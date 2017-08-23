@@ -1,0 +1,29 @@
+{
+	"description": "The Mapillary iOS SDK",
+	"frameworks": [],
+	"language": "Objective-C",
+	"maintainers": [
+		"millenbop"
+	],
+	"providers": [{
+		"name": "mapillary_sdk_ios_provider",
+		"dependencies": [{
+				"name": "api_v2"
+			},
+			{
+				"name": "api_v3"
+			},
+			{
+				"name": "mapillary_upload_api"
+			}
+		],
+		"description": "Mapillary iOS SDK",
+		"extDependencies": [],
+		"services": [{
+			"description": "The Mapillary iOS SDK",
+			"name": "sdk_ios"
+		}],
+		"type": "sdk_ios"
+	}],
+	"repo": "mapillary_sdk_ios"
+}
