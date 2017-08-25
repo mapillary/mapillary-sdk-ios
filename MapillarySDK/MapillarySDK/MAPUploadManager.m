@@ -12,17 +12,28 @@
 
 - (void)uploadSequences:(NSArray*)sequences
 {
-
+    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStarted:)])
+    {
+        [self.delegate uploadStarted:self];
+    }
 }
 
 - (void)stopUpload
 {
-
+    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:)])
+    {
+        [self.delegate uploadStopped:self];
+    }
 }
 
 - (MAPUploadStatus*)getStatus
 {
-    return nil;
+    MAPUploadStatus* status = [[MAPUploadStatus alloc] init];
+    status.nbrImagesToUpload = 0;
+    status.nbrImagesUploaded = 0;
+    status.uploading = NO;
+    
+    return status;
 }
 
 @end
