@@ -17,7 +17,7 @@
 
 + (void)deleteSequence:(MAPSequence*)sequence
 {
-
+    
 }
 
 + (void)deleteImage:(MAPImage*)image
