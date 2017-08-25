@@ -14,6 +14,7 @@
 @property float bearingOffset; // (-1 = undefined, 0-360 = set),
 @property NSTimeInterval timeOffset; // in milliseconds, +1 means the image date is increased by 1 ms
 @property (nonnull) NSDate* sequenceDate;
+@property (nonnull) NSString* path;
 
 - (nonnull NSArray*)listImages;
 - (void)addImageWithData:(nonnull NSData*)imageData date:(nullable NSDate*)date bearing:(nullable NSNumber*)bearing location:(nullable MAPLocation*)location;

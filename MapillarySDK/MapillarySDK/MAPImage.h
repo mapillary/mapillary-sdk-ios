@@ -20,6 +20,6 @@
 
 - (UIImage*)loadImage;
 - (UIImage*)loadThumbnailImage;
-
+- (NSString*)thumbPath;
 
 @end

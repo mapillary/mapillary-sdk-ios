@@ -7,6 +7,11 @@
 //
 
 #import "MAPSequence.h"
+#import "Utils.h"
+
+@interface MAPSequence()
+
+@end
 
 @implementation MAPSequence
 
@@ -18,6 +23,11 @@
         self.sequenceDate = [NSDate date];
         self.bearingOffset = -1;
         self.timeOffset = 0;
+        
+        NSString* folderName = [Utils getTimeString];
+        self.path = [NSString stringWithFormat:@"%@/%@", [Utils sequenceDirectory], folderName];
+        
+        [Utils createFolderAtPath:self.path];
     }
     return self;
 }
