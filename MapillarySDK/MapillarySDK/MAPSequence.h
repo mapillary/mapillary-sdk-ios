@@ -13,12 +13,12 @@
 
 @property float bearingOffset; // (-1 = undefined, 0-360 = set),
 @property NSTimeInterval timeOffset; // in milliseconds, +1 means the image date is increased by 1 ms
-@property NSDate* captureDate;
+@property (nonnull) NSDate* sequenceDate;
 
-- (NSArray*)listImages;
-- (void)addImageWithData:(NSData*)imageData date:(NSDate*)date bearing:(double)bearing location:(MAPLocation*)location;
-- (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(double)bearing location:(MAPLocation*)location;
-- (void)addLocation:(MAPLocation*)location date:(NSDate*)date;
-- (void)addGpx:(NSString*)path;
+- (nonnull NSArray*)listImages;
+- (void)addImageWithData:(nonnull NSData*)imageData date:(nullable NSDate*)date bearing:(nullable NSNumber*)bearing location:(nullable MAPLocation*)location;
+- (void)addImageWithPath:(nonnull NSString*)imagePath date:(nullable NSDate*)date bearing:(nullable NSNumber*)bearing location:(nullable MAPLocation*)location;
+- (void)addLocation:(nonnull MAPLocation*)location date:(nonnull NSDate*)date;
+- (void)addGpx:(nonnull NSString*)path;
 
 @end

@@ -10,17 +10,30 @@
 
 @implementation MAPSequence
 
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.sequenceDate = [NSDate date];
+        self.bearingOffset = -1;
+        self.timeOffset = 0;
+    }
+    return self;
+}
+
 - (NSArray*)listImages
 {
-    return nil;
+    NSArray* images = [[NSArray alloc] init];
+    return images;
 }
 
-- (void)addImageWithData:(NSData*)imageData date:(NSDate*)date bearing:(double)bearing location:(MAPLocation*)location
+- (void)addImageWithData:(NSData*)imageData date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
 {
 
 }
 
-- (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(double)bearing location:(MAPLocation*)location
+- (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
 {
 
 }
