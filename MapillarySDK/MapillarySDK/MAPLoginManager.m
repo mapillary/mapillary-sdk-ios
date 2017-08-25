@@ -8,22 +8,25 @@
 
 #import "MAPLoginManager.h"
 #import "Defines.h"
+#import <UIKit/UIKit.h>
 
 @implementation MAPLoginManager
 
 + (void)signIn
 {
-    // TODO
+    NSString* redirectUrl = @"anders"; //@"VzVVTDFEN2RlQkRPM0pCOFYtb19QdzozNDBkYmQ3ZmFiNTVmOTIz"; //@"http://com.mapillary.sdk.ios"; //[[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CLIENT_ID];
+    NSString* clientId = @"VzVVTDFEN2RlQkRPM0pCOFYtb19QdzozNDBkYmQ3ZmFiNTVmOTIz";
+    NSString* url = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:read&state=return&redirect_uri=%@://&response_type=token&client_id=%@", redirectUrl, clientId];
     
-    [[NSUserDefaults standardUserDefaults] setObject:@"username" forKey:MAPILLARY_CURRENT_USER_NAME];
-    [[NSUserDefaults standardUserDefaults] setObject:@"userkey" forKey:MAPILLARY_CURRENT_USER_KEY];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    
+    //[[NSUserDefaults standardUserDefaults] setObject:@"username" forKey:MAPILLARY_CURRENT_USER_NAME];
+    //[[NSUserDefaults standardUserDefaults] setObject:@"userkey" forKey:MAPILLARY_CURRENT_USER_KEY];
+    //[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 + (void)signOut
 {
-    // TODO
-    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_NAME];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
