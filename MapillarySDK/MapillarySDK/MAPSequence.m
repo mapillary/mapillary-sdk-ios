@@ -24,28 +24,30 @@
 
 - (NSArray*)listImages
 {
+    // TODO
+    
     NSArray* images = [[NSArray alloc] init];
     return images;
 }
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
 {
-
+    // TODO
 }
 
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
 {
-
+    // TODO
 }
 
 - (void)addLocation:(MAPLocation*)location date:(NSDate*)date
 {
-
+    // TODO
 }
 
 - (void)addGpx:(NSString*)path
 {
-
+    // TODO
 }
 
 @end

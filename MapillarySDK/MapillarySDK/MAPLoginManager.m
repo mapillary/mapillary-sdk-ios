@@ -14,6 +14,8 @@
 
 + (void)signIn
 {
+    // TODO
+    
     NSString* redirectUrl = @"anders"; //@"VzVVTDFEN2RlQkRPM0pCOFYtb19QdzozNDBkYmQ3ZmFiNTVmOTIz"; //@"http://com.mapillary.sdk.ios"; //[[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CLIENT_ID];
     NSString* clientId = @"VzVVTDFEN2RlQkRPM0pCOFYtb19QdzozNDBkYmQ3ZmFiNTVmOTIz";
     NSString* url = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:read&state=return&redirect_uri=%@://&response_type=token&client_id=%@", redirectUrl, clientId];

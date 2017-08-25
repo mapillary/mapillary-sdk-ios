@@ -12,6 +12,8 @@
 
 - (void)uploadSequences:(NSArray*)sequences
 {
+    // TODO
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStarted:)])
     {
         [self.delegate uploadStarted:self];
@@ -20,6 +22,8 @@
 
 - (void)stopUpload
 {
+    // TODO
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:)])
     {
         [self.delegate uploadStopped:self];
@@ -28,6 +32,8 @@
 
 - (MAPUploadStatus*)getStatus
 {
+    // TODO
+    
     MAPUploadStatus* status = [[MAPUploadStatus alloc] init];
     status.nbrImagesToUpload = 0;
     status.nbrImagesUploaded = 0;

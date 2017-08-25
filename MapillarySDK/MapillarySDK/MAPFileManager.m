@@ -12,17 +12,19 @@
 
 + (NSArray*)listSequences
 {
+    // TODO
+    
     return nil;
 }
 
 + (void)deleteSequence:(MAPSequence*)sequence
 {
-    
+    // TODO
 }
 
 + (void)deleteImage:(MAPImage*)image
 {
-
+    // TODO
 }
 
 @end
