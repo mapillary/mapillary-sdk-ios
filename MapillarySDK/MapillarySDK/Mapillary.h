@@ -16,11 +16,17 @@ FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Mapillary/PublicHeader.h>
 
+#import "MAPFileManager.h"
+#import "MAPImage.h"
+#import "MAPLocation.h"
 #import "MAPLoginManager.h"
+#import "MAPSequence.h"
+#import "MAPUploadManager.h"
+#import "MAPUploadStatus.h"
 #import "MAPUser.h"
 
 @interface Mapillary : NSObject
 
-+ (void)initWithClientId:(NSString*)clientId;
++ (void)initWithClientId:(nonnull NSString*)clientId;
 
 @end
