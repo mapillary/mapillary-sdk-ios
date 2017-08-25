@@ -7,17 +7,44 @@
 //
 
 #import "MAPImage.h"
+#import "MAPLoginManager.h"
 
 @implementation MAPImage
 
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.captureDate = [NSDate date];
+        self.author = [MAPLoginManager currentUser];
+    }
+    return self;
+}
+
 - (UIImage*)loadImage
 {
+    if (self.imagePath)
+    {
+        return [UIImage imageWithContentsOfFile:self.imagePath];
+    }
+    
     return nil;
 }
 
 - (UIImage*)loadThumbnailImage
 {
+    if (self.imagePath)
+    {
+        return [UIImage imageWithContentsOfFile:[self thumbPath]];
+    }
+    
     return nil;
+}
+
+- (NSString*)thumbPath
+{
+    return [NSString stringWithFormat:@"%@-thumb.jpg", [self.imagePath substringToIndex:self.imagePath.length-4]];
 }
 
 @end
