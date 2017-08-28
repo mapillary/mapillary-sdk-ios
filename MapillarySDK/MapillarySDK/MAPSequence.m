@@ -7,8 +7,9 @@
 //
 
 #import "MAPSequence.h"
-#import "Utils.h"
-
+#import "MAPUtils.h"
+#import "MAPImage.h"
+#import "MAPLoginManager.h"
 @interface MAPSequence()
 
 @end
@@ -24,10 +25,10 @@
         self.bearingOffset = -1;
         self.timeOffset = 0;
         
-        NSString* folderName = [Utils getTimeString];
-        self.path = [NSString stringWithFormat:@"%@/%@", [Utils sequenceDirectory], folderName];
+        NSString* folderName = [MAPUtils getTimeString];
+        self.path = [NSString stringWithFormat:@"%@/%@", [MAPUtils sequenceDirectory], folderName];
         
-        [Utils createFolderAtPath:self.path];
+        [MAPUtils createFolderAtPath:self.path];
     }
     return self;
 }
@@ -36,7 +37,21 @@
 {
     // TODO
     
-    NSArray* images = [[NSArray alloc] init];
+    MAPUser* author = [MAPLoginManager currentUser];
+    
+    NSMutableArray* images = [[NSMutableArray alloc] init];
+    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+    
+    for (NSString* path in contents)
+    {
+        MAPImage* image = [[MAPImage alloc] init];
+        image.imagePath = path;
+        image.captureDate = [MAPUtils dateFromFilePath:path];
+        image.author = author;
+        image.location = nil;
+        [images addObject:image];
+    }
+    
     return images;
 }
 
@@ -47,7 +62,15 @@
 
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
 {
-    // TODO
+    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath])
+    {
+        NSData* data = [NSData dataWithContentsOfFile:imagePath];
+        
+        if (data)
+        {
+            [self addImageWithData:data date:date bearing:bearing location:location];
+        }
+    }
 }
 
 - (void)addLocation:(MAPLocation*)location date:(NSDate*)date

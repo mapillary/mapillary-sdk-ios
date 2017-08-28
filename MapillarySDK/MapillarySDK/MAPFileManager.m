@@ -7,24 +7,27 @@
 //
 
 #import "MAPFileManager.h"
-#import "Utils.h"
+#import "MAPUtils.h"
 
 @implementation MAPFileManager
 
 + (NSArray*)listSequences
 {
     // TODO
+    
     NSMutableArray* sequences = [[NSMutableArray alloc] init];
-    NSString* sequenceDirectory = [Utils sequenceDirectory];
+    NSString* sequenceDirectory = [MAPUtils sequenceDirectory];
     NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequenceDirectory error:nil];
     
     for (NSString* path in contents)
     {
         MAPSequence* sequence = [[MAPSequence alloc] init];
         sequence.path = path;
+        sequence.sequenceDate = [NSDate date];
+        sequence.bearingOffset = 0;
+        sequence.timeOffset = 0;
         [sequences addObject:sequence];
     }
-    
     
     return sequences;
 }
