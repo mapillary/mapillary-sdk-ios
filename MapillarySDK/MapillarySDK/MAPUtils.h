@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Utils : NSObject
+@interface MAPUtils : NSObject
 
 + (NSString *)getTimeString;
 
@@ -19,5 +19,9 @@
 + (BOOL)createSubfolderAtPath:(NSString *)path folder:(NSString *)folder;
 + (BOOL)createFolderAtPath:(NSString *)path;
 + (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString;
+
++ (NSDate*)dateFromFilePath:(NSString*)filePath;
+
++ (NSString*)appVersion;
 
 @end

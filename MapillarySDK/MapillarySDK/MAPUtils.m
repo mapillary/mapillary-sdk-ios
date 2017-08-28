@@ -6,10 +6,10 @@
 //  Copyright © 2017 Mapillary. All rights reserved.
 //
 
-#import "Utils.h"
+#import "MAPUtils.h"
 #include <sys/xattr.h>
 
-@implementation Utils
+@implementation MAPUtils
 
 + (NSString *)getTimeString
 {
@@ -96,6 +96,26 @@
     
     int result = setxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
     return result == 0;
+}
+
++ (NSDate*)dateFromFilePath:(NSString*)filePath
+{
+    NSString* fileName = [filePath lastPathComponent];
+    NSString* strippedFileName = [fileName stringByDeletingPathExtension];
+    
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
+    dateFormatter.AMSymbol = @"";
+    dateFormatter.PMSymbol = @"";
+    dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+    
+    return [dateFormatter dateFromString:strippedFileName];
+}
+
++ (NSString*)appVersion
+{
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 }
 
 @end
