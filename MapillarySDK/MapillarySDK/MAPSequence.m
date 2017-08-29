@@ -10,7 +10,12 @@
 #import "MAPUtils.h"
 #import "MAPImage.h"
 #import "MAPLoginManager.h"
+#import "GpxLogger.h"
+
 @interface MAPSequence()
+
+@property NSString* sequenceUUID;
+@property GpxLogger* gpxLogger;
 
 @end
 
@@ -24,11 +29,16 @@
         self.sequenceDate = [NSDate date];
         self.bearingOffset = -1;
         self.timeOffset = 0;
+        self.sequenceUUID = [[NSUUID UUID] UUIDString];
         
         NSString* folderName = [MAPUtils getTimeString];
         self.path = [NSString stringWithFormat:@"%@/%@", [MAPUtils sequenceDirectory], folderName];
         
         [MAPUtils createFolderAtPath:self.path];
+        
+        self.gpxLogger = [[GpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
+        
+        
     }
     return self;
 }
@@ -58,6 +68,11 @@
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
 {
     // TODO
+    
+    if (location)
+    {
+        [self.gpxLogger add:location];
+    }
 }
 
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
@@ -76,6 +91,11 @@
 - (void)addLocation:(MAPLocation*)location date:(NSDate*)date
 {
     // TODO
+    
+    if (location)
+    {
+        [self.gpxLogger add:location];
+    }
 }
 
 - (void)addGpx:(NSString*)path

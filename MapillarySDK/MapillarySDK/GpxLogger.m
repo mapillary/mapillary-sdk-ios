@@ -12,7 +12,7 @@
 @interface GpxOperation : NSOperation
 
 @property (nonatomic) NSString* path;
-@property (nonatomic) CLLocation* location;
+@property (nonatomic) MAPLocation* location;
 @property (nonatomic) NSString* time;
 
 @end
@@ -28,7 +28,7 @@
         static const NSString* footer = @"    </trkseg>\n  </trk>\n</gpx>";
         NSData* footerData = [footer dataUsingEncoding:NSUTF8StringEncoding];
         
-        NSString* locationString = [NSString stringWithFormat:@"      <trkpt lat=\"%f\" lon=\"%f\"><time>%@</time></trkpt>\n%@", self.location.coordinate.latitude, self.location.coordinate.longitude, self.time, footer];
+        NSString* locationString = [NSString stringWithFormat:@"      <trkpt lat=\"%f\" lon=\"%f\"><time>%@</time></trkpt>\n%@", self.location.latitude, self.location.longitude, self.time, footer];
         NSData* locationData = [locationString dataUsingEncoding:NSUTF8StringEncoding];
         
         NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:nil];
@@ -92,7 +92,7 @@
     return self;
 }
 
-- (void)add:(CLLocation*)location
+- (void)add:(MAPLocation*)location
 {
     GpxOperation* op = [[GpxOperation alloc] init];
     op.path = self.path;
@@ -115,7 +115,10 @@
     
     for (int i = 0; i < 10; i++)
     {
-        CLLocation* l = [[CLLocation alloc] initWithLatitude:50+(arc4random_uniform(100)/100.0) longitude:50+(arc4random_uniform(100)/100.0)];
+        MAPLocation* l = [[MAPLocation alloc] init];
+        l.latitude = 50+(arc4random_uniform(100)/100.0);
+        l.longitude = 50+(arc4random_uniform(100)/100.0);
+        
         [gpx add:l];
     }
     

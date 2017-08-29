@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "MAPLocation.h"
 
 @interface GpxLogger : NSObject
 
 - (id)initWithFile:(NSString*)path;
-- (void)add:(CLLocation*)location;
+- (void)add:(MAPLocation*)location;
 
 + (void)test;
 
