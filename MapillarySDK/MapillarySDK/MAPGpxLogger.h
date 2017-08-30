@@ -1,5 +1,5 @@
 //
-//  GpxLogger.h
+//  MAPGpxLogger.h
 //  MapillarySDK
 //
 //  Created by Anders Mårtensson on 2017-03-21.
@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "MAPLocation.h"
 
-@interface GpxLogger : NSObject
+@interface MAPGpxLogger : NSObject
 
 - (id)initWithFile:(NSString*)path;
 - (void)add:(MAPLocation*)location date:(NSDate*)date;

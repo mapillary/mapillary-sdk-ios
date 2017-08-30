@@ -1,15 +1,15 @@
 //
-//  GpxLogger.m
+//  MAPGpxLogger.m
 //  MapillarySDK
 //
 //  Created by Anders Mårtensson on 2017-03-21.
 //  Copyright © 2017 Mapillary. All rights reserved.
 //
 
-#import "GpxLogger.h"
+#import "MAPGpxLogger.h"
 #import "MAPUtils.h"
 
-@interface GpxOperation : NSOperation
+@interface MAPGpxOperation : NSOperation
 
 @property (nonatomic) NSString* path;
 @property (nonatomic) MAPLocation* location;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation GpxOperation
+@implementation MAPGpxOperation
 
 - (void)main
 {
@@ -44,7 +44,7 @@
 
 @end
 
-@interface GpxLogger()
+@interface MAPGpxLogger()
 
 @property (nonatomic) NSOperationQueue* operationQueue;
 @property (nonatomic) NSString* path;
@@ -52,7 +52,7 @@
 
 @end
 
-@implementation GpxLogger
+@implementation MAPGpxLogger
 
 - (id)initWithFile:(NSString*)path
 {
@@ -94,7 +94,7 @@
 
 - (void)add:(MAPLocation*)location date:(NSDate*)date
 {
-    GpxOperation* op = [[GpxOperation alloc] init];
+    MAPGpxOperation* op = [[MAPGpxOperation alloc] init];
     op.path = self.path;
     op.location = location;
     
@@ -120,7 +120,7 @@
 
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
     
-    GpxLogger* gpx = [[GpxLogger alloc] initWithFile:path];
+    MAPGpxLogger* gpx = [[MAPGpxLogger alloc] initWithFile:path];
     
     for (int i = 0; i < 10; i++)
     {

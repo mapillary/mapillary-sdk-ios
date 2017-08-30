@@ -10,14 +10,14 @@
 #import "MAPUtils.h"
 #import "MAPImage.h"
 #import "MAPLoginManager.h"
-#import "GpxLogger.h"
+#import "MAPGpxLogger.h"
 #import "BOSImageResizeOperation.h"
-#import "Defines.h"
+#import "MAPDefines.h"
 
 @interface MAPSequence()
 
 @property NSString* sequenceUUID;
-@property GpxLogger* gpxLogger;
+@property MAPGpxLogger* gpxLogger;
 
 @end
 
@@ -38,7 +38,7 @@
         
         [MAPUtils createFolderAtPath:self.path];
         
-        self.gpxLogger = [[GpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
+        self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
     }
     return self;
 }

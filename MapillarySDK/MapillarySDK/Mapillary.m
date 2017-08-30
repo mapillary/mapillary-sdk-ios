@@ -7,7 +7,7 @@
 //
 
 #import "Mapillary.h"
-#import "Defines.h"
+#import "MAPDefines.h"
 
 @interface Mapillary()
 

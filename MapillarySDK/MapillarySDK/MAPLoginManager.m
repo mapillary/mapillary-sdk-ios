@@ -7,7 +7,7 @@
 //
 
 #import "MAPLoginManager.h"
-#import "Defines.h"
+#import "MAPDefines.h"
 #import <UIKit/UIKit.h>
 
 @implementation MAPLoginManager
