@@ -92,12 +92,21 @@
     return self;
 }
 
-- (void)add:(MAPLocation*)location
+- (void)add:(MAPLocation*)location date:(NSDate*)date
 {
     GpxOperation* op = [[GpxOperation alloc] init];
     op.path = self.path;
     op.location = location;
-    op.time = [self.dateFormatter stringFromDate:[NSDate date]];
+    
+    if (date)
+    {
+        op.time = [self.dateFormatter stringFromDate:date];
+    }
+    else
+    {
+        op.time = [self.dateFormatter stringFromDate:[NSDate date]];
+    }
+    
     [self.operationQueue addOperation:op];
     
     NSLog(@"%lu", (unsigned long)self.operationQueue.operationCount);
@@ -119,7 +128,7 @@
         l.latitude = 50+(arc4random_uniform(100)/100.0);
         l.longitude = 50+(arc4random_uniform(100)/100.0);
         
-        [gpx add:l];
+        [gpx add:l date:nil];
     }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

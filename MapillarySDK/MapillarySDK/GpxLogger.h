@@ -13,7 +13,7 @@
 @interface GpxLogger : NSObject
 
 - (id)initWithFile:(NSString*)path;
-- (void)add:(MAPLocation*)location;
+- (void)add:(MAPLocation*)location date:(NSDate*)date;
 
 + (void)test;
 

@@ -1,0 +1,12 @@
+PODS:
+  - BOSImageResizeOperation (0.1.0)
+
+DEPENDENCIES:
+  - BOSImageResizeOperation
+
+SPEC CHECKSUMS:
+  BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
+
+PODFILE CHECKSUM: 14136dff5ba8afc19f86aabd3446588446c66dbe
+
+COCOAPODS: 1.1.1

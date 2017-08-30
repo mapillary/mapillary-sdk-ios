@@ -10,7 +10,7 @@
 
 @interface MAPUtils : NSObject
 
-+ (NSString *)getTimeString;
++ (NSString *)getTimeString:(NSDate*)date;
 
 + (NSString *)documentsDirectory;
 + (NSString *)basePath;

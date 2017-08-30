@@ -11,7 +11,7 @@
 
 @implementation MAPUtils
 
-+ (NSString *)getTimeString
++ (NSString *)getTimeString:(NSDate*)date
 {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -21,7 +21,12 @@
     dateFormatter.PMSymbol = @"";
     dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     
-    NSString* dateString = [[dateFormatter stringFromDate:[NSDate date]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (date == nil)
+    {
+        date = [NSDate date];
+    }
+    
+    NSString* dateString = [[dateFormatter stringFromDate:date] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     return dateString;
 }
