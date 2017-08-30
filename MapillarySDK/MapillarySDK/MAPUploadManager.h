@@ -14,21 +14,21 @@
 
 @protocol MAPUploadManagerDelegate <NSObject>
 @optional
-- (void)uploadStarted:(nonnull MAPUploadManager*)uploadManager;
-- (void)uploadStopped:(nonnull MAPUploadManager*)uploadManager;
-- (void)imageUploadSuccess:(nonnull MAPUploadManager*)uploadManager image:(nonnull MAPImage*)image;
-- (void)imageUploadFailed:(nonnull MAPUploadManager*)uploadManager image:(nonnull MAPImage*)image error:(nonnull NSError*)error;
+- (void)uploadStarted:(MAPUploadManager*)uploadManager;
+- (void)uploadStopped:(MAPUploadManager*)uploadManager;
+- (void)imageUploadSuccess:(MAPUploadManager*)uploadManager image:(MAPImage*)image;
+- (void)imageUploadFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image error:(NSError*)error;
 @end
 
 @interface MAPUploadManager : NSObject
 
-@property (weak, nullable) id<MAPUploadManagerDelegate> delegate;
+@property (weak) id<MAPUploadManagerDelegate> delegate;
 @property int nbrUploadThreads;
 @property BOOL allowUploadOnCell;
 
-- (void)uploadSequences:(nonnull NSArray*)sequences;
+- (void)uploadSequences:(NSArray*)sequences;
 - (void)stopUpload;
-- (nonnull MAPUploadStatus*)getStatus;
+- (MAPUploadStatus*)getStatus;
 
 
 @end

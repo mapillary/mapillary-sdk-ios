@@ -10,10 +10,14 @@
 
 @interface MAPLocation : NSObject
 
-@property double latitude;
-@property double longitude;
-@property double originalBearing;
-@property double calculatedBearing;
-
+@property NSNumber* latitude;
+@property NSNumber* longitude;
+@property NSNumber* originalBearing;
+@property NSNumber* calculatedBearing;
+@property NSNumber* elevation;
+@property NSDate* date;
+@property NSString* dateString;
+    
+- (BOOL)isEqualToLocation:(MAPLocation*)aLocation;
 
 @end

@@ -9,12 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "MAPLocation.h"
+#import "MAPSequence.h"
 
 @interface MAPGpxLogger : NSObject
 
-- (id)initWithFile:(NSString*)path;
-- (void)add:(MAPLocation*)location date:(NSDate*)date;
-
-+ (void)test;
+- (id)initWithFile:(NSString*)path andSequence:(MAPSequence*)sequence;
+- (void)add:(MAPLocation*)location;
 
 @end

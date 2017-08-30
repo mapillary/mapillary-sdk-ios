@@ -16,14 +16,14 @@
 
 @interface MAPSequence()
 
-@property NSString* sequenceUUID;
 @property MAPGpxLogger* gpxLogger;
+@property MAPLocation* currentLocation;
 
 @end
 
 @implementation MAPSequence
 
-- (id)init
+- (id)initWithDevice:(MAPDevice*)device
 {
     self = [super init];
     if (self)
@@ -31,22 +31,23 @@
         self.sequenceDate = [NSDate date];
         self.bearingOffset = -1;
         self.timeOffset = 0;
-        self.sequenceUUID = [[NSUUID UUID] UUIDString];
+        self.sequenceKey = [[NSUUID UUID] UUIDString];
+        self.currentLocation = [[MAPLocation alloc] init];
+        self.device = device;
         
         NSString* folderName = [MAPUtils getTimeString:nil];
         self.path = [NSString stringWithFormat:@"%@/%@", [MAPUtils sequenceDirectory], folderName];
         
         [MAPUtils createFolderAtPath:self.path];
         
-        self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
+        self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"] andSequence:self];
+        
     }
     return self;
 }
 
 - (NSArray*)listImages
 {
-    // TODO
-    
     MAPUser* author = [MAPLoginManager currentUser];
     
     NSMutableArray* images = [[NSMutableArray alloc] init];
@@ -58,14 +59,22 @@
         image.imagePath = path;
         image.captureDate = [MAPUtils dateFromFilePath:path];
         image.author = author;
-        image.location = nil;
+        image.location = [self locationForDate:image.captureDate];
         [images addObject:image];
     }
     
     return images;
 }
+    
+- (NSArray*)listLocations
+{
+    // TODO
 
-- (void)addImageWithData:(NSData*)imageData date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
+    NSMutableArray* locations = [[NSMutableArray alloc] init];
+    return locations;
+}
+
+- (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
 {
     NSString* fileName = [MAPUtils getTimeString:date];
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
@@ -83,11 +92,12 @@
 
     if (location)
     {
-        [self.gpxLogger add:location date:date];
+        [self.gpxLogger add:location];
+        self.currentLocation = location;
     }
 }
 
-- (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date bearing:(NSNumber*)bearing location:(MAPLocation*)location
+- (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath])
     {
@@ -95,24 +105,29 @@
         
         if (data)
         {
-            [self addImageWithData:data date:date bearing:bearing location:location];
+            [self addImageWithData:data date:date location:location];
         }
     }
 }
 
-- (void)addLocation:(MAPLocation*)location date:(NSDate*)date
+- (void)addLocation:(MAPLocation*)location
 {
-    // TODO
-    
     if (location)
     {
-        [self.gpxLogger add:location date:date];
+        [self.gpxLogger add:location];
+        self.currentLocation = location;
     }
 }
 
 - (void)addGpx:(NSString*)path
 {
     // TODO
+}
+    
+- (MAPLocation*)locationForDate:(NSDate*)date
+{
+    // TODO
+    return nil;
 }
 
 @end

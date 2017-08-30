@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Mapillary.h"
+#import "MapillarySDK.h"
 
 @interface MAPUserTests : XCTestCase
 

@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Mapillary.h"
+#import "MapillarySDK.h"
 
 @interface MAPLoginManagerTests : XCTestCase
 
@@ -19,7 +19,7 @@
 {
     [super setUp];
     
-    [Mapillary initWithClientId:@""];
+    [MapillarySDK initWithClientId:@""];
 }
 
 - (void)tearDown

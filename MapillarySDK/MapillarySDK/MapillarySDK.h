@@ -1,5 +1,5 @@
 //
-//  Mapillary.h
+//  MapillarySDK.h
 //  Mapillary
 //
 //  Created by Anders Mårtensson on 2017-08-23.
@@ -16,6 +16,7 @@ FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Mapillary/PublicHeader.h>
 
+#import "MAPDevice.h"
 #import "MAPFileManager.h"
 #import "MAPImage.h"
 #import "MAPLocation.h"
@@ -25,8 +26,9 @@ FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 #import "MAPUploadStatus.h"
 #import "MAPUser.h"
 
-@interface Mapillary : NSObject
 
-+ (void)initWithClientId:(nonnull NSString*)clientId;
+@interface MapillarySDK : NSObject
+
++ (void)initWithClientId:(NSString*)clientId;
 
 @end

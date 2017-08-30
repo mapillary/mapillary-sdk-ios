@@ -12,9 +12,9 @@
 
 @interface MAPFileManager : NSObject
 
-+ (nonnull NSArray*)listSequences;
-+ (void)deleteSequence:(nonnull MAPSequence*)sequence;
-+ (void)deleteImage:(nonnull MAPImage*)image;
++ (NSArray*)listSequences;
++ (void)deleteSequence:(MAPSequence*)sequence;
++ (void)deleteImage:(MAPImage*)image;
 
 
 @end

@@ -8,18 +8,28 @@
 
 #import <Foundation/Foundation.h>
 #import "MAPLocation.h"
+#import "MAPDevice.h"
 
 @interface MAPSequence : NSObject
 
 @property float bearingOffset; // (-1 = undefined, 0-360 = set),
 @property NSTimeInterval timeOffset; // in milliseconds, +1 means the image date is increased by 1 ms
-@property (nonnull) NSDate* sequenceDate;
-@property (nonnull) NSString* path;
+@property NSDate* sequenceDate;
+@property NSString* path;
+@property NSString* project;
+@property NSString* sequenceKey;
+@property MAPDevice* device;
+    
+- (id)initWithDevice:(MAPDevice*)device;
 
-- (nonnull NSArray*)listImages;
-- (void)addImageWithData:(nonnull NSData*)imageData date:(nullable NSDate*)date bearing:(nullable NSNumber*)bearing location:(nullable MAPLocation*)location;
-- (void)addImageWithPath:(nonnull NSString*)imagePath date:(nullable NSDate*)date bearing:(nullable NSNumber*)bearing location:(nullable MAPLocation*)location;
-- (void)addLocation:(nonnull MAPLocation*)location date:(nonnull NSDate*)date;
-- (void)addGpx:(nonnull NSString*)path;
+- (NSArray*)listImages;
+- (NSArray*)listLocations;
+    
+- (MAPLocation*)locationForDate:(NSDate*)date;
+    
+- (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location;
+- (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location;
+- (void)addLocation:(MAPLocation*)location;
+- (void)addGpx:(NSString*)path;
 
 @end

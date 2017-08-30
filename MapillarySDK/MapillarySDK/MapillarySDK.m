@@ -1,21 +1,21 @@
 //
-//  Mapillary.m
+//  MapillarySDK.m
 //  MapillarySDK
 //
 //  Created by Anders Mårtensson on 2017-08-23.
 //  Copyright © 2017 Mapillary. All rights reserved.
 //
 
-#import "Mapillary.h"
+#import "MapillarySDK.h"
 #import "MAPDefines.h"
 
-@interface Mapillary()
+@interface MapillarySDK()
 
 @property NSString* clientId;
 
 @end
 
-@implementation Mapillary
+@implementation MapillarySDK
 
 + (void)initWithClientId:(NSString*)clientId
 {
