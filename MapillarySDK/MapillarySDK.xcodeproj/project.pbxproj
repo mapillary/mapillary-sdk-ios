@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2E94298B40925C85C8763F38 /* libPods-MapillarySDKTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E80025FA3A595529DAE1966 /* libPods-MapillarySDKTests.a */; };
 		2E99FBD02B117723E745A817 /* libPods-MapillarySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 169F403CB7C5B1A80A248CDC /* libPods-MapillarySDK.a */; };
+		9A6B0D6B1F615CA5009C2454 /* MAPGpxParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6B0D691F615CA5009C2454 /* MAPGpxParser.h */; };
+		9A6B0D6C1F615CA5009C2454 /* MAPGpxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6B0D6A1F615CA5009C2454 /* MAPGpxParser.m */; };
 		9A7977021F4EF3EA00358A30 /* MAPFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7977001F4EF3EA00358A30 /* MAPFileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A7977031F4EF3EA00358A30 /* MAPFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7977011F4EF3EA00358A30 /* MAPFileManager.m */; };
 		9A7977061F4EF3F800358A30 /* MAPImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7977041F4EF3F800358A30 /* MAPImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,6 +58,8 @@
 		22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4E80025FA3A595529DAE1966 /* libPods-MapillarySDKTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapillarySDKTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.release.xcconfig"; sourceTree = "<group>"; };
+		9A6B0D691F615CA5009C2454 /* MAPGpxParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPGpxParser.h; sourceTree = "<group>"; };
+		9A6B0D6A1F615CA5009C2454 /* MAPGpxParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPGpxParser.m; sourceTree = "<group>"; };
 		9A7977001F4EF3EA00358A30 /* MAPFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPFileManager.h; sourceTree = "<group>"; };
 		9A7977011F4EF3EA00358A30 /* MAPFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPFileManager.m; sourceTree = "<group>"; };
 		9A7977041F4EF3F800358A30 /* MAPImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPImage.h; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				9A88F9481F4D933F0076C311 /* Info.plist */,
+				9A79772C1F55AA1500358A30 /* Podfile */,
 				9AC8718F1F4DB3300012721D /* internal */,
 				9AE6FB131F571E1D004AE114 /* MAPDevice.h */,
 				9AE6FB141F571E1D004AE114 /* MAPDevice.m */,
@@ -168,7 +173,6 @@
 				9A7977151F4EF43700358A30 /* MAPUploadStatus.m */,
 				9AC871941F4DB3F90012721D /* MAPUser.h */,
 				9AC871951F4DB3F90012721D /* MAPUser.m */,
-				9A79772C1F55AA1500358A30 /* Podfile */,
 			);
 			path = MapillarySDK;
 			sourceTree = "<group>";
@@ -192,6 +196,8 @@
 				9A7977251F507A6300358A30 /* MAPGpxLogger.m */,
 				9A7977201F5027C700358A30 /* MAPUtils.h */,
 				9A7977211F5027C700358A30 /* MAPUtils.m */,
+				9A6B0D691F615CA5009C2454 /* MAPGpxParser.h */,
+				9A6B0D6A1F615CA5009C2454 /* MAPGpxParser.m */,
 			);
 			name = internal;
 			sourceTree = "<group>";
@@ -224,6 +230,7 @@
 				9AE6FB151F571E1D004AE114 /* MAPDevice.h in Headers */,
 				9AC871961F4DB3F90012721D /* MAPUser.h in Headers */,
 				9A7977021F4EF3EA00358A30 /* MAPFileManager.h in Headers */,
+				9A6B0D6B1F615CA5009C2454 /* MAPGpxParser.h in Headers */,
 				9A88F9551F4D933F0076C311 /* MapillarySDK.h in Headers */,
 				9A7977221F5027C700358A30 /* MAPUtils.h in Headers */,
 				9AC871991F4DB8310012721D /* MAPDefines.h in Headers */,
@@ -418,6 +425,7 @@
 				9A7977031F4EF3EA00358A30 /* MAPFileManager.m in Sources */,
 				9AC871931F4DB37D0012721D /* MAPLoginManager.m in Sources */,
 				9A7977231F5027C700358A30 /* MAPUtils.m in Sources */,
+				9A6B0D6C1F615CA5009C2454 /* MAPGpxParser.m in Sources */,
 				9AE6FB161F571E1D004AE114 /* MAPDevice.m in Sources */,
 				9A7977131F4EF41F00358A30 /* MAPUploadManager.m in Sources */,
 				9A7977271F507A6300358A30 /* MAPGpxLogger.m in Sources */,

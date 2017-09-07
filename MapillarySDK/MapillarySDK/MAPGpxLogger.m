@@ -28,19 +28,19 @@
         NSMutableString* locationString = [[NSMutableString alloc] init];
         
         // Add location
-        [locationString appendFormat:@"\t\t\t<trkpt lat=\"%f\" lon=\"%f\">", self.location.latitude.doubleValue, self.location.longitude.doubleValue];
+        [locationString appendFormat:@"\t\t\t<trkpt lat=\"%f\" lon=\"%f\">", self.location.location.coordinate.latitude, self.location.location.coordinate.longitude];
         
         // Add eleveation if available
-        if (self.location.elevation != nil)
+        if (self.location.location.verticalAccuracy > 0)
         {
-            [locationString appendFormat:@"<ele>%f</ele>", self.location.elevation.doubleValue];
+            [locationString appendFormat:@"<ele>%f</ele>", self.location.location.altitude];
         }
         
         // Add time
         [locationString appendFormat:@"<time>%@</time>", self.time];
         
         // Add fix
-        if (self.location.elevation != nil)
+        if (self.location.location.verticalAccuracy > 0)
         {
             [locationString appendString:@"<fix>3d</fix>"];
         }
@@ -51,34 +51,14 @@
         
         
         // Add exgtensions
-        // TODO Add bearing etr
-        // TODO Add accelerometer
-        // TODO precision
-        
-        /*
-         
-         {
-         
-         "MAPCalculatedHeading" : 193.1933,
-         
-         "MAPGPSAccuracyMeters" : "10.000000",
-         
-         "MAPPhotoUUID" : "10B77312-48B4-4817-8155-00753C944DC5",
-         "MAPDirection" : 9,
-         
-         "MAPCompassHeading"
-            "TrueHeading" : 30.13333,
-            "MagneticHeading" : 26.32394,
-            "AccuracyDegrees" : 25
-         
-         
-         */
-        
-        
+        // TODO need accelerometer?
+        // TODO need direction?
         
         NSMutableString* extensionsString = [[NSMutableString alloc] init];
-        //[extensionsString appendFormat:@"<mapillary:localTimeZone>%@</>", timeZoneString];
-        
+        [extensionsString appendFormat:@"<mapillary:gpsAccuracyMeters>%f</>", self.location.location.horizontalAccuracy];
+        [extensionsString appendFormat:@"<mapillary:compassTrueHeading>%f</>", self.location.heading.trueHeading];
+        [extensionsString appendFormat:@"<mapillary:compassMagneticHeading>%f</>", self.location.heading.magneticHeading];
+        [extensionsString appendFormat:@"<mapillary:compassAccuracyDegrees>%f</>", self.location.heading.headingAccuracy];
         [locationString appendFormat:@"<extensions>%@</extensions>", extensionsString];
         
         // End track point
@@ -138,15 +118,15 @@
             NSMutableString* extensionsString = [[NSMutableString alloc] init];
             [extensionsString appendFormat:@"\t\t<mapillary:localTimeZone>%@</>\n", [[NSTimeZone systemTimeZone] description]];
             [extensionsString appendFormat:@"\t\t<mapillary:project>%@</>\n", sequence.project ? sequence.project : @""];
-            [extensionsString appendFormat:@"\t\t<mapillary:userKey>%@</>\n", [[MAPLoginManager currentUser] userKey]];
             [extensionsString appendFormat:@"\t\t<mapillary:sequenceKey>%@</>\n", sequence.sequenceKey];
             [extensionsString appendFormat:@"\t\t<mapillary:timeOffset>%f</>\n", sequence.timeOffset];
-            [extensionsString appendFormat:@"\t\t<mapillary:bearingOffset>%f</>\n", sequence.bearingOffset];
+            [extensionsString appendFormat:@"\t\t<mapillary:directionOffset>%f</>\n", sequence.directionOffset];
             [extensionsString appendFormat:@"\t\t<mapillary:deviceName>%@</>\n", sequence.device.name];
             [extensionsString appendFormat:@"\t\t<mapillary:deviceMake>%@</>\n", sequence.device.make];
             [extensionsString appendFormat:@"\t\t<mapillary:deviceModel>%@</>\n", sequence.device.model];
-            [extensionsString appendFormat:@"\t\t<mapillary:uploadHash>%@</>\n", @"TODO"];
             [extensionsString appendFormat:@"\t\t<mapillary:appVersion>%@</>\n", versionString];
+            [extensionsString appendFormat:@"\t\t<mapillary:userKey>%@</>\n", [[MAPLoginManager currentUser] userKey]];
+            [extensionsString appendFormat:@"\t\t<mapillary:uploadHash>%@</>\n", [[MAPLoginManager currentUser] uploadHash]];
             // TODO MAPSettingsTokenValid needed?
             
             NSMutableString* header = [[NSMutableString alloc] init];
@@ -181,9 +161,9 @@
     op.path = self.path;
     op.location = location;
     
-    if (location.date)
+    if (location.timestamp)
     {
-        op.time = [self.dateFormatter stringFromDate:location.date];
+        op.time = [self.dateFormatter stringFromDate:location.timestamp];
     }
     else
     {

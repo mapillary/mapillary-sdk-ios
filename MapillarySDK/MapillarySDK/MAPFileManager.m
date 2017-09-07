@@ -24,7 +24,7 @@
         MAPSequence* sequence = [[MAPSequence alloc] init];
         sequence.path = path;
         sequence.sequenceDate = [NSDate date];
-        sequence.bearingOffset = 0;
+        sequence.directionOffset = 0;
         sequence.timeOffset = 0;
         [sequences addObject:sequence];
     }

@@ -12,7 +12,7 @@
 
 @interface MAPSequence : NSObject
 
-@property float bearingOffset; // (-1 = undefined, 0-360 = set),
+@property CLLocationDirection directionOffset; // (-1 = undefined, 0-360 = set),
 @property NSTimeInterval timeOffset; // in milliseconds, +1 means the image date is increased by 1 ms
 @property NSDate* sequenceDate;
 @property NSString* path;

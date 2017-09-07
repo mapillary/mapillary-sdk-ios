@@ -7,17 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface MAPLocation : NSObject
 
-@property NSNumber* latitude;
-@property NSNumber* longitude;
-@property NSNumber* originalBearing;
-@property NSNumber* calculatedBearing;
-@property NSNumber* elevation;
-@property NSDate* date;
-@property NSString* dateString;
-    
+@property CLLocation* location;
+@property CLHeading* heading;
+@property NSDate* timestamp;
+
 - (BOOL)isEqualToLocation:(MAPLocation*)aLocation;
+- (NSString*)timeString;
 
 @end

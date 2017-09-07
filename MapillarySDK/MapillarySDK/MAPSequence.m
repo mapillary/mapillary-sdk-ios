@@ -29,7 +29,7 @@
     if (self)
     {
         self.sequenceDate = [NSDate date];
-        self.bearingOffset = -1;
+        self.directionOffset = -1;
         self.timeOffset = 0;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
@@ -69,6 +69,8 @@
 - (NSArray*)listLocations
 {
     // TODO
+    NSData* data = [NSData dataWithContentsOfFile:self.path];
+    NSXMLParser* xmlParser = [[NSXMLParser alloc] initWithData:data];
 
     NSMutableArray* locations = [[NSMutableArray alloc] init];
     return locations;

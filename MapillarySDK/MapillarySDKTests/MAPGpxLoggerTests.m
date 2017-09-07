@@ -23,14 +23,13 @@
 {
     [super setUp];
     
-    self.sequence = [[MAPSequence alloc] init];
+    MAPDevice* device = [[MAPDevice alloc] init];
+    device.name = @"iPhone7,2";
+    device.make = @"Apple";
+    device.model = @"iPhone 6";
     
+    self.sequence = [[MAPSequence alloc] initWithDevice:device];
     self.sequence.project = @"Public";
-    self.sequence.device.name = @"iPhone7,2";
-    self.sequence.device.make = @"Apple";
-    self.sequence.device.model = @"iPhone 6";
-    
-    NSLog(@"%@", self.sequence.path);
 }
 
 - (void)tearDown
@@ -46,9 +45,8 @@
     for (int i = 0; i < 10; i++)
     {
         MAPLocation* location = [[MAPLocation alloc] init];
-        location.latitude = [NSNumber numberWithDouble:50+i*0.1];
-        location.longitude = [NSNumber numberWithDouble:50+i*0.1];
-        location.date = [NSDate date];
+        location.location = [[CLLocation alloc] initWithLatitude:50+i*0.1 longitude:50+i*0.1];
+        location.timestamp = [NSDate date];
         
         [NSThread sleepForTimeInterval:0.1];
         

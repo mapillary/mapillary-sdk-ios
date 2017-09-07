@@ -12,7 +12,9 @@
 
 @property (readonly) NSString* userName;
 @property (readonly) NSString* userKey;
+@property (readonly) NSString* accessToken;
+@property (readonly) NSString* uploadHash;
 
-- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey;
+- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey andUserAccessToken:(NSString*)accessToken;
 
 @end

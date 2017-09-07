@@ -12,7 +12,9 @@
 @interface MAPLoginManager : NSObject
 
 + (void)signIn;
++ (BOOL)finishSignIn:(NSURL*)url;
 + (void)signOut;
+
 + (MAPUser*)currentUser;
 
 @end

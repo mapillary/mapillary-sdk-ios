@@ -17,9 +17,13 @@
 
 @implementation MapillarySDK
 
-+ (void)initWithClientId:(NSString*)clientId
++ (void)initWithClientId:(NSString*)clientId andRedirectUrl:(NSString*)redirectUrl;
 {
+    NSAssert(clientId != nil && clientId.length > 0, @"clientId cannot be nil or empty");
+    NSAssert(redirectUrl != nil && redirectUrl.length > 0, @"redirectUrl cannot be nil or empty");
+    
     [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:MAPILLARY_CLIENT_ID];
+    [[NSUserDefaults standardUserDefaults] setObject:redirectUrl forKey:MAPILLARY_REDIRECT_URL];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

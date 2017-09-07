@@ -29,22 +29,29 @@
     
 - (BOOL)isEqualToLocation:(MAPLocation*)aLocation
 {
-    if (self == aLocation)
+    /*if (self == aLocation)
     {
         return YES;
     }
     
-    if (fabs(self.latitude.doubleValue - aLocation.latitude.doubleValue) < CLCOORDINATE_EPSILON && fabs(self.longitude.doubleValue - aLocation.longitude.doubleValue) < CLCOORDINATE_EPSILON)
+    if (fabs(self.location.coordinate.latitude - aLocation.coordinate.latitude) < CLCOORDINATE_EPSILON && fabs(self.coordinate.longitude - aLocation.coordinate.longitude) < CLCOORDINATE_EPSILON)
     {
         return YES;
     }
     
-    return NO;
+    return NO;*/
+    
+    return [self.location isEqual:aLocation.location];
 }
     
 - (NSString*)description
 {
-    return [NSString stringWithFormat: @"Date: %@ Latitude: %f Longitude: %f", self.dateString, self.latitude.doubleValue, self.latitude.doubleValue];
+    return [NSString stringWithFormat: @"Date: %@ Latitude: %f Longitude: %f", [self timeString], self.location.coordinate.latitude, self.location.coordinate.latitude];
+}
+
+- (NSString*)timeString
+{
+    return nil; // TODO
 }
 
 @end

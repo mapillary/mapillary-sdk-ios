@@ -29,6 +29,6 @@ FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 
 @interface MapillarySDK : NSObject
 
-+ (void)initWithClientId:(NSString*)clientId;
++ (void)initWithClientId:(NSString*)clientId andRedirectUrl:(NSString*)redirectUrl;
 
 @end
