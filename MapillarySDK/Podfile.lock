@@ -1,12 +1,29 @@
 PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
   - BOSImageResizeOperation (0.1.0)
 
 DEPENDENCIES:
-  - BOSImageResizeOperation
+  - AFNetworking (~> 3.1)
+  - BOSImageResizeOperation (= 0.1.0)
 
 SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
 
-PODFILE CHECKSUM: 14136dff5ba8afc19f86aabd3446588446c66dbe
+PODFILE CHECKSUM: 9f043990a35615074dab782eba6be351216842f7
 
 COCOAPODS: 1.1.1
