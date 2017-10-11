@@ -37,7 +37,7 @@ To use the SDK, you need to obtain a Mapillary `client_id` first.
 
 ##### Redirect URL
 
-When you fill in the form, make sure the redirect URL is on this format:
+When you fill in the form, make sure the redirect URL is similar to this:
 
 `com.mycompany.myapp.mapillary://`
 
@@ -47,9 +47,13 @@ When you fill in the form, make sure the redirect URL is on this format:
 
 Copy your `client_id`, you need it to initialize the SDK later.
 
-### Custom URL scheme
+### Edit your application plist
 
-Now you need to add a custom URL scheme to your app. This is needed so that after authentication in the browser, your app can get focus again. Enter the same scheme as you provided in the redirect URL previously. Below is an example of an plist.
+Now you need to add a custom URL scheme to your app. This is needed so that after authentication in the browser, your app can get focus again. Enter the same scheme as you provided in the redirect URL previously. 
+
+You also need to add `MapillaryClientId` and `MapillaryRedirectUrl` to the plist.
+
+Below is an example of a plist.
 
 ```
 <plist version="1.0">
@@ -62,10 +66,16 @@ Now you need to add a custom URL scheme to your app. This is needed so that afte
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.mycompany.myapp.mapillary</string>
+				<string>YOUR_REDIRECT_URL</string>
 			</array>
 		</dict>
 	</array>
+	...
+	<key>MapillaryClientId</key>
+	<string>YOUR_CLIENT_ID</string>
+	...
+	<key>MapillaryRedirectUrl</key>
+	<string>YOUR_REDIRECT_URL</string>
 	...
 </dict>
 </plist>
@@ -80,13 +90,12 @@ Add this to your `AppDelegate.m` file:
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	[MapillarySDK initWithClientId:YOUR_CLIENT_ID andRedirectUrl:YOUR_REDIRECT_URL];
-	return YES;
+	return [MAPApplicationDelegate application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {    
-	return [MAPLoginManager finishSignIn:url];
+	return [MAPApplicationDelegate application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 ```
 
