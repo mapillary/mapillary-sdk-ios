@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreMotion/CoreMotion.h>
 
 @interface MAPLocation : NSObject
 
 @property CLLocation* location;
 @property CLHeading* heading;
 @property NSDate* timestamp;
+@property CMDeviceMotion* deviceMotion;
 
 - (BOOL)isEqualToLocation:(MAPLocation*)aLocation;
 - (NSString*)timeString;

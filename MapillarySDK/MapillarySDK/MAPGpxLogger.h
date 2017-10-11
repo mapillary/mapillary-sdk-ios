@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreMotion/CoreMotion.h>
 #import "MAPLocation.h"
 #import "MAPSequence.h"
 
 @interface MAPGpxLogger : NSObject
 
 - (id)initWithFile:(NSString*)path andSequence:(MAPSequence*)sequence;
-- (void)add:(MAPLocation*)location;
+- (void)addLocation:(MAPLocation*)location;
 
 @end

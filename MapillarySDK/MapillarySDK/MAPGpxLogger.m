@@ -49,16 +49,17 @@
             [locationString appendString:@"<fix>2d</fix>"];
         }
         
-        
         // Add exgtensions
-        // TODO need accelerometer?
-        // TODO need direction?
-        
         NSMutableString* extensionsString = [[NSMutableString alloc] init];
         [extensionsString appendFormat:@"<mapillary:gpsAccuracyMeters>%f</mapillary:gpsAccuracyMeters>", self.location.location.horizontalAccuracy];
         [extensionsString appendFormat:@"<mapillary:compassTrueHeading>%f</mapillary:compassTrueHeading>", self.location.heading.trueHeading];
         [extensionsString appendFormat:@"<mapillary:compassMagneticHeading>%f</mapillary:compassMagneticHeading>", self.location.heading.magneticHeading];
         [extensionsString appendFormat:@"<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>", self.location.heading.headingAccuracy];
+        [extensionsString appendFormat:@"<mapillary:motionX>%f</mapillary:motionX>", -self.location.deviceMotion.gravity.x];
+        [extensionsString appendFormat:@"<mapillary:motionY>%f</mapillary:motionY>", self.location.deviceMotion.gravity.y];
+        [extensionsString appendFormat:@"<mapillary:motionZ>%f</mapillary:motionZ>", self.location.deviceMotion.gravity.z];
+        [extensionsString appendFormat:@"<mapillary:motionAngle>%f</mapillary:motionZ>", atan2(self.location.deviceMotion.gravity.y, -self.location.deviceMotion.gravity.x)];
+        
         [locationString appendFormat:@"<extensions>%@</extensions>", extensionsString];
         
         // End track point
@@ -155,7 +156,7 @@
     return self;
 }
 
-- (void)add:(MAPLocation*)location
+- (void)addLocation:(MAPLocation*)location
 {
     MAPGpxOperation* op = [[MAPGpxOperation alloc] init];
     op.path = self.path;

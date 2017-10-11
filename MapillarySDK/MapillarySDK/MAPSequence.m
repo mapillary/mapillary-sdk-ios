@@ -97,7 +97,7 @@
 
     if (location)
     {
-        [self.gpxLogger add:location];
+        [self.gpxLogger addLocation:location];
         self.currentLocation = location;
     }
 }
@@ -119,7 +119,7 @@
 {
     if (location)
     {
-        [self.gpxLogger add:location];
+        [self.gpxLogger addLocation:location];
         self.currentLocation = location;
     }
 }
