@@ -19,7 +19,6 @@
 {
     [super setUp];
     
-    [MapillarySDK initWithClientId:@""];
 }
 
 - (void)tearDown

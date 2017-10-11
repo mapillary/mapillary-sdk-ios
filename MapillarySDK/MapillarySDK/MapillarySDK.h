@@ -14,8 +14,7 @@ FOUNDATION_EXPORT double MapillarySDKVersionNumber;
 //! Project version string for MapillarySDK.
 FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <Mapillary/PublicHeader.h>
-
+#import "MAPApplicationDelegate.h"
 #import "MAPDevice.h"
 #import "MAPFileManager.h"
 #import "MAPImage.h"
@@ -25,10 +24,3 @@ FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 #import "MAPUploadManager.h"
 #import "MAPUploadStatus.h"
 #import "MAPUser.h"
-
-
-@interface MapillarySDK : NSObject
-
-+ (void)initWithClientId:(NSString*)clientId andRedirectUrl:(NSString*)redirectUrl;
-
-@end
