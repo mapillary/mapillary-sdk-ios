@@ -23,7 +23,7 @@
 - (id)initWithDevice:(MAPDevice*)device;
 
 - (NSArray*)listImages;
-- (NSArray*)listLocations;
+- (void)listLocations:(void(^)(NSArray*))done;
     
 - (MAPLocation*)locationForDate:(NSDate*)date;
     

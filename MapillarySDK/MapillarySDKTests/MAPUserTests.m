@@ -29,13 +29,13 @@
 {
     NSString* userName = @"Mappy";
     NSString* userKey = [[NSUUID UUID] UUIDString];
-    NSString* userUploadHash = [[NSUUID UUID] UUIDString];
+    NSString* accessToken = [[NSUUID UUID] UUIDString];
     
-    MAPUser* user = [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andUploadHash:userUploadHash];
+    MAPUser* user = [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andUserAccessToken:accessToken];
     
     XCTAssertTrue([userName isEqualToString:user.userName]);
     XCTAssertTrue([userKey isEqualToString:user.userKey]);
-    XCTAssertTrue([userUploadHash isEqualToString:user.uploadHash]);
+    XCTAssertTrue([accessToken isEqualToString:user.accessToken]);
 }
 
 @end

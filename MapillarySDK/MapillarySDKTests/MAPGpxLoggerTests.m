@@ -8,11 +8,10 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
-
 #import "MAPUtils.h"
+#import "MAPGpxParser.h"
 
-@interface MAPGpxLoggerTests : XCTestCase
-    
+@interface MAPGpxLoggerTests : XCTestCase    
 @property MAPSequence* sequence;
 
 @end
@@ -56,6 +55,11 @@
     NSString* file = [NSString stringWithFormat:@"%@/sequence.gpx", self.sequence.path];
     NSString* contents = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil];
     NSLog(@"\n\n----------------------------\n%@\n\n----------------------------", contents);
+    
+    MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:file];
+    [parser parse:^(NSDictionary *dict) {
+        
+    }];
     
 }
 

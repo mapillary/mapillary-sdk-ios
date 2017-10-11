@@ -13,6 +13,7 @@
 #import "MAPGpxLogger.h"
 #import "BOSImageResizeOperation.h"
 #import "MAPDefines.h"
+#import "MAPGpxParser.h"
 
 @interface MAPSequence()
 
@@ -66,14 +67,16 @@
     return images;
 }
     
-- (NSArray*)listLocations
+- (void)listLocations:(void(^)(NSArray*))done
 {
-    // TODO
-    NSData* data = [NSData dataWithContentsOfFile:self.path];
-    NSXMLParser* xmlParser = [[NSXMLParser alloc] initWithData:data];
-
-    NSMutableArray* locations = [[NSMutableArray alloc] init];
-    return locations;
+    MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
+    
+    [parser parse:^(NSDictionary *dict) {
+        
+        NSArray* locations = dict[@"locations"];
+        done(locations);
+        
+    }];
 }
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
