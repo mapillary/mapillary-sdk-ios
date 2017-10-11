@@ -11,4 +11,6 @@ Pod::Spec.new do |s|
   s.source       = { :path => '.' }  
   s.source_files = "MapillarySDK", "MapillarySDK/MapillarySDK/**/*.{h,m}", "MapillarySDK/internal"
   s.dependency 'BOSImageResizeOperation', '~> 0.1'
+  s.dependency 'AFNetworking', '~> 3.0'
+
 end
