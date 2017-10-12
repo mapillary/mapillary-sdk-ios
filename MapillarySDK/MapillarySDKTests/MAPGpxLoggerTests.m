@@ -41,7 +41,7 @@
 
 - (void)testGpx
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i <= 1; i++)
     {
         MAPLocation* location = [[MAPLocation alloc] init];
         location.location = [[CLLocation alloc] initWithLatitude:50+i*0.1 longitude:50+i*0.1];

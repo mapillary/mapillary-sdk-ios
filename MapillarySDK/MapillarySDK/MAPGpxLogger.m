@@ -58,7 +58,7 @@
         [extensionsString appendFormat:@"<mapillary:motionX>%f</mapillary:motionX>", -self.location.deviceMotion.gravity.x];
         [extensionsString appendFormat:@"<mapillary:motionY>%f</mapillary:motionY>", self.location.deviceMotion.gravity.y];
         [extensionsString appendFormat:@"<mapillary:motionZ>%f</mapillary:motionZ>", self.location.deviceMotion.gravity.z];
-        [extensionsString appendFormat:@"<mapillary:motionAngle>%f</mapillary:motionZ>", atan2(self.location.deviceMotion.gravity.y, -self.location.deviceMotion.gravity.x)];
+        [extensionsString appendFormat:@"<mapillary:motionAngle>%f</mapillary:motionAngle>", atan2(self.location.deviceMotion.gravity.y, -self.location.deviceMotion.gravity.x)];
         
         [locationString appendFormat:@"<extensions>%@</extensions>", extensionsString];
         
@@ -132,7 +132,7 @@
             
             NSMutableString* header = [[NSMutableString alloc] init];
             [header appendFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"];
-            [header appendFormat:@"<gpx version=\"1,0\" creator=\"Mapillary iOS %@\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n", versionString];
+            [header appendFormat:@"<gpx version=\"1.1\" creator=\"Mapillary iOS %@\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n", versionString];
             [header appendFormat:@"\t<metadata>\n"];
             [header appendFormat:@"\t\t<author>\n\t\t\t<name>%@</name>\n\t\t</author>\n", authorString];
             [header appendFormat:@"\t\t<time>%@</time>\n", dateString];
