@@ -21,6 +21,7 @@
 @property MAPDevice* device;
     
 - (id)initWithDevice:(MAPDevice*)device;
+- (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project;
 
 - (NSArray*)listImages;
 - (void)listLocations:(void(^)(NSArray*))done;

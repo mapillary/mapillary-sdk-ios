@@ -26,6 +26,11 @@
 
 - (id)initWithDevice:(MAPDevice*)device
 {
+    return [self initWithDevice:device andProject:@"Public"];
+}
+
+- (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project
+{
     self = [super init];
     if (self)
     {
@@ -35,6 +40,7 @@
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device;
+        self.project = project;
         
         NSString* folderName = [MAPUtils getTimeString:nil];
         self.path = [NSString stringWithFormat:@"%@/%@", [MAPUtils sequenceDirectory], folderName];

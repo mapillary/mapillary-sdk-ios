@@ -18,6 +18,9 @@
 
 @end
 
+NSString* footer;
+unsigned long long footerLength;
+
 @implementation MAPGpxOperation
 
 - (void)main
@@ -28,54 +31,60 @@
         NSMutableString* locationString = [[NSMutableString alloc] init];
         
         // Add location
-        [locationString appendFormat:@"\t\t\t<trkpt lat=\"%f\" lon=\"%f\">", self.location.location.coordinate.latitude, self.location.location.coordinate.longitude];
+        [locationString appendFormat:@"\t\t\t<trkpt lat=\"%f\" lon=\"%f\">\n", self.location.location.coordinate.latitude, self.location.location.coordinate.longitude];
         
         // Add eleveation if available
         if (self.location.location.verticalAccuracy > 0)
         {
-            [locationString appendFormat:@"<ele>%f</ele>", self.location.location.altitude];
+            [locationString appendFormat:@"\t\t\t\t<ele>%f</ele>\n", self.location.location.altitude];
         }
         
         // Add time
-        [locationString appendFormat:@"<time>%@</time>", self.time];
+        [locationString appendFormat:@"\t\t\t\t<time>%@</time>\n", self.time];
         
         // Add fix
         if (self.location.location.verticalAccuracy > 0)
         {
-            [locationString appendString:@"<fix>3d</fix>"];
+            [locationString appendString:@"\t\t\t\t<fix>3d</fix>\n"];
         }
         else
         {
-            [locationString appendString:@"<fix>2d</fix>"];
+            [locationString appendString:@"\t\t\t\t<fix>2d</fix>\n"];
         }
         
         // Add exgtensions
         NSMutableString* extensionsString = [[NSMutableString alloc] init];
-        [extensionsString appendFormat:@"<mapillary:gpsAccuracyMeters>%f</mapillary:gpsAccuracyMeters>", self.location.location.horizontalAccuracy];
-        [extensionsString appendFormat:@"<mapillary:compassTrueHeading>%f</mapillary:compassTrueHeading>", self.location.heading.trueHeading];
-        [extensionsString appendFormat:@"<mapillary:compassMagneticHeading>%f</mapillary:compassMagneticHeading>", self.location.heading.magneticHeading];
-        [extensionsString appendFormat:@"<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>", self.location.heading.headingAccuracy];
-        [extensionsString appendFormat:@"<mapillary:motionX>%f</mapillary:motionX>", -self.location.deviceMotion.gravity.x];
-        [extensionsString appendFormat:@"<mapillary:motionY>%f</mapillary:motionY>", self.location.deviceMotion.gravity.y];
-        [extensionsString appendFormat:@"<mapillary:motionZ>%f</mapillary:motionZ>", self.location.deviceMotion.gravity.z];
-        [extensionsString appendFormat:@"<mapillary:motionAngle>%f</mapillary:motionAngle>", atan2(self.location.deviceMotion.gravity.y, -self.location.deviceMotion.gravity.x)];
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:gpsAccuracyMeters>%f</mapillary:gpsAccuracyMeters>\n", self.location.location.horizontalAccuracy];
         
-        [locationString appendFormat:@"<extensions>%@</extensions>", extensionsString];
+        if (self.location.heading)
+        {
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassTrueHeading>%f</mapillary:compassTrueHeading>\n", self.location.heading.trueHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassMagneticHeading>%f</mapillary:compassMagneticHeading>\n", self.location.heading.magneticHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>\n", self.location.heading.headingAccuracy];
+        }
+        
+        if (self.location.deviceMotion)
+        {
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionX>%f</mapillary:motionX>\n", -self.location.deviceMotion.gravity.x];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionY>%f</mapillary:motionY>\n", self.location.deviceMotion.gravity.y];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionZ>%f</mapillary:motionZ>\n", self.location.deviceMotion.gravity.z];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionAngle>%f</mapillary:motionAngle>\n", atan2(self.location.deviceMotion.gravity.y, -self.location.deviceMotion.gravity.x)];
+        }
+        
+        [locationString appendFormat:@"\t\t\t\t<extensions>\n%@\t\t\t\t</extensions>\n", extensionsString];
         
         // End track point
-        [locationString appendString:@"</trkpt>\n"];
+        [locationString appendString:@"\t\t\t</trkpt>\n"];
         
         // Append footer
-        NSString* footer = @"\t\t</trkseg>\n\t</trk>\n</gpx>";
         [locationString appendString:footer];
         
         // Append to end of file - footer length
         NSData* locationData = [locationString dataUsingEncoding:NSUTF8StringEncoding];
-        NSData* footerData = [footer dataUsingEncoding:NSUTF8StringEncoding];
+        
         
         NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:nil];
         
-        unsigned long long footerLength = footerData.length;
         unsigned long long fileLength = [attributes fileSize];
         
         [file seekToFileOffset:fileLength-footerLength];
@@ -135,21 +144,22 @@
             [header appendFormat:@"<gpx version=\"1.1\" creator=\"Mapillary iOS %@\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n", versionString];
             [header appendFormat:@"\t<metadata>\n"];
             [header appendFormat:@"\t\t<author>\n\t\t\t<name>%@</name>\n\t\t</author>\n", authorString];
-            [header appendFormat:@"\t\t<time>%@</time>\n", dateString];
             [header appendFormat:@"\t\t<link href=\"https://www.mapillary.com/app/user/%@\"/>\n", authorString];
+            [header appendFormat:@"\t\t<time>%@</time>\n", dateString];
             [header appendFormat:@"\t</metadata>\n"];
-            [header appendFormat:@"\t<extensions>\n%@\t</extensions>\n", extensionsString];
             [header appendFormat:@"\t<trk>\n"];
             [header appendFormat:@"\t\t<src>Logged by %@ using Mapillary</src>\n", authorString];
             [header appendFormat:@"\t\t<trkseg>\n"];
             
-            NSString* footer = @"\t\t</trkseg>\n\t</trk>\n</gpx>";
+            footer = [NSString stringWithFormat:@"\t\t</trkseg>\n\t</trk>\n\t<extensions>\n%@\t</extensions>\n</gpx>", extensionsString];
+            
             [header appendString:footer];
-
             
             NSData* data = [header dataUsingEncoding:NSUTF8StringEncoding];
-            
             [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
+            
+            NSData* footerData = [footer dataUsingEncoding:NSUTF8StringEncoding];
+            footerLength = footerData.length;
         }
     }
     

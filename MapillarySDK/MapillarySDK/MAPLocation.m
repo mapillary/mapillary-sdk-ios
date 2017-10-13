@@ -51,7 +51,9 @@
 
 - (NSString*)timeString
 {
-    return nil; // TODO
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+    return [dateFormatter stringFromDate:self.timestamp];
 }
 
 @end

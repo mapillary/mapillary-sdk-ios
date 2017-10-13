@@ -29,6 +29,9 @@
     self = [super init];
     if (self)
     {
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+        
         NSData* data = [NSData dataWithContentsOfFile:path];
         self.xmlParser = [[NSXMLParser alloc] initWithData:data];
         self.xmlParser.delegate = self;
@@ -67,6 +70,7 @@
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
     [self.currentElementValue appendString:string];
+    NSLog(@"%@", string);
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
@@ -92,11 +96,13 @@
                                                                  speed:speed
                                                              timestamp:timestamp];
             
-            location.heading = [[CLHeading alloc] init];
+            
+            location.timestamp = timestamp;
+            //location.heading = [[CLHeading alloc] init];
             
             [self.locations addObject:location];
             
-            self.currentTrackPoint = nil;
+            //self.currentTrackPoint = nil;
         }
         else if (![elementName isEqualToString:@"extensions"] && ![elementName isEqualToString:@"fix"])
         {
@@ -116,9 +122,7 @@
 {
     if (self.doneCallback)
     {
-        NSDictionary* dict = @{
-                               @"locations": self.locations
-                               };
+        NSDictionary* dict = @{@"locations": self.locations};
         
         self.doneCallback(dict);
         self.doneCallback = nil;
