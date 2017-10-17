@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "UNIT TESTS RUN (NONE)"
+exit 0
