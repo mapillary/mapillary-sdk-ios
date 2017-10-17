@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
+#import <OCMockito/OCMockito.h>
 
 @interface MAPLoginManagerTests : XCTestCase
 
@@ -31,10 +32,16 @@
 {
     [MAPLoginManager signIn];
     
+    
+    
+    
+    
+    
+    
     MAPUser* currentUser = [MAPLoginManager currentUser];
     
-    //XCTAssertTrue([@"username" isEqualToString:currentUser.userName]);
-    //XCTAssertTrue([@"userkey" isEqualToString:currentUser.userKey]);
+    XCTAssertTrue([@"username" isEqualToString:currentUser.userName]);
+    XCTAssertTrue([@"userkey" isEqualToString:currentUser.userKey]);
     
     [MAPLoginManager signOut];
 }

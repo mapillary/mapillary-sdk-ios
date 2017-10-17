@@ -45,6 +45,8 @@
 		9AE6FB121F56EB67004AE114 /* MAPGpxLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */; };
 		9AE6FB151F571E1D004AE114 /* MAPDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE6FB131F571E1D004AE114 /* MAPDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AE6FB161F571E1D004AE114 /* MAPDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6FB141F571E1D004AE114 /* MAPDevice.m */; };
+		9AE762391F94E4B7003EC3E9 /* libOCHamcrest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */; };
+		9AE7623B1F94E4BC003EC3E9 /* libOCMockito.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AE7623C1F94E4BC003EC3E9 /* libOCMockito.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,10 @@
 		9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPGpxLoggerTests.m; sourceTree = "<group>"; };
 		9AE6FB131F571E1D004AE114 /* MAPDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPDevice.h; sourceTree = "<group>"; };
 		9AE6FB141F571E1D004AE114 /* MAPDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPDevice.m; sourceTree = "<group>"; };
+		9AE762361F94E47B003EC3E9 /* libOCMockito.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCMockito.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE762381F94E482003EC3E9 /* libOCHamcrest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCHamcrest.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCHamcrest.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE7623C1F94E4BC003EC3E9 /* libOCMockito.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCMockito.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +124,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AE7623B1F94E4BC003EC3E9 /* libOCMockito.a in Frameworks */,
+				9AE762391F94E4B7003EC3E9 /* libOCHamcrest.a in Frameworks */,
 				9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */,
 				2E94298B40925C85C8763F38 /* libPods-MapillarySDKTests.a in Frameworks */,
 			);
@@ -129,6 +137,10 @@
 		15E690A7296FD5CBD0E66C92 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9AE7623C1F94E4BC003EC3E9 /* libOCMockito.a */,
+				9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */,
+				9AE762381F94E482003EC3E9 /* libOCHamcrest.a */,
+				9AE762361F94E47B003EC3E9 /* libOCMockito.a */,
 				169F403CB7C5B1A80A248CDC /* libPods-MapillarySDK.a */,
 				4E80025FA3A595529DAE1966 /* libPods-MapillarySDKTests.a */,
 			);
