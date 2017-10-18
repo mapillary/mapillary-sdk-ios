@@ -1,5 +1,5 @@
 #!groovy
-@Library('mapillary-pipeline@ios_stages') _
+@Library('mapillary-pipeline') _
 com.mapillary.pipeline.Pipeline.builder(this, steps)
     .withUnitIosStage()
     .build()
