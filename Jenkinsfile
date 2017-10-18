@@ -1,7 +1,6 @@
 #!groovy
-
-@Library('mapillary-pipeline') _
+@Library('mapillary-pipeline@ios_stages') _
 com.mapillary.pipeline.Pipeline.builder(this, steps)
-   .defaultPipeline()
-   .build()
-   .execute()
+    .withUnitIosStage()
+    .build()
+    .execute()
