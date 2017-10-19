@@ -23,7 +23,7 @@
 			"description": "The Mapillary iOS SDK",
 			"name": "sdk_ios"
 		}],
-		"type": "sdk_ios"
+		"type": "library"
 	}],
 	"repo": "mapillary-sdk-ios"
 }
