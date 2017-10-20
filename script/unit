@@ -5,7 +5,7 @@ PARRENT_DIR="$(dirname "$current_dir")"
 
 echo "HELLO"
 
-cd $CURRENT_DIR/MapillarySDK
+cd MapillarySDK
 
 echo "Testing..."
 
