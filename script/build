@@ -3,7 +3,7 @@
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PARRENT_DIR="$(dirname "$current_dir")"
 
-cd $PARENT_DIR/MapillarySDK
+cd $CURRENT_DIR/MapillarySDK
 
 echo "Building..."
 
