@@ -1,11 +1,16 @@
 #!/bin/bash
 
-cd $WORKSAPCE/../MapillarySDK
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PARRENT_DIR="$(dirname "$current_dir")"
+
+echo "HELLO"
+
+cd $CURRENT_DIR/../MapillarySDK
 
 echo "Testing..."
 
 xcodebuild test-without-building \
-           -destination 'platform=iOS Simulator,OS=11.0,name=iPhone 6' \
+           -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' \
            -xctestrun "build/Build/Products/MapillarySDK_iphonesimulator11.0-x86_64.xctestrun" 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."

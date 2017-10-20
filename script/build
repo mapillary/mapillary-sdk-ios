@@ -12,6 +12,6 @@ echo "Building..."
 xcodebuild -workspace MapillarySDK.xcworkspace \
            -scheme MapillarySDK \
            -configuration Debug \
-           -destination 'platform=iOS Simulator,OS=11.0,name=iPhone 6' \
+           -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' \
            -derivedDataPath "build" \
            build-for-testing
