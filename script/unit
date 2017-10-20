@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ~/checkout_dir/MapillarySDK
+cd $WORKSAPCE/MapillarySDK
 
 echo "Testing..."
 
