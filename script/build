@@ -5,10 +5,10 @@ PARENT_DIR="$(dirname "$current_dir")"
 
 echo "HELLO"
 
-pwd
+cd MapillarySDK
+
 ls
 
-cd $PARENT_DIR/MapillarySDK
 
 echo "Building..."
 
