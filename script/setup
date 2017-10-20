@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PARENT_DIR="$(dirname "$current_dir")"
+
+echo "Setting up..."
+
+gem install cocoapods
+gem install slather
+gem install ocunit2junit
