@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PARENT_DIR="$(dirname "$current_dir")"
+PARENT_DIR="$(dirname "$CURRENT_DIR")"
 
 cd MapillarySDK
 
