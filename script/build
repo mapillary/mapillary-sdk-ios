@@ -6,7 +6,7 @@ PARENT_DIR="$(dirname "$CURRENT_DIR")"
 cd MapillarySDK
 
 echo "Generating workspace"
-pod install
+/usr/local/bin/pod install
 
 echo "Building..."
 xcodebuild -workspace $PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace \
