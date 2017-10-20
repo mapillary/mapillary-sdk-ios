@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ../MapillarySDK
+cd ~/checkout_dir/MapillarySDK
 
 echo "Testing..."
 
