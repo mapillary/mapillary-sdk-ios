@@ -1,9 +1,11 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PARENT_DIR="$(dirname "$current_dir")"
+PARENT_DIR="$(dirname "$CURRENT_DIR")"
 
 echo "Building..."
+
+echo "$PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace"
 
 xcodebuild -workspace $PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace \
            -scheme MapillarySDK \
