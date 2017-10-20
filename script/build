@@ -3,13 +3,6 @@
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PARENT_DIR="$(dirname "$current_dir")"
 
-echo "HELLO"
-
-cd MapillarySDK
-
-ls
-
-
 echo "Building..."
 
 xcodebuild -workspace $PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace \
