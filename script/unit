@@ -1,3 +1,23 @@
 #!/bin/bash
-echo "UNIT TESTS RUN (NONE)"
-exit 0
+
+cd ../MapillarySDK
+
+echo "Testing..."
+
+xcodebuild test-without-building \
+           -destination 'platform=iOS Simulator,OS=11.0,name=iPhone 6' \
+           -xctestrun "build/Build/Products/MapillarySDK_iphonesimulator11.0-x86_64.xctestrun" 2>&1 | /usr/local/bin/ocunit2junit
+
+echo "Collecting code coverage..."
+
+/usr/local/bin/slather coverage --cobertura-xml --scheme MapillarySDK --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace ./MapillarySDK.xcodeproj
+
+echo "Copying reports..."
+
+mkdir -p ~/test-reports/unit
+mkdir -p ~/test-reports/cobertura
+cp -a test-reports/. ~/test-reports/unit/
+cp -a cobertura/cobertura.xml ~/test-reports/cobertura/cobertura.xml
+echo "DONE."
+
+#exit 0
