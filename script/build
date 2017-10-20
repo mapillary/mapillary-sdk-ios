@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd $WORKSPACE/MapillarySDK
+cd $WORKSPACE/../MapillarySDK
 
 echo "Building..."
 
