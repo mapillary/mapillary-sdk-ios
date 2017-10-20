@@ -1,13 +1,14 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PARRENT_DIR="$(dirname "$current_dir")"
+PARENT_DIR="$(dirname "$current_dir")"
 
 echo "HELLO"
 
 cd MapillarySDK
 
 ls
+
 
 echo "Building..."
 
