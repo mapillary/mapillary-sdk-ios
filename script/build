@@ -1,9 +1,9 @@
 #!/bin/bash
 
-pwd
-ls
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PARRENT_DIR="$(dirname "$current_dir")"
 
-cd $WORKSPACE/../MapillarySDK
+cd $PARENT_DIR/MapillarySDK
 
 echo "Building..."
 
