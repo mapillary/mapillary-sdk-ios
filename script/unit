@@ -18,7 +18,7 @@ echo "Copying reports..."
 mkdir -p ../test_reports/unit
 mkdir -p ../test_reports/cobertura
 cp -a test-reports/. ../test_reports/unit/
-cp -a cobertura/cobertura.xml ../test_reports/cobertura/cobertura.xml
+cp -a cobertura/cobertura.xml ../test_reports/cobertura/coverage.xml
 echo "DONE."
 
 cd ..
