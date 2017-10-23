@@ -3,7 +3,7 @@
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PARRENT_DIR="$(dirname "$current_dir")"
 
-cd MapillarySDK
+#cd MapillarySDK
 
 echo "Running tests..."
 
@@ -16,7 +16,7 @@ xcodebuild test-without-building \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
-/usr/local/bin/slather coverage --cobertura-xml --scheme Test --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace --source-directory ./MapillarySDK ./MapillarySDK.xcodeproj
+#/usr/local/bin/slather coverage --cobertura-xml --scheme Test --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace --source-directory ./MapillarySDK ./MapillarySDK.xcodeproj
 
 echo "Copying reports..."
 mkdir -p ../test_results/unit
