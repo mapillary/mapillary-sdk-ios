@@ -8,12 +8,10 @@ cd MapillarySDK
 echo "Generating workspace"
 pod install
 
-mkdir build
-
 echo "Building..."
 xcodebuild -workspace $PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace \
            -scheme Test \
            -configuration Debug \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' \
-           -derivedDataPath "build" \
+           -derivedDataPath "~/build" \
            build-for-testing
