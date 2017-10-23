@@ -5,15 +5,15 @@ PARRENT_DIR="$(dirname "$current_dir")"
 
 cd MapillarySDK
 
-ls
-ls build
-ls build/Build
-ls build/Build/Products
+ls MapillarySDK
+ls MapillarySDK/build
+ls MapillarySDK/build/Build
+ls MapillarySDK/build/Build/Products
 
 echo "Running tests..."
 xcodebuild test-without-building \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' \
-           -xctestrun "build/Build/Products/Test_iphonesimulator11.0-x86_64.xctestrun" 2>&1 | /usr/local/bin/ocunit2junit
+           -xctestrun "MapillarySDK/build/Build/Products/Test_iphonesimulator11.0-x86_64.xctestrun" 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
 /usr/local/bin/slather coverage --cobertura-xml --scheme Test --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace ./MapillarySDK.xcodeproj
