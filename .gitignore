@@ -4,3 +4,4 @@
 *.xcbkptlist
 xcuserdata
 Pods
+build
