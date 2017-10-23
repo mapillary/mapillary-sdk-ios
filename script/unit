@@ -5,6 +5,9 @@ PARRENT_DIR="$(dirname "$current_dir")"
 
 cd MapillarySDK
 
+echo "Generating workspace"
+pod install
+
 echo "Running tests..."
 
 ls -al
