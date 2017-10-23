@@ -20,6 +20,20 @@
                ReferencedContainer = "container:MapillarySDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9A88F94C1F4D933F0076C311"
+               BuildableName = "MapillarySDKTests.xctest"
+               BlueprintName = "MapillarySDKTests"
+               ReferencedContainer = "container:MapillarySDK.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
