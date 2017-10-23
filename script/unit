@@ -8,10 +8,10 @@ cd MapillarySDK
 echo "Running tests..."
 xcodebuild test-without-building \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' \
-           -xctestrun "build/Build/Products/MapillarySDK_iphonesimulator11.0-x86_64.xctestrun" 2>&1 | /usr/local/bin/ocunit2junit
+           -xctestrun "build/Build/Products/MapillarySDK_iphonesimulator11.0.1-x86_64.xctestrun" 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
-/usr/local/bin/slather coverage --cobertura-xml --scheme MapillarySDK --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace ./MapillarySDK.xcodeproj
+/usr/local/bin/slather coverage --cobertura-xml --scheme Test --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace ./MapillarySDK.xcodeproj
 
 echo "Copying reports..."
 mkdir -p ~/test-reports/unit
