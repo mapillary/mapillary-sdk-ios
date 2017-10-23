@@ -13,5 +13,5 @@ xcodebuild -workspace $PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace \
            -scheme Test \
            -configuration Debug \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' \
-           -derivedDataPath "$CURRENT_DIR/build" \
+           -derivedDataPath "$PARENT_DIR/build" \
            build-for-testing
