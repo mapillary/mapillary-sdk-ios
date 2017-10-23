@@ -7,8 +7,8 @@ cd MapillarySDK
 
 echo "Running tests..."
 xcodebuild test-without-building \
-           -workspace MapillarySDK.xcworkspace \
            -scheme Test \
+           -workspace MapillarySDK.xcworkspace \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
