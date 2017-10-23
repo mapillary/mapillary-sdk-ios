@@ -6,9 +6,13 @@ PARRENT_DIR="$(dirname "$current_dir")"
 cd MapillarySDK
 
 echo "Running tests..."
+
+ls -al
+
 xcodebuild test-without-building \
-           -scheme Test \
            -workspace MapillarySDK.xcworkspace \
+           -scheme Test \
+           -configuration Debug \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
