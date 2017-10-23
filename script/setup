@@ -2,8 +2,6 @@
 
 echo "Setting up..."
 
-export LANG=en_US.UTF-8
-
 gem install cocoapods --user-install
 gem install slather --user-install
 gem install ocunit2junit --user-install

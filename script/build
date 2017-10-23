@@ -6,6 +6,7 @@ PARENT_DIR="$(dirname "$CURRENT_DIR")"
 cd MapillarySDK
 
 echo "Generating workspace"
+export LANG=en_US.UTF-8
 pod install
 
 echo "Building..."

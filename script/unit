@@ -6,10 +6,10 @@ PARRENT_DIR="$(dirname "$current_dir")"
 cd MapillarySDK
 
 echo "Generating workspace"
+export LANG=en_US.UTF-8
 pod install
 
 echo "Running tests..."
-
 xcodebuild test-without-building \
            -workspace MapillarySDK.xcworkspace \
            -scheme Test \
