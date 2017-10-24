@@ -70,7 +70,7 @@
 
 - (void)testGpxParser
 {
-    XCTestExpectation* expectation = [self expectationWithDescription:@"Testing GPX parser"];
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations written should be the same as the number parsed"];
     
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
@@ -104,11 +104,12 @@
         
     }];
     
+    // Wait for test to finish
     [self waitForExpectationsWithTimeout:10 handler:^(NSError *error) {
         
         if (error)
         {
-            XCTFail(@"Expectation Failed with error: %@", error);
+            XCTFail(@"Expectation failed with error: %@", error);
         }
         
     }];

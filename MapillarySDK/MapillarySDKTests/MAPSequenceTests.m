@@ -115,6 +115,45 @@
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
+- (void)testAddLocations
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
+    
+    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
+    
+    int nbrPositions = arc4random()%100;
+    MAPLocation* location = [[MAPLocation alloc] init];
+    for (int i = 0; i < nbrPositions; i++)
+    {
+        [sequence addLocation:location];
+        [NSThread sleepForTimeInterval:0.1];
+    }
+    
+    [NSThread sleepForTimeInterval:1];
+    
+    // There should now be nbrPositions locations
+    
+    [sequence listLocations:^(NSArray *array) {
+        
+         XCTAssert(array.count == nbrPositions);
+        [expectation fulfill];
+        
+    }];
+    
+    // Cleanup
+    [MAPFileManager deleteSequence:sequence];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+        
+    }];
+}
+
 #pragma mark - Utils
 
 - (NSData*)createImageData
