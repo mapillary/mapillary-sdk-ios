@@ -17,7 +17,7 @@ xcodebuild test-without-building \
            -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
-/usr/local/bin/slather coverage --cobertura-xml --scheme Test --output-directory ./cobertura/ --workspace ./MapillarySDK.xcworkspace --source-directory ./MapillarySDK ./MapillarySDK.xcodeproj
+/usr/local/bin/slather
 
 echo "Copying reports..."
 mkdir -p ../test_results/unit

@@ -1,0 +1,8 @@
+coverage_service: cobertura_xml
+xcodeproj: MapillarySDK/MapillarySDK.xcodeproj
+workspace: MapillarySDK/MapillarySDK.xcworkspace
+scheme: Test
+source_directory: MapillarySDK/MapillarySDK
+output_directory: test_results/cobertura
+ignore:
+  - MapillarySDK/Pods/*
