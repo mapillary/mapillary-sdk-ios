@@ -14,6 +14,8 @@
 
 @interface MAPGpxLogger : NSObject
 
+@property (nonatomic) BOOL busy;
+
 - (id)initWithFile:(NSString*)path andSequence:(MAPSequence*)sequence;
 - (void)addLocation:(MAPLocation*)location;
 

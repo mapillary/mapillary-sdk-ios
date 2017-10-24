@@ -10,6 +10,8 @@
 #import "MAPUtils.h"
 #import "MAPLoginManager.h"
 
+static NSString* kQueueOperationsChanged = @"kQueueOperationsChanged";
+
 @interface MAPGpxOperation : NSOperation
 
 @property (nonatomic) NSString* path;
@@ -168,6 +170,13 @@ unsigned long long footerLength;
 
 - (void)addLocation:(MAPLocation*)location
 {
+    if (!self.busy)
+    {
+        [self.operationQueue addObserver:self forKeyPath:@"operations" options:0 context:&kQueueOperationsChanged];
+    }
+    
+    self.busy = YES;
+    
     MAPGpxOperation* op = [[MAPGpxOperation alloc] init];
     op.path = self.path;
     op.location = location;
@@ -184,6 +193,22 @@ unsigned long long footerLength;
     [self.operationQueue addOperation:op];
     
     //NSLog(@"%lu", (unsigned long)self.operationQueue.operationCount);
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self.operationQueue && [keyPath isEqualToString:@"operations"] && context == &kQueueOperationsChanged)
+    {
+        if ([self.operationQueue.operations count] == 0)
+        {
+            [self.operationQueue removeObserver:self forKeyPath:@"operations" context:&kQueueOperationsChanged];
+            self.busy = NO;
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 @end

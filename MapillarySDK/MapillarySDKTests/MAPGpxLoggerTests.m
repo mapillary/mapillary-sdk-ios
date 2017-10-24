@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
 #import "MAPUtils.h"
-#import "MAPGpxParser.h"
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -53,8 +52,6 @@
         //location.heading = [[CLHeading alloc] init];
         //location.deviceMotion = [[CMDeviceMotion alloc] init];
         
-        [NSThread sleepForTimeInterval:0.1];
-        
         [self.sequence addLocation:location];
     }
     
@@ -67,53 +64,5 @@
     
     XCTAssertTrue([contents isEqualToString:expected]);
 }
-
-- (void)testGpxParser
-{
-    XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations written should be the same as the number parsed"];
-    
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
-    
-    int nbrLocations = arc4random()%100;
-    
-    for (int i = 0; i < nbrLocations; i++)
-    {
-        MAPLocation* location = [[MAPLocation alloc] init];
-        location.location = [[CLLocation alloc] initWithLatitude:50+i*0.1 longitude:50+i*0.1];
-        location.timestamp = [NSDate dateWithTimeIntervalSince1970:i];
-        
-        [NSThread sleepForTimeInterval:0.1];
-        
-        [self.sequence addLocation:location];
-    }
-    
-    [NSThread sleepForTimeInterval:1];
-    
-    NSString* file = [NSString stringWithFormat:@"%@/sequence.gpx", self.sequence.path];
-    MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:file];
-    
-    [parser parse:^(NSDictionary *dict) {
-        
-        XCTAssertNotNil(dict);
-        
-        NSArray* locations = dict[@"locations"];
-        XCTAssertTrue(nbrLocations == locations.count);
-        
-        [expectation fulfill];
-        
-    }];
-    
-    // Wait for test to finish
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError *error) {
-        
-        if (error)
-        {
-            XCTFail(@"Expectation failed with error: %@", error);
-        }
-        
-    }];
-}
-
 
 @end

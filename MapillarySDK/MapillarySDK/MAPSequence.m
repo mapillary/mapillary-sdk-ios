@@ -15,10 +15,13 @@
 #import "MAPDefines.h"
 #import "MAPGpxParser.h"
 
+static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
+
 @interface MAPSequence()
 
 @property MAPGpxLogger* gpxLogger;
 @property MAPLocation* currentLocation;
+@property dispatch_semaphore_t listLocationsSemaphore;
 
 @end
 
@@ -77,6 +80,15 @@
     
 - (void)listLocations:(void(^)(NSArray*))done
 {
+    if (self.gpxLogger.busy)
+    {
+        self.listLocationsSemaphore = dispatch_semaphore_create(0);
+        
+        [self.gpxLogger addObserver:self forKeyPath:@"busy" options:0 context:&kGpxLoggerBusy];
+        
+        dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
+    }
+    
     MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
     
     [parser parse:^(NSDictionary *dict) {
@@ -148,6 +160,24 @@
 {
     // TODO
     return nil;
+}
+
+#pragma mark - Internal
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self.gpxLogger && [keyPath isEqualToString:@"busy"] && context == &kGpxLoggerBusy)
+    {
+        if (!self.gpxLogger.busy)
+        {
+            [self.gpxLogger removeObserver:self forKeyPath:@"busy" context:&kGpxLoggerBusy];
+            dispatch_semaphore_signal(self.listLocationsSemaphore);
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 @end

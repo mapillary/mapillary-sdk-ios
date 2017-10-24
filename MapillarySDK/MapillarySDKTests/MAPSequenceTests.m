@@ -121,15 +121,12 @@
     
     MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
     
-    int nbrPositions = arc4random()%100;
+    int nbrPositions = arc4random()%1000;
     MAPLocation* location = [[MAPLocation alloc] init];
     for (int i = 0; i < nbrPositions; i++)
     {
         [sequence addLocation:location];
-        [NSThread sleepForTimeInterval:0.1];
     }
-    
-    [NSThread sleepForTimeInterval:1];
     
     // There should now be nbrPositions locations
     
@@ -163,8 +160,5 @@
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     return UIImageJPEGRepresentation(image, 1);
 }
-
-
-
 
 @end
