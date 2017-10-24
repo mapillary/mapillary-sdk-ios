@@ -3,6 +3,6 @@ xcodeproj: MapillarySDK/MapillarySDK.xcodeproj
 workspace: MapillarySDK/MapillarySDK.xcworkspace
 scheme: Test
 source_directory: MapillarySDK/MapillarySDK
-output_directory: test_results/cobertura
+output_directory: ./cobertura
 ignore:
   - MapillarySDK/Pods/*
