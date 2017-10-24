@@ -59,8 +59,10 @@
     
     NSMutableArray* images = [[NSMutableArray alloc] init];
     NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
+    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@)", extensions]];
     
-    for (NSString* path in contents)
+    for (NSString* path in files)
     {
         MAPImage* image = [[MAPImage alloc] init];
         image.imagePath = path;
@@ -87,6 +89,13 @@
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
 {
+    NSAssert(imageData != nil, @"imageData cannot be nil");
+    
+    if (date == nil)
+    {
+        date = [NSDate date];        
+    }
+    
     NSString* fileName = [MAPUtils getTimeString:date];
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
     [imageData writeToFile:fullPath atomically:YES];
