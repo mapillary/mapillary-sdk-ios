@@ -8,8 +8,10 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
+#import "MAPUtils.h"
 
 @interface MAPSequenceTests : XCTestCase
+
 
 @property MAPDevice* device;
 
@@ -29,7 +31,8 @@
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    self.device = nil;
+    
     [super tearDown];
 }
 
@@ -60,7 +63,7 @@
     XCTAssertFalse(directoryExists);
 }
 
-- (void)testAddImages
+- (void)testAddImagesFromData
 {
     MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
     
@@ -71,16 +74,14 @@
     
     // Test with invalid data
     NSData* imageData = nil;
-    NSDate* imageDate = nil;
-    MAPLocation* imageLocation = nil;
-    XCTAssertThrows([sequence addImageWithData:imageData date:imageDate location:imageLocation]);
+    XCTAssertThrows([sequence addImageWithData:imageData date:nil location:nil]);
     
     // Test with valid data
+    imageData = [self createImageData];
     int nbrImages = arc4random()%100;
     for (int i = 0; i < nbrImages; i++)
     {
-        imageData = [self createImageData];
-        XCTAssertNoThrow([sequence addImageWithData:imageData date:imageDate location:imageLocation]);
+        XCTAssertNoThrow([sequence addImageWithData:imageData date:nil location:nil]);
     }
 
     // There should now be nbrImages images
@@ -89,6 +90,29 @@
     
     // Cleanup
     [MAPFileManager deleteSequence:sequence];
+}
+
+- (void)testAddImagesFromFile
+{
+    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
+    
+    NSString* path = [NSString stringWithFormat:@"%@/%@", [MAPUtils documentsDirectory], @"temp.jpg"];
+    
+    NSData* imageData = [self createImageData];
+    [imageData writeToFile:path atomically:YES];
+    
+    int nbrImages = arc4random()%100;
+    for (int i = 0; i < nbrImages; i++)
+    {
+        XCTAssertNoThrow([sequence addImageWithPath:path date:nil location:nil]);
+    }
+    
+    // There should now be nbrImages images
+    XCTAssert([sequence listImages].count == nbrImages);
+    
+    // Cleanup
+    [MAPFileManager deleteSequence:sequence];
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
 #pragma mark - Utils
