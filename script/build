@@ -7,7 +7,7 @@ cd MapillarySDK
 
 echo "Generating workspace"
 export LANG=en_US.UTF-8
-pod install
+/usr/local/bin/pod install
 
 echo "Building..."
 xcodebuild -workspace MapillarySDK.xcworkspace \
