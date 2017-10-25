@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MAPLocation.h"
 
-#define AVG(A, B) ((A+B)/2)
+#define AVG(A, B) ((A+B)/2.0)
 
 @interface MAPUtils : NSObject
 
