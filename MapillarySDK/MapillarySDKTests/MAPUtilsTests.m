@@ -43,10 +43,10 @@
     // Order B and A
     MAPLocation* resultBA = [MAPUtils locationBetweenLocationA:b andLocationB:a forDate:[NSDate dateWithTimeIntervalSince1970:500]];
     
-    // test1 and test2 should be the same
+    // Test1 and test2 should be the same
     XCTAssertTrue([resultAB isEqualToLocation:resultBA]);
     
-    // coordinate should be inbetween A and B
+    // Coordinate should be inbetween A and B
     XCTAssertEqual(resultAB.location.coordinate.latitude, AVG(a.location.coordinate.latitude, b.location.coordinate.latitude));
     XCTAssertEqual(resultAB.location.coordinate.longitude, AVG(a.location.coordinate.longitude, b.location.coordinate.longitude));
     

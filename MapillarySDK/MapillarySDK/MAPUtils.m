@@ -23,6 +23,7 @@
     
     if (date == nil)
     {
+        date = [NSDate dateWithTimeIntervalSince1970:AVG(locationA.timestamp.timeIntervalSince1970, locationB.timestamp.timeIntervalSince1970)];
         factor = 0.5;
     }
     else
