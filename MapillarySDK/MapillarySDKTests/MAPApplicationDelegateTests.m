@@ -30,18 +30,17 @@
 - (void)testDidFinishLaunchingWithOptions
 {
     BOOL ok = [MAPApplicationDelegate application:nil didFinishLaunchingWithOptions:nil];
-    XCTAssertTrue(ok);
+    XCTAssertFalse(ok);
     
-    // TODO add better tests
+    // TODO add more tests
 }
 
 - (void)testopenURL
 {
     BOOL ok = [MAPApplicationDelegate application:nil openURL:nil sourceApplication:nil annotation:nil];
-    XCTAssertTrue(ok);
+    XCTAssertFalse(ok);
     
-    // TODO add better tests
+    // TODO add more tests
 }
-
 
 @end
