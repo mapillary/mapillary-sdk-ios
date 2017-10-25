@@ -14,6 +14,7 @@
 #import "BOSImageResizeOperation.h"
 #import "MAPDefines.h"
 #import "MAPGpxParser.h"
+#import "MAPUtils.h"
 
 static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
@@ -94,7 +95,12 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     [parser parse:^(NSDictionary *dict) {
         
         NSArray* locations = dict[@"locations"];
-        done(locations);
+        
+        NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
+            return [b.timestamp compare:a.timestamp];
+        }];
+        
+        done(sorted);
         
     }];
 }
@@ -162,53 +168,66 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
     [self listLocations:^(NSArray *locations) {
+
+        MAPLocation* first = locations.firstObject;
+        MAPLocation* last = locations.lastObject;
         
-        MAPLocation* before = nil;
-        MAPLocation* exact = nil;
-        MAPLocation* after = nil;
-        
-        int i = 0;
-        
-        while ((exact == nil ||  after == nil || before == nil) && i < locations.count)
+        // Outside of range, return nil
+        if ([date compare:first.timestamp] == NSOrderedDescending || [date compare:last.timestamp] == NSOrderedAscending)
         {
-            MAPLocation* currentLocation = locations[i];
+            location = nil;
+        }
+        
+        // Find position
+        else
+        {
+            MAPLocation* before = nil;
+            MAPLocation* exact = nil;
+            MAPLocation* after = nil;
             
-            if ([currentLocation.timestamp isEqualToDate:date])
-            {
-                exact = currentLocation;
-            }
+            int i = 0;
             
-            else if ([currentLocation.timestamp compare:date] == NSOrderedAscending)
+            while ((exact == nil ||  after == nil || before == nil) && i < locations.count)
             {
-                if (i > 0)
+                MAPLocation* currentLocation = locations[i];
+                
+                if ([currentLocation.timestamp isEqualToDate:date])
                 {
-                    after = locations[i-1];
+                    exact = currentLocation;
                 }
                 
-                before = currentLocation;
+                else if ([currentLocation.timestamp compare:date] == NSOrderedAscending)
+                {
+                    if (i > 0)
+                    {
+                        after = locations[i-1];
+                    }
+                    
+                    before = currentLocation;
+                }
+                
+                i++;
             }
             
-            i++;
-        }
-        
-        // Exact match
-        if (exact)
-        {
-            location = exact;
-        }
-        
-        // No match found, need to interpolate between two positions
-        else if (before && after)
-        {
+            // Exact match
+            if (exact)
+            {
+                location = exact;
+            }
             
+            // No match found, need to interpolate between two positions
+            else if (before && after)
+            {
+                location = [MAPUtils locationBetweenLocationA:before andLocationB:after forDate:date];
+            }
+            
+            // Not possible to interpolate, use the closest position
+            else if (before || after)
+            {
+                location = (before ? before : after);
+            }
         }
-        
-        // Not possible to interpolate, use the closest position
-        else if (before || after)
-        {
-            location = (before ? before : after);
-        }
-        
+
         dispatch_semaphore_signal(semaphore);
         
     }];

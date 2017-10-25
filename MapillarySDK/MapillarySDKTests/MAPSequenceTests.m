@@ -151,6 +151,48 @@
     }];
 }
 
+- (void)testLocationForDate
+{
+    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
+    
+    MAPLocation* a = [[MAPLocation alloc] init];
+    a.timestamp = [NSDate dateWithTimeIntervalSince1970:500];
+    a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+    [sequence addLocation:a];
+    
+    MAPLocation* b = [[MAPLocation alloc] init];
+    b.timestamp = [NSDate dateWithTimeIntervalSince1970:1000];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(100, 100) altitude:100 horizontalAccuracy:30 verticalAccuracy:30 timestamp:b.timestamp];
+    [sequence addLocation:b];
+    
+    // Test with date inbetween A and B
+    MAPLocation* result1 = [sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:750]];
+    XCTAssertEqual(result1.location.coordinate.latitude, AVG(a.location.coordinate.latitude, b.location.coordinate.latitude));
+    XCTAssertEqual(result1.location.coordinate.longitude, AVG(a.location.coordinate.longitude, b.location.coordinate.longitude));
+    
+    // Test with nil date
+    MAPLocation* result2 = [sequence locationForDate:nil];
+    XCTAssertNil(result2);
+    
+    // Test with a's date
+    MAPLocation* result3 = [sequence locationForDate:a.timestamp];
+    XCTAssertEqual(result3.location.coordinate.latitude, a.location.coordinate.latitude);
+    XCTAssertEqual(result3.location.coordinate.longitude, a.location.coordinate.longitude);
+    
+    // Test with b's date
+    MAPLocation* result4 = [sequence locationForDate:b.timestamp];
+    XCTAssertEqual(result4.location.coordinate.latitude, b.location.coordinate.latitude);
+    XCTAssertEqual(result4.location.coordinate.longitude, b.location.coordinate.longitude);
+    
+    // Test with date before a, should be nil
+    MAPLocation* result5 = [sequence locationForDate:[NSDate dateWithTimeInterval:-100 sinceDate:a.timestamp]];
+    XCTAssertNil(result5);
+    
+    // Test with date after b, should be nil
+    MAPLocation* result6 = [sequence locationForDate:[NSDate dateWithTimeInterval:100 sinceDate:b.timestamp]];
+    XCTAssertNil(result6);
+}
+
 #pragma mark - Utils
 
 - (NSData*)createImageData
