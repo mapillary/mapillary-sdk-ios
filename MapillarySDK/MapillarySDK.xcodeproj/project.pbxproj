@@ -43,6 +43,8 @@
 		9AC871991F4DB8310012721D /* MAPDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AC871981F4DB8310012721D /* MAPDefines.h */; };
 		9AC8719B1F4DBA1A0012721D /* MAPLoginManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC8719A1F4DBA1A0012721D /* MAPLoginManagerTests.m */; };
 		9AC8719D1F4DD8500012721D /* MAPUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC8719C1F4DD8500012721D /* MAPUserTests.m */; };
+		9AE3BB0D1FA0938E00174C47 /* MAPApplicationDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3BB0C1FA0938E00174C47 /* MAPApplicationDelegateTests.m */; };
+		9AE3BB0F1FA093B000174C47 /* MAPApiManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3BB0E1FA093B000174C47 /* MAPApiManagerTests.m */; };
 		9AE6FB121F56EB67004AE114 /* MAPGpxLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */; };
 		9AE6FB151F571E1D004AE114 /* MAPDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE6FB131F571E1D004AE114 /* MAPDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AE6FB161F571E1D004AE114 /* MAPDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6FB141F571E1D004AE114 /* MAPDevice.m */; };
@@ -102,6 +104,8 @@
 		9AC871981F4DB8310012721D /* MAPDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPDefines.h; path = internal/MAPDefines.h; sourceTree = "<group>"; };
 		9AC8719A1F4DBA1A0012721D /* MAPLoginManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPLoginManagerTests.m; sourceTree = "<group>"; };
 		9AC8719C1F4DD8500012721D /* MAPUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUserTests.m; sourceTree = "<group>"; };
+		9AE3BB0C1FA0938E00174C47 /* MAPApplicationDelegateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPApplicationDelegateTests.m; sourceTree = "<group>"; };
+		9AE3BB0E1FA093B000174C47 /* MAPApiManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPApiManagerTests.m; sourceTree = "<group>"; };
 		9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPGpxLoggerTests.m; sourceTree = "<group>"; };
 		9AE6FB131F571E1D004AE114 /* MAPDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPDevice.h; sourceTree = "<group>"; };
 		9AE6FB141F571E1D004AE114 /* MAPDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPDevice.m; sourceTree = "<group>"; };
@@ -205,10 +209,12 @@
 			isa = PBXGroup;
 			children = (
 				9A88F9541F4D933F0076C311 /* Info.plist */,
+				9AE3BB0E1FA093B000174C47 /* MAPApiManagerTests.m */,
+				9AE3BB0C1FA0938E00174C47 /* MAPApplicationDelegateTests.m */,
 				9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */,
 				9AC8719A1F4DBA1A0012721D /* MAPLoginManagerTests.m */,
-				9AC8719C1F4DD8500012721D /* MAPUserTests.m */,
 				9A32E79A1F9F29550069E241 /* MAPSequenceTests.m */,
+				9AC8719C1F4DD8500012721D /* MAPUserTests.m */,
 			);
 			path = MapillarySDKTests;
 			sourceTree = "<group>";
@@ -481,6 +487,8 @@
 				9AC8719B1F4DBA1A0012721D /* MAPLoginManagerTests.m in Sources */,
 				9AC8719D1F4DD8500012721D /* MAPUserTests.m in Sources */,
 				9AE6FB121F56EB67004AE114 /* MAPGpxLoggerTests.m in Sources */,
+				9AE3BB0F1FA093B000174C47 /* MAPApiManagerTests.m in Sources */,
+				9AE3BB0D1FA0938E00174C47 /* MAPApplicationDelegateTests.m in Sources */,
 				9A32E79B1F9F29550069E241 /* MAPSequenceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
