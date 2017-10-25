@@ -193,6 +193,43 @@
     XCTAssertNil(result6);
 }
 
+- (void)testListLocationsPerformance
+{
+    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
+    
+    srand(1234);
+    
+    for (int i = 0; i < 5000; i++)
+    {
+        MAPLocation* a = [[MAPLocation alloc] init];
+        a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
+        [sequence addLocation:a];
+    }
+    
+    [self measureBlock:^{
+        
+        XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
+        
+        [sequence listLocations:^(NSArray *array) {
+            
+            [expectation fulfill];
+            
+        }];
+        
+        // Wait for test to finish
+        [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+            
+            if (error)
+            {
+                XCTFail(@"Expectation failed with error: %@", error);
+            }
+            
+        }];
+    }];
+    
+    
+}
+
 #pragma mark - Utils
 
 - (NSData*)createImageData
