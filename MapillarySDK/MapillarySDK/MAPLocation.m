@@ -29,19 +29,17 @@
     
 - (BOOL)isEqualToLocation:(MAPLocation*)aLocation
 {
-    /*if (self == aLocation)
+    if (self == aLocation)
     {
         return YES;
     }
     
-    if (fabs(self.location.coordinate.latitude - aLocation.coordinate.latitude) < CLCOORDINATE_EPSILON && fabs(self.coordinate.longitude - aLocation.coordinate.longitude) < CLCOORDINATE_EPSILON)
+    if (fabs(self.location.coordinate.latitude - aLocation.location.coordinate.latitude) < CLCOORDINATE_EPSILON && fabs(self.location.coordinate.longitude - aLocation.location.coordinate.longitude) < CLCOORDINATE_EPSILON)
     {
         return YES;
     }
     
-    return NO;*/
-    
-    return [self.location isEqual:aLocation.location];
+    return NO;
 }
     
 - (NSString*)description

@@ -13,6 +13,8 @@
 
 @end
 
+// TODO add more tests
+
 @implementation MAPApplicationDelegateTests
 
 - (void)setUp
@@ -27,20 +29,16 @@
     [super tearDown];
 }
 
-- (void)testDidFinishLaunchingWithOptions
+- (void)testDidFinishLaunchingWithOptionsWithNil
 {
     BOOL ok = [MAPApplicationDelegate application:nil didFinishLaunchingWithOptions:nil];
     XCTAssertFalse(ok);
-    
-    // TODO add more tests
 }
 
-- (void)testopenURL
+- (void)testopenURLWithNil
 {
     BOOL ok = [MAPApplicationDelegate application:nil openURL:nil sourceApplication:nil annotation:nil];
     XCTAssertFalse(ok);
-    
-    // TODO add more tests
 }
 
 @end

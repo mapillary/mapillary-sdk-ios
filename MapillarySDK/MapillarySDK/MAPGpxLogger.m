@@ -7,7 +7,7 @@
 //
 
 #import "MAPGpxLogger.h"
-#import "MAPUtils.h"
+#import "MAPInternalUtils.h"
 #import "MAPLoginManager.h"
 
 static NSString* kQueueOperationsChanged = @"kQueueOperationsChanged";
@@ -123,7 +123,7 @@ unsigned long long footerLength;
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:path])
         {
-            NSString* versionString = [MAPUtils appVersion];
+            NSString* versionString = [MAPInternalUtils appVersion];
             NSString* dateString = [self.dateFormatter stringFromDate:sequence.sequenceDate];
             NSString* authorString = [[MAPLoginManager currentUser] userName];
             

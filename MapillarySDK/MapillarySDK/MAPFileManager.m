@@ -7,7 +7,7 @@
 //
 
 #import "MAPFileManager.h"
-#import "MAPUtils.h"
+#import "MAPInternalUtils.h"
 
 @implementation MAPFileManager
 
@@ -16,7 +16,7 @@
     // TODO
     
     NSMutableArray* sequences = [[NSMutableArray alloc] init];
-    NSString* sequenceDirectory = [MAPUtils sequenceDirectory];
+    NSString* sequenceDirectory = [MAPInternalUtils sequenceDirectory];
     NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequenceDirectory error:nil];
     
     for (NSString* path in contents)

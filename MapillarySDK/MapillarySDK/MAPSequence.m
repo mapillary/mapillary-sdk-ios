@@ -7,7 +7,7 @@
 //
 
 #import "MAPSequence.h"
-#import "MAPUtils.h"
+#import "MAPInternalUtils.h"
 #import "MAPImage.h"
 #import "MAPLoginManager.h"
 #import "MAPGpxLogger.h"
@@ -45,10 +45,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.device = device;
         self.project = project;
         
-        NSString* folderName = [MAPUtils getTimeString:nil];
-        self.path = [NSString stringWithFormat:@"%@/%@", [MAPUtils sequenceDirectory], folderName];
+        NSString* folderName = [MAPInternalUtils getTimeString:nil];
+        self.path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], folderName];
         
-        [MAPUtils createFolderAtPath:self.path];
+        [MAPInternalUtils createFolderAtPath:self.path];
         
         self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"] andSequence:self];
         
@@ -69,7 +69,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     {
         MAPImage* image = [[MAPImage alloc] init];
         image.imagePath = path;
-        image.captureDate = [MAPUtils dateFromFilePath:path];
+        image.captureDate = [MAPInternalUtils dateFromFilePath:path];
         image.author = author;
         image.location = [self locationForDate:image.captureDate];
         [images addObject:image];
@@ -78,7 +78,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     return images;
 }
     
-- (void)listLocations:(void(^)(NSArray*))done
+- (void)listLocations:(void(^)(NSArray* locations))done
 {
     if (self.gpxLogger.busy)
     {
@@ -108,7 +108,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         date = [NSDate date];        
     }
     
-    NSString* fileName = [MAPUtils getTimeString:date];
+    NSString* fileName = [MAPInternalUtils getTimeString:date];
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
     [imageData writeToFile:fullPath atomically:YES];
     
@@ -158,8 +158,65 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
 - (MAPLocation*)locationForDate:(NSDate*)date
 {
-    // TODO
-    return nil;
+    __block MAPLocation* location = nil;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [self listLocations:^(NSArray *locations) {
+        
+        MAPLocation* before = nil;
+        MAPLocation* exact = nil;
+        MAPLocation* after = nil;
+        
+        int i = 0;
+        
+        while ((exact == nil ||  after == nil || before == nil) && i < locations.count)
+        {
+            MAPLocation* currentLocation = locations[i];
+            
+            if ([currentLocation.timestamp isEqualToDate:date])
+            {
+                exact = currentLocation;
+            }
+            
+            else if ([currentLocation.timestamp compare:date] == NSOrderedAscending)
+            {
+                if (i > 0)
+                {
+                    after = locations[i-1];
+                }
+                
+                before = currentLocation;
+            }
+            
+            i++;
+        }
+        
+        // Exact match
+        if (exact)
+        {
+            location = exact;
+        }
+        
+        // No match found, need to interpolate between two positions
+        else if (before && after)
+        {
+            
+        }
+        
+        // Not possible to interpolate, use the closest position
+        else if (before || after)
+        {
+            location = (before ? before : after);
+        }
+        
+        dispatch_semaphore_signal(semaphore);
+        
+    }];
+    
+    // Wait here intil done
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    return location;
 }
 
 #pragma mark - Internal

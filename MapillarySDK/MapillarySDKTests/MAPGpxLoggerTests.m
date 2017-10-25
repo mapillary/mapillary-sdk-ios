@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
-#import "MAPUtils.h"
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 

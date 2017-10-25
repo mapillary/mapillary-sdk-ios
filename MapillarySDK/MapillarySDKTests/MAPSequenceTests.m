@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
-#import "MAPUtils.h"
+#import "MAPInternalUtils.h"
 
 @interface MAPSequenceTests : XCTestCase
 
@@ -96,7 +96,7 @@
 {
     MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:self.device];
     
-    NSString* path = [NSString stringWithFormat:@"%@/%@", [MAPUtils documentsDirectory], @"temp.jpg"];
+    NSString* path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils documentsDirectory], @"temp.jpg"];
     
     NSData* imageData = [self createImageData];
     [imageData writeToFile:path atomically:YES];

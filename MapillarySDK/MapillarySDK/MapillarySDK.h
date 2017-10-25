@@ -24,3 +24,4 @@ FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 #import "MAPUploadManager.h"
 #import "MAPUploadStatus.h"
 #import "MAPUser.h"
+#import "MAPUtils.h"
