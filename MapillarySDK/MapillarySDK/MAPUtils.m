@@ -1,126 +1,47 @@
 //
-//  Utils.m
+//  MAPUtils.m
 //  MapillarySDK
 //
-//  Created by Anders Mårtensson on 2017-08-25.
+//  Created by Anders Mårtensson on 2017-10-25.
 //  Copyright © 2017 Mapillary. All rights reserved.
 //
 
 #import "MAPUtils.h"
-#include <sys/xattr.h>
+#import "MAPInternalUtils.h"
 
 @implementation MAPUtils
 
-+ (NSString *)getTimeString:(NSDate*)date
++ (MAPLocation*)locationBetweenLocationA:(MAPLocation*)locationA andLocationB:(MAPLocation*)locationB forDate:(NSDate*)date
 {
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    //dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-    dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
-    dateFormatter.AMSymbol = @"";
-    dateFormatter.PMSymbol = @"";
-    dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+    if (locationA == nil || locationB == nil)
+    {
+        return nil;
+    }
+    
+    MAPLocation* result = locationA;
+    float factor;
     
     if (date == nil)
     {
-        date = [NSDate date];
+        factor = 0.5;
     }
-    
-    NSString* dateString = [[dateFormatter stringFromDate:date] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    return dateString;
-}
-
-+ (NSString *)documentsDirectory
-{
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [paths objectAtIndex:0];
-    
-    return documentsDirectory;
-}
-
-+ (NSString *)basePath
-{
-    return [NSString stringWithFormat:@"%@/%@", [self documentsDirectory], @"mapillary"];
-}
-
-+ (NSString *)sequenceDirectory
-{
-    return [NSString stringWithFormat:@"%@/%@", [self basePath], @"sequences"];
-}
-
-
-+ (BOOL)createSubfolderAtPath:(NSString *)path folder:(NSString *)folder
-{
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSString *newFolderPath = [path stringByAppendingPathComponent:folder];
-    
-    if (![fm fileExistsAtPath:newFolderPath])
+    else
     {
-        NSLog(@"Creating %@", newFolderPath);
-        BOOL success = [fm createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
-        
-        if (success)
-        {
-            [self addSkipBackupAttributeToItemAtPath:newFolderPath];
-        }
-        
-        return success;
+        factor = [MAPInternalUtils calculateFactorFromDates:date date1:locationA.timestamp date2:locationB.timestamp];
     }
     
-    return NO;
-}
-
-+ (BOOL)createFolderAtPath:(NSString *)path
-{
-    NSFileManager* fm = [NSFileManager defaultManager];
+    CLLocationCoordinate2D coordinate = [MAPInternalUtils interpolateCoords:locationA.location.coordinate location2:locationB.location.coordinate factor:factor];
     
-    if (![fm fileExistsAtPath:path])
-    {
-        BOOL success = [fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-        
-        if (success)
-        {
-            [self addSkipBackupAttributeToItemAtPath:path];
-        }
-        
-        return success;
-    }
+    result.timestamp = date;
+    result.location = [[CLLocation alloc] initWithCoordinate:coordinate
+                                                    altitude:AVG(locationA.location.altitude,           locationB.location.altitude)
+                                          horizontalAccuracy:AVG(locationA.location.horizontalAccuracy, locationB.location.horizontalAccuracy)
+                                            verticalAccuracy:AVG(locationA.location.verticalAccuracy,   locationB.location.verticalAccuracy)
+                                                   timestamp:date];
     
-    return NO;
-}
-
-+ (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString
-{
-    NSURL* fileURL = [NSURL fileURLWithPath:filePathString];
+    // TODO add more
     
-    const char* filePath = [fileURL.path fileSystemRepresentation];
-    
-    const char* attrName = "com.apple.MobileBackup";
-    u_int8_t attrValue = 1;
-    
-    int result = setxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
-    return result == 0;
-}
-
-+ (NSDate*)dateFromFilePath:(NSString*)filePath
-{
-    NSString* fileName = [filePath lastPathComponent];
-    NSString* strippedFileName = [fileName stringByDeletingPathExtension];
-    
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
-    dateFormatter.AMSymbol = @"";
-    dateFormatter.PMSymbol = @"";
-    dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
-    
-    return [dateFormatter dateFromString:strippedFileName];
-}
-
-+ (NSString*)appVersion
-{
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    return result;
 }
 
 @end
