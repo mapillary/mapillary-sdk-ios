@@ -23,6 +23,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 @property MAPGpxLogger* gpxLogger;
 @property MAPLocation* currentLocation;
 @property dispatch_semaphore_t listLocationsSemaphore;
+@property NSArray* cachedLocations;
 
 @end
 
@@ -45,6 +46,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device;
         self.project = project;
+        self.cachedLocations = nil;
         
         NSString* folderName = [MAPInternalUtils getTimeString:nil];
         self.path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], folderName];
@@ -81,7 +83,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
 - (void)listLocations:(void(^)(NSArray* locations))done
 {
-    if (self.gpxLogger.busy)
+    if (self.cachedLocations)
+    {
+        done(self.cachedLocations);
+    }
+    else if (self.gpxLogger.busy)
     {
         self.listLocationsSemaphore = dispatch_semaphore_create(0);
         
@@ -89,20 +95,24 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         
         dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
     }
-    
-    MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
-    
-    [parser parse:^(NSDictionary *dict) {
+    else
+    {
+        MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
         
-        NSArray* locations = dict[@"locations"];
-        
-        NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
-            return [b.timestamp compare:a.timestamp];
+        [parser parse:^(NSDictionary *dict) {
+            
+            NSArray* locations = dict[@"locations"];
+            
+            NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
+                return [b.timestamp compare:a.timestamp];
+            }];
+            
+            self.cachedLocations = sorted;
+            
+            done(sorted);
+            
         }];
-        
-        done(sorted);
-        
-    }];
+    }
 }
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
@@ -152,6 +162,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     if (location)
     {
+        self.cachedLocations = nil;
         [self.gpxLogger addLocation:location];
         self.currentLocation = location;
     }
