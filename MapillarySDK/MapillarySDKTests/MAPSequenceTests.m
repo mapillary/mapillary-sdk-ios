@@ -57,6 +57,8 @@
     XCTAssertTrue(directoryExists);
     XCTAssertTrue(fileExists);
     
+    [MAPFileManager deleteSequence:self.sequence];
+    
     directoryExists = [[NSFileManager defaultManager] fileExistsAtPath:self.sequence.path isDirectory:nil];
     XCTAssertFalse(directoryExists);
 }
