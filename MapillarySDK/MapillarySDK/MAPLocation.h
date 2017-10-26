@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 
-@interface MAPLocation : NSObject
+@interface MAPLocation : NSObject <NSCopying>
 
 @property CLLocation* location;
 @property CLHeading* heading;

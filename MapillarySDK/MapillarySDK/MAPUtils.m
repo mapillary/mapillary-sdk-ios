@@ -18,7 +18,7 @@
         return nil;
     }
     
-    MAPLocation* result = locationA;
+    MAPLocation* result = [locationA copy];
     float factor;
     
     if (date == nil)

@@ -54,4 +54,23 @@
     return [dateFormatter stringFromDate:self.timestamp];
 }
 
+#pragma mark - NSCopying>
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    id copy = [[[self class] alloc] init];
+    
+    if (copy)
+    {
+        [copy setLocation:self.location.copy];
+        [copy setHeading:self.heading.copy];
+        [copy setTimestamp:self.timestamp.copy];
+        [copy setDeviceMotion:self.deviceMotion.copy];
+    }
+    
+    return copy;
+}
+
+
+
 @end
