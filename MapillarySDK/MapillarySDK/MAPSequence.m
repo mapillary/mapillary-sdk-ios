@@ -23,7 +23,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 @property MAPGpxLogger* gpxLogger;
 @property MAPLocation* currentLocation;
 @property dispatch_semaphore_t listLocationsSemaphore;
-@property NSArray* cachedLocations;
+@property NSMutableArray* cachedLocations;
 
 @end
 
@@ -108,12 +108,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             return [b.timestamp compare:a.timestamp];
         }];
         
-        self.cachedLocations = [sorted copy];
+        self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
         
         done(sorted);
         
     }];
-    
 }
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
@@ -163,7 +162,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     if (location)
     {
-        self.cachedLocations = nil;
+        if (self.cachedLocations)
+        {
+            [self.cachedLocations addObject:location];
+        }
         [self.gpxLogger addLocation:location];
         self.currentLocation = location;
     }
