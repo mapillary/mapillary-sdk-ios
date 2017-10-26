@@ -98,21 +98,30 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
     }
     
-    MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
     
-    [parser parse:^(NSDictionary *dict) {
+    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(reentrantAvoidanceQueue, ^{
         
-        NSArray* locations = dict[@"locations"];
+        MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
         
-        NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
-            return [b.timestamp compare:a.timestamp];
+        [parser parse:^(NSDictionary *dict) {
+            
+            NSArray* locations = dict[@"locations"];
+            
+            NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
+                return [b.timestamp compare:a.timestamp];
+            }];
+            
+            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
+            
+            done(sorted);
+            
         }];
-        
-        self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
-        
-        done(sorted);
-        
-    }];
+       
+    });
+    dispatch_sync(reentrantAvoidanceQueue, ^{ });
+    
+    
 }
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
@@ -171,9 +180,32 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     }
 }
 
-- (void)addGpx:(NSString*)path
+- (void)addGpx:(NSString*)path done:(void(^)(void))done
 {
-    // TODO
+    if (path == nil || ![[NSFileManager defaultManager] fileExistsAtPath:path])
+    {
+        if (done)
+        {
+            done();
+        }
+        return;
+    }
+    
+    MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:path];
+    [parser parse:^(NSDictionary *dict) {
+        
+        NSArray* locations = dict[@"locations"];
+        
+        for (MAPLocation* l in locations)
+        {
+            [self addLocation:l];
+        }
+        
+        if (done)
+        {
+            done();
+        }
+    }];    
 }
     
 - (MAPLocation*)locationForDate:(NSDate*)date

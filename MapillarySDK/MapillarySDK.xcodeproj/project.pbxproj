@@ -48,6 +48,7 @@
 		9AE3BB121FA0BEA600174C47 /* MAPUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE3BB101FA0BEA600174C47 /* MAPUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AE3BB131FA0BEA600174C47 /* MAPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3BB111FA0BEA600174C47 /* MAPUtils.m */; };
 		9AE3BB151FA0C6D300174C47 /* MAPUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3BB141FA0C6D300174C47 /* MAPUtilsTests.m */; };
+		9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */; };
 		9AE6FB121F56EB67004AE114 /* MAPGpxLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */; };
 		9AE6FB151F571E1D004AE114 /* MAPDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE6FB131F571E1D004AE114 /* MAPDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AE6FB161F571E1D004AE114 /* MAPDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6FB141F571E1D004AE114 /* MAPDevice.m */; };
@@ -112,6 +113,7 @@
 		9AE3BB101FA0BEA600174C47 /* MAPUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPUtils.h; sourceTree = "<group>"; };
 		9AE3BB111FA0BEA600174C47 /* MAPUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPUtils.m; sourceTree = "<group>"; };
 		9AE3BB141FA0C6D300174C47 /* MAPUtilsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPUtilsTests.m; sourceTree = "<group>"; };
+		9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "mapbox-test.gpx"; sourceTree = "<group>"; };
 		9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPGpxLoggerTests.m; sourceTree = "<group>"; };
 		9AE6FB131F571E1D004AE114 /* MAPDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPDevice.h; sourceTree = "<group>"; };
 		9AE6FB141F571E1D004AE114 /* MAPDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPDevice.m; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 		9A88F9511F4D933F0076C311 /* MapillarySDKTests */ = {
 			isa = PBXGroup;
 			children = (
+				9AE3BB251FA20CC300174C47 /* test-files */,
 				9A88F9541F4D933F0076C311 /* Info.plist */,
 				9AE3BB0E1FA093B000174C47 /* MAPApiManagerTests.m */,
 				9AE3BB0C1FA0938E00174C47 /* MAPApplicationDelegateTests.m */,
@@ -242,6 +245,14 @@
 				9A7977211F5027C700358A30 /* MAPInternalUtils.m */,
 			);
 			name = internal;
+			sourceTree = "<group>";
+		};
+		9AE3BB251FA20CC300174C47 /* test-files */ = {
+			isa = PBXGroup;
+			children = (
+				9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */,
+			);
+			path = "test-files";
 			sourceTree = "<group>";
 		};
 		C154E3531FA59E311CF0FE63 /* Pods */ = {
@@ -379,6 +390,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

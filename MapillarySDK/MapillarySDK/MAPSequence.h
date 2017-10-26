@@ -31,6 +31,6 @@
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location;
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location;
 - (void)addLocation:(MAPLocation*)location;
-- (void)addGpx:(NSString*)path;
+- (void)addGpx:(NSString*)path done:(void(^)(void))done;
 
 @end

@@ -209,8 +209,95 @@
             
         }];
     }];
+}
+
+- (void)testAddMissingGpxFile
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Trying to add missing GPX file"];
     
+    [self.sequence addGpx:@"path/to/file" done:^{
+        
+        [expectation fulfill];
+        
+    }];
     
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+        
+    }];
+}
+
+- (void)testAddMapillaryGpxFile
+{
+    // TODO add bigger test file
+    
+    NSString* path = [NSString stringWithFormat:@"%@/test.gpx", [MAPInternalUtils documentsDirectory]];
+    
+    NSString* gpx = @"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<gpx version=\"1.1\" creator=\"Mapillary iOS (null)\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<metadata>\n\t\t<author>\n\t\t\t<name>(null)</name>\n\t\t</author>\n\t\t<link href=\"https://www.mapillary.com/app/user/(null)\"/>\n\t\t<time>1970-01-01T01:00:00Z</time>\n\t</metadata>\n\t<trk>\n\t\t<src>Logged by (null) using Mapillary</src>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"50.000000\" lon=\"50.000000\">\n\t\t\t\t<time>1970-01-01T01:00:00Z</time>\n\t\t\t\t<fix>2d</fix>\n\t\t\t\t<extensions>\n\t\t\t\t\t<mapillary:gpsAccuracyMeters>0.000000</mapillary:gpsAccuracyMeters>\n\t\t\t\t</extensions>\n\t\t\t</trkpt>\n\t\t</trkseg>\n\t</trk>\n\t<extensions>\n\t\t<mapillary:localTimeZone>Europe/Stockholm (GMT+2) offset 7200 (Daylight)</mapillary:localTimeZone>\n\t\t<mapillary:project>Public</mapillary:project>\n\t\t<mapillary:sequenceKey>1234-5678-9ABC-DEF</mapillary:sequenceKey>\n\t\t<mapillary:timeOffset>0.000000</mapillary:timeOffset>\n\t\t<mapillary:directionOffset>-1.000000</mapillary:directionOffset>\n\t\t<mapillary:deviceName>iPhone7,2</mapillary:deviceName>\n\t\t<mapillary:deviceMake>Apple</mapillary:deviceMake>\n\t\t<mapillary:deviceModel>iPhone 6</mapillary:deviceModel>\n\t\t<mapillary:appVersion>(null)</mapillary:appVersion>\n\t\t<mapillary:userKey>(null)</mapillary:userKey>\n\t\t<mapillary:uploadHash>(null)</mapillary:uploadHash>\n\t</extensions>\n</gpx>";
+    
+    [gpx writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Adding Mapillary GPX file"];
+    
+    __weak MAPSequenceTests* weakSelf = self;
+    
+    [weakSelf.sequence addGpx:path done:^{
+        
+        [weakSelf.sequence listLocations:^(NSArray *array) {
+            
+            XCTAssert(array.count == 1);
+            [expectation fulfill];
+            
+        }];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddMapboxGpxFile
+{
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mapbox-test" ofType:@"gpx"];
+
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Adding Non Mapillary GPX file"];
+    
+    __weak MAPSequenceTests* weakSelf = self;
+    
+    [weakSelf.sequence addGpx:path done:^{
+        
+        [weakSelf.sequence listLocations:^(NSArray *array) {
+            
+            XCTAssert(array.count == 206);
+            [expectation fulfill];
+            
+        }];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
 }
 
 #pragma mark - Utils
