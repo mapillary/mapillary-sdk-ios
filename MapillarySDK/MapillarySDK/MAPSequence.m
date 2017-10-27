@@ -32,7 +32,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (id)initWithDevice:(MAPDevice*)device
 {
-    return [self initWithDevice:device andProject:@"Public"];
+    return [self initWithDevice:device andProject:@"Public" cachingEnabled:NO];
 }
 
 - (id)initWithDevice:(MAPDevice*)device cachingEnabled:(BOOL)cachingEnabled
@@ -42,7 +42,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project
 {
-    return [self initWithDevice:device andProject:@"Public" cachingEnabled:YES];
+    return [self initWithDevice:device andProject:@"Public" cachingEnabled:NO];
 }
 
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project cachingEnabled:(BOOL)cachingEnabled
@@ -57,7 +57,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device;
         self.project = project;
-        self.cachedLocations = cachingEnabled ? [NSMutableArray array] : nil;
+        self.cachedLocations = cachingEnabled ? [[NSMutableArray alloc] init] : nil;
         self.cachingEnabled = cachingEnabled;
         
         NSString* folderName = [MAPInternalUtils getTimeString:nil];

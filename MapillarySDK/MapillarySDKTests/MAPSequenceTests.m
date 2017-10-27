@@ -111,6 +111,8 @@
 
 - (void)testAddLocations
 {
+    self.sequence = [[MAPSequence alloc] initWithDevice:self.device];
+    
     XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
     
     int nbrPositions = arc4random()%1000;
@@ -315,31 +317,6 @@
     
     srand(1234);
     
-    // Not cached
-    {
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        
-        self.sequence = [[MAPSequence alloc] initWithDevice:self.device cachingEnabled:NO];
-        
-        timeStart = [NSDate timeIntervalSinceReferenceDate];
-        
-        for (int i = 0; i < nbrLocations; i++)
-        {
-            MAPLocation* a = [[MAPLocation alloc] init];
-            a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
-            [self.sequence addLocation:a];
-        }
-        
-        [self.sequence listLocations:^(NSArray *array) {
-            timeEnd = [NSDate timeIntervalSinceReferenceDate];
-            dispatch_semaphore_signal(semaphore);
-        }];
-        
-        [MAPFileManager deleteSequence:self.sequence];
-        
-        dispatch_semaphore_wait(semaphore, 60);
-    }
-    
     // Cached
     {
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
@@ -357,6 +334,31 @@
         
         [self.sequence listLocations:^(NSArray *array) {
             timeEndCached = [NSDate timeIntervalSinceReferenceDate];
+            dispatch_semaphore_signal(semaphore);
+        }];
+        
+        [MAPFileManager deleteSequence:self.sequence];
+        
+        dispatch_semaphore_wait(semaphore, 60);
+    }
+    
+    // Not cached
+    {
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        self.sequence = [[MAPSequence alloc] initWithDevice:self.device cachingEnabled:NO];
+        
+        timeStart = [NSDate timeIntervalSinceReferenceDate];
+        
+        for (int i = 0; i < nbrLocations; i++)
+        {
+            MAPLocation* a = [[MAPLocation alloc] init];
+            a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
+            [self.sequence addLocation:a];
+        }
+        
+        [self.sequence listLocations:^(NSArray *array) {
+            timeEnd = [NSDate timeIntervalSinceReferenceDate];
             dispatch_semaphore_signal(semaphore);
         }];
         
