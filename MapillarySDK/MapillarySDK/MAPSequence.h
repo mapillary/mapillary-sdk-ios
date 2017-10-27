@@ -21,9 +21,7 @@
 @property MAPDevice* device;
     
 - (id)initWithDevice:(MAPDevice*)device;
-- (id)initWithDevice:(MAPDevice*)device cachingEnabled:(BOOL)cachingEnabled;
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project;
-- (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project cachingEnabled:(BOOL)cachingEnabled;
 
 - (NSArray*)listImages;
 - (void)listLocations:(void(^)(NSArray*))done;

@@ -310,68 +310,46 @@
     __block NSTimeInterval timeStartCached = 0;
     __block NSTimeInterval timeEnd = 0;
     __block NSTimeInterval timeEndCached = 0;
-    int nbrLocations = 10000;
+    int nbrLocations = 1000;
     
     NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mapbox-test" ofType:@"gpx"];
     XCTestExpectation* expectation = [self expectationWithDescription:@"Caching should be faster than non-cached"];
     
     srand(1234);
     
-    // Cached
+    for (int i = 0; i < nbrLocations; i++)
     {
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        
-        self.sequence = [[MAPSequence alloc] initWithDevice:self.device cachingEnabled:YES];
-        
-        timeStartCached = [NSDate timeIntervalSinceReferenceDate];
-        
-        for (int i = 0; i < nbrLocations; i++)
-        {
-            MAPLocation* a = [[MAPLocation alloc] init];
-            a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
-            [self.sequence addLocation:a];
-        }
-        
-        [self.sequence listLocations:^(NSArray *array) {
-            timeEndCached = [NSDate timeIntervalSinceReferenceDate];
-            dispatch_semaphore_signal(semaphore);
-        }];
-        
-        [MAPFileManager deleteSequence:self.sequence];
-        
-        dispatch_semaphore_wait(semaphore, 60);
+        MAPLocation* a = [[MAPLocation alloc] init];
+        a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
+        [self.sequence addLocation:a];
     }
     
-    // Not cached
     {
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        
-        self.sequence = [[MAPSequence alloc] initWithDevice:self.device cachingEnabled:NO];
-        
         timeStart = [NSDate timeIntervalSinceReferenceDate];
-        
-        for (int i = 0; i < nbrLocations; i++)
-        {
-            MAPLocation* a = [[MAPLocation alloc] init];
-            a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
-            [self.sequence addLocation:a];
-        }
         
         [self.sequence listLocations:^(NSArray *array) {
             timeEnd = [NSDate timeIntervalSinceReferenceDate];
             dispatch_semaphore_signal(semaphore);
         }];
         
-        [MAPFileManager deleteSequence:self.sequence];
+        dispatch_semaphore_wait(semaphore, 60);
+    }
+    
+    {
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        timeStartCached = [NSDate timeIntervalSinceReferenceDate];
+        
+        [self.sequence listLocations:^(NSArray *array) {
+            timeEndCached = [NSDate timeIntervalSinceReferenceDate];
+            dispatch_semaphore_signal(semaphore);
+        }];
         
         dispatch_semaphore_wait(semaphore, 60);
     }
     
     NSTimeInterval timeNotCached = timeEnd-timeStart;
     NSTimeInterval timeCached = timeEndCached-timeStartCached;
-    
-    NSLog(@"%f", timeNotCached);
-    NSLog(@"%f", timeCached);
     
     XCTAssert(timeCached < timeNotCached);
     

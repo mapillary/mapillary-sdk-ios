@@ -11,6 +11,19 @@
 #define CLCOORDINATE_EPSILON 0.00000000001f
 
 @implementation MAPLocation
+
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.location = nil;
+        self.heading = nil;
+        self.timestamp = nil;
+        self.deviceMotion = nil;
+    }
+    return self;
+}
     
 - (BOOL)isEqual:(id)other
 {

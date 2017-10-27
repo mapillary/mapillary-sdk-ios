@@ -121,6 +121,8 @@ unsigned long long footerLength;
         self.operationQueue = [[NSOperationQueue alloc] init];
         self.operationQueue.maxConcurrentOperationCount = 1;
         
+        [self.operationQueue addObserver:self forKeyPath:@"operations" options:0 context:&kQueueOperationsChanged];
+        
         if (![[NSFileManager defaultManager] fileExistsAtPath:path])
         {
             NSString* versionString = [MAPInternalUtils appVersion];
@@ -168,13 +170,13 @@ unsigned long long footerLength;
     return self;
 }
 
+/*- (void)dealloc
+{
+    [self.operationQueue removeObserver:self forKeyPath:@"operations"];
+}*/
+
 - (void)addLocation:(MAPLocation*)location
 {
-    if (!self.busy)
-    {
-        [self.operationQueue addObserver:self forKeyPath:@"operations" options:0 context:&kQueueOperationsChanged];
-    }
-    
     self.busy = YES;
     
     MAPGpxOperation* op = [[MAPGpxOperation alloc] init];
@@ -199,9 +201,9 @@ unsigned long long footerLength;
 {
     if (object == self.operationQueue && [keyPath isEqualToString:@"operations"] && context == &kQueueOperationsChanged)
     {
+        //NSLog(@"%lu", (unsigned long)self.operationQueue.operationCount);
         if ([self.operationQueue.operations count] == 0)
         {
-            [self.operationQueue removeObserver:self forKeyPath:@"operations" context:&kQueueOperationsChanged];
             self.busy = NO;
         }
     }

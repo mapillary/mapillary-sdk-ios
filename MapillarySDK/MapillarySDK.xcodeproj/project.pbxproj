@@ -220,8 +220,8 @@
 			children = (
 				9AE3BB251FA20CC300174C47 /* test-files */,
 				9A88F9541F4D933F0076C311 /* Info.plist */,
-				9AE3BB0E1FA093B000174C47 /* MAPApiManagerTests.m */,
 				9AE3BB0C1FA0938E00174C47 /* MAPApplicationDelegateTests.m */,
+				9AE3BB0E1FA093B000174C47 /* MAPApiManagerTests.m */,
 				9AE6FB111F56EB67004AE114 /* MAPGpxLoggerTests.m */,
 				9AC8719A1F4DBA1A0012721D /* MAPLoginManagerTests.m */,
 				9A32E79A1F9F29550069E241 /* MAPSequenceTests.m */,
