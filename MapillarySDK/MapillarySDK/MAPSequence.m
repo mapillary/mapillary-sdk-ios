@@ -24,6 +24,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 @property MAPLocation* currentLocation;
 @property dispatch_semaphore_t listLocationsSemaphore;
 @property NSMutableArray* cachedLocations;
+@property BOOL cachingEnabled;
 
 @end
 
@@ -34,7 +35,17 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     return [self initWithDevice:device andProject:@"Public"];
 }
 
+- (id)initWithDevice:(MAPDevice*)device cachingEnabled:(BOOL)cachingEnabled
+{
+    return [self initWithDevice:device andProject:@"Public" cachingEnabled:cachingEnabled];
+}
+
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project
+{
+    return [self initWithDevice:device andProject:@"Public" cachingEnabled:YES];
+}
+
+- (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project cachingEnabled:(BOOL)cachingEnabled
 {
     self = [super init];
     if (self)
@@ -46,7 +57,8 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device;
         self.project = project;
-        self.cachedLocations = nil;
+        self.cachedLocations = cachingEnabled ? [NSMutableArray array] : nil;
+        self.cachingEnabled = cachingEnabled;
         
         NSString* folderName = [MAPInternalUtils getTimeString:nil];
         self.path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], folderName];
@@ -83,7 +95,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
 - (void)listLocations:(void(^)(NSArray* locations))done
 {
-    if (self.cachedLocations)
+    if (self.cachingEnabled && self.cachedLocations)
     {
         done(self.cachedLocations);
         return;
@@ -98,7 +110,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
     }
     
-    
     dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_async(reentrantAvoidanceQueue, ^{
         
@@ -112,7 +123,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 return [b.timestamp compare:a.timestamp];
             }];
             
-            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
+            if (self.cachingEnabled)
+            {
+                self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
+            }
             
             done(sorted);
             
@@ -171,7 +185,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     if (location)
     {
-        if (self.cachedLocations)
+        if (self.cachingEnabled && self.cachedLocations)
         {
             [self.cachedLocations addObject:location];
         }

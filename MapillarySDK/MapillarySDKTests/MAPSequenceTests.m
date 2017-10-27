@@ -12,7 +12,7 @@
 
 @interface MAPSequenceTests : XCTestCase
 
-
+@property MAPDevice* device;
 @property MAPSequence* sequence;
 
 @end
@@ -23,17 +23,19 @@
 {
     [super setUp];
     
-    MAPDevice* device = [[MAPDevice alloc] init];
-    device.name = @"iPhone7,2";
-    device.make = @"Apple";
-    device.model = @"iPhone 6";
+    self.device = [[MAPDevice alloc] init];
+    self.device.name = @"iPhone7,2";
+    self.device.make = @"Apple";
+    self.device.model = @"iPhone 6";
     
-    self.sequence = [[MAPSequence alloc] initWithDevice:device];
+    self.sequence = [[MAPSequence alloc] initWithDevice:self.device];
 }
 
 - (void)tearDown
 {
     [MAPFileManager deleteSequence:self.sequence];
+    self.sequence = nil;
+    self.device = nil;
     
     [super tearDown];
 }
@@ -290,6 +292,91 @@
     
     // Wait for test to finish
     [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testCaching
+{
+    __block NSTimeInterval timeStart = 0;
+    __block NSTimeInterval timeStartCached = 0;
+    __block NSTimeInterval timeEnd = 0;
+    __block NSTimeInterval timeEndCached = 0;
+    int nbrLocations = 10000;
+    
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mapbox-test" ofType:@"gpx"];
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Caching should be faster than non-cached"];
+    
+    srand(1234);
+    
+    // Not cached
+    {
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        self.sequence = [[MAPSequence alloc] initWithDevice:self.device cachingEnabled:NO];
+        
+        timeStart = [NSDate timeIntervalSinceReferenceDate];
+        
+        for (int i = 0; i < nbrLocations; i++)
+        {
+            MAPLocation* a = [[MAPLocation alloc] init];
+            a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
+            [self.sequence addLocation:a];
+        }
+        
+        [self.sequence listLocations:^(NSArray *array) {
+            timeEnd = [NSDate timeIntervalSinceReferenceDate];
+            dispatch_semaphore_signal(semaphore);
+        }];
+        
+        [MAPFileManager deleteSequence:self.sequence];
+        
+        dispatch_semaphore_wait(semaphore, 60);
+    }
+    
+    // Cached
+    {
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        self.sequence = [[MAPSequence alloc] initWithDevice:self.device cachingEnabled:YES];
+        
+        timeStartCached = [NSDate timeIntervalSinceReferenceDate];
+        
+        for (int i = 0; i < nbrLocations; i++)
+        {
+            MAPLocation* a = [[MAPLocation alloc] init];
+            a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
+            [self.sequence addLocation:a];
+        }
+        
+        [self.sequence listLocations:^(NSArray *array) {
+            timeEndCached = [NSDate timeIntervalSinceReferenceDate];
+            dispatch_semaphore_signal(semaphore);
+        }];
+        
+        [MAPFileManager deleteSequence:self.sequence];
+        
+        dispatch_semaphore_wait(semaphore, 60);
+    }
+    
+    NSTimeInterval timeNotCached = timeEnd-timeStart;
+    NSTimeInterval timeCached = timeEndCached-timeStartCached;
+    
+    NSLog(@"%f", timeNotCached);
+    NSLog(@"%f", timeCached);
+    
+    XCTAssert(timeCached < timeNotCached);
+    
+    [expectation fulfill];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
         
