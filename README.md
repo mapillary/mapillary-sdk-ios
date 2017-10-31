@@ -15,7 +15,7 @@
 To integrate MapillarySDK into your Xcode project using CocoaPods, specify it in your Podfile:
 
 ```
-platform :ios, '8.0'
+platform :ios, '11.0'
 
 target 'TargetName' do
 	pod 'MapillarySDK'
@@ -49,11 +49,11 @@ Copy your `client_id`, you need it to initialize the SDK later.
 
 ### Edit your application plist
 
-Now you need to add a custom URL scheme to your app. This is needed so that after authentication in the browser, your app can get focus again. Enter the same scheme as you provided in the redirect URL previously. 
+Now you need to add a custom URL scheme to your app. This is needed so that after authentication in the browser, your app can get focus again. Enter the same scheme as you provided in the redirect URL previously (but without ://). 
 
 You also need to add `MapillaryClientId` and `MapillaryRedirectUrl` to the plist.
 
-Below is an example of a plist.
+Below is an example of parts of a plist file.
 
 ```
 <plist version="1.0">
@@ -90,12 +90,12 @@ Add this to your `AppDelegate.m` file:
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	return [MAPApplicationDelegate application:application didFinishLaunchingWithOptions:launchOptions];
+    return [MAPApplicationDelegate application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{    
-	return [MAPApplicationDelegate application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+{
+    return [MAPApplicationDelegate application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 ```
 
@@ -104,44 +104,24 @@ Add this to your `AppDelegate.m` file:
 
 ### Signing in
 ```
-[MAPLoginManager signIn];
+[MAPLoginManager signIn:^(BOOL success) {
+                
+    if (success)
+    {
+        NSLog(@"Sign in was a success");
+    }
+    else
+    {
+        NSLog(@"Sign in failed");
+    }                        
+
+}];
 ```
 
-### Creating a new sequence
+### Signing out
 ```
-MAPDevice* device = [[MAPDevice alloc] init];
-device.name = @"iPhone7,2";
-device.make = @"Apple";
-device.model = @"iPhone 6";
-    
-MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:device];
+[MAPLoginManager signOut];
 ```
-
-### Adding images and position data from GPS
-```
-NSData* imageData = [NSData from camera or similar];
-
-MAPLocation* location = [[MAPLocation alloc] init];
-location.location = <CLLocation from GPS>;
-location.heading = <CLHeading from GPS>;           
-
-[sequence addImageWithData:imageData date:[NSDate date] location:location];
-```
-
-### Adding images and position data from a GPX file recorded with another app
-```
-NSData* imageData = [NSData from camera or similar];
-        
-[sequence addImageWithData:imageData date:[NSDate date] location:nil];
-[sequence addGpx:<path to GPX file>];
-```
-
-### Uploading a sequence
-```
-[MAPUploadManager uploadSequences:@[sequence]];
-```
-
-TODO
 
 ## Maintainers
 @millenbop, anders@mapillary.com
