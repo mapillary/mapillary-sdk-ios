@@ -25,16 +25,14 @@
 
 + (BOOL)handleLoginWithUrl:(NSURL*)url
 {
-    // com.mapillary.sdk.ios://?token_type=bearer&access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtcHkiLCJzdWIiOiJXNVVMMUQ3ZGVCRE8zSkI4Vi1vX1B3IiwiYXVkIjoiVnpWVlRERkVOMlJsUWtSUE0wcENPRll0YjE5UWR6bzRNR1k0TUdSbFpqTTJOakF6TnpRdyIsImlhdCI6MTUwNDcyOTQyNjE3NywianRpIjoiODE4NTgzODQ2ZjBjYTAyMDI2ZWQ4NDI0ODVjYzY2NGUiLCJzY28iOlsidXNlcjpyZWFkIl0sInZlciI6MX0.1zBYA98pDgogM0z7bQbH4Cei49j_fd-t-wVor45tRpY&expires_in=never
-    
     BOOL ok = NO;
     
-    NSString* redirectUrl = @"com.mapillary.sdk.ios";
+    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MapillaryRedirectUrl"];
     
     if ([url.scheme isEqualToString:redirectUrl])
     {
         NSMutableDictionary* queryStringDictionary = [[NSMutableDictionary alloc] init];
-        NSArray* urlComponents = [url.parameterString componentsSeparatedByString:@"&"];
+        NSArray* urlComponents = [url.absoluteString componentsSeparatedByString:@"&"];
         
         for (NSString* keyValuePair in urlComponents)
         {
@@ -50,6 +48,8 @@
         if (access_token && access_token.length > 0)
         {
             ok = YES;
+            
+            [[NSUserDefaults standardUserDefaults] setObject:access_token forKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];
         }
         
         [MAPApiManager getCurrentUser:^(MAPUser *user) {
@@ -61,9 +61,10 @@
                 
                 [[NSUserDefaults standardUserDefaults] setObject:user_name forKey:MAPILLARY_CURRENT_USER_NAME];
                 [[NSUserDefaults standardUserDefaults] setObject:user_key forKey:MAPILLARY_CURRENT_USER_KEY];
-                [[NSUserDefaults standardUserDefaults] setObject:access_token forKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];             
-
             }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:MAPILLARY_NOTIFICATION_LOGIN object:nil userInfo:@{@"success": [NSNumber numberWithBool:ok]}];
+            
         }];
     }
 

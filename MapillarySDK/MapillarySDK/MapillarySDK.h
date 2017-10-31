@@ -15,13 +15,5 @@ FOUNDATION_EXPORT double MapillarySDKVersionNumber;
 FOUNDATION_EXPORT const unsigned char MapillarySDKVersionString[];
 
 #import "MAPApplicationDelegate.h"
-#import "MAPDevice.h"
-#import "MAPFileManager.h"
-#import "MAPImage.h"
-#import "MAPLocation.h"
 #import "MAPLoginManager.h"
-#import "MAPSequence.h"
-#import "MAPUploadManager.h"
-#import "MAPUploadStatus.h"
 #import "MAPUser.h"
-#import "MAPUtils.h"

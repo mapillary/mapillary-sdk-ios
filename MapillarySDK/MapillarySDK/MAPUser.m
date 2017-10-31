@@ -12,22 +12,18 @@
 
 @property NSString* _userName;
 @property NSString* _userKey;
-@property NSString* _accessToken;
-@property NSString* _uploadHash;
 
 @end
 
 @implementation MAPUser
 
-- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey andUserAccessToken:(NSString*)accessToken
+- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey
 {
     self = [super init];
     if (self)
     {
         self._userName = userName;
         self._userKey = userKey;
-        self._accessToken = accessToken;
-        self._uploadHash = [NSString stringWithFormat:@"Bearer %@", accessToken];
     }
     return self;
 }
@@ -40,16 +36,6 @@
 - (NSString*)userKey
 {
     return self._userKey;
-}
-
-- (NSString*)accessToken
-{
-    return self._accessToken;
-}
-
-- (NSString*)uploadHash
-{
-    return self._uploadHash;
 }
 
 @end

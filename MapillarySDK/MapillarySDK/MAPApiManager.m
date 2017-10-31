@@ -22,7 +22,13 @@
         
         if (responseObject)
         {
-            // TODO
+            NSString* username = responseObject[@"username"];
+            NSString* key = responseObject[@"key"];
+            
+            if (username && key)
+            {
+                user = [[MAPUser alloc] initWithUserName:username andUserKey:key];
+            }
         }
         
         if (done)

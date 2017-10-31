@@ -11,8 +11,9 @@
 
 @interface MAPLoginManager : NSObject
 
-+ (void)signIn;
++ (void)signIn:(void (^) (BOOL success))result;
 + (void)signOut;
++ (BOOL)isSignedIn;
 
 + (MAPUser*)currentUser;
 
