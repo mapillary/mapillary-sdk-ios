@@ -4,8 +4,7 @@ Pod::Spec.new do |s|
   s.version          = '0.0.2'
   s.platform         = :ios, '8.0'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.summary          = 'Mapillary is a platform for creating street-level imagery'  
-  s.description      = 'Mapillary is a platform for creating street-level imagery and extract data using computer vision'
+  s.summary          = 'Mapillary is a platform for creating street-level imagery and extract data using computer vision'
   s.homepage         = 'https://github.com/mapillary/mapillary-sdk-ios'
   s.social_media_url = 'https://twitter.com/mapillary'
   s.author           = { 'Anders Mårtensson' => 'anders@mapillary.com' }
