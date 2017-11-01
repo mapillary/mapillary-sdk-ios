@@ -94,7 +94,7 @@ static MAPLoginManager* singleInstance;
     
     if (userName && userKey && userAccessToken)
     {
-        return [[MAPUser alloc] initWithUserName:userName andUserKey:userKey];
+        return [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andAccessToken:userAccessToken];
     }
     
     return nil;
