@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>--company-id</key>
+	<string>com.mapillary</string>
+	<key>--create-docset</key>
+	<true/>
+	<key>--create-html</key>
+	<true/>
+	<key>--ignore</key>
+	<array>
+        <string>MapillarySDKExample</string>
+        <string>MapillarySDKTests</string>
+		<string>Pods</string>
+	</array>
+	<key>--install-docset</key>
+	<false/>
+	<key>--docset-platform-family</key>
+	<string>iphoneos</string>
+	<key>--output</key>
+	<string>docs</string>
+	<key>--project-company</key>
+	<string>Mapillary</string>
+	<key>--project-name</key>
+	<string>MapillarySDK</string>
+	<key>--keep-undocumented-objects</key>
+	<false/>
+	<key>--keep-undocumented-members</key>
+	<false/>
+	<key>--warn-undocumented-object</key>
+	<false/>
+	<key>--warn-undocumented-member</key>
+	<false/>
+	<key>--warn-empty-description</key>
+	<true/>
+	<key>--warn-missing-arg</key>
+	<true/>
+	<key>--warn-unknown-directive</key>
+	<true/>
+	<key>--verbose</key>
+	<string>6</string>
+	<key>--exit-threshold</key>
+	<integer>2</integer>
+    <key>--keep-intermediate-files</key>
+    <true/>
+</dict>
+</plist>
