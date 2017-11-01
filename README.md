@@ -33,7 +33,7 @@ Then, run the following command:
 To use the SDK, you need to obtain a Mapillary `client_id` first. 
 
 1. [Create a Mapillary account](https://www.mapillary.com/signup) if you don't have one already.
-2. Create an app at [the Developer page](https://www.mapillary.com/app/settings/developershttps://www.mapillary.com/app/settings/developers). 
+2. Create an app at [the Developer page](https://www.mapillary.com/app/settings/developers). 
 
 ##### Redirect URL
 
