@@ -47,7 +47,7 @@
 
 + (NSString*)fullUrlForUrlString:(NSString*)url
 {
-    NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MapillaryClientId"];
+    NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
     NSString* baseUrl = @"https://a.mapillary.com";
     NSMutableString* fullPath = [NSMutableString stringWithFormat:@"%@/%@", baseUrl, url];
     

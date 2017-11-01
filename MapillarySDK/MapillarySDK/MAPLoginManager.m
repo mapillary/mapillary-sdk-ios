@@ -41,8 +41,8 @@ static MAPLoginManager* singleInstance;
 
 + (void)signIn:(void (^) (BOOL success))result
 {
-    NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MapillaryClientId"];
-    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MapillaryRedirectUrl"];
+    NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
+    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_REDIRECT_URL];
     
     // Check that clientId and redirectUrl are set
     NSAssert(clientId != nil, @"MapillaryClientId is not specified in application plist file");
@@ -60,8 +60,6 @@ static MAPLoginManager* singleInstance;
     
     // Wait here until login loop finishes
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        
         
         [MAPLoginManager getInstance].semaphore = dispatch_semaphore_create(0);
         dispatch_semaphore_wait([MAPLoginManager getInstance].semaphore, DISPATCH_TIME_FOREVER);

@@ -14,8 +14,8 @@
 
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // TODO
-    return [self handleLoginWithUrl:nil];
+    NSURL* url = launchOptions[UIApplicationLaunchOptionsURLKey];
+    return [self handleLoginWithUrl:url];
 }
 
 + (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -27,7 +27,7 @@
 {
     BOOL ok = NO;
     
-    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MapillaryRedirectUrl"];
+    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_REDIRECT_URL];
     
     if ([url.scheme isEqualToString:redirectUrl])
     {
