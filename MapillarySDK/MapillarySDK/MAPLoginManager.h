@@ -21,7 +21,7 @@
  also to obtain a client ID. Your app must also support the custom URL scheme
  defined in `MapillaryRedirectUrl`.
  
- @see MAPApplicationDelegate
+ @see `MAPApplicationDelegate`
  */
 @interface MAPLoginManager : NSObject
 

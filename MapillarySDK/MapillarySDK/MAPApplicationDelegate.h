@@ -14,7 +14,7 @@
  initiated by the `MAPLoginManager`. You should add these methods to your
  `UIApplicationDelegate`.
  
- @see MAPLoginManager
+ @see `MAPLoginManager`
  */
 @interface MAPApplicationDelegate : NSObject
 
@@ -24,6 +24,7 @@
  
  @param application Forward this parameter.
  @param launchOptions Forward this parameter.
+ 
  */
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
