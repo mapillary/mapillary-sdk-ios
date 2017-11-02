@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MAPLoginManager Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    <link rel='shortcut icon' href='https://www.mapillary.com/img/favicon.ico' type='image/x-icon' />
+
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/MAPLoginManager" class="dashAnchor"></a>
+    <a title="MAPLoginManager Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Mapillary Docs</a></p>
+        <p class="header-right"><a href="https://github.com/mapillary/mapillary-sdk-ios"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Mapillary Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        MAPLoginManager Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../getting-started.html">Getting started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Authentication.html">Authentication</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPLoginManager.html">MAPLoginManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUser.html">MAPUser</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>MAPLoginManager</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPLoginManager</span></code></pre>
+
+                </div>
+              </div>
+            <p>The <code>MAPLoginManager</code> class manages the authentication of Mapillary. The
+signIn method starts the authentication loop. It requires two values to be
+defined in your application <code>.plist</code> file:</p>
+
+<ul>
+<li>MapillaryClientId</li>
+<li>MapillaryRedirectUrl</li>
+</ul>
+
+<p>You need to register your app at mapillary.com to enter the redirect URL and
+also to obtain a client ID. Your app must also support the custom URL scheme
+defined in <code>MapillaryRedirectUrl</code>.</p>
+
+<p>@see-also MAPApplicationDelegate</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Authentication"></a>
+                <a name="//apple_ref/objc/Section/Authentication" class="dashAnchor"></a>
+                <a href="#/Authentication">
+                  <h3 class="section-name">Authentication</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLoginManager(cm)signIn:"></a>
+                    <a name="//apple_ref/objc/Method/+signIn:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLoginManager(cm)signIn:">+signIn:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Redirects the user to an authentication page on mapillary.com in Safari.
+After the user has entered the credentials and is authenticated, focus is
+returned to the app.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">signIn</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">int</span><span class="p">))</span><span class="nv">result</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">sign</span><span class="p">(</span><span class="k">in</span> <span class="nv">result</span><span class="p">:</span> <span class="p">((</span><span class="kt">Int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>result</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object that is executed when the authentication loop
+finishes. This block has no return value and takes one argument: if
+authentication was sucessful or not.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLoginManager(cm)signOut"></a>
+                    <a name="//apple_ref/objc/Method/+signOut" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLoginManager(cm)signOut">+signOut</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Signs out the current signed in user and removes all related user data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">signOut</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">signOut</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Current%20user"></a>
+                <a name="//apple_ref/objc/Section/Current user" class="dashAnchor"></a>
+                <a href="#/Current%20user">
+                  <h3 class="section-name">Current user</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLoginManager(cm)isSignedIn"></a>
+                    <a name="//apple_ref/objc/Method/+isSignedIn" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLoginManager(cm)isSignedIn">+isSignedIn</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Checks if a user is signed in or not.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">+</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">isSignedIn</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">isSignedIn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>YES if a user is signed in, NO if no user is signed in.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLoginManager(cm)currentUser"></a>
+                    <a name="//apple_ref/objc/Method/+currentUser" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLoginManager(cm)currentUser">+currentUser</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the currently signed in user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">+</span> <span class="p">(</span><span class="n"><a href="../Classes/MAPUser.html">MAPUser</a></span> <span class="o">*</span><span class="p">)</span><span class="n">currentUser</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">currentUser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/MAPUser.html">MAPUser</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The signed in user if a user is signed in, nill if no user is signed
+in.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2017 <a class="link" href="https://www.mapillary.com" target="_blank" rel="external">Mapillary</a>. See <a class="link" href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE" target="_blank" rel="external">license</a> for more details.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

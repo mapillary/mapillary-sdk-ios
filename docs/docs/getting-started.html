@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Getting started  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    <link rel='shortcut icon' href='https://www.mapillary.com/img/favicon.ico' type='image/x-icon' />
+
+  </head>
+  <body>
+    <a title="Getting started  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">Mapillary Docs</a></p>
+        <p class="header-right"><a href="https://github.com/mapillary/mapillary-sdk-ios"><img src="img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">Mapillary Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Getting started  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="getting-started.html">Getting started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Authentication.html">Authentication</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/MAPLoginManager.html">MAPLoginManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPUser.html">MAPUser</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='getting-started' class='heading'>Getting started</h1>
+<h2 id='installation-with-cocoapods' class='heading'>Installation with CocoaPods</h2>
+
+<p><a href="https://cocoapods.org">CocoaPods</a> is a dependency manager for Objective-C and Swift, which automates and simplifies the process of using 3rd-party libraries like MapillarySDK in your projects. You can install it with the following command:</p>
+
+<p><code>$ gem install cocoapods</code></p>
+<h5 id='podfile' class='heading'>Podfile</h5>
+
+<p>To integrate MapillarySDK into your Xcode project using CocoaPods, specify it in your Podfile:</p>
+<pre class="highlight plaintext"><code>platform :ios, '11.0'
+
+target 'TargetName' do
+    pod 'MapillarySDK'
+end
+</code></pre>
+
+<p>Then, run the following command:</p>
+
+<p><code>$ pod install</code></p>
+<h2 id='configuration' class='heading'>Configuration</h2>
+<h3 id='register-your-app-with-mapillary' class='heading'>Register your app with Mapillary</h3>
+
+<p>To use the SDK, you need to obtain a Mapillary <code>client_id</code> first. </p>
+
+<ol>
+<li><a href="https://www.mapillary.com/signup">Create a Mapillary account</a> if you don&rsquo;t have one already.</li>
+<li>Create an app at <a href="https://www.mapillary.com/app/settings/developers">the Developer page</a>.</li>
+</ol>
+<h5 id='redirect-url' class='heading'>Redirect URL</h5>
+
+<p>When you fill in the form, make sure the redirect URL is similar to this:</p>
+
+<p><code>com.mycompany.myapp.mapillary://</code></p>
+
+<blockquote>
+<p>The <code>://</code> at the end is very important!</p>
+</blockquote>
+<h5 id='client_id' class='heading'>client_id</h5>
+
+<p>Copy your <code>client_id</code>, you need it to initialize the SDK later.</p>
+<h3 id='edit-your-application-plist' class='heading'>Edit your application plist</h3>
+
+<p>Now you need to add a custom URL scheme to your app. This is needed so that after authentication in the browser, your app can get focus again. Enter the same scheme as you provided in the redirect URL previously (but without ://). </p>
+
+<p>You also need to add <code>MapillaryClientId</code> and <code>MapillaryRedirectUrl</code> to the plist.</p>
+
+<p>Below is an example of parts of a plist file.</p>
+<pre class="highlight plaintext"><code>&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    ...
+    &lt;key&gt;CFBundleURLTypes&lt;/key&gt;
+    &lt;array&gt;
+        &lt;dict&gt;
+            &lt;key&gt;CFBundleTypeRole&lt;/key&gt;
+            &lt;string&gt;Editor&lt;/string&gt;
+            &lt;key&gt;CFBundleURLSchemes&lt;/key&gt;
+            &lt;array&gt;
+                &lt;string&gt;YOUR_REDIRECT_URL&lt;/string&gt;
+            &lt;/array&gt;
+        &lt;/dict&gt;
+    &lt;/array&gt;
+    ...
+    &lt;key&gt;MapillaryClientId&lt;/key&gt;
+    &lt;string&gt;YOUR_CLIENT_ID&lt;/string&gt;
+    ...
+    &lt;key&gt;MapillaryRedirectUrl&lt;/key&gt;
+    &lt;string&gt;YOUR_REDIRECT_URL&lt;/string&gt;
+    ...
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+<h3 id='app-delegate' class='heading'>App Delegate</h3>
+
+<p>Add this to your <code>AppDelegate.m</code> file:</p>
+<pre class="highlight plaintext"><code>#import &lt;MapillarySDK/MapillarySDK.h&gt;
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    return [MAPApplicationDelegate application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [MAPApplicationDelegate application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+}
+</code></pre>
+<h2 id='usage' class='heading'>Usage</h2>
+<h3 id='signing-in' class='heading'>Signing in</h3>
+<pre class="highlight plaintext"><code>[MAPLoginManager signIn:^(BOOL success) {
+
+    if (success)
+    {
+        NSLog(@"Sign in was a success");
+    }
+    else
+    {
+        NSLog(@"Sign in failed");
+    }                        
+
+}];
+</code></pre>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2017 <a class="link" href="https://www.mapillary.com" target="_blank" rel="external">Mapillary</a>. See <a class="link" href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE" target="_blank" rel="external">license</a> for more details.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
