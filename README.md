@@ -99,6 +99,10 @@ Add this to your `AppDelegate.m` file:
 }
 ```
 
+## Documentation
+
+The latest generated documentation can found here: https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html
+
 ## Usage
 
 
