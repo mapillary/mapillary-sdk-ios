@@ -18,16 +18,16 @@ PODS:
     - AFNetworking (~> 3.0)
 
 DEPENDENCIES:
-  - MapillarySDK (from `../MapillarySDK/MapillarySDK.podspec`)
+  - MapillarySDK (from `../MapillarySDK.podspec`)
 
 EXTERNAL SOURCES:
   MapillarySDK:
-    :path: ../MapillarySDK/MapillarySDK.podspec
+    :path: ../MapillarySDK.podspec
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  MapillarySDK: 5c0ea1529335d7dfc60b10f7af43051246598b86
+  MapillarySDK: ed1408177e70980595d3098b995f898e3ab2b322
 
-PODFILE CHECKSUM: 76d0720974f37f613d1b8967249a5ef7c9e69d37
+PODFILE CHECKSUM: 86c388e9f27c189ad82b6a8951063d2c970b6650
 
 COCOAPODS: 1.3.1
