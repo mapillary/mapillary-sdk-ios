@@ -11,15 +11,21 @@
 
 @implementation MAPInternalUtils
 
-+ (NSString *)getTimeString:(NSDate*)date
++ (NSDateFormatter*)defaultDateFormatter
 {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    //dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     dateFormatter.AMSymbol = @"";
     dateFormatter.PMSymbol = @"";
     dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+    return dateFormatter;
+}
+
++ (NSString *)getTimeString:(NSDate*)date
+{
+    NSDateFormatter* dateFormatter = [self defaultDateFormatter];
     
     if (date == nil)
     {
@@ -111,6 +117,7 @@
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     dateFormatter.AMSymbol = @"";
     dateFormatter.PMSymbol = @"";
     dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
@@ -182,6 +189,5 @@
     
     return heading;
 }
-
 
 @end
