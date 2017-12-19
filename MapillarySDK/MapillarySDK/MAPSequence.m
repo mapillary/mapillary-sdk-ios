@@ -66,7 +66,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     NSMutableArray* images = [[NSMutableArray alloc] init];
     NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
     NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
-    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@)", extensions]];
+    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
     
     for (NSString* path in files)
     {
