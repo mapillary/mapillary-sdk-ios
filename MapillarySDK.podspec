@@ -12,5 +12,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'MapillarySDK', 'MapillarySDK/MapillarySDK/**/*.{h,m}', 'MapillarySDK/internal'
   s.requires_arc     = true
   s.dependency 'AFNetworking', '~> 3.0'
+  s.dependency 'BOSImageResizeOperation', '~> 0.1'
+  s.dependency 'OCMockito', '~> 5.0'
 
 end

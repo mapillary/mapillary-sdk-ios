@@ -134,7 +134,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
     [imageData writeToFile:fullPath atomically:YES];
     
-    NSString* thumbPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
+    NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
     UIImage* srcImage = [UIImage imageWithData:imageData];
     CGSize thumbSize = CGSizeMake(SCREEN_WIDTH/3-1, SCREEN_WIDTH/3-1);
     

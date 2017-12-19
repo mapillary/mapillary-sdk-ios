@@ -140,7 +140,6 @@ unsigned long long footerLength;
             [extensionsString appendFormat:@"\t\t<mapillary:deviceModel>%@</mapillary:deviceModel>\n", sequence.device.model];
             [extensionsString appendFormat:@"\t\t<mapillary:appVersion>%@</mapillary:appVersion>\n", versionString];
             [extensionsString appendFormat:@"\t\t<mapillary:userKey>%@</mapillary:userKey>\n", [[MAPLoginManager currentUser] userKey]];
-            // TODO MAPSettingsTokenValid needed?
             
             NSMutableString* header = [[NSMutableString alloc] init];
             [header appendFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"];
