@@ -10,6 +10,7 @@
 		9A1021471FE7D8BD003CF9CC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A1021461FE7D8BD003CF9CC /* MainViewController.m */; };
 		9A63EE381FE80C2D00D27A46 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A63EE371FE80C2D00D27A46 /* CameraViewController.m */; };
 		9A63EE3B1FE93A9D00D27A46 /* CustomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A63EE3A1FE93A9D00D27A46 /* CustomNavigationController.m */; };
+		9A63EE3E1FE967B200D27A46 /* SequenceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A63EE3D1FE967B200D27A46 /* SequenceListViewController.m */; };
 		9AE3BB551FA72C1C00174C47 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3BB541FA72C1C00174C47 /* AppDelegate.m */; };
 		9AE3BB581FA72C1C00174C47 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3BB571FA72C1C00174C47 /* LoginViewController.m */; };
 		9AE3BB5B1FA72C1C00174C47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9AE3BB591FA72C1C00174C47 /* Main.storyboard */; };
@@ -30,6 +31,8 @@
 		9A63EE371FE80C2D00D27A46 /* CameraViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		9A63EE391FE93A9D00D27A46 /* CustomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomNavigationController.h; sourceTree = "<group>"; };
 		9A63EE3A1FE93A9D00D27A46 /* CustomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomNavigationController.m; sourceTree = "<group>"; };
+		9A63EE3C1FE967B200D27A46 /* SequenceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SequenceListViewController.h; sourceTree = "<group>"; };
+		9A63EE3D1FE967B200D27A46 /* SequenceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SequenceListViewController.m; sourceTree = "<group>"; };
 		9AE3BB501FA72C1C00174C47 /* MapillarySDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapillarySDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE3BB531FA72C1C00174C47 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9AE3BB541FA72C1C00174C47 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 				9A63EE371FE80C2D00D27A46 /* CameraViewController.m */,
 				9A63EE391FE93A9D00D27A46 /* CustomNavigationController.h */,
 				9A63EE3A1FE93A9D00D27A46 /* CustomNavigationController.m */,
+				9A63EE3C1FE967B200D27A46 /* SequenceListViewController.h */,
+				9A63EE3D1FE967B200D27A46 /* SequenceListViewController.m */,
 			);
 			path = MapillarySDKExample;
 			sourceTree = "<group>";
@@ -243,6 +248,7 @@
 				9AE3BB581FA72C1C00174C47 /* LoginViewController.m in Sources */,
 				9A1021471FE7D8BD003CF9CC /* MainViewController.m in Sources */,
 				9AE3BB631FA72C1C00174C47 /* main.m in Sources */,
+				9A63EE3E1FE967B200D27A46 /* SequenceListViewController.m in Sources */,
 				9A63EE3B1FE93A9D00D27A46 /* CustomNavigationController.m in Sources */,
 				9AE3BB551FA72C1C00174C47 /* AppDelegate.m in Sources */,
 			);

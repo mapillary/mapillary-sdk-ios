@@ -9,6 +9,7 @@
 #import "MAPGpxParser.h"
 #import "MAPLocation.h"
 #import "MAPInternalUtils.h"
+#import <SDVersion/SDVersion.h>
 
 @interface MAPGpxParser()
 
@@ -17,6 +18,17 @@
 @property NSMutableDictionary* currentTrackPoint;
 @property NSMutableString* currentElementValue;
 @property NSDateFormatter* dateFormatter;
+@property NSString* localTimeZone;
+@property NSString* project;
+@property NSString* sequenceKey;
+@property NSNumber* timeOffset;
+@property NSNumber* directionOffset;
+@property NSString* deviceMake;
+@property NSString* deviceModel;
+@property NSString* deviceName;
+@property NSDate* sequenceDate;
+@property BOOL parsingMeta;
+@property BOOL quickParse;
 
 @property (nonatomic, copy) void (^doneCallback)(NSDictionary* dict);
 
@@ -38,6 +50,19 @@
         self.xmlParser.delegate = self;
         
         self.locations = [NSMutableArray array];
+        self.parsingMeta = NO;
+        self.quickParse = NO;
+        
+        // Default values
+        self.localTimeZone = [[NSTimeZone localTimeZone] description];
+        self.project = @"Public";
+        self.sequenceKey = [[NSUUID UUID] UUIDString];
+        self.timeOffset = @0;
+        self.directionOffset = @-1;
+        self.deviceMake = @"Apple";
+        self.deviceModel = [SDVersion deviceNameString];
+        self.deviceName = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        self.sequenceDate = [NSDate date];
     }
     return self;
 }
@@ -48,21 +73,33 @@
     [self.xmlParser parse];
 }
 
-- (void)parserDidStartDocument:(NSXMLParser *)parser
+- (void)quickParse:(void(^)(NSDictionary* dict))done
 {
-    
+    self.quickParse = YES;
+    self.doneCallback = done;
+    [self.xmlParser parse];
 }
+
+#pragma mark - NSXMLParserDelegate
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     NSLog(@"Parser error: %@", parseError);
+    
+    [self parserDidEndDocument:parser];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
     self.currentElementValue = [[NSMutableString alloc] init];
     
-    if ([elementName isEqualToString:@"trkpt"])
+    if ([elementName isEqualToString:@"metadata"])
+    {
+        self.parsingMeta = YES;
+    }
+    
+    // Skip GPS track if we are doing a quick parse
+    if (!self.quickParse && [elementName isEqualToString:@"trkpt"])
     {
         self.currentTrackPoint = [NSMutableDictionary dictionaryWithDictionary:attributeDict];
     }
@@ -76,7 +113,64 @@
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
-    if (self.currentTrackPoint)
+    NSString* strippedValue = [self.currentElementValue stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]];
+    
+    // Meta
+    
+    if (self.parsingMeta && [elementName isEqualToString:@"time"])
+    {
+        self.parsingMeta = NO;
+        self.sequenceDate = [self.dateFormatter dateFromString:strippedValue];
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:localTimeZone"])
+    {
+        self.localTimeZone = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:project"])
+    {
+        self.project = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:sequenceKey"])
+    {
+        self.sequenceKey = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:timeOffset"])
+    {
+        NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        f.locale = [NSLocale systemLocale];
+        self.timeOffset = [f numberFromString:strippedValue];
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:directionOffset"])
+    {
+        NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        f.locale = [NSLocale systemLocale];
+        self.directionOffset = [f numberFromString:strippedValue];
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:deviceName"])
+    {
+        self.deviceName = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:deviceMake"])
+    {
+        self.deviceMake = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:@"mapillary:deviceModel"])
+    {
+        self.deviceModel = strippedValue;
+    }
+    
+    // GPS track points
+    else if (self.currentTrackPoint)
     {
         if ([elementName isEqualToString:@"trkpt"])
         {
@@ -99,11 +193,8 @@
             
             
             location.timestamp = timestamp;
-            //location.heading = [[CLHeading alloc] init];
             
             [self.locations addObject:location];
-            
-            //self.currentTrackPoint = nil;
         }
         else if (![elementName isEqualToString:@"extensions"] && ![elementName isEqualToString:@"fix"])
         {
@@ -117,15 +208,37 @@
             [self.currentTrackPoint setObject:trimmedValue forKey:elementName];
         }
     }
+    
+    // Check if quick parse is done
+    if (self.quickParse && self.localTimeZone && self.project && self.sequenceKey && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceName && self.sequenceDate)
+    {
+        [self.xmlParser abortParsing];
+    }
 }
 
 - (void)parserDidEndDocument:(NSXMLParser*)parser
 {
     if (self.doneCallback)
     {
-        NSDictionary* dict = @{@"locations": self.locations};
+        NSMutableDictionary* dict = dict = [NSMutableDictionary dictionary];
+        
+        [dict setObject:self.localTimeZone forKey:@"localTimeZone"];
+        [dict setObject:self.project forKey:@"project"];
+        [dict setObject:self.sequenceKey forKey:@"sequenceKey"];
+        [dict setObject:self.timeOffset forKey:@"timeOffset"];
+        [dict setObject:self.directionOffset forKey:@"directionOffset"];
+        [dict setObject:self.deviceMake forKey:@"deviceMake"];
+        [dict setObject:self.deviceModel forKey:@"deviceModel"];
+        [dict setObject:self.deviceName forKey:@"deviceName"];
+        [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
+        
+        if (!self.quickParse)
+        {
+            [dict setObject:self.locations forKey:@"locations"];
+        }
         
         self.doneCallback(dict);
+        
         self.doneCallback = nil;
     }
 }

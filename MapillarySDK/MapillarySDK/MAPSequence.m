@@ -123,7 +123,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
 {
-    NSAssert(imageData != nil, @"imageData cannot be nil");
+    if (imageData == nil)
+    {
+        return;
+    }
     
     if (date == nil)
     {

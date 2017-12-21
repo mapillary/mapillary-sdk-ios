@@ -14,5 +14,6 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking', '~> 3.0'
   s.dependency 'BOSImageResizeOperation', '~> 0.1'
   s.dependency 'OCMockito', '~> 5.0'
+  s.dependency 'SDVersion', '~> 4.0'
 
 end

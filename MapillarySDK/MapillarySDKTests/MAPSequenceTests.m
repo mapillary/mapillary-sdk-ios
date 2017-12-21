@@ -74,14 +74,15 @@
     
     // Test with invalid data
     NSData* imageData = nil;
-    XCTAssertThrows([self.sequence addImageWithData:imageData date:nil location:nil]);
+    [self.sequence addImageWithData:imageData date:nil location:nil];
+    XCTAssert(images.count == 0);
     
     // Test with valid data
     imageData = [self createImageData];
     int nbrImages = arc4random()%100;
     for (int i = 0; i < nbrImages; i++)
     {
-        XCTAssertNoThrow([self.sequence addImageWithData:imageData date:nil location:nil]);
+        [self.sequence addImageWithData:imageData date:nil location:nil];
     }
 
     // There should now be nbrImages images
@@ -99,7 +100,7 @@
     int nbrImages = arc4random()%100;
     for (int i = 0; i < nbrImages; i++)
     {
-        XCTAssertNoThrow([self.sequence addImageWithPath:path date:nil location:nil]);
+        [self.sequence addImageWithPath:path date:nil location:nil];
     }
     
     // There should now be nbrImages images
@@ -242,7 +243,7 @@
     
     NSString* path = [NSString stringWithFormat:@"%@/test.gpx", [MAPInternalUtils documentsDirectory]];
     
-    NSString* gpx = @"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<gpx version=\"1.1\" creator=\"Mapillary iOS (null)\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<metadata>\n\t\t<author>\n\t\t\t<name>(null)</name>\n\t\t</author>\n\t\t<link href=\"https://www.mapillary.com/app/user/(null)\"/>\n\t\t<time>1970-01-01T01:00:00Z</time>\n\t</metadata>\n\t<trk>\n\t\t<src>Logged by (null) using Mapillary</src>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"50.000000\" lon=\"50.000000\">\n\t\t\t\t<time>1970-01-01T01:00:00Z</time>\n\t\t\t\t<fix>2d</fix>\n\t\t\t\t<extensions>\n\t\t\t\t\t<mapillary:gpsAccuracyMeters>0.000000</mapillary:gpsAccuracyMeters>\n\t\t\t\t</extensions>\n\t\t\t</trkpt>\n\t\t</trkseg>\n\t</trk>\n\t<extensions>\n\t\t<mapillary:localTimeZone>Europe/Stockholm (GMT+2) offset 7200 (Daylight)</mapillary:localTimeZone>\n\t\t<mapillary:project>Public</mapillary:project>\n\t\t<mapillary:sequenceKey>1234-5678-9ABC-DEF</mapillary:sequenceKey>\n\t\t<mapillary:timeOffset>0.000000</mapillary:timeOffset>\n\t\t<mapillary:directionOffset>-1.000000</mapillary:directionOffset>\n\t\t<mapillary:deviceName>iPhone7,2</mapillary:deviceName>\n\t\t<mapillary:deviceMake>Apple</mapillary:deviceMake>\n\t\t<mapillary:deviceModel>iPhone 6</mapillary:deviceModel>\n\t\t<mapillary:appVersion>(null)</mapillary:appVersion>\n\t\t<mapillary:userKey>(null)</mapillary:userKey>\n\t\t<mapillary:uploadHash>(null)</mapillary:uploadHash>\n\t</extensions>\n</gpx>";
+    NSString* gpx = @"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<gpx version=\"1.1\" creator=\"Mapillary iOS 1.0\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<metadata>\n\t\t<author>\n\t\t\t<name>millenbop</name>\n\t\t</author>\n\t\t<link href=\"https://www.mapillary.com/app/user/millenbop\"/>\n\t\t<time>1970-01-01T01:00:00.000Z</time>\n\t</metadata>\n\t<trk>\n\t\t<src>Logged by millenbop using Mapillary</src>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"50.000000\" lon=\"50.000000\">\n\t\t\t\t<time>1970-01-01T01:00:00.000Z</time>\n\t\t\t\t<fix>2d</fix>\n\t\t\t\t<extensions>\n\t\t\t\t\t<mapillary:gpsAccuracyMeters>0.000000</mapillary:gpsAccuracyMeters>\n\t\t\t\t</extensions>\n\t\t\t</trkpt>\n\t\t</trkseg>\n\t</trk>\n\t<extensions>\n\t\t<mapillary:localTimeZone>Europe/Stockholm (GMT+2) offset 7200 (Daylight)</mapillary:localTimeZone>\n\t\t<mapillary:project>Public</mapillary:project>\n\t\t<mapillary:sequenceKey>1234-5678-9ABC-DEF</mapillary:sequenceKey>\n\t\t<mapillary:timeOffset>0.000000</mapillary:timeOffset>\n\t\t<mapillary:directionOffset>-1.000000</mapillary:directionOffset>\n\t\t<mapillary:deviceName>iPhone7,2</mapillary:deviceName>\n\t\t<mapillary:deviceMake>Apple</mapillary:deviceMake>\n\t\t<mapillary:deviceModel>iPhone 6</mapillary:deviceModel>\n\t\t<mapillary:appVersion>(null)</mapillary:appVersion>\n\t\t<mapillary:userKey>(null)</mapillary:userKey>\n\t\t</extensions>\n</gpx>";
     
     [gpx writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
@@ -277,7 +278,7 @@
 {
     NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mapbox-test" ofType:@"gpx"];
 
-    XCTestExpectation* expectation = [self expectationWithDescription:@"Adding Non Mapillary GPX file"];
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
     
     __weak MAPSequenceTests* weakSelf = self;
     

@@ -6,6 +6,7 @@ target 'MapillarySDK' do
     pod 'AFNetworking', '~> 3.0'
     pod 'BOSImageResizeOperation', '~> 0.1'
     pod 'OCMockito', '~> 5.0'
+    pod 'SDVersion', '~> 4.0'
 
     target 'MapillarySDKTests' do
         inherit! :search_paths

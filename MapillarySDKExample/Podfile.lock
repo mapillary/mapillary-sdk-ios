@@ -19,9 +19,11 @@ PODS:
     - AFNetworking (~> 3.0)
     - BOSImageResizeOperation (~> 0.1)
     - OCMockito (~> 5.0)
+    - SDVersion (~> 4.0)
   - OCHamcrest (7.0.2)
   - OCMockito (5.0.1):
     - OCHamcrest (~> 7.0)
+  - SDVersion (4.3.2)
 
 DEPENDENCIES:
   - MapillarySDK (from `../MapillarySDK.podspec`)
@@ -33,9 +35,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
-  MapillarySDK: b71b7e74ee2f173b8b1eaefef9de947a9c56a737
+  MapillarySDK: c82341b7cdf8d33ec6a4d75ada3d81dc1f61c36d
   OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
   OCMockito: 063837a086c058e764fcd23e771089c1759e7197
+  SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
 PODFILE CHECKSUM: 86c388e9f27c189ad82b6a8951063d2c970b6650
 

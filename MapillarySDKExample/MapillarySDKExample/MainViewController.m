@@ -58,6 +58,8 @@
 {
     MAPDevice* device = [[MAPDevice alloc] init];
     device.name = @"iPhone";
+    device.make = @"Apple";
+    device.model = @"iPhone";
     self.sequence = [[MAPSequence alloc] initWithDevice:device andProject:nil];
     
     self.startSequenceButton.enabled = NO;

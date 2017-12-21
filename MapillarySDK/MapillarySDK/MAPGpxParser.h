@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "MAPSequence.h"
 
 @interface MAPGpxParser : NSObject <NSXMLParserDelegate>
 
-- (instancetype)initWithPath:(NSString*)path;
+- (id)initWithPath:(NSString*)path;
 - (void)parse:(void(^)(NSDictionary* dict))done;
+- (void)quickParse:(void(^)(NSDictionary* dict))done;
 
 @end

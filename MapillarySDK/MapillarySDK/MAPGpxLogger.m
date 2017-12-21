@@ -131,7 +131,7 @@ unsigned long long footerLength;
             
             NSMutableString* extensionsString = [[NSMutableString alloc] init];
             [extensionsString appendFormat:@"\t\t<mapillary:localTimeZone>%@</mapillary:localTimeZone>\n", [[NSTimeZone systemTimeZone] description]];
-            [extensionsString appendFormat:@"\t\t<mapillary:project>%@</mapillary:project>\n", sequence.project ? sequence.project : @""];
+            [extensionsString appendFormat:@"\t\t<mapillary:project>%@</mapillary:project>\n", sequence.project ? sequence.project : @"Public"];
             [extensionsString appendFormat:@"\t\t<mapillary:sequenceKey>%@</mapillary:sequenceKey>\n", sequence.sequenceKey];
             [extensionsString appendFormat:@"\t\t<mapillary:timeOffset>%f</mapillary:timeOffset>\n", sequence.timeOffset];
             [extensionsString appendFormat:@"\t\t<mapillary:directionOffset>%f</mapillary:directionOffset>\n", sequence.directionOffset];
