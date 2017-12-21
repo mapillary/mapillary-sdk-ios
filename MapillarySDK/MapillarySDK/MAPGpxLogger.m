@@ -135,7 +135,7 @@ unsigned long long footerLength;
             [extensionsString appendFormat:@"\t\t<mapillary:sequenceKey>%@</mapillary:sequenceKey>\n", sequence.sequenceKey];
             [extensionsString appendFormat:@"\t\t<mapillary:timeOffset>%f</mapillary:timeOffset>\n", sequence.timeOffset];
             [extensionsString appendFormat:@"\t\t<mapillary:directionOffset>%f</mapillary:directionOffset>\n", sequence.directionOffset];
-            [extensionsString appendFormat:@"\t\t<mapillary:deviceName>%@</mapillary:deviceName>\n", sequence.device.name];
+            [extensionsString appendFormat:@"\t\t<mapillary:deviceUUID>%@</mapillary:deviceUUID>\n", sequence.device.UUID];
             [extensionsString appendFormat:@"\t\t<mapillary:deviceMake>%@</mapillary:deviceMake>\n", sequence.device.make];
             [extensionsString appendFormat:@"\t\t<mapillary:deviceModel>%@</mapillary:deviceModel>\n", sequence.device.model];
             [extensionsString appendFormat:@"\t\t<mapillary:appVersion>%@</mapillary:appVersion>\n", versionString];

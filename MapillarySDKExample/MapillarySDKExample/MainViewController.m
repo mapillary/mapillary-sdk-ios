@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 #import <MapillarySDK/MapillarySDK.h>
 #import "CameraViewController.h"
+#import <SDVersion/SDVersion.h>
 
 @interface MainViewController ()
 
@@ -56,10 +57,7 @@
 
 - (IBAction)startNewSequenceAction:(id)sender
 {
-    MAPDevice* device = [[MAPDevice alloc] init];
-    device.name = @"iPhone";
-    device.make = @"Apple";
-    device.model = @"iPhone";
+    MAPDevice* device = [MAPDevice currentDevice];
     self.sequence = [[MAPSequence alloc] initWithDevice:device andProject:nil];
     
     self.startSequenceButton.enabled = NO;

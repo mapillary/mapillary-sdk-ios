@@ -9,7 +9,6 @@
 #import "MAPGpxParser.h"
 #import "MAPLocation.h"
 #import "MAPInternalUtils.h"
-#import <SDVersion/SDVersion.h>
 
 @interface MAPGpxParser()
 
@@ -25,7 +24,7 @@
 @property NSNumber* directionOffset;
 @property NSString* deviceMake;
 @property NSString* deviceModel;
-@property NSString* deviceName;
+@property NSString* deviceUUID;
 @property NSDate* sequenceDate;
 @property BOOL parsingMeta;
 @property BOOL quickParse;
@@ -59,10 +58,12 @@
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.timeOffset = @0;
         self.directionOffset = @-1;
-        self.deviceMake = @"Apple";
-        self.deviceModel = [SDVersion deviceNameString];
-        self.deviceName = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
         self.sequenceDate = [NSDate date];
+        
+        MAPDevice* defaultDevice = [MAPDevice currentDevice];
+        self.deviceMake = defaultDevice.make;
+        self.deviceModel = defaultDevice.model;
+        self.deviceUUID = defaultDevice.UUID;
     }
     return self;
 }
@@ -154,9 +155,9 @@
         self.directionOffset = [f numberFromString:strippedValue];
     }
     
-    else if ([elementName isEqualToString:@"mapillary:deviceName"])
+    else if ([elementName isEqualToString:@"mapillary:deviceUUID"])
     {
-        self.deviceName = strippedValue;
+        self.deviceUUID = strippedValue;
     }
     
     else if ([elementName isEqualToString:@"mapillary:deviceMake"])
@@ -210,7 +211,7 @@
     }
     
     // Check if quick parse is done
-    if (self.quickParse && self.localTimeZone && self.project && self.sequenceKey && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceName && self.sequenceDate)
+    if (self.quickParse && self.localTimeZone && self.project && self.sequenceKey && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate)
     {
         [self.xmlParser abortParsing];
     }
@@ -229,7 +230,7 @@
         [dict setObject:self.directionOffset forKey:@"directionOffset"];
         [dict setObject:self.deviceMake forKey:@"deviceMake"];
         [dict setObject:self.deviceModel forKey:@"deviceModel"];
-        [dict setObject:self.deviceName forKey:@"deviceName"];
+        [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
         [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
         
         if (!self.quickParse)

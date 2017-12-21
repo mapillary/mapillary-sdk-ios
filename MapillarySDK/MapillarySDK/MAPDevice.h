@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface MAPDevice : NSObject
-    
-@property NSString* name;
+
 @property NSString* make;
 @property NSString* model;
+@property NSString* UUID;
+
++ (id)currentDevice;
 
 @end

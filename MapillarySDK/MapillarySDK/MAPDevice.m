@@ -7,7 +7,19 @@
 //
 
 #import "MAPDevice.h"
+#import <SDVersion/SDVersion.h>
+#import <UIKit/UIKit.h>
 
 @implementation MAPDevice
+
++ (id)currentDevice
+{
+    MAPDevice* current = [[MAPDevice alloc] init];
+    current.make = @"Apple";
+    current.model = [SDVersion deviceNameString];
+    current.UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    
+    return current;
+}
 
 @end

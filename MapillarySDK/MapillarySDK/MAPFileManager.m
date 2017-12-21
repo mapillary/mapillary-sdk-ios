@@ -41,7 +41,7 @@
                 MAPDevice* device = [[MAPDevice alloc] init];
                 device.make = result[@"deviceMake"];
                 device.model = result[@"deviceModel"];
-                device.name = result[@"deviceName"];
+                device.UUID = result[@"deviceUUID"];
                 
                 MAPSequence* sequence = [[MAPSequence alloc] init];
                 sequence.path = [NSString stringWithFormat:@"%@/%@", sequenceDirectory, path];
