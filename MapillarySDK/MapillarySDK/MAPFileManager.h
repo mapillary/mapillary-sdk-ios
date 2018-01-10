@@ -12,7 +12,7 @@
 
 @interface MAPFileManager : NSObject
 
-+ (void)listSequences:(void(^)(NSArray*))done;
++ (void)listSequences:(void(^)(NSArray* sequences))done;
 + (void)deleteSequence:(MAPSequence*)sequence;
 + (void)deleteImage:(MAPImage*)image;
 

@@ -12,7 +12,7 @@
 
 @implementation MAPFileManager
 
-+ (void)listSequences:(void(^)(NSArray*))result
++ (void)listSequences:(void(^)(NSArray* sequences))result
 {
     if (result == nil)
     {
