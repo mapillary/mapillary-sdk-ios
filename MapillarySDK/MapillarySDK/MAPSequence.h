@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MAPLocation.h"
 #import "MAPDevice.h"
+#import "MAPImage.h"
 
 @interface MAPSequence : NSObject
 
@@ -19,18 +20,25 @@
 @property NSString* project;
 @property NSString* sequenceKey;
 @property MAPDevice* device;
-    
+@property NSUInteger imageCount;
+@property NSUInteger sequenceSize;
+
 - (id)initWithDevice:(MAPDevice*)device;
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project;
-
-- (NSArray*)listImages;
-- (void)listLocations:(void(^)(NSArray*))done;
-    
-- (MAPLocation*)locationForDate:(NSDate*)date;
+- (id)initWithPath:(NSString*)path;
     
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location;
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location;
 - (void)addLocation:(MAPLocation*)location;
 - (void)addGpx:(NSString*)path done:(void(^)(void))done;
+
+- (void)deleteImage:(MAPImage*)image;
+
+- (NSArray*)listImages;
+- (void)listLocations:(void(^)(NSArray*))done;
+
+- (MAPLocation*)locationForDate:(NSDate*)date;
+
+
 
 @end

@@ -31,10 +31,20 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (id)initWithDevice:(MAPDevice*)device
 {
-    return [self initWithDevice:device andProject:@"Public"];
+    return [self initInternal:nil device:device project:nil];
 }
 
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project
+{
+    return [self initInternal:nil device:device project:project];
+}
+
+- (id)initWithPath:(NSString*)path
+{
+    return [self initInternal:path device:nil project:nil];
+}
+
+- (id)initInternal:(NSString*)path device:(MAPDevice*)device project:(NSString*)project
 {
     self = [super init];
     if (self)
@@ -44,81 +54,90 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.timeOffset = 0;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
-        self.device = device;
-        self.project = project;
+        self.device = device ? device : [MAPDevice currentDevice];
+        self.project = project ? project : @"Public";
         self.cachedLocations = nil;
+        self.imageCount = 0;
+        self.imageCount = 0;
         
-        NSString* folderName = [MAPInternalUtils getTimeString:nil];
-        self.path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], folderName];
+        if (path == nil)
+        {
+            NSString* folderName = [MAPInternalUtils getTimeString:nil];
+            self.path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], folderName];
+        }
+        else
+        {
+            self.path = path;
+            
+            NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
+            
+            if ([[NSFileManager defaultManager] fileExistsAtPath:gpxPath])
+            {
+                dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                
+                MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:gpxPath];
+                
+                [parser quickParse:^(NSDictionary *result) {
+                    
+                    NSNumber* directionOffset = result[@"directionOffset"];
+                    NSNumber* timeOffset = result[@"timeOffset"];
+                    
+                    MAPDevice* device = [[MAPDevice alloc] init];
+                    device.make = result[@"deviceMake"];
+                    device.model = result[@"deviceModel"];
+                    device.UUID = result[@"deviceUUID"];
+                    
+                    self.sequenceKey = result[@"sequenceKey"];
+                    self.sequenceDate = result[@"sequenceDate"];
+                    self.directionOffset = directionOffset.doubleValue;
+                    self.timeOffset = timeOffset.doubleValue;
+                    self.project = result[@"project"];
+                    self.device = device;
+                    
+                    dispatch_semaphore_signal(semaphore);
+                    
+                }];
+                
+                // Wait here intil done
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            }
+        }
         
-        [MAPInternalUtils createFolderAtPath:self.path];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.path])
+        {
+            NSArray* dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+            
+            NSPredicate* fltr = [NSPredicate predicateWithFormat:@"(self ENDSWITH '.jpg') AND NOT (self CONTAINS 'thumb')"];
+            NSArray* dirContentsFiltered = [dirContents filteredArrayUsingPredicate:fltr];
+            self.imageCount = dirContentsFiltered.count;
+            
+            NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:nil];
+            NSNumber* fileSize = [attrs objectForKey:@"NSFileSize"];
+            self.sequenceSize = fileSize.unsignedIntValue;
+            
+            if ([dirContentsFiltered count] > 0)
+            {
+                // Image count,
+                self.imageCount = dirContentsFiltered.count;
+                
+                // Sequence size
+                for (NSString* f in dirContentsFiltered)
+                {
+                    NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[self.path stringByAppendingPathComponent:f] error:nil];
+                    NSNumber* fileSize = [attrs objectForKey:@"NSFileSize"];
+                    self.sequenceSize += fileSize.unsignedIntegerValue;
+                }
+            }
+        }
+        else
+        {
+            [MAPInternalUtils createFolderAtPath:self.path];
+        }
         
         self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"] andSequence:self];
-        
     }
+    
     return self;
-}
-
-- (NSArray*)listImages
-{
-    MAPUser* author = [MAPLoginManager currentUser];
-    
-    NSMutableArray* images = [[NSMutableArray alloc] init];
-    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
-    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
-    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
-    
-    for (NSString* path in files)
-    {
-        MAPImage* image = [[MAPImage alloc] init];
-        image.imagePath = path;
-        image.captureDate = [MAPInternalUtils dateFromFilePath:path];
-        image.author = author;
-        image.location = [self locationForDate:image.captureDate];
-        [images addObject:image];
-    }
-    
-    return images;
-}
-    
-- (void)listLocations:(void(^)(NSArray* locations))done
-{
-    if (self.cachedLocations)
-    {
-        done(self.cachedLocations);
-        return;
-    }
-    
-    if (self.gpxLogger.busy)
-    {
-        self.listLocationsSemaphore = dispatch_semaphore_create(0);
-        
-        [self.gpxLogger addObserver:self forKeyPath:@"busy" options:0 context:&kGpxLoggerBusy];
-        
-        dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
-    }
-    
-    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(reentrantAvoidanceQueue, ^{
-        
-        MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
-        
-        [parser parse:^(NSDictionary *dict) {
-            
-            NSArray* locations = dict[@"locations"];
-            
-            NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
-                return [b.timestamp compare:a.timestamp];
-            }];
-            
-            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
-            
-            done(sorted);
-            
-        }];
-       
-    });
-    dispatch_sync(reentrantAvoidanceQueue, ^{ });
 }
 
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location
@@ -152,6 +171,9 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         [self.gpxLogger addLocation:location];
         self.currentLocation = location;
     }
+    
+    self.imageCount++;
+    self.sequenceSize += imageData.length;
 }
 
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location
@@ -207,6 +229,84 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             done();
         }
     }];    
+}
+
+- (void)deleteImage:(MAPImage*)image
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:image.imagePath])
+    {
+        // Update stats
+        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:image.imagePath error:nil];
+        NSNumber* fileSize = [attrs objectForKey:@"NSFileSize"];
+        self.sequenceSize -= fileSize.unsignedIntValue;
+        self.imageCount--;
+        
+        // Delete files
+        [[NSFileManager defaultManager] removeItemAtPath:image.imagePath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:image.thumbPath error:nil];
+    }
+}
+
+- (NSArray*)listImages
+{
+    MAPUser* author = [MAPLoginManager currentUser];
+    
+    NSMutableArray* images = [[NSMutableArray alloc] init];
+    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
+    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
+    
+    for (NSString* path in files)
+    {
+        MAPImage* image = [[MAPImage alloc] init];
+        image.imagePath = [self.path stringByAppendingPathComponent:path];
+        image.captureDate = [MAPInternalUtils dateFromFilePath:path];
+        image.author = author;
+        image.location = [self locationForDate:image.captureDate];
+        [images addObject:image];
+    }
+    
+    return images;
+}
+
+- (void)listLocations:(void(^)(NSArray* locations))done
+{
+    if (self.cachedLocations)
+    {
+        done(self.cachedLocations);
+        return;
+    }
+    
+    if (self.gpxLogger.busy)
+    {
+        self.listLocationsSemaphore = dispatch_semaphore_create(0);
+        
+        [self.gpxLogger addObserver:self forKeyPath:@"busy" options:0 context:&kGpxLoggerBusy];
+        
+        dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
+    }
+    
+    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(reentrantAvoidanceQueue, ^{
+        
+        MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
+        
+        [parser parse:^(NSDictionary *dict) {
+            
+            NSArray* locations = dict[@"locations"];
+            
+            NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
+                return [b.timestamp compare:a.timestamp];
+            }];
+            
+            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
+            
+            done(sorted);
+            
+        }];
+        
+    });
+    dispatch_sync(reentrantAvoidanceQueue, ^{ });
 }
     
 - (MAPLocation*)locationForDate:(NSDate*)date
