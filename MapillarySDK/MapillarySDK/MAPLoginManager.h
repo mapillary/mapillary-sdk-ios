@@ -59,8 +59,7 @@
 /**
  Returns the currently signed in user.
  
- @return The signed in user if a user is signed in, nill if no user is signed
- in.
+ @return The signed in user if a user is signed in, nil if no user is signed in.
  */
 + (MAPUser*)currentUser;
 
