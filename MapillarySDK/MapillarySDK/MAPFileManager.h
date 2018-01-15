@@ -14,7 +14,6 @@
 
 + (void)listSequences:(void(^)(NSArray* sequences))done;
 + (void)deleteSequence:(MAPSequence*)sequence;
-+ (void)deleteImage:(MAPImage*)image;
 
 
 @end

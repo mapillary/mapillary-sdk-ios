@@ -21,49 +21,28 @@
     
     NSMutableArray* sequences = [[NSMutableArray alloc] init];
     NSString* sequenceDirectory = [MAPInternalUtils sequenceDirectory];
-    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequenceDirectory error:nil];
     
-    for (NSString* path in contents)
-    {
-        NSString* gpxPath = [NSString stringWithFormat:@"%@/%@/sequence.gpx", sequenceDirectory, path];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        if ([[NSFileManager defaultManager] fileExistsAtPath:gpxPath])
+        NSError* error = nil;
+        NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequenceDirectory error:&error];
+        
+        if (!error)
         {
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            
-            MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:gpxPath];
-            
-            [parser quickParse:^(NSDictionary *result) {
-                
-                NSNumber* directionOffset = result[@"directionOffset"];
-                NSNumber* timeOffset = result[@"timeOffset"];
-                
-                MAPDevice* device = [[MAPDevice alloc] init];
-                device.make = result[@"deviceMake"];
-                device.model = result[@"deviceModel"];
-                device.UUID = result[@"deviceUUID"];
-                
-                MAPSequence* sequence = [[MAPSequence alloc] init];
-                sequence.path = [NSString stringWithFormat:@"%@/%@", sequenceDirectory, path];
-                sequence.sequenceKey = result[@"sequenceKey"];
-                sequence.sequenceDate = result[@"sequenceDate"];
-                sequence.directionOffset = directionOffset.doubleValue;
-                sequence.timeOffset = timeOffset.doubleValue;
-                sequence.project = result[@"project"];
-                sequence.device = device;
-                
+            for (NSString* path in contents)
+            {
+                MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, path]];
                 [sequences addObject:sequence];
-                
-                dispatch_semaphore_signal(semaphore);
-                
-            }];
-            
-            // Wait here intil done
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            }
         }
-    }
-    
-    result(sequences);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            result(sequences);
+            
+        });
+        
+    });
 }
 
 + (void)deleteSequence:(MAPSequence*)sequence
@@ -72,12 +51,6 @@
 
     // Delete folder
     [fm removeItemAtPath:sequence.path error:nil];
-}
-
-+ (void)deleteImage:(MAPImage*)image
-{
-    [[NSFileManager defaultManager] removeItemAtPath:image.imagePath error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:image.thumbPath error:nil];
 }
 
 @end
