@@ -22,6 +22,14 @@
     return self;
 }
 
+- (id)initWithPath:(NSString*)path
+{
+    self = [self init];
+    self.imagePath = path;
+    
+    return self;
+}
+
 - (UIImage*)loadImage
 {
     if (self.imagePath)
@@ -45,6 +53,12 @@
 - (NSString*)thumbPath
 {
     return [NSString stringWithFormat:@"%@-thumb.jpg", [self.imagePath substringToIndex:self.imagePath.length-4]];
+}
+
+- (BOOL)isLocked
+{
+    NSString* path = [self.imagePath stringByAppendingPathComponent:@"lock"];
+    return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 @end

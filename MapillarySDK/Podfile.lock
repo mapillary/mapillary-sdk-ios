@@ -14,6 +14,9 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
+  - AWSCore (2.6.11)
+  - AWSS3 (2.6.11):
+    - AWSCore (= 2.6.11)
   - BOSImageResizeOperation (0.1.0)
   - OCHamcrest (7.0.2)
   - OCMockito (5.0.1):
@@ -22,17 +25,21 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 3.1)
+  - AWSCore (~> 2.6)
+  - AWSS3 (~> 2.6)
   - BOSImageResizeOperation (~> 0.1)
   - OCMockito (~> 5.0)
   - SDVersion (~> 4.0)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  AWSCore: a461695bf302a32a366768bf36056be3a2c87d8d
+  AWSS3: d13e29a4dbfecb7cd99b4ce833a9fe221dee8cba
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
   OCMockito: 063837a086c058e764fcd23e771089c1759e7197
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
-PODFILE CHECKSUM: a80f7e30548907638202837a8f074da8aac02aae
+PODFILE CHECKSUM: 43411a40062671ca3f9c02b28efc30e1c2b4a5f2
 
 COCOAPODS: 1.4.0.rc.1

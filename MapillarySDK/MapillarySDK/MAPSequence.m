@@ -15,6 +15,7 @@
 #import "MAPDefines.h"
 #import "MAPGpxParser.h"
 #import "MAPUtils.h"
+#import "MAPImage+Private.h"
 
 static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
@@ -242,8 +243,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.imageCount--;
         
         // Delete files
-        [[NSFileManager defaultManager] removeItemAtPath:image.imagePath error:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:image.thumbPath error:nil];
+        [image delete];        
     }
 }
 
@@ -383,6 +383,12 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     return [location copy];
+}
+
+- (BOOL)isLocked
+{
+    NSString* path = [self.path stringByAppendingPathComponent:@"lock"];
+    return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 #pragma mark - Internal

@@ -32,6 +32,11 @@
 @property (readonly) NSString* accessToken;
 
 /**
+ Shouldn't be used.
+ */
+- (id) init __unavailable;
+
+/**
  Creates a user object.
  
  @param userName The user's user name.

@@ -9,26 +9,28 @@
 #import <Foundation/Foundation.h>
 #import "MAPUploadStatus.h"
 #import "MAPImage.h"
+#import "MAPSequence.h"
 
 @class MAPUploadManager;
 
 @protocol MAPUploadManagerDelegate <NSObject>
 @optional
-- (void)uploadStarted:(MAPUploadManager*)uploadManager;
-- (void)uploadStopped:(MAPUploadManager*)uploadManager;
-- (void)imageUploadSuccess:(MAPUploadManager*)uploadManager image:(MAPImage*)image;
-- (void)imageUploadFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image error:(NSError*)error;
+- (void)uploadStarted:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error;
+- (void)sequenceFinished:(MAPUploadManager*)uploadManager sequence:(MAPSequence*)sequence uploadStatus:(MAPUploadStatus*)uploadStatus;
+- (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
+- (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
 @end
 
-@interface MAPUploadManager : NSObject
+@interface MAPUploadManager : NSObject <NSURLSessionDelegate, NSURLSessionTaskDelegate, CLLocationManagerDelegate>
 
 @property (weak) id<MAPUploadManagerDelegate> delegate;
-@property int nbrUploadThreads;
-@property BOOL allowUploadOnCell;
 
-- (void)uploadSequences:(NSArray*)sequences;
++ (instancetype)sharedManager;
+
+- (void)uploadSequences:(NSArray*)sequences allowsCellularAccess:(BOOL)allowsCellularAccess;
 - (void)stopUpload;
-- (MAPUploadStatus*)getStatus;
 
+- (MAPUploadStatus*)getStatus;
 
 @end

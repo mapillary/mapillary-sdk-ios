@@ -18,8 +18,11 @@
 @property MAPLocation* location;
 @property MAPUser* author;
 
+- (id)init;
+- (id)initWithPath:(NSString*)path;
 - (UIImage*)loadImage;
 - (UIImage*)loadThumbnailImage;
 - (NSString*)thumbPath;
+- (BOOL)isLocked;
 
 @end

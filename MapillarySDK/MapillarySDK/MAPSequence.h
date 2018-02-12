@@ -23,6 +23,7 @@
 @property NSUInteger imageCount;
 @property NSUInteger sequenceSize;
 
+- (id) init __unavailable;
 - (id)initWithDevice:(MAPDevice*)device;
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project;
 - (id)initWithPath:(NSString*)path;
@@ -34,10 +35,12 @@
 
 - (void)deleteImage:(MAPImage*)image;
 
-- (NSArray*)listImages;
+- (NSArray*)listImages; // TODO make async
 - (void)listLocations:(void(^)(NSArray*))done;
 
 - (MAPLocation*)locationForDate:(NSDate*)date;
+
+- (BOOL)isLocked;
 
 
 

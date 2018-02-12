@@ -15,5 +15,7 @@ Pod::Spec.new do |s|
   s.dependency 'BOSImageResizeOperation', '~> 0.1'
   s.dependency 'OCMockito', '~> 5.0'
   s.dependency 'SDVersion', '~> 4.0'
+  s.dependency 'AWSCore', '~> 2.6'
+  s.dependency 'AWSS3', '~> 2.6'
 
 end
