@@ -125,8 +125,6 @@
 		9A912D541FE2D19400B6D126 /* MAPUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUtilsTests.m; sourceTree = "<group>"; };
 		9A912D551FE2D19400B6D126 /* MAPUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUserTests.m; sourceTree = "<group>"; };
 		9A912D561FE2D19400B6D126 /* MAPApiManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPApiManagerTests.m; sourceTree = "<group>"; };
-		9AB3997820236C1600A75CDB /* MAPExifTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPExifTools.h; sourceTree = "<group>"; };
-		9AB3997920236C1600A75CDB /* MAPExifTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPExifTools.m; sourceTree = "<group>"; };
 		9AC871911F4DB37D0012721D /* MAPLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPLoginManager.m; sourceTree = "<group>"; };
 		9AC871941F4DB3F90012721D /* MAPUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUser.h; sourceTree = "<group>"; };
 		9AC871951F4DB3F90012721D /* MAPUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUser.m; sourceTree = "<group>"; };
@@ -272,8 +270,6 @@
 				9A420B6C2019E67D001BF118 /* MAPInternalUtils.m */,
 				9A420B672019E67D001BF118 /* MAPSequence+Private.h */,
 				9A420B602019E67C001BF118 /* MAPSequence+Private.m */,
-				9AB3997820236C1600A75CDB /* MAPExifTools.h */,
-				9AB3997920236C1600A75CDB /* MAPExifTools.m */,
 			);
 			name = internal;
 			sourceTree = "<group>";

@@ -21,4 +21,21 @@
 
 #define MAPILLARY_NOTIFICATION_LOGIN        @"kMapillaryNotificationLogin"
 
+#define kMAPLatitude            @"MAPLatitude"
+#define kMAPLongitude           @"MAPLongitude"
+#define kMAPCaptureTime         @"MAPCaptureTime"
+#define kMAPGpsTime             @"MAPGpsTime"
+#define kMAPDirection           @"MAPDirection"
+#define kMAPCompassHeading      @"MAPCompassHeading"
+#define kMAPTrueHeading         @"TrueHeading"
+#define kMAPMagneticHeading     @"MagneticHeading"
+#define kMAPGPSAccuracyMeters   @"MAPGPSAccuracyMeters"
+#define kMAPAccelerometerVector @"MAPAccelerometerVectorMAPAtanAngle"
+#define kMAPSettingsTokenValid  @"MAPSettingsTokenValid"
+#define kMAPSettingsUserKey     @"MAPSettingsUserKey"
+#define kMAPOrganizationKey     @"MAPOrganizationKey"
+#define kMAPPrivate             @"MAPPrivate"
+#define kMAPVersionString       @"MAPVersionString"
+#define kMAPLocalTimeZone       @"MAPLocalTimeZone"
+
 #endif /* MAPDefines_h */

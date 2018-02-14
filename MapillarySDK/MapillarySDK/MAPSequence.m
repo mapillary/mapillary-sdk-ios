@@ -365,7 +365,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             // No match found, need to interpolate between two positions
             else if (before && after)
             {
-                location = [MAPUtils locationBetweenLocationA:before andLocationB:after forDate:date];
+                location = [MAPInternalUtils locationBetweenLocationA:before andLocationB:after forDate:date];
             }
             
             // Not possible to interpolate, use the closest position

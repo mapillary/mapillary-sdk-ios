@@ -13,5 +13,6 @@
 
 - (void)lock;
 - (void)unlock;
+- (NSMutableDictionary*)meta;
 
 @end

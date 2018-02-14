@@ -140,11 +140,20 @@
 
 - (void)setupAws
 {
-    // Default to EU West 1
-    AWSRegionType region = AWSRegionEUWest1;
-    
+    AWSRegionType region = AWSRegionEUWest1; // Default to EU West 1
     AWSCognitoCredentialsProvider* credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:region identityPoolId:AWS_IDENTITY_POOL_ID];
-    AWSServiceConfiguration* configuration = [[AWSServiceConfiguration alloc] initWithRegion:region credentialsProvider:credentialsProvider];
+    AWSServiceConfiguration* configuration = nil;
+    
+    if (DEBUG_UPLOAD)
+    {
+        AWSEndpoint* endpoint = [[AWSEndpoint alloc] initWithURLString:@"http://34.244.228.197:4569"];
+        configuration = [[AWSServiceConfiguration alloc] initWithRegion:region endpoint:endpoint credentialsProvider:credentialsProvider];
+    }
+    else
+    {
+        configuration = [[AWSServiceConfiguration alloc] initWithRegion:region credentialsProvider:credentialsProvider];
+    }
+    
     AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
 }
 
@@ -203,7 +212,8 @@
     
     if (DEBUG_UPLOAD)
     {
-        bucket = @"mapillary.testing.uploads.images";
+        //bucket = @"mapillary.testing.uploads.images";
+        bucket = @"mtf_upload_images";
     }
     else
     {

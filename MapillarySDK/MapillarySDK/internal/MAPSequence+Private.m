@@ -7,6 +7,7 @@
 //
 
 #import "MAPSequence+Private.h"
+#import "MAPDefines.h"
 
 @implementation MAPSequence(Private)
 
@@ -20,6 +21,20 @@
 {
     NSString* path = [self.path stringByAppendingPathComponent:@"lock"];
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+}
+- (NSMutableDictionary*)meta
+{
+    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    dict[kMAPDirection] = [NSNumber numberWithDouble:self.directionOffset];
+    
+     dict[kMAPSettingsTokenValid] = [NSNumber numberWithDouble:self.directionOffset];
+    dict[kMAPSettingsUserKey] = [NSNumber numberWithDouble:self.directionOffset];
+    dict[kMAPOrganizationKey] = [NSNumber numberWithDouble:self.directionOffset];
+    dict[kMAPPrivate] = [NSNumber numberWithDouble:self.directionOffset];
+    dict[kMAPVersionString] = [NSNumber numberWithDouble:self.directionOffset];
+    dict[kMAPLocalTimeZone] = [NSNumber numberWithDouble:self.directionOffset];
+    
+    return dict;
 }
 
 @end

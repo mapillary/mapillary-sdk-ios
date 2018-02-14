@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "MAPLocation.h"
+
+#define AVG(A, B) ((A+B)/2.0)
 
 @interface MAPInternalUtils : NSObject
 
@@ -30,5 +33,7 @@
 + (double)calculateHeadingFromCoordA:(CLLocationCoordinate2D)A B:(CLLocationCoordinate2D)B;
 
 + (NSDateFormatter*)defaultDateFormatter;
+
++ (MAPLocation*)locationBetweenLocationA:(MAPLocation*)locationA andLocationB:(MAPLocation*)locationB forDate:(NSDate*)date;
 
 @end

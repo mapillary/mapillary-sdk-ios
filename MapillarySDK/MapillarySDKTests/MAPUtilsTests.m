@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
+#import "MAPInternalUtils.h"
 
 @interface MAPUtilsTests : XCTestCase
 
@@ -38,10 +39,10 @@
     b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(100, 100) altitude:100 horizontalAccuracy:30 verticalAccuracy:30 timestamp:b.timestamp];
     
     // Order A and B
-    MAPLocation* resultAB = [MAPUtils locationBetweenLocationA:a andLocationB:b forDate:[NSDate dateWithTimeIntervalSince1970:500]];
+    MAPLocation* resultAB = [MAPInternalUtils locationBetweenLocationA:a andLocationB:b forDate:[NSDate dateWithTimeIntervalSince1970:500]];
     
     // Order B and A
-    MAPLocation* resultBA = [MAPUtils locationBetweenLocationA:b andLocationB:a forDate:[NSDate dateWithTimeIntervalSince1970:500]];
+    MAPLocation* resultBA = [MAPInternalUtils locationBetweenLocationA:b andLocationB:a forDate:[NSDate dateWithTimeIntervalSince1970:500]];
     
     // Test1 and test2 should be the same
     XCTAssertTrue([resultAB isEqualToLocation:resultBA]);
@@ -51,19 +52,19 @@
     XCTAssertEqual(resultAB.location.coordinate.longitude, AVG(a.location.coordinate.longitude, b.location.coordinate.longitude));
     
     // Test with same coordinates
-    MAPLocation* resultAA = [MAPUtils locationBetweenLocationA:a andLocationB:a forDate:[NSDate dateWithTimeIntervalSince1970:500]];
+    MAPLocation* resultAA = [MAPInternalUtils locationBetweenLocationA:a andLocationB:a forDate:[NSDate dateWithTimeIntervalSince1970:500]];
     XCTAssertTrue([a isEqualToLocation:resultAA]);
     
     // Test with nil locations
-    MAPLocation* resultNilNilNil = [MAPUtils locationBetweenLocationA:nil andLocationB:nil forDate:nil];
-    MAPLocation* resultANilNil = [MAPUtils locationBetweenLocationA:a andLocationB:nil forDate:nil];
-    MAPLocation* resultNilBNil = [MAPUtils locationBetweenLocationA:nil andLocationB:b forDate:nil];
+    MAPLocation* resultNilNilNil = [MAPInternalUtils locationBetweenLocationA:nil andLocationB:nil forDate:nil];
+    MAPLocation* resultANilNil = [MAPInternalUtils locationBetweenLocationA:a andLocationB:nil forDate:nil];
+    MAPLocation* resultNilBNil = [MAPInternalUtils locationBetweenLocationA:nil andLocationB:b forDate:nil];
     XCTAssertNil(resultNilNilNil);
     XCTAssertNil(resultANilNil);
     XCTAssertNil(resultNilBNil);
     
     // Test with nil date, should be inbetween A and B, i.e. same as resultAB
-    MAPLocation* resultABNil = [MAPUtils locationBetweenLocationA:a andLocationB:b forDate:nil];
+    MAPLocation* resultABNil = [MAPInternalUtils locationBetweenLocationA:a andLocationB:b forDate:nil];
     XCTAssertTrue([resultAB isEqualToLocation:resultABNil]);
 }
 
