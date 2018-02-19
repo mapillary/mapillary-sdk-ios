@@ -247,9 +247,7 @@
 
 - (BOOL)checkImage:(MAPImage*)image fromSequence:(MAPSequence*)sequence
 {
-    NSData* imageData = [NSData dataWithContentsOfFile:image.imagePath];
-    
-    if (![MAPExifTools imageDataHasMapillaryTags:imageData])
+    if (![MAPExifTools imageHasMapillaryTags:image])
     {
         [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
     }

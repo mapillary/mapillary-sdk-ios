@@ -8,6 +8,7 @@
 
 #import "MAPSequence+Private.h"
 #import "MAPDefines.h"
+#import "MAPLoginManager.h"
 
 @implementation MAPSequence(Private)
 
@@ -25,14 +26,15 @@
 - (NSMutableDictionary*)meta
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    dict[kMAPDirection] = [NSNumber numberWithDouble:self.directionOffset];
+    dict[kMAPSettingsTokenValid] = @YES;
+    dict[kMAPSettingsUserKey] = [MAPLoginManager currentUser].userKey;
+    dict[kMAPLocalTimeZone] = [NSString stringWithFormat:@"%@", [NSTimeZone systemTimeZone]];
+    // dict[kMAPOrganizationKey] = [NSNumber numberWithDouble:self.directionOffset]; // TODO
+    // dict[kMAPPrivate] = [NSNumber numberWithDouble:self.directionOffset]; // TODO
     
-     dict[kMAPSettingsTokenValid] = [NSNumber numberWithDouble:self.directionOffset];
-    dict[kMAPSettingsUserKey] = [NSNumber numberWithDouble:self.directionOffset];
-    dict[kMAPOrganizationKey] = [NSNumber numberWithDouble:self.directionOffset];
-    dict[kMAPPrivate] = [NSNumber numberWithDouble:self.directionOffset];
-    dict[kMAPVersionString] = [NSNumber numberWithDouble:self.directionOffset];
-    dict[kMAPLocalTimeZone] = [NSNumber numberWithDouble:self.directionOffset];
+    NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString* bundle = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    dict[kMAPVersionString] = [NSString stringWithFormat:@"%@ (%@)", version, bundle];
     
     return dict;
 }

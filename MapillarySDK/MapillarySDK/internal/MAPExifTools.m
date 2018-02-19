@@ -1,4 +1,4 @@
-//
+                                                        //
 //  MAPExifTools.m
 //  MapillarySDK
 //
@@ -9,26 +9,23 @@
 #import "MAPExifTools.h"
 #import "MAPSequence+Private.h"
 #import "MAPDefines.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @implementation MAPExifTools
 
 + (BOOL)imageHasMapillaryTags:(MAPImage*)image
 {
-    NSData* imageData = [NSData dataWithContentsOfFile:image.imagePath];
-    return [self imageDataHasMapillaryTags:imageData];
-}
-
-+ (BOOL)imageDataHasMapillaryTags:(NSData*)imageData
-{
     BOOL ok = NO;
     
-    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)(imageData), NULL);
+    CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
     
     if (source)
     {
         CFDictionaryRef cfDict = CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
         NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
         NSDictionary* TIFF = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+        
+        NSLog(@"%@", metadata);
         
         if (TIFF)
         {
@@ -52,77 +49,139 @@
     return ok;
 }
 
-+ (void)addExifTagsToImage:(MAPImage*)image fromSequence:(MAPSequence*)sequence
++ (BOOL)addExifTagsToImage:(MAPImage*)image fromSequence:(MAPSequence*)sequence
 {
-    // TODO
+    BOOL success = YES;
     
-    if (![self imageHasMapillaryTags:image])
+    //if (![self imageHasMapillaryTags:image])
     {
-        // Prepare
-        CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)image.imagePath, NULL);
-        CFStringRef UTI = CGImageSourceGetType(imageSource);
-        NSMutableData* imageData = [NSMutableData dataWithContentsOfFile:image.imagePath];
-        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)imageData, UTI, 1, NULL);
-
-        // GPS part
-        MAPLocation* adjustedLocation = [sequence locationForDate:image.captureDate];
-        NSDictionary* gpsDictionary = [self gpsDictionaryFromLocation:adjustedLocation];
+        // Get source and metadata
+        CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
+        CGImageMetadataRef metadata = CGImageSourceCopyMetadataAtIndex(imageSource, 0, NULL);
+        CGMutableImageMetadataRef mutableMetadata = CGImageMetadataCreateMutable();
         
-        // Description
+        
+        // Cleanup existing metadata
+        [self cleanMetadata:metadata mutableMetadata:mutableMetadata];
+        
+        
+        // Recalculate GPS position based on time and add to metadata
+        MAPLocation* adjustedLocation = [sequence locationForDate:image.captureDate];
+        [self addGps:adjustedLocation mutableMetadata:mutableMetadata];
+        
+        
+        // Update and add Mapillary tags to metadata
+        
+        float atanAngle = atan2(adjustedLocation.deviceMotion.gravity.y, -adjustedLocation.deviceMotion.gravity.x);
+        NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:-adjustedLocation.deviceMotion.gravity.x],
+                                              @"y": [NSNumber numberWithDouble:adjustedLocation.deviceMotion.gravity.y],
+                                              @"z": [NSNumber numberWithDouble:adjustedLocation.deviceMotion.gravity.z]};
+        
         NSMutableDictionary* description = [sequence meta];
         description[kMAPLatitude] = [NSNumber numberWithDouble:adjustedLocation.location.coordinate.latitude];
         description[kMAPLongitude] = [NSNumber numberWithDouble:adjustedLocation.location.coordinate.longitude];
-        description[kMAPCaptureTime] = image.captureDate; // TODO string
-        description[kMAPGpsTime] = image.location.timestamp; // TODO string
+        description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
+        description[kMAPGpsTime] = [self getUTCFormattedDate:image.captureDate];
+        description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:adjustedLocation.heading.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:adjustedLocation.heading.magneticHeading]};
+        description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:adjustedLocation.location.horizontalAccuracy];
+        description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
+        description[kMAPAccelerometerVector] = accelerometerVector;
+        
+        NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
+        NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
+        
+        [self addTiffMetadata:mutableMetadata tag:@"ImageDescription" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
         
         
+        // Write new metadata to image
+        CFMutableDictionaryRef options = CFDictionaryCreateMutable(CFAllocatorGetDefault(), 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CFDictionarySetValue(options, kCGImageDestinationMetadata, mutableMetadata);
         
-        //
-        //dict[kMAPCompassHeading] = @{kMAPTrueHeading: @"", kMAPMagneticHeading: @""};
+        CFStringRef UTI = CGImageSourceGetType(imageSource);
+        if (UTI == NULL)
+        {
+            UTI = kUTTypeJPEG;
+        }
         
+        CGImageDestinationRef destination = CGImageDestinationCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], UTI, 1, NULL);
         
-        /*#
-         #define          @"MAPCaptureTime"
-         #define              @"MAPGpsTime"
-         #define kMAPDirection           @"MAPDirection"
-         #define kMAPCompassHeading      @"MAPCompassHeading"
-         #define kMAPTrueHeading         @"TrueHeading"
-         #define kMAPMagneticHeading     @"MagneticHeading"
-         #define kMAPGPSAccuracyMeters   @"MAPGPSAccuracyMeters"
-         #define kMAPAccelerometerVector @"MAPAccelerometerVectorMAPAtanAngle"*/
-        
-        
-        // Combine all dictionaries
-        NSDictionary* exifOriginal = (__bridge NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
-        NSMutableDictionary* metaCopy = [exifOriginal mutableCopy];
-        metaCopy[(NSString *)kCGImagePropertyExifDictionary] = description;
-        metaCopy[(NSString *)kCGImagePropertyGPSDictionary] = gpsDictionary;
-        metaCopy[(NSString *)kCGImageDestinationMergeMetadata] = @YES; // Makes sure we just merge the new meta data instead of overwriting it
-        
-        // Write new data to image
         CFErrorRef errorRef = nil;
-        if (!CGImageDestinationCopyImageSource(destination, imageSource, (__bridge CFDictionaryRef)metaCopy, &errorRef))
+        success = CGImageDestinationCopyImageSource(destination, imageSource, options, &errorRef);
+        
+        if (!success)
         {
             CFStringRef error_description = CFErrorCopyDescription(errorRef);
             CFRelease(error_description);
         }
         
-        // Write to disk
-        [imageData writeToFile:image.imagePath atomically:YES];
         
         // Cleanup
         CFRelease(destination);
         CFRelease(imageSource);
-        imageData = nil;
+        CFRelease(mutableMetadata);
     }
+
+    return success;
 }
 
 #pragma mark - Internal
 
-+ (NSDictionary*)gpsDictionaryFromLocation:(MAPLocation*)location
++ (void)addExifMetadata:(CGMutableImageMetadataRef)container tag:(NSString*)tag type:(CGImageMetadataType)type value:(CFTypeRef)value
 {
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+    NSString* tagPath = [NSString stringWithFormat:@"%@:%@", kCGImageMetadataPrefixExif, tag];
+    CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(kCGImageMetadataNamespaceExif, kCGImageMetadataPrefixExif, (__bridge CFStringRef)tag, type, value);
+    CGImageMetadataSetTagWithPath(container, NULL, (__bridge CFStringRef)tagPath, tagValue);
+    CFRelease(tagValue);
+}
+
++ (void)addTiffMetadata:(CGMutableImageMetadataRef)container tag:(NSString*)tag type:(CGImageMetadataType)type value:(CFTypeRef)value
+{
+    NSString* tagPath = [NSString stringWithFormat:@"%@:%@", kCGImageMetadataPrefixTIFF, tag];
+    CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(kCGImageMetadataNamespaceTIFF, kCGImageMetadataPrefixTIFF, (__bridge CFStringRef)tag, type, value);
+    CGImageMetadataSetTagWithPath(container, NULL, (__bridge CFStringRef)tagPath, tagValue);
+    CFRelease(tagValue);
+}
+
++ (void)cleanMetadata:(CGImageMetadataRef)metadata mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
+{
+    // Copy all the valid tags and ignore the ones that we shouldn't have
     
+    CFArrayRef tags = CGImageMetadataCopyTags(metadata);
+    for(int i = 0; i < CFArrayGetCount(tags); i++)
+    {
+        CGImageMetadataTagRef tag = (CGImageMetadataTagRef)CFArrayGetValueAtIndex(tags, i);
+        CFStringRef nameSpace = CGImageMetadataTagCopyNamespace(tag);
+        CFStringRef prefix = CGImageMetadataTagCopyPrefix(tag);
+        CFStringRef name = CGImageMetadataTagCopyName(tag);
+        CGImageMetadataType type = CGImageMetadataTagGetType(tag);
+        CFTypeRef value = CGImageMetadataTagCopyValue(tag);
+        
+        if (CFStringCompare(nameSpace, kCGImageMetadataNamespaceExif, 0) == kCFCompareEqualTo ||
+            CFStringCompare(nameSpace, kCGImageMetadataNamespaceExifEX, 0) == kCFCompareEqualTo ||
+            CFStringCompare(nameSpace, kCGImageMetadataNamespaceExifAux, 0) == kCFCompareEqualTo ||
+            CFStringCompare(nameSpace, kCGImageMetadataNamespaceTIFF, 0) == kCFCompareEqualTo ||
+            CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPRights, 0) == kCFCompareEqualTo ||
+            CFStringCompare(nameSpace, kCGImageMetadataNamespaceIPTCCore, 0) == kCFCompareEqualTo)
+            //CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPBasic, 0) == kCFCompareEqualTo) // This causes the metadata to no be able to be written to the destination
+        {
+            NSString* tagPath = [NSString stringWithFormat:@"%@:%@", prefix, name];
+            CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(nameSpace, prefix, name, type, value);
+            CGImageMetadataSetTagWithPath(mutableMetadata, NULL, (__bridge CFStringRef)tagPath, tagValue);
+            CFRelease(tagValue);
+        }
+        
+        CFRelease(nameSpace);
+        CFRelease(prefix);
+        CFRelease(name);
+        CFRelease(value);
+    }
+    
+    CFRelease(metadata);
+    CFRelease(tags);
+}
+
++ (void)addGps:(MAPLocation*)location mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
+{
     CLLocationDegrees latitude  = location.location.coordinate.latitude;
     CLLocationDegrees longitude = location.location.coordinate.longitude;
     
@@ -149,22 +208,33 @@
     else
     {
         longitudeRef = @"E";
-        
     }
     
-    dict[(NSString*)kCGImagePropertyGPSTimeStamp] = [self getUTCFormattedDate:location.location.timestamp];
-    dict[(NSString*)kCGImagePropertyGPSDateStamp] = [self getUTCFormattedDate:location.location.timestamp]; // TODO change format
+    [self addExifMetadata:mutableMetadata tag:@"GPSLatitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:latitude]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSLongitude"           type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:longitude]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSLatitudeRef"         type:kCGImageMetadataTypeString value:(__bridge CFStringRef)latitudeRef];
+    [self addExifMetadata:mutableMetadata tag:@"GPSLongitudeRef"        type:kCGImageMetadataTypeString value:(__bridge CFStringRef)longitudeRef];
+    [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSHPositioningError"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.heading.trueHeading]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
+}
+
++ (NSString*)getUTCFormattedTime:(NSDate*)localDate
+{
+    static NSDateFormatter* dateFormatter = nil;
     
-    dict[(NSString*)kCGImagePropertyGPSLatitudeRef] = latitudeRef;
-    dict[(NSString*)kCGImagePropertyGPSLatitude] = [NSNumber numberWithFloat:latitude];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"HH:mm:ss.SSSSSS";
+        
+    });
     
-    dict[(NSString*)kCGImagePropertyGPSLongitudeRef] = longitudeRef;
-    dict[(NSString*)kCGImagePropertyGPSLongitude] = [NSNumber numberWithFloat:longitude];
-    
-    dict[(NSString*)kCGImagePropertyGPSDOP] = [NSNumber numberWithFloat:location.location.horizontalAccuracy];
-    dict[(NSString*)kCGImagePropertyGPSAltitude] = [NSNumber numberWithFloat:location.location.altitude];
-    
-    return dict;
+    return [dateFormatter stringFromDate:localDate];
 }
 
 + (NSString*)getUTCFormattedDate:(NSDate*)localDate
@@ -175,7 +245,7 @@
     dispatch_once(&onceToken, ^{
         
         dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"yyyy:MM:dd HH:mm:ss";
+        dateFormatter.dateFormat = @"yyyy:MM:dd";
         
     });
         
