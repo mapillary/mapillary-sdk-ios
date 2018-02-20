@@ -19,7 +19,7 @@
     {
         self.location = nil;
         self.heading = nil;
-        self.timestamp = nil;
+        self.timestamp = [NSDate date];
         self.deviceMotion = nil;
     }
     return self;

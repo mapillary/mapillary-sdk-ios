@@ -13,17 +13,17 @@
 #import "MAPImage+Private.h"
 #import "MAPFileManager.h"
 #import "MAPExifTools.h"
+#import "MAPTestConfig.h"
 
 #define UPLOAD_MODE_FOREGROUND  1
 #define UPLOAD_MODE_BACKGROUND  2
 #define AWS_IDENTITY_POOL_ID    @"eu-west-1:57d09467-4c2f-470d-9577-90d3f89f76a1"
-#define DEBUG_UPLOAD YES
 
 @interface MAPUploadManager()
 
 @property (nonatomic) int uploadMode;
-//@property (nonatomic) NSURLSession* foregroundSession;
-@property (nonatomic) NSURLSession* backgroundSession;
+@property (nonatomic) NSURLSession* foregroundSession;
+//@property (nonatomic) NSURLSession* backgroundSession;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
 @property (nonatomic, copy) void (^savedCompletionHandler)(void);
 //@property (nonatomic) NSMutableArray* imagesToUpload;
@@ -141,12 +141,15 @@
 - (void)setupAws
 {
     AWSRegionType region = AWSRegionEUWest1; // Default to EU West 1
-    AWSCognitoCredentialsProvider* credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:region identityPoolId:AWS_IDENTITY_POOL_ID];
+    //AWSCognitoCredentialsProvider* credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:AWSRegionEUWest1 identityPoolId:AWS_IDENTITY_POOL_ID];
+    
+    id <AWSCredentialsProvider> credentialsProvider = [[AWSAnonymousCredentialsProvider alloc] init];
+    
     AWSServiceConfiguration* configuration = nil;
     
-    if (DEBUG_UPLOAD)
+    if (TEST_UPLOAD)
     {
-        AWSEndpoint* endpoint = [[AWSEndpoint alloc] initWithURLString:@"http://34.244.228.197:4569"];
+        AWSEndpoint* endpoint = [[AWSEndpoint alloc] initWithURLString:@"http://172.31.3.245:4569"];
         configuration = [[AWSServiceConfiguration alloc] initWithRegion:region endpoint:endpoint credentialsProvider:credentialsProvider];
     }
     else
@@ -166,22 +169,22 @@
     dispatch_once(&onceToken, ^{
         
         // Foreground session
-        /*NSURLSessionConfiguration* foregroundConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        foregroundConfiguration.allowsCellularAccess = [Settings uploadViaCellular];
+        NSURLSessionConfiguration* foregroundConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        foregroundConfiguration.allowsCellularAccess = allowsCellularAccess;
         foregroundConfiguration.timeoutIntervalForResource = 7*24*60*60;
         foregroundConfiguration.timeoutIntervalForRequest = 7*24*60*60;
-        self.foregroundSession = [NSURLSession sessionWithConfiguration:foregroundConfiguration delegate:self delegateQueue:nil];*/
+        self.foregroundSession = [NSURLSession sessionWithConfiguration:foregroundConfiguration delegate:self delegateQueue:nil];
         
         // Background session
-        NSURLSessionConfiguration* backgroundConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.mapillary.networking.upload"];
+        /*NSURLSessionConfiguration* backgroundConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.mapillary.networking.upload"];
         backgroundConfiguration.allowsCellularAccess = allowsCellularAccess;
         backgroundConfiguration.timeoutIntervalForResource = 7*24*60*60;
         backgroundConfiguration.timeoutIntervalForRequest = 7*24*60*60;
-        self.backgroundSession = [NSURLSession sessionWithConfiguration:backgroundConfiguration delegate:self delegateQueue:nil];
+        self.backgroundSession = [NSURLSession sessionWithConfiguration:backgroundConfiguration delegate:self delegateQueue:nil];*/
         
     });
     
-    self.backgroundSession.configuration.allowsCellularAccess = allowsCellularAccess;
+    self.foregroundSession.configuration.allowsCellularAccess = allowsCellularAccess;
 }
 
 - (void)createTaskForImage:(MAPImage*)image fromSequence:(MAPSequence*)sequence
@@ -194,7 +197,17 @@
     {
         [self createRequestForImage:image request:^(NSURLRequest *request) {
             
-            NSURLSessionUploadTask* uploadTask = [self.backgroundSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath]];
+            //NSURLSessionUploadTask* uploadTask = [self.foregroundSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath]];
+            
+            NSURLSessionUploadTask* uploadTask = [self.foregroundSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                
+                NSLog(@"Response: %@", response);
+                
+                NSString* str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                
+                NSLog(@"Data: %@", str);
+            }];            
+            
             [uploadTask setTaskDescription:image.imagePath];
             [uploadTask resume];
             
@@ -210,7 +223,7 @@
 {
     NSString* bucket = nil;
     
-    if (DEBUG_UPLOAD)
+    if (TEST_UPLOAD)
     {
         //bucket = @"mapillary.testing.uploads.images";
         bucket = @"mtf_upload_images";
@@ -225,7 +238,7 @@
     getPreSignedURLRequest.key = image.imagePath.lastPathComponent;
     getPreSignedURLRequest.HTTPMethod = AWSHTTPMethodPUT;
     getPreSignedURLRequest.expires = [NSDate dateWithTimeIntervalSinceNow:60*60*24];
-    getPreSignedURLRequest.contentType = @"image/jpeg";
+    getPreSignedURLRequest.contentType = @"image/jpeg";    
     
     AWSTask* awsTask = [[AWSS3PreSignedURLBuilder defaultS3PreSignedURLBuilder] getPreSignedURL:getPreSignedURLRequest];
     

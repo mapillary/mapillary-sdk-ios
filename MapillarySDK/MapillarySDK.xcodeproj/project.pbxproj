@@ -80,6 +80,7 @@
 		9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPInternalUtilsTests.m; sourceTree = "<group>"; };
 		9A058025203437BE005A5C8A /* MAPExifToolsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPExifToolsTests.m; sourceTree = "<group>"; };
 		9A058027203476F7005A5C8A /* test-image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "test-image.jpg"; sourceTree = "<group>"; };
+		9A058029203ADC03005A5C8A /* MAPTestConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPTestConfig.h; sourceTree = "<group>"; };
 		9A1021431FE3FC7C003CF9CC /* MAPApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPApplicationDelegate.m; sourceTree = "<group>"; };
 		9A420B602019E67C001BF118 /* MAPSequence+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MAPSequence+Private.m"; path = "internal/MAPSequence+Private.m"; sourceTree = "<group>"; };
 		9A420B612019E67C001BF118 /* MAPDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPDefines.h; path = internal/MAPDefines.h; sourceTree = "<group>"; };
@@ -264,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				9A420B612019E67C001BF118 /* MAPDefines.h */,
+				9A058029203ADC03005A5C8A /* MAPTestConfig.h */,
 				9A420B652019E67C001BF118 /* MAPApiManager.h */,
 				9A420B6A2019E67D001BF118 /* MAPApiManager.m */,
 				9A420B7C201B6485001BF118 /* MAPExifTools.h */,

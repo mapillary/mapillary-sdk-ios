@@ -25,8 +25,6 @@
         NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
         NSDictionary* TIFF = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
         
-        NSLog(@"%@", metadata);
-        
         if (TIFF)
         {
             NSString* description = [TIFF objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
@@ -37,7 +35,7 @@
                 NSString* MAPLatitude = json[kMAPLatitude];
                 NSString* MAPLongitude = json[kMAPLongitude];
                 
-                // TODO add more?
+                // TODO add more checks?
                 
                 ok = MAPLatitude && MAPLongitude;
             }
@@ -53,7 +51,7 @@
 {
     BOOL success = YES;
     
-    //if (![self imageHasMapillaryTags:image])
+    if (![self imageHasMapillaryTags:image])
     {
         // Get source and metadata
         CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);

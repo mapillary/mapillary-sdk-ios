@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
+#import "MAPTestConfig.h"
 
 @interface MAPUploadManagerTests : XCTestCase <MAPUploadManagerDelegate>
 
@@ -43,7 +44,7 @@
     self.expectationSequenceFinished = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
     self.expectationUploadFinished = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
     
-    MAPSequence* s = [self createSequence:5];
+    MAPSequence* s = [self createSequence:1];
     [[MAPUploadManager sharedManager] uploadSequences:@[s] allowsCellularAccess:NO];
     
     // Wait for test to finish
@@ -99,6 +100,10 @@
     CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, 100, 100));
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     return UIImageJPEGRepresentation(image, 1);
+    
+    /*NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
+    NSData* imageData = [NSData dataWithContentsOfFile:path];
+    return imageData;*/
 }
 
 - (MAPSequence*)createSequence:(int)countImages
@@ -110,7 +115,9 @@
     
     for (int i = 0; i < countImages; i++)
     {
-        [sequence addImageWithData:imageData date:nil location:nil];
+        MAPLocation* location = [[MAPLocation alloc] init];
+        location.location = [[CLLocation alloc] initWithLatitude:55+i longitude:55+1];
+        [sequence addImageWithData:imageData date:nil location:location];
     }
     
     return sequence;

@@ -167,11 +167,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     [op writeResultToPath:thumbPath];
     [op start];
 
-    if (location)
-    {
-        [self.gpxLogger addLocation:location];
-        self.currentLocation = location;
-    }
+    [self addLocation:location];
     
     self.imageCount++;
     self.sequenceSize += imageData.length;
