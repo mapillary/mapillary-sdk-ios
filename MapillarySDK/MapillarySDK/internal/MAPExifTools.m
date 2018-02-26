@@ -34,10 +34,9 @@
                 NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[description dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
                 NSString* MAPLatitude = json[kMAPLatitude];
                 NSString* MAPLongitude = json[kMAPLongitude];
+                NSString* MAPSettingsUserKey = json[kMAPSettingsUserKey];
                 
-                // TODO add more checks?
-                
-                ok = MAPLatitude && MAPLongitude;
+                ok = MAPLatitude && MAPLongitude && MAPSettingsUserKey;
             }
         }
         
