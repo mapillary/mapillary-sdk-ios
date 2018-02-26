@@ -10,14 +10,12 @@
 
 @interface MAPUploadStatus : NSObject
 
-@property BOOL uploading;
-@property NSUInteger sequencesToUpload;
-@property NSUInteger sequencesUploaded;
-@property NSUInteger imagesToUpload;
-@property NSUInteger imagesUploaded;
-@property NSUInteger imagesFailed;
-@property (nonatomic) float uploadSpeed;
-@property (nonatomic) int64_t totalKilobytesSent;
-@property (nonatomic) int64_t totalKilobytesToSend;
+@property (nonatomic) BOOL uploading;
+@property (nonatomic) NSUInteger imagesToUpload;
+@property (nonatomic) NSUInteger imagesUploaded;
+@property (nonatomic) NSUInteger imagesFailed;
+@property (nonatomic) NSUInteger imagesProcessed;
+@property (nonatomic) int64_t totalBytesSent;
+@property (nonatomic) int64_t totalBytesToSend;
 
 @end

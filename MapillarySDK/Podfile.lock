@@ -14,9 +14,9 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - AWSCore (2.6.11)
-  - AWSS3 (2.6.11):
-    - AWSCore (= 2.6.11)
+  - AWSCore (2.6.12)
+  - AWSS3 (2.6.12):
+    - AWSCore (= 2.6.12)
   - BOSImageResizeOperation (0.1.0)
   - OCHamcrest (7.0.2)
   - OCMockito (5.0.1):
@@ -33,8 +33,8 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  AWSCore: a461695bf302a32a366768bf36056be3a2c87d8d
-  AWSS3: d13e29a4dbfecb7cd99b4ce833a9fe221dee8cba
+  AWSCore: d0d6e4f6831754aaf98058d2306a016ae71510fe
+  AWSS3: c35608e0cdd5172f9e1d943221fd5fde01c5f749
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
   OCMockito: 063837a086c058e764fcd23e771089c1759e7197

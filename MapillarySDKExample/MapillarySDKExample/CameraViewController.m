@@ -10,6 +10,7 @@
 
 @interface CameraViewController ()
 
+@property MAPSequence* sequence;
 @property AVCaptureSession* captureSession;
 @property AVCapturePhotoOutput* stillCameraOutput;
 @property CLLocationManager* locationManager;
@@ -24,7 +25,11 @@
 {
     [super viewDidLoad];
     
+    self.captureButton.layer.cornerRadius = self.captureButton.frame.size.width/2;
     self.cameraBusy = NO;
+    
+    MAPDevice* device = [MAPDevice currentDevice];
+    self.sequence = [[MAPSequence alloc] initWithDevice:device andProject:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated

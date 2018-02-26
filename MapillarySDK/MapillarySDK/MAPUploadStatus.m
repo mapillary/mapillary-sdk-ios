@@ -16,14 +16,12 @@
     if (self)
     {
         self.uploading = NO;
-        self.sequencesToUpload = 0;
-        self.sequencesUploaded = 0;
         self.imagesToUpload = 0;
         self.imagesUploaded = 0;
         self.imagesFailed = 0;
-        self.uploadSpeed = 0;
-        self.totalKilobytesSent = 0;
-        self.totalKilobytesToSend = 0;
+        self.imagesProcessed = 0;
+        self.totalBytesSent = 0;
+        self.totalBytesToSend = 0;
     }
     return self;
 }

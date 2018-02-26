@@ -85,8 +85,6 @@
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-    NSLog(@"Parser error: %@", parseError);
-    
     [self parserDidEndDocument:parser];
 }
 

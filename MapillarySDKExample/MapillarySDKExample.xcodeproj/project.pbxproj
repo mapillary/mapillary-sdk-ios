@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9A1021471FE7D8BD003CF9CC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A1021461FE7D8BD003CF9CC /* MainViewController.m */; };
+		9A11C4DA203C2DD300885C78 /* UploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A11C4D9203C2DD300885C78 /* UploadViewController.m */; };
 		9A63EE381FE80C2D00D27A46 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A63EE371FE80C2D00D27A46 /* CameraViewController.m */; };
 		9A63EE3B1FE93A9D00D27A46 /* CustomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A63EE3A1FE93A9D00D27A46 /* CustomNavigationController.m */; };
 		9A63EE3E1FE967B200D27A46 /* SequenceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A63EE3D1FE967B200D27A46 /* SequenceListViewController.m */; };
@@ -27,6 +28,8 @@
 		5D705162EC64EA3B7CAC4B25 /* libPods-MapillarySDKExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapillarySDKExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A1021451FE7D8BD003CF9CC /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		9A1021461FE7D8BD003CF9CC /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		9A11C4D8203C2DD300885C78 /* UploadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadViewController.h; sourceTree = "<group>"; };
+		9A11C4D9203C2DD300885C78 /* UploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadViewController.m; sourceTree = "<group>"; };
 		9A63EE361FE80C2D00D27A46 /* CameraViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		9A63EE371FE80C2D00D27A46 /* CameraViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		9A63EE391FE93A9D00D27A46 /* CustomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomNavigationController.h; sourceTree = "<group>"; };
@@ -105,6 +108,8 @@
 				9A63EE3A1FE93A9D00D27A46 /* CustomNavigationController.m */,
 				9A63EE3C1FE967B200D27A46 /* SequenceListViewController.h */,
 				9A63EE3D1FE967B200D27A46 /* SequenceListViewController.m */,
+				9A11C4D8203C2DD300885C78 /* UploadViewController.h */,
+				9A11C4D9203C2DD300885C78 /* UploadViewController.m */,
 			);
 			path = MapillarySDKExample;
 			sourceTree = "<group>";
@@ -249,6 +254,7 @@
 				9A1021471FE7D8BD003CF9CC /* MainViewController.m in Sources */,
 				9AE3BB631FA72C1C00174C47 /* main.m in Sources */,
 				9A63EE3E1FE967B200D27A46 /* SequenceListViewController.m in Sources */,
+				9A11C4DA203C2DD300885C78 /* UploadViewController.m in Sources */,
 				9A63EE3B1FE93A9D00D27A46 /* CustomNavigationController.m in Sources */,
 				9AE3BB551FA72C1C00174C47 /* AppDelegate.m in Sources */,
 			);

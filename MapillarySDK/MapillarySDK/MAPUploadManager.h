@@ -13,11 +13,11 @@
 
 @class MAPUploadManager;
 
-@protocol MAPUploadManagerDelegate <NSObject>
+@protocol MAPUploadManagerDelegate <NSObject, NSURLSessionTaskDelegate>
 @optional
+- (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
 - (void)uploadStarted:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
 - (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error;
-- (void)sequenceFinished:(MAPUploadManager*)uploadManager sequence:(MAPSequence*)sequence uploadStatus:(MAPUploadStatus*)uploadStatus;
 - (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
 - (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
 @end
@@ -25,10 +25,11 @@
 @interface MAPUploadManager : NSObject <NSURLSessionDelegate, NSURLSessionTaskDelegate, CLLocationManagerDelegate>
 
 @property (weak) id<MAPUploadManagerDelegate> delegate;
+@property (nonatomic) BOOL testUpload;
 
 + (instancetype)sharedManager;
 
-- (void)uploadSequences:(NSArray*)sequences allowsCellularAccess:(BOOL)allowsCellularAccess;
+- (void)uploadSequences:(NSArray*)sequences allowsCellularAccess:(BOOL)allowsCellularAccess deleteAfterUpload:(BOOL)deleteAfterUpload;
 - (void)stopUpload;
 
 - (MAPUploadStatus*)getStatus;

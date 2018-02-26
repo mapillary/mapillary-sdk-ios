@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <MapillarySDK/MapillarySDK.h>
+#import <AWSS3/AWSS3.h>
 
 @interface AppDelegate ()
 
@@ -24,6 +25,11 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return [MAPApplicationDelegate application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+}
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{    
+    [AWSS3TransferUtility interceptApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
 @end

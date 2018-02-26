@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SequenceListViewController : UICollectionViewController
+@interface SequenceListViewController : UITableViewController
 
 @end

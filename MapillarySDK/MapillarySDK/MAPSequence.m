@@ -159,8 +159,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
     NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
     UIImage* srcImage = [UIImage imageWithData:imageData];
-    CGSize thumbSize = CGSizeMake(SCREEN_WIDTH/3-1, SCREEN_WIDTH/3-1);
     
+    // TODO perhaps make configurable
+    float screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    float screenHeight = [[UIScreen mainScreen] bounds].size.width;
+    CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
+    
+    // TODO perhaps make optionable
     BOSImageResizeOperation* op = [[BOSImageResizeOperation alloc] initWithImage:srcImage];
     [op resizeToFitWithinSize:thumbSize];
     op.JPEGcompressionQuality = 0.5;

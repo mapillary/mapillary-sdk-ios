@@ -51,7 +51,7 @@
 {
     BOOL success = YES;
     
-    if (![self imageHasMapillaryTags:image])
+    //if (![self imageHasMapillaryTags:image])
     {
         // Get source and metadata
         CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);

@@ -14,7 +14,7 @@
 @interface CameraViewController : UIViewController <AVCapturePhotoCaptureDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *cameraView;
-@property MAPSequence* sequence;
+@property (weak, nonatomic) IBOutlet UIButton *captureButton;
 
 - (IBAction)captureAction:(id)sender;
 - (IBAction)exitAction:(id)sender;

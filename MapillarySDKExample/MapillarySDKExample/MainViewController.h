@@ -10,21 +10,11 @@
 
 @interface MainViewController : UIViewController
 
-#pragma mark - User
-@property (weak, nonatomic) IBOutlet UILabel *userLabel;
-- (IBAction)signOutAction:(id)sender;
 
-#pragma mark - Sequence
+@property (weak, nonatomic) IBOutlet UILabel *userLabel;
 @property (weak, nonatomic) IBOutlet UIButton *startSequenceButton;
 @property (weak, nonatomic) IBOutlet UIButton *addPhotoButton;
-@property (weak, nonatomic) IBOutlet UIButton *deleteSequenceButton;
-@property (weak, nonatomic) IBOutlet UILabel *photosLabel;
-- (IBAction)startNewSequenceAction:(id)sender;
-- (IBAction)addPhotoAction:(id)sender;
-- (IBAction)deleteSequenceAction:(id)sender;
 
-#pragma mark - Upload
-- (IBAction)startUploadAction:(id)sender;
-- (IBAction)stopUploadAction:(id)sender;
+- (IBAction)signOutAction:(id)sender;
 
 @end

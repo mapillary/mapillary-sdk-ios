@@ -11,7 +11,7 @@
 
 @interface SequenceListViewController ()
 
-@property NSArray* sequences;
+@property NSMutableArray* sequences;
 @property NSDateFormatter* dateFormatter;
 
 @end
@@ -24,6 +24,8 @@
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
+    
+    self.sequences = [[NSMutableArray alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -34,65 +36,70 @@
     
     [MAPFileManager listSequences:^(NSArray *sequences) {
         
-        self.sequences = sequences;
-        [self.collectionView reloadData];
+        for (MAPSequence* s in sequences)
+        {
+            NSArray* images = [s listImages];
+            
+            if (images.count == 0)
+            {
+                [MAPFileManager deleteSequence:s];
+            }
+            else
+            {
+                NSDictionary* dict = @{@"sequence": s, @"count": @0};
+                [self.sequences addObject:dict];
+            }
+        }
+        
+        [self.tableView reloadData];
         
     }];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:YES];
-}
-
-#pragma mark <UICollectionViewDataSource>
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
-
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.sequences.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    NSDictionary* dict = [self.sequences objectAtIndex:indexPath.row];
+    MAPSequence* sequence = dict[@"sequence"];
+    NSNumber* count = dict[@"count"];
     
-    MAPSequence* sequence = [self.sequences objectAtIndex:indexPath.row];
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
-    UILabel* label = [cell viewWithTag:1];
-    label.text = [self.dateFormatter stringFromDate:sequence.sequenceDate];
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    
+    NSString* dateString = [self.dateFormatter stringFromDate:sequence.sequenceDate];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@, %d images", dateString, count.intValue];
     
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return YES;
 }
-*/
 
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        [tableView beginUpdates];
+        
+        NSDictionary* dict = [self.sequences objectAtIndex:indexPath.row];
+        MAPSequence* sequence = dict[@"sequence"];
+        [MAPFileManager deleteSequence:sequence];
+        
+        [self.sequences removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [tableView endUpdates];
+    }
 }
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end
