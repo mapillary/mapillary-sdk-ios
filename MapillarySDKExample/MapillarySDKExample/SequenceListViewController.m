@@ -26,13 +26,6 @@
     self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
     
     self.sequences = [[NSMutableArray alloc] init];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO];
     
     [MAPFileManager listSequences:^(NSArray *sequences) {
         
@@ -46,7 +39,7 @@
             }
             else
             {
-                NSDictionary* dict = @{@"sequence": s, @"count": @0};
+                NSDictionary* dict = @{@"sequence": s, @"count": [NSNumber numberWithUnsignedInteger:images.count]};
                 [self.sequences addObject:dict];
             }
         }
@@ -54,6 +47,20 @@
         [self.tableView reloadData];
         
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO];
+    
+    
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -68,11 +75,6 @@
     NSNumber* count = dict[@"count"];
     
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    }
     
     NSString* dateString = [self.dateFormatter stringFromDate:sequence.sequenceDate];
     cell.textLabel.text = [NSString stringWithFormat:@"%@, %d images", dateString, count.intValue];
