@@ -103,6 +103,11 @@
         NSArray* images = [sequence listImages];
         self.status.imagesToUpload += images.count;
         
+        for (MAPImage* image in images)
+        {
+            [self createBookkeepingForImage:image];
+        }
+        
         [sequence lock];
     }
     
@@ -123,6 +128,11 @@
     
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
+        for (MAPImage* image in [sequence listImages])
+        {
+            [self deleteBookkeepingForImage:image];
+        }
+        
         [sequence unlock];
     }
     
@@ -143,6 +153,8 @@
 
 - (void)loadState
 {
+    // TODO pause
+    
     [MAPFileManager listSequences:^(NSArray *sequences) {
         
         for (MAPSequence* sequence in sequences)
@@ -150,9 +162,23 @@
             if ([sequence isLocked])
             {
                 [self.sequencesToUpload addObject:sequence];
+                
+                NSArray* dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequence.path error:nil];
+                
+                NSArray* images = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(SELF ENDSWITH '.jpg') AND (NOT SELF CONTAINS 'thumb')"]];
+                NSArray* done = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.done'"]];
+                NSArray* failed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.failed'"]];
+                
                 self.status.uploading = YES;
+                self.status.imagesToUpload += images.count;
+                self.status.imagesUploaded += done.count;
+                self.status.imagesFailed += failed.count;
+                
+                // TODO count bytes
             }
         }
+        
+        // TODO resume
     }];
 }
 
@@ -189,6 +215,8 @@
                 weakSelf.status.imagesUploaded++;
                 weakSelf.status.totalBytesToSend += task.sessionTask.countOfBytesSent;
                 
+                [weakSelf setBookkeepingDoneForImage:image];
+                
                 if (weakSelf.deleteAfterUpload)
                 {
                     MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[filePath stringByDeletingLastPathComponent]];
@@ -204,6 +232,8 @@
             else
             {
                 weakSelf.status.imagesFailed++;
+                
+                [weakSelf setBookkeepingFailedForImage:image];
             }
             
             if (self.delegate && [self.delegate respondsToSelector:@selector(imageUploaded:image:uploadStatus:error:)])
@@ -230,6 +260,7 @@
     [transferUtility enumerateToAssignBlocksForUploadTask:^(AWSS3TransferUtilityUploadTask * _Nonnull uploadTask, AWSS3TransferUtilityProgressBlock  _Nullable __autoreleasing * _Nullable uploadProgressBlockReference, AWSS3TransferUtilityUploadCompletionHandlerBlock  _Nullable __autoreleasing * _Nullable completionHandlerReference) {
         
         *completionHandlerReference = weakSelf.completionHandler;
+        
         
     } downloadTask:nil];
 }
@@ -264,6 +295,18 @@
         {
             NSLog(@"Error: %@", t.error);
         }
+        
+        /*AWSS3TransferUtilityUploadTask* uploadTask = t.result;
+        if (uploadTask.sessionTask.state == NSURLSessionTaskStateRunning)
+        {
+            NSString* imagePath = [uploadTask associatedObject];
+            
+            if (imagePath)
+            {
+                MAPImage* image = [[MAPImage alloc] initWithPath:imagePath];
+                [self setBookkeepingUploadingForImage:image];
+            }
+        }*/
         
         return nil;
         
@@ -321,6 +364,45 @@
         float speed = self.status.imagesToUpload/time;*/
 
     });
+}
+
+- (void)createBookkeepingForImage:(MAPImage*)image
+{
+    NSLog(@"create: %@", image.imagePath.lastPathComponent);
+    
+    NSString* upload = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".upload"];
+    [[NSFileManager defaultManager] createFileAtPath:upload contents:nil attributes:nil];
+}
+
+- (void)deleteBookkeepingForImage:(MAPImage*)image
+{
+    NSLog(@"delete: %@", image.imagePath.lastPathComponent);
+    
+    NSString* upload = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".upload"];
+    NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
+    NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
+    
+    [[NSFileManager defaultManager] removeItemAtPath:upload error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:done error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:failed error:nil];
+}
+
+- (void)setBookkeepingDoneForImage:(MAPImage*)image
+{
+    NSLog(@"done: %@", image.imagePath.lastPathComponent);
+    
+    NSString* upload = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".upload"];
+    NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
+    [[NSFileManager defaultManager] moveItemAtPath:upload toPath:done error:nil];
+}
+
+- (void)setBookkeepingFailedForImage:(MAPImage*)image
+{
+    NSLog(@"failed: %@", image.imagePath.lastPathComponent);
+    
+    NSString* upload = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".upload"];
+    NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
+    [[NSFileManager defaultManager] moveItemAtPath:upload toPath:failed error:nil];
 }
 
 @end

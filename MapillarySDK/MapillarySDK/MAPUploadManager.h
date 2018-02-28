@@ -13,7 +13,7 @@
 
 @class MAPUploadManager;
 
-@protocol MAPUploadManagerDelegate <NSObject, NSURLSessionTaskDelegate>
+@protocol MAPUploadManagerDelegate <NSObject>
 @optional
 - (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
 - (void)uploadStarted:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
