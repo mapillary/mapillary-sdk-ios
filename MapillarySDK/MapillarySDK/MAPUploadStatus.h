@@ -15,7 +15,6 @@
 @property (nonatomic) NSUInteger imagesUploaded;
 @property (nonatomic) NSUInteger imagesFailed;
 @property (nonatomic) NSUInteger imagesProcessed;
-@property (nonatomic) int64_t totalBytesSent;
-@property (nonatomic) int64_t totalBytesToSend;
+@property (nonatomic) float uploadSpeedBytesPerSecond;
 
 @end

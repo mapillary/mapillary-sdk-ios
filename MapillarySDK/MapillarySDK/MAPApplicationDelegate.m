@@ -9,19 +9,27 @@
 #import "MAPApplicationDelegate.h"
 #import "MAPApiManager.h"
 #import "MAPDefines.h"
+#import "MAPUploadManager.h"
 
 @implementation MAPApplicationDelegate
 
-+ (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
++ (BOOL)interceptApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSURL* url = launchOptions[UIApplicationLaunchOptionsURLKey];
     return [self handleLoginWithUrl:url];
 }
 
-+ (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
++ (BOOL)interceptApplication:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return [self handleLoginWithUrl:url];
 }
+
++ (void)interceptApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{
+    [MAPUploadManager sharedManager].backgroundUploadSessionCompletionHandler = completionHandler;
+}
+
+#pragma mark - Internal
 
 + (BOOL)handleLoginWithUrl:(NSURL*)url
 {

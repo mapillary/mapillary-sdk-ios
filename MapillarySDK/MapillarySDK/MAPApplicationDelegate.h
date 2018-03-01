@@ -26,7 +26,7 @@
  @param launchOptions Forward this parameter.
  
  */
-+ (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
++ (BOOL)interceptApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
 /**
  Make sure to call this method in the same method in your
@@ -37,6 +37,8 @@
  @param sourceApplication Forward this parameter.
  @param annotation Forward this parameter.
  */
-+ (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
++ (BOOL)interceptApplication:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
+
++ (void)interceptApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
 
 @end

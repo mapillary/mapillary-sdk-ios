@@ -20,8 +20,7 @@
         self.imagesUploaded = 0;
         self.imagesFailed = 0;
         self.imagesProcessed = 0;
-        self.totalBytesSent = 0;
-        self.totalBytesToSend = 0;
+        self.uploadSpeedBytesPerSecond = 0;
     }
     return self;
 }

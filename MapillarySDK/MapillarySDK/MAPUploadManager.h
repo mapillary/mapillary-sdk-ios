@@ -13,11 +13,13 @@
 
 @class MAPUploadManager;
 
+//typedef void (^MAPUploadManagerUploadCompletionHandlerBlock)(void);
+
 @protocol MAPUploadManagerDelegate <NSObject>
 @optional
 - (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
-- (void)uploadStarted:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
-- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error;
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
+- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error;
 - (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
 - (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
 @end
@@ -26,6 +28,7 @@
 
 @property (weak) id<MAPUploadManagerDelegate> delegate;
 @property (nonatomic) BOOL testUpload;
+@property (copy, nonatomic) void (^backgroundUploadSessionCompletionHandler)(void);
 
 + (instancetype)sharedManager;
 

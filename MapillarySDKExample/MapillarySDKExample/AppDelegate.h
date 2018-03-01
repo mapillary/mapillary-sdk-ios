@@ -11,9 +11,6 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (copy) void (^backgroundDownloadSessionCompletionHandler)(void);
-@property (copy) void (^backgroundUploadSessionCompletionHandler)(void);
-
 
 @end
 

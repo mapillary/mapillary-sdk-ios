@@ -85,8 +85,10 @@
         float processProgress = (float)status.imagesProcessed/status.imagesToUpload;
         float uploadProgress = (float)status.imagesUploaded/status.imagesToUpload;
         
-        [self.imagesProcessedProgressView setProgress:processProgress animated:YES];
-        [self.imagesUploadedProgressView setProgress:uploadProgress animated:YES];
+        [self.imagesProcessedProgressView setProgress:processProgress animated:NO];
+        [self.imagesUploadedProgressView setProgress:uploadProgress animated:NO];
+        
+        self.statusLabel.text = [NSString stringWithFormat:@"Uploading...\n(%.1f kb/s)", status.uploadSpeedBytesPerSecond/1024.0f];
     }
     else
     {
@@ -123,12 +125,12 @@
     [self updateProgress];
 }
 
-- (void)uploadStarted:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus
 {
-
+    [self updateProgress];
 }
 
-- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
+- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
 {
     [self updateProgress];
 }
