@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MAPUser.h"
+#import "MAPLoginViewController.h"
 
 /**
  The `MAPLoginManager` class manages the authentication of Mapillary. The
@@ -23,7 +24,7 @@
  
  @see `MAPApplicationDelegate`
  */
-@interface MAPLoginManager : NSObject
+@interface MAPLoginManager : NSObject <MAPLoginViewControllerDelegate>
 
 ///-----------------------------------------------------------------------------
 /// @name Authentication
@@ -38,7 +39,7 @@
  finishes. This block has no return value and takes one argument: if
  authentication was sucessful or not.
  */
-+ (void)signIn:(void (^) (BOOL success))result;
++ (void)signInFromViewController:(UIViewController*)viewController result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled;
 
 /**
  Signs out the current signed in user and removes all related user data.

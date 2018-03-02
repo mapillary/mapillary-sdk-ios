@@ -23,11 +23,9 @@ PODS:
     - AWSCore (~> 2.6)
     - AWSS3 (~> 2.6)
     - BOSImageResizeOperation (~> 0.1)
-    - OCMockito (~> 5.0)
+    - PodAsset (~> 0.22)
     - SDVersion (~> 4.0)
-  - OCHamcrest (7.0.2)
-  - OCMockito (5.0.1):
-    - OCHamcrest (~> 7.0)
+  - PodAsset (0.22.0)
   - SDVersion (4.3.2)
 
 DEPENDENCIES:
@@ -42,9 +40,8 @@ SPEC CHECKSUMS:
   AWSCore: d0d6e4f6831754aaf98058d2306a016ae71510fe
   AWSS3: c35608e0cdd5172f9e1d943221fd5fde01c5f749
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
-  MapillarySDK: b339c83c78f7a95365787cbc8b6fe105a5866ac8
-  OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
-  OCMockito: 063837a086c058e764fcd23e771089c1759e7197
+  MapillarySDK: ad77d796157aff41e65728023f0fac7ecfaad71a
+  PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
 PODFILE CHECKSUM: 86c388e9f27c189ad82b6a8951063d2c970b6650

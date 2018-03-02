@@ -10,8 +10,8 @@
 #import <UIKit/UIKit.h>
 
 /**
- The `MAPApplicationDelegate` is used to complete the autehntication process
- initiated by the `MAPLoginManager`. You should add these methods to your
+ The `MAPApplicationDelegate` is used to handle the background uploading process
+ initiated by `MAPUploadManager`. You should add these methods to your
  `UIApplicationDelegate`.
  
  @see `MAPLoginManager`
@@ -23,22 +23,9 @@
  'UIApplicationDelegate'.
  
  @param application Forward this parameter.
- @param launchOptions Forward this parameter.
- 
+ @param identifier Forward this parameter.
+ @param completionHandler Forward this parameter.
  */
-+ (BOOL)interceptApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
-
-/**
- Make sure to call this method in the same method in your
- 'UIApplicationDelegate'.
- 
- @param application Forward this parameter.
- @param url Forward this parameter.
- @param sourceApplication Forward this parameter.
- @param annotation Forward this parameter.
- */
-+ (BOOL)interceptApplication:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
-
 + (void)interceptApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
 
 @end

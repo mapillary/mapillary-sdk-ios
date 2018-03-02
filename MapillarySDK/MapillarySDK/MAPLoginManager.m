@@ -10,13 +10,15 @@
 #import "MAPDefines.h"
 #import <UIKit/UIKit.h>
 #import "MAPApiManager.h"
+#import <PodAsset/PodAsset.h>
 
 static MAPLoginManager* singleInstance;
 
+
 @interface MAPLoginManager()
 
-@property dispatch_semaphore_t semaphore;
-@property BOOL loginSuccess;
+@property (copy, nonatomic) void (^loginCompletionHandler)(BOOL);
+@property (copy, nonatomic) void (^loginCancelledHandler)(void);
 
 @end
 
@@ -29,17 +31,13 @@ static MAPLoginManager* singleInstance;
     dispatch_once(&dispatchOnceToken, ^{
         
         singleInstance = [[MAPLoginManager alloc] init];
-        singleInstance.semaphore = nil;
-        singleInstance.loginSuccess = NO;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:singleInstance selector:@selector(didLogin:) name:MAPILLARY_NOTIFICATION_LOGIN object:nil];
         
     });
     
     return singleInstance;
 }
 
-+ (void)signIn:(void (^) (BOOL success))result
++ (void)signInFromViewController:(UIViewController*)viewController result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled
 {
     NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
     NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_REDIRECT_URL];
@@ -54,23 +52,17 @@ static MAPLoginManager* singleInstance;
         redirectUrl = [redirectUrl stringByAppendingString:@"://"];
     }
     
-    NSString* url = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:read&state=return&redirect_uri=%@&response_type=token&client_id=%@", redirectUrl, clientId];
+    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:read&state=return&redirect_uri=%@&response_type=token&client_id=%@", redirectUrl, clientId];
     
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    [MAPLoginManager getInstance].loginCompletionHandler = result;
+    [MAPLoginManager getInstance].loginCancelledHandler = cancelled;
     
-    // Wait here until login loop finishes
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [MAPLoginManager getInstance].semaphore = dispatch_semaphore_create(0);
-        dispatch_semaphore_wait([MAPLoginManager getInstance].semaphore, DISPATCH_TIME_FOREVER);
-        
-        if (result)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                result([MAPLoginManager getInstance].loginSuccess);
-            });
-        }
-    });
+    MAPLoginViewController* loginViewController = [[MAPLoginViewController alloc] initWithNibName:@"MAPLoginViewController" bundle:[PodAsset bundleForPod:@"MapillarySDK"]];
+    loginViewController.urlString = urlString;
+    loginViewController.delegate = (id<MAPLoginViewControllerDelegate>)[MAPLoginManager getInstance];
+    
+    [viewController presentViewController:loginViewController animated:YES completion:nil];
+    
 }
 
 + (void)signOut
@@ -102,14 +94,58 @@ static MAPLoginManager* singleInstance;
 
 #pragma mark - Internal
 
-- (void)didLogin:(NSNotification*)notification
+- (void)didLogin:(MAPLoginViewController*)loginViewController accessToken:(NSString*)accessToken
 {
-    NSNumber* success = notification.userInfo[@"success"];
-    [MAPLoginManager getInstance].loginSuccess = success.boolValue;
+    loginViewController.delegate = nil;
     
-    // Login loop done, continue
-    dispatch_semaphore_signal([MAPLoginManager getInstance].semaphore);
-    [MAPLoginManager getInstance].semaphore = nil;
+    if (accessToken && accessToken.length > 0)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];
+        
+        [MAPApiManager getCurrentUser:^(MAPUser *user) {
+            
+            if (user)
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:user.userName forKey:MAPILLARY_CURRENT_USER_NAME];
+                [[NSUserDefaults standardUserDefaults] setObject:user.userKey forKey:MAPILLARY_CURRENT_USER_KEY];
+                
+                if (self.loginCompletionHandler)
+                {
+                    [MAPLoginManager getInstance].loginCompletionHandler(YES);
+                    [MAPLoginManager getInstance].loginCompletionHandler = nil;
+                    [MAPLoginManager getInstance].loginCancelledHandler = nil;
+                }
+            }
+            else
+            {
+                if ([MAPLoginManager getInstance].loginCompletionHandler)
+                {
+                    [MAPLoginManager getInstance].loginCompletionHandler(NO);
+                    [MAPLoginManager getInstance].loginCompletionHandler = nil;
+                    [MAPLoginManager getInstance].loginCancelledHandler = nil;
+                }
+            }
+        }];
+    }
+    else
+    {
+        if ([MAPLoginManager getInstance].loginCompletionHandler)
+        {
+            [MAPLoginManager getInstance].loginCompletionHandler(NO);
+            [MAPLoginManager getInstance].loginCompletionHandler = nil;
+            [MAPLoginManager getInstance].loginCancelledHandler = nil;
+        }
+    }
+}
+
+- (void)didCancel:(MAPLoginViewController*)loginViewController
+{
+    if ([MAPLoginManager getInstance].loginCancelledHandler)
+    {
+        [MAPLoginManager getInstance].loginCancelledHandler();
+        [MAPLoginManager getInstance].loginCompletionHandler = nil;
+        [MAPLoginManager getInstance].loginCancelledHandler = nil;
+    }
 }
 
 @end

@@ -13,8 +13,6 @@
 
 @class MAPUploadManager;
 
-//typedef void (^MAPUploadManagerUploadCompletionHandlerBlock)(void);
-
 @protocol MAPUploadManagerDelegate <NSObject>
 @optional
 - (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;

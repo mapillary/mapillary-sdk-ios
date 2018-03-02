@@ -35,7 +35,7 @@
     {
         self.button.enabled = NO;
         
-        [MAPLoginManager signIn:^(BOOL success) {
+        [MAPLoginManager signInFromViewController:self result:^(BOOL success) {
             
             if (success)
             {
@@ -49,7 +49,11 @@
             }
             
             self.button.enabled = YES;
-
+            
+        } cancelled:^{
+            
+            self.button.enabled = YES;
+            
         }];
     }
 }
