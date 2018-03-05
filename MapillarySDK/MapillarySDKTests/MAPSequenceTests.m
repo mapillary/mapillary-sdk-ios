@@ -318,6 +318,7 @@
     {
         MAPLocation* a = [[MAPLocation alloc] init];
         a.timestamp = [NSDate dateWithTimeIntervalSince1970:rand()];
+        a.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
         [self.sequence addLocation:a];
     }
     
