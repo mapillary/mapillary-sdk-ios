@@ -9,6 +9,7 @@
 #import "MAPApiManager.h"
 #import "MAPDefines.h"
 #import "AFNetworking.h"
+#import <SAMKeychain/SAMKeychain.h>
 
 @implementation MAPApiManager
 
@@ -65,7 +66,7 @@
 
 + (AFHTTPSessionManager*)httpSessionManager
 {
-    NSString* accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];
+    NSString* accessToken = [SAMKeychain passwordForService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
     NSString* header = [NSString stringWithFormat:@"Bearer %@", accessToken];
     
     AFHTTPSessionManager* manager = [AFHTTPSessionManager manager];

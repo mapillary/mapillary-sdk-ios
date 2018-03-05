@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "MAPApiManager.h"
 #import <PodAsset/PodAsset.h>
+#import <SAMKeychain/SAMKeychain.h>
 
 static MAPLoginManager* singleInstance;
 
@@ -62,15 +63,18 @@ static MAPLoginManager* singleInstance;
     loginViewController.delegate = (id<MAPLoginViewControllerDelegate>)[MAPLoginManager getInstance];
     
     [viewController presentViewController:loginViewController animated:YES completion:nil];
-    
 }
 
 + (void)signOut
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_NAME];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    for (NSString* account in [SAMKeychain accountsForService:MAPILLARY_KEYCHAIN_SERVICE])
+    {
+        [SAMKeychain deletePasswordForService:MAPILLARY_KEYCHAIN_SERVICE account:account];
+    }
 }
 
 + (BOOL)isSignedIn
@@ -82,7 +86,7 @@ static MAPLoginManager* singleInstance;
 {
     NSString* userName = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_NAME];
     NSString* userKey = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_KEY];
-    NSString* userAccessToken = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];
+    NSString* userAccessToken = [SAMKeychain passwordForService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
     
     if (userName && userKey && userAccessToken)
     {
@@ -100,9 +104,9 @@ static MAPLoginManager* singleInstance;
     
     if (accessToken && accessToken.length > 0)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:MAPILLARY_CURRENT_USER_ACCESS_TOKEN];
-        
         [MAPApiManager getCurrentUser:^(MAPUser *user) {
+            
+            [SAMKeychain setPassword:accessToken forService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
             
             if (user)
             {

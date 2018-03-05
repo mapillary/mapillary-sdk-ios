@@ -9,6 +9,7 @@ target 'MapillarySDK' do
     pod 'AWSCore', '~> 2.6'
     pod 'AWSS3', '~> 2.6'
     pod 'PodAsset', '~> 0.22'
+    pod 'SAMKeychain', '~> 1.5'
 
     target 'MapillarySDKTests' do
         

@@ -14,11 +14,10 @@
 #define MAPILLARY_CLIENT_ID                 @"MapillaryClientId"
 #define MAPILLARY_CLIENT_REDIRECT_URL       @"MapillaryRedirectUrl"
 
+#define MAPILLARY_KEYCHAIN_SERVICE          @"kMapillaryKeychainService"
+#define MAPILLARY_KEYCHAIN_ACCOUNT          @"kMapillaryKeychainAccount"
 #define MAPILLARY_CURRENT_USER_NAME         @"kMapillaryCurrentUserName"
 #define MAPILLARY_CURRENT_USER_KEY          @"kMapillaryCurrentUserKey"
-#define MAPILLARY_CURRENT_USER_ACCESS_TOKEN @"kMapillaryCurrentUserAccessToken"
-
-#define MAPILLARY_NOTIFICATION_LOGIN        @"kMapillaryNotificationLogin"
 
 #define kMAPLatitude                        @"MAPLatitude"
 #define kMAPLongitude                       @"MAPLongitude"

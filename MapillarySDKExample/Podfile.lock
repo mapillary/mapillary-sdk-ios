@@ -24,8 +24,10 @@ PODS:
     - AWSS3 (~> 2.6)
     - BOSImageResizeOperation (~> 0.1)
     - PodAsset (~> 0.22)
+    - SAMKeychain (~> 1.5)
     - SDVersion (~> 4.0)
   - PodAsset (0.22.0)
+  - SAMKeychain (1.5.3)
   - SDVersion (4.3.2)
 
 DEPENDENCIES:
@@ -40,8 +42,9 @@ SPEC CHECKSUMS:
   AWSCore: d0d6e4f6831754aaf98058d2306a016ae71510fe
   AWSS3: c35608e0cdd5172f9e1d943221fd5fde01c5f749
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
-  MapillarySDK: ad77d796157aff41e65728023f0fac7ecfaad71a
+  MapillarySDK: 61a74d15473f40795ac24ba672d955adf098ad6b
   PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
 PODFILE CHECKSUM: 86c388e9f27c189ad82b6a8951063d2c970b6650

@@ -22,6 +22,7 @@ PODS:
   - OCMockito (5.0.1):
     - OCHamcrest (~> 7.0)
   - PodAsset (0.22.0)
+  - SAMKeychain (1.5.3)
   - SDVersion (4.3.2)
 
 DEPENDENCIES:
@@ -31,6 +32,7 @@ DEPENDENCIES:
   - BOSImageResizeOperation (~> 0.1)
   - OCMockito (~> 5.0)
   - PodAsset (~> 0.22)
+  - SAMKeychain (~> 1.5)
   - SDVersion (~> 4.0)
 
 SPEC CHECKSUMS:
@@ -41,8 +43,9 @@ SPEC CHECKSUMS:
   OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
   OCMockito: 063837a086c058e764fcd23e771089c1759e7197
   PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
-PODFILE CHECKSUM: 6384a8cc7197b9b2dd44aae02a2bdd26ee7ee7cc
+PODFILE CHECKSUM: 054edbf18dee17bca44c7294f152b97cb7e73afc
 
 COCOAPODS: 1.4.0.rc.1
