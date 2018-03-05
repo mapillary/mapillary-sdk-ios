@@ -75,6 +75,7 @@
                                               @"z": [NSNumber numberWithDouble:adjustedLocation.deviceMotion.gravity.z]};
         
         NSMutableDictionary* description = [sequence meta];
+        description[kMAPSettingsUserKey] = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_KEY];
         description[kMAPLatitude] = [NSNumber numberWithDouble:adjustedLocation.location.coordinate.latitude];
         description[kMAPLongitude] = [NSNumber numberWithDouble:adjustedLocation.location.coordinate.longitude];
         description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
