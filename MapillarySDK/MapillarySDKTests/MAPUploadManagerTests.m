@@ -8,13 +8,11 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
-#import "MAPTestConfig.h"
 
 @interface MAPUploadManagerTests : XCTestCase <MAPUploadManagerDelegate>
 
-@property XCTestExpectation* expectationUploadStarted;
+@property XCTestExpectation* expectationImageProcessed;
 @property XCTestExpectation* expectationImageUploaded;
-@property XCTestExpectation* expectationSequenceFinished;
 @property XCTestExpectation* expectationUploadFinished;
 
 @end
@@ -39,13 +37,12 @@
 
 - (void)testSingleSequence
 {
-    self.expectationUploadStarted = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
-    self.expectationImageUploaded = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
-    self.expectationSequenceFinished = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
-    self.expectationUploadFinished = [self expectationWithDescription:@"Adding non Mapillary GPX file"];
+    self.expectationImageProcessed = [self expectationWithDescription:@"Processing image"];
+    self.expectationImageUploaded = [self expectationWithDescription:@"Uploading image"];
+    self.expectationUploadFinished = [self expectationWithDescription:@"Upload finished"];
     
     MAPSequence* s = [self createSequence:1];
-    [[MAPUploadManager sharedManager] uploadSequences:@[s] allowsCellularAccess:NO];
+    [[MAPUploadManager sharedManager] uploadSequences:@[s] allowsCellularAccess:NO deleteAfterUpload:YES];
     
     // Wait for test to finish
     [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
@@ -60,26 +57,19 @@
 
 #pragma mark - MAPUploadManagerDelegate
 
-- (void)uploadStarted:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
 {
-    [self.expectationUploadStarted fulfill];
+    [self.expectationImageProcessed fulfill];
 }
 
-- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus
 {
-    if (error == nil)
-    {
-        [self.expectationImageUploaded fulfill];
-    }
-    else
-    {
-        XCTFail(@"Expectation failed with error: %@", error);
-    }
+    [self.expectationImageUploaded fulfill];
 }
 
-- (void)sequenceFinished:(MAPUploadManager*)uploadManager sequence:(MAPSequence*)sequence uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
 {
-    [self.expectationSequenceFinished fulfill];
+    
 }
 
 - (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
