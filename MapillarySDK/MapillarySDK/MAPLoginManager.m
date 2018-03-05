@@ -12,6 +12,7 @@
 #import "MAPApiManager.h"
 #import <PodAsset/PodAsset.h>
 #import <SAMKeychain/SAMKeychain.h>
+#import "MAPLoginViewController.h"
 
 static MAPLoginManager* singleInstance;
 

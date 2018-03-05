@@ -59,7 +59,7 @@
 		9A912D5D1FE2D19400B6D126 /* MAPApiManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D561FE2D19400B6D126 /* MAPApiManagerTests.m */; };
 		9AC871931F4DB37D0012721D /* MAPLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC871911F4DB37D0012721D /* MAPLoginManager.m */; };
 		9AC871961F4DB3F90012721D /* MAPUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AC871941F4DB3F90012721D /* MAPUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9AE3958B204958F1004FAA72 /* MAPLoginViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE39588204958F0004FAA72 /* MAPLoginViewController.h */; };
+		9AE3958B204958F1004FAA72 /* MAPLoginViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE39588204958F0004FAA72 /* MAPLoginViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AE3958C204958F1004FAA72 /* MAPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39589204958F1004FAA72 /* MAPLoginViewController.m */; };
 		9AE395962049900C004FAA72 /* MAPLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AE395952049900B004FAA72 /* MAPLoginViewController.xib */; };
 		9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */; };
@@ -325,11 +325,11 @@
 				9A420B6E2019E67D001BF118 /* MAPDefines.h in Headers */,
 				9A912D311FE2CE3A00B6D126 /* MAPSequence.h in Headers */,
 				9A912D301FE2CE3A00B6D126 /* MAPImage.h in Headers */,
-				9AE3958B204958F1004FAA72 /* MAPLoginViewController.h in Headers */,
 				9A420B722019E67D001BF118 /* MAPApiManager.h in Headers */,
 				9A912D261FE2CE3A00B6D126 /* MAPUtils.h in Headers */,
 				9A420B742019E67D001BF118 /* MAPSequence+Private.h in Headers */,
 				9A912D351FE2CE3A00B6D126 /* MAPUploadManager.h in Headers */,
+				9AE3958B204958F1004FAA72 /* MAPLoginViewController.h in Headers */,
 				9A420B6F2019E67D001BF118 /* MAPGpxParser.h in Headers */,
 				9A912D2E1FE2CE3A00B6D126 /* MAPLocation.h in Headers */,
 				9A912D291FE2CE3A00B6D126 /* MAPLoginManager.h in Headers */,
