@@ -52,19 +52,23 @@
     MAPLocation* location1 = [[MAPLocation alloc] init];
     MAPLocation* location2 = [[MAPLocation alloc] init];
     location1.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
-    location2.location = [[CLLocation alloc] initWithLatitude:60 longitude:60];
-    
     [sequence addLocation:location1];
+    
     [sequence addImageWithData:imageData date:nil location:nil];
+    
+    location2.location = [[CLLocation alloc] initWithLatitude:60 longitude:60];
     [sequence addLocation:location2];
     
     MAPImage* image = [sequence listImages][0];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"testuserkey" forKey:@"kMapillaryCurrentUserKey"];
     
     [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
     
     XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
     
     [MAPFileManager deleteSequence:sequence];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"testuserkey"];
 }
 
 - (NSData*)createImageData
