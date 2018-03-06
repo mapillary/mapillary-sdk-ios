@@ -315,10 +315,20 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         MAPLocation* first = locations.firstObject;
         MAPLocation* last = locations.lastObject;
         
-        // Outside of range, return nil
+        // Outside of range, clamp
         if ([date compare:first.timestamp] == NSOrderedDescending || [date compare:last.timestamp] == NSOrderedAscending)
         {
-            location = nil;
+            NSTimeInterval diff1 = [date timeIntervalSinceDate:first.timestamp];
+            NSTimeInterval diff2 = [date timeIntervalSinceDate:last.timestamp];
+            
+            if (fabs(diff1) < fabs(diff2))
+            {
+                location = first;
+            }
+            else
+            {
+                location = last;
+            }                        
         }
         
         // Find position

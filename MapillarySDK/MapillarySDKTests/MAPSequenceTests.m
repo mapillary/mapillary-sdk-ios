@@ -170,13 +170,15 @@
     XCTAssertEqual(result4.location.coordinate.latitude, b.location.coordinate.latitude);
     XCTAssertEqual(result4.location.coordinate.longitude, b.location.coordinate.longitude);
     
-    // Test with date before a, should be nil
+    // Test with date before a, should be a
     MAPLocation* result5 = [self.sequence locationForDate:[NSDate dateWithTimeInterval:-100 sinceDate:a.timestamp]];
-    XCTAssertNil(result5);
+    XCTAssertEqual(result5.location.coordinate.latitude, a.location.coordinate.latitude);
+    XCTAssertEqual(result5.location.coordinate.latitude, a.location.coordinate.longitude);
     
-    // Test with date after b, should be nil
+    // Test with date after b, should be b
     MAPLocation* result6 = [self.sequence locationForDate:[NSDate dateWithTimeInterval:100 sinceDate:b.timestamp]];
-    XCTAssertNil(result6);
+    XCTAssertEqual(result6.location.coordinate.latitude, b.location.coordinate.latitude);
+    XCTAssertEqual(result6.location.coordinate.latitude, b.location.coordinate.longitude);
 }
 
 - (void)testListLocationsPerformance
