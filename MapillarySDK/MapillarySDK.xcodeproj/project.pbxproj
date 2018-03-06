@@ -31,6 +31,7 @@
 		9A420B7F201B6485001BF118 /* MAPExifTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7D201B6485001BF118 /* MAPExifTools.m */; };
 		9A6B0D731F628E2B009C2454 /* MAPApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6B0D711F628E2B009C2454 /* MAPApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A79772D1F55AA1500358A30 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 9A79772C1F55AA1500358A30 /* Podfile */; };
+		9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D551FE2D19400B6D126 /* MAPUserTests.m */; };
 		9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A88F9441F4D933F0076C311 /* MapillarySDK.framework */; };
 		9A88F9551F4D933F0076C311 /* MapillarySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A88F9471F4D933F0076C311 /* MapillarySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A912D091FE2CE2A00B6D126 /* MAPFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912CFD1FE2CE2900B6D126 /* MAPFileManager.m */; };
@@ -568,6 +569,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A912D571FE2D19400B6D126 /* MAPApplicationDelegateTests.m in Sources */,
+				9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */,
 				9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */,
 				9A912D591FE2D19400B6D126 /* MAPLoginManagerTests.m in Sources */,
 				9A912D5A1FE2D19400B6D126 /* MAPSequenceTests.m in Sources */,
