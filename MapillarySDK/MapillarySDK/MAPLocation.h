@@ -13,7 +13,9 @@
 @interface MAPLocation : NSObject <NSCopying>
 
 @property CLLocation* location;
-@property CLHeading* heading;
+@property double magneticHeading;
+@property double trueHeading;
+@property double headingAccuracy;
 @property NSDate* timestamp;
 @property CMDeviceMotion* deviceMotion;
 

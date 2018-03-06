@@ -80,7 +80,7 @@
         description[kMAPLongitude] = [NSNumber numberWithDouble:adjustedLocation.location.coordinate.longitude];
         description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
         description[kMAPGpsTime] = [self getUTCFormattedDate:image.captureDate];
-        description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:adjustedLocation.heading.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:adjustedLocation.heading.magneticHeading]};
+        description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:adjustedLocation.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:adjustedLocation.magneticHeading]};
         description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:adjustedLocation.location.horizontalAccuracy];
         description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
         description[kMAPAccelerometerVector] = accelerometerVector;
@@ -216,7 +216,7 @@
     [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
     [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
     [self addExifMetadata:mutableMetadata tag:@"GPSHPositioningError"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.heading.trueHeading]];
+    [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.trueHeading]];
     [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
 }
 

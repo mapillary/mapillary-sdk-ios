@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
 #import "MAPInternalUtils.h"
+#import "MAPSequence+Private.h"
 
 @interface MAPSequenceTests : XCTestCase
 
@@ -61,6 +62,21 @@
     XCTAssertFalse(directoryExists);
 }
 
+- (void)testInit
+{
+    MAPSequence* s1 = [[MAPSequence alloc] initWithDevice:self.device];
+    MAPSequence* s2 = [[MAPSequence alloc] initWithDevice:self.device andProject:@"test"];
+    MAPSequence* s3 = [[MAPSequence alloc] initWithPath:s1.path];
+    
+    XCTAssertNotNil(s1);
+    XCTAssertNotNil(s2);
+    XCTAssertNotNil(s3);
+    
+    [MAPFileManager deleteSequence:s1];
+    [MAPFileManager deleteSequence:s2];
+    [MAPFileManager deleteSequence:s3];
+}
+
 - (void)testAddImagesFromData
 {
     // There should be no images
@@ -108,8 +124,6 @@
 
 - (void)testAddLocations
 {
-    self.sequence = [[MAPSequence alloc] initWithDevice:self.device];
-    
     XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
     
     int nbrPositions = arc4random()%1000;
@@ -237,8 +251,6 @@
 
 - (void)testAddMapillaryGpxFile
 {
-    // TODO add bigger test file
-    
     NSString* path = [NSString stringWithFormat:@"%@/test.gpx", [MAPInternalUtils documentsDirectory]];
     
     NSString* gpx = @"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<gpx version=\"1.1\" creator=\"Mapillary iOS 1.0\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<metadata>\n\t\t<author>\n\t\t\t<name>millenbop</name>\n\t\t</author>\n\t\t<link href=\"https://www.mapillary.com/app/user/millenbop\"/>\n\t\t<time>1970-01-01T01:00:00.000Z</time>\n\t</metadata>\n\t<trk>\n\t\t<src>Logged by millenbop using Mapillary</src>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"50.000000\" lon=\"50.000000\">\n\t\t\t\t<time>1970-01-01T01:00:00.000Z</time>\n\t\t\t\t<fix>2d</fix>\n\t\t\t\t<extensions>\n\t\t\t\t\t<mapillary:gpsAccuracyMeters>0.000000</mapillary:gpsAccuracyMeters>\n\t\t\t\t</extensions>\n\t\t\t</trkpt>\n\t\t</trkseg>\n\t</trk>\n\t<extensions>\n\t\t<mapillary:localTimeZone>Europe/Stockholm (GMT+2) offset 7200 (Daylight)</mapillary:localTimeZone>\n\t\t<mapillary:project>Public</mapillary:project>\n\t\t<mapillary:sequenceKey>1234-5678-9ABC-DEF</mapillary:sequenceKey>\n\t\t<mapillary:timeOffset>0.000000</mapillary:timeOffset>\n\t\t<mapillary:directionOffset>-1.000000</mapillary:directionOffset>\n\t\t<mapillary:deviceUUID>iPhone7,2</mapillary:deviceUUID>\n\t\t<mapillary:deviceMake>Apple</mapillary:deviceMake>\n\t\t<mapillary:deviceModel>iPhone 6</mapillary:deviceModel>\n\t\t<mapillary:appVersion>(null)</mapillary:appVersion>\n\t\t<mapillary:userKey>(null)</mapillary:userKey>\n\t\t</extensions>\n</gpx>";
@@ -365,6 +377,80 @@
             XCTFail(@"Expectation failed with error: %@", error);
         }
     }];
+}
+
+- (void)testLock
+{
+    XCTAssertFalse([self.sequence isLocked]);
+    
+    [self.sequence lock];
+    
+    XCTAssertTrue([self.sequence isLocked]);
+    
+    [self.sequence unlock];
+    
+    XCTAssertFalse([self.sequence isLocked]);
+}
+
+- (void)testDeleteImage
+{
+    NSData* imageData = [self createImageData];
+    
+    NSArray* images = [self.sequence listImages];
+    XCTAssertEqual(images.count, 0);
+    
+    [self.sequence addImageWithData:imageData date:nil location:nil];
+    images = [self.sequence listImages];
+    XCTAssertEqual(images.count, 1);
+    
+    [self.sequence deleteImage:images.firstObject];
+    images = [self.sequence listImages];
+    XCTAssertEqual(images.count, 0);
+    
+    [self.sequence deleteImage:nil];
+    images = [self.sequence listImages];
+    XCTAssertEqual(images.count, 0);
+}
+
+- (void)testHeading
+{
+    MAPLocation* a = [[MAPLocation alloc] init];
+    a.timestamp = [NSDate dateWithTimeIntervalSince1970:0];
+    a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+    [self.sequence addLocation:a];
+    
+    MAPLocation* b = [[MAPLocation alloc] init];
+    b.timestamp = [NSDate dateWithTimeIntervalSince1970:1000];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(55, 55) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    [self.sequence addLocation:b];
+    
+    NSData* imageData = [self createImageData];
+    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:0] location:nil];
+    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:500] location:nil];
+    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:1000] location:nil];
+    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:1500] location:nil];
+    
+    NSArray* images = [self.sequence listImages];
+    MAPImage* image = nil;
+    
+    // From http://www.igismap.com/map-tool/bearing-angle the bearing should be 29.369942517564084
+    double correctHeading = 29.369942517564084;
+    
+    image = images[0];
+    XCTAssert(image.location.magneticHeading == correctHeading);
+    XCTAssert(image.location.trueHeading == correctHeading);
+    
+    image = images[1];
+    XCTAssert(image.location.magneticHeading == correctHeading);
+    XCTAssert(image.location.trueHeading == correctHeading);
+    
+    image = images[2];
+    XCTAssert(image.location.magneticHeading == correctHeading);
+    XCTAssert(image.location.trueHeading == correctHeading);
+    
+    image = images[3];
+    XCTAssert(image.location.magneticHeading == correctHeading);
+    XCTAssert(image.location.trueHeading == correctHeading);
 }
 
 #pragma mark - Utils

@@ -58,11 +58,11 @@ unsigned long long footerLength;
         NSMutableString* extensionsString = [[NSMutableString alloc] init];
         [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:gpsAccuracyMeters>%f</mapillary:gpsAccuracyMeters>\n", self.location.location.horizontalAccuracy];
         
-        if (self.location.heading)
+        if (self.location.trueHeading)
         {
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassTrueHeading>%f</mapillary:compassTrueHeading>\n", self.location.heading.trueHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassMagneticHeading>%f</mapillary:compassMagneticHeading>\n", self.location.heading.magneticHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>\n", self.location.heading.headingAccuracy];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassTrueHeading>%f</mapillary:compassTrueHeading>\n", self.location.trueHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassMagneticHeading>%f</mapillary:compassMagneticHeading>\n", self.location.magneticHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>\n", self.location.headingAccuracy];
         }
         
         if (self.location.deviceMotion)

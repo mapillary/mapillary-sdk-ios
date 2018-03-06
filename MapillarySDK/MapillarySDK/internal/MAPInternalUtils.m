@@ -55,28 +55,6 @@
     return [NSString stringWithFormat:@"%@/%@", [self basePath], @"sequences"];
 }
 
-
-+ (BOOL)createSubfolderAtPath:(NSString *)path folder:(NSString *)folder
-{
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSString *newFolderPath = [path stringByAppendingPathComponent:folder];
-    
-    if (![fm fileExistsAtPath:newFolderPath])
-    {
-        NSLog(@"Creating %@", newFolderPath);
-        BOOL success = [fm createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
-        
-        if (success)
-        {
-            [self addSkipBackupAttributeToItemAtPath:newFolderPath];
-        }
-        
-        return success;
-    }
-    
-    return NO;
-}
-
 + (BOOL)createFolderAtPath:(NSString *)path
 {
     NSFileManager* fm = [NSFileManager defaultManager];

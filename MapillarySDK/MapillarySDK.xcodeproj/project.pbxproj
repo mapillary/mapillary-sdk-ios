@@ -26,7 +26,6 @@
 		9A420B772019E67D001BF118 /* MAPApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B6A2019E67D001BF118 /* MAPApiManager.m */; };
 		9A420B782019E67D001BF118 /* MAPImage+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B6B2019E67D001BF118 /* MAPImage+Private.m */; };
 		9A420B792019E67D001BF118 /* MAPInternalUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B6C2019E67D001BF118 /* MAPInternalUtils.m */; };
-		9A420B7B201B3265001BF118 /* MAPUploadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7A201B3265001BF118 /* MAPUploadManagerTests.m */; };
 		9A420B7E201B6485001BF118 /* MAPExifTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B7C201B6485001BF118 /* MAPExifTools.h */; };
 		9A420B7F201B6485001BF118 /* MAPExifTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7D201B6485001BF118 /* MAPExifTools.m */; };
 		9A6B0D731F628E2B009C2454 /* MAPApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6B0D711F628E2B009C2454 /* MAPApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,6 +33,7 @@
 		9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D551FE2D19400B6D126 /* MAPUserTests.m */; };
 		9A7CB8B3204E913C004C7BD1 /* MAPImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CB8B2204E913C004C7BD1 /* MAPImageTests.m */; };
 		9A7CB8B5204EA3A2004C7BD1 /* MAPLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CB8B4204EA3A2004C7BD1 /* MAPLocationTests.m */; };
+		9A7CB8B9204ECA7A004C7BD1 /* MAPFileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CB8B8204ECA7A004C7BD1 /* MAPFileManagerTests.m */; };
 		9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A88F9441F4D933F0076C311 /* MapillarySDK.framework */; };
 		9A88F9551F4D933F0076C311 /* MapillarySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A88F9471F4D933F0076C311 /* MapillarySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A912D091FE2CE2A00B6D126 /* MAPFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912CFD1FE2CE2900B6D126 /* MAPFileManager.m */; };
@@ -106,6 +106,7 @@
 		9A79772C1F55AA1500358A30 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9A7CB8B2204E913C004C7BD1 /* MAPImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPImageTests.m; sourceTree = "<group>"; };
 		9A7CB8B4204EA3A2004C7BD1 /* MAPLocationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPLocationTests.m; sourceTree = "<group>"; };
+		9A7CB8B8204ECA7A004C7BD1 /* MAPFileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPFileManagerTests.m; sourceTree = "<group>"; };
 		9A88F9441F4D933F0076C311 /* MapillarySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapillarySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A88F9471F4D933F0076C311 /* MapillarySDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapillarySDK.h; sourceTree = "<group>"; };
 		9A88F9481F4D933F0076C311 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -249,6 +250,7 @@
 				9A912D561FE2D19400B6D126 /* MAPApiManagerTests.m */,
 				9A912D501FE2D19400B6D126 /* MAPApplicationDelegateTests.m */,
 				9A058025203437BE005A5C8A /* MAPExifToolsTests.m */,
+				9A7CB8B8204ECA7A004C7BD1 /* MAPFileManagerTests.m */,
 				9A912D511FE2D19400B6D126 /* MAPGpxLoggerTests.m */,
 				9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */,
 				9A7CB8B2204E913C004C7BD1 /* MAPImageTests.m */,
@@ -598,10 +600,10 @@
 				9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */,
 				9A912D591FE2D19400B6D126 /* MAPLoginManagerTests.m in Sources */,
 				9A912D5A1FE2D19400B6D126 /* MAPSequenceTests.m in Sources */,
-				9A420B7B201B3265001BF118 /* MAPUploadManagerTests.m in Sources */,
 				9A058026203437BE005A5C8A /* MAPExifToolsTests.m in Sources */,
 				9A7CB8B3204E913C004C7BD1 /* MAPImageTests.m in Sources */,
 				9A912D5B1FE2D19400B6D126 /* MAPUtilsTests.m in Sources */,
+				9A7CB8B9204ECA7A004C7BD1 /* MAPFileManagerTests.m in Sources */,
 				9A912D5D1FE2D19400B6D126 /* MAPApiManagerTests.m in Sources */,
 				9A912D581FE2D19400B6D126 /* MAPGpxLoggerTests.m in Sources */,
 				9A7CB8B5204EA3A2004C7BD1 /* MAPLocationTests.m in Sources */,

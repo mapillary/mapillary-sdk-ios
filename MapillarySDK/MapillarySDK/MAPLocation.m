@@ -18,7 +18,9 @@
     if (self)
     {
         self.location = nil;
-        self.heading = nil;
+        self.trueHeading = 0;
+        self.magneticHeading = 0;
+        self.headingAccuracy = 0;
         self.timestamp = [NSDate date];
         self.deviceMotion = nil;
     }
@@ -76,7 +78,9 @@
     if (copy)
     {
         [copy setLocation:self.location.copy];
-        [copy setHeading:self.heading.copy];
+        [copy setTrueHeading:self.trueHeading];
+        [copy setMagneticHeading:self.magneticHeading];
+        [copy setHeadingAccuracy:self.headingAccuracy];
         [copy setTimestamp:self.timestamp.copy];
         [copy setDeviceMotion:self.deviceMotion.copy];
     }

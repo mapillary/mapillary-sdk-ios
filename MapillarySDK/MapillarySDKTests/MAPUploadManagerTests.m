@@ -35,7 +35,7 @@
     [super tearDown];
 }
 
-/*- (void)testSingleSequence
+- (void)testSingleSequence
 {
     self.expectationImageProcessed = [self expectationWithDescription:@"Processing image"];
     self.expectationImageUploaded = [self expectationWithDescription:@"Uploading image"];
@@ -53,7 +53,7 @@
         }
     }];
     
-}*/
+}
 
 #pragma mark - MAPUploadManagerDelegate
 

@@ -20,7 +20,6 @@
 + (NSString *)basePath;
 + (NSString *)sequenceDirectory;
 
-+ (BOOL)createSubfolderAtPath:(NSString*)path folder:(NSString*)folder;
 + (BOOL)createFolderAtPath:(NSString*)path;
 + (BOOL)addSkipBackupAttributeToItemAtPath:(NSString*)filePathString;
 

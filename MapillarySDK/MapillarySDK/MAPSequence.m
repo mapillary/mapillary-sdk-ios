@@ -328,7 +328,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             else
             {
                 location = last;
-            }                        
+            }
+            
+            location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
+            location.trueHeading = location.magneticHeading;
         }
         
         // Find position
@@ -346,7 +349,25 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 
                 if ([currentLocation.timestamp isEqualToDate:date])
                 {
+                    if (i < locations.count-1)
+                    {
+                        before = locations[i+1];
+                    }
+                    else
+                    {
+                        before = currentLocation;
+                    }
+                    
                     exact = currentLocation;
+                    
+                    if (i > 0)
+                    {
+                        after = locations[i-1];
+                    }
+                    else
+                    {
+                        after = currentLocation;
+                    }
                 }
                 
                 else if ([currentLocation.timestamp compare:date] == NSOrderedAscending)
@@ -379,6 +400,9 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             {
                 location = (before ? before : after);
             }
+            
+            location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:after.location.coordinate];
+            location.trueHeading = location.magneticHeading;
         }
 
         dispatch_semaphore_signal(semaphore);
@@ -388,7 +412,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     // Wait here intil done
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
-    return [location copy];
+    return location;
 }
 
 - (BOOL)isLocked
