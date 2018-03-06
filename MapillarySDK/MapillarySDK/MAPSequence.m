@@ -11,7 +11,6 @@
 #import "MAPImage.h"
 #import "MAPLoginManager.h"
 #import "MAPGpxLogger.h"
-#import "BOSImageResizeOperation.h"
 #import "MAPDefines.h"
 #import "MAPGpxParser.h"
 #import "MAPUtils.h"
@@ -166,11 +165,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
     
     // TODO perhaps make optionable
-    BOSImageResizeOperation* op = [[BOSImageResizeOperation alloc] initWithImage:srcImage];
-    [op resizeToFitWithinSize:thumbSize];
-    op.JPEGcompressionQuality = 0.5;
-    [op writeResultToPath:thumbPath];
-    [op start];
+    [MAPUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
 
     [self addLocation:location];
     

@@ -24,19 +24,7 @@
 
 - (void)tearDown
 {
-    
     [super tearDown];
-}
-
-- (void)testSignin
-{
-    //[MAPLoginManager signIn];
-    
-    //MAPUser* currentUser = [MAPLoginManager currentUser];
-    //XCTAssertTrue([@"username" isEqualToString:currentUser.userName]);
-    //XCTAssertTrue([@"userkey" isEqualToString:currentUser.userKey]);
-    
-    [MAPLoginManager signOut];
 }
 
 - (void)testSignOut

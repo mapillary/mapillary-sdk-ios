@@ -18,13 +18,13 @@
 
 - (void)lock
 {
-    NSString* path = [self.imagePath stringByAppendingPathComponent:@"lock"];
+    NSString* path = [self.imagePath stringByAppendingPathExtension:@"lock"];
     [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
 }
 
 - (void)unlock
 {
-    NSString* path = [self.imagePath stringByAppendingPathComponent:@"lock"];
+    NSString* path = [self.imagePath stringByAppendingPathExtension:@"lock"];
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 

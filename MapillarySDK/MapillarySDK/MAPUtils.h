@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "MAPLocation.h"
 
 @interface MAPUtils : NSObject
+
++ (void)createThumbnailForImage:(UIImage*)sourceImage atPath:(NSString*)path withSize:(CGSize)size;
 
 @end
