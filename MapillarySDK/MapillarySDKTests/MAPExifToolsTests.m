@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
 #import "MAPExifTools.h"
+#import "MAPDefines.h"
 
 @interface MAPExifToolsTests : XCTestCase
 
@@ -44,6 +45,7 @@
 
 - (void)testAddMapillaryTags
 {
+    [[NSUserDefaults standardUserDefaults] setObject:@"testuserkey" forKey:MAPILLARY_CURRENT_USER_KEY];
     MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:[MAPDevice thisDevice]];
     
     NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
@@ -61,14 +63,12 @@
     
     MAPImage* image = [sequence listImages][0];
     
-    [[NSUserDefaults standardUserDefaults] setObject:@"testuserkey" forKey:@"kMapillaryCurrentUserKey"];
-    
     [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
     
     XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
     
     [MAPFileManager deleteSequence:sequence];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"testuserkey"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
 }
 
 - (NSData*)createImageData

@@ -27,7 +27,7 @@
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     dict[kMAPSettingsTokenValid]    = @YES;
-    dict[kMAPSettingsUserKey]       = [MAPLoginManager currentUser].userKey;
+    dict[kMAPSettingsUserKey]       = [[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CURRENT_USER_KEY];
     dict[kMAPLocalTimeZone]         = [NSString stringWithFormat:@"%@", [NSTimeZone systemTimeZone]];
     // dict[kMAPOrganizationKey]    = [NSNumber numberWithDouble:self.directionOffset]; // TODO
     // dict[kMAPPrivate]            = [NSNumber numberWithDouble:self.directionOffset]; // TODO

@@ -37,8 +37,9 @@
                 NSString* MAPLatitude = json[kMAPLatitude];
                 NSString* MAPLongitude = json[kMAPLongitude];
                 NSString* MAPSettingsUserKey = json[kMAPSettingsUserKey];
+                NSString* MAPSettingsUploadHash = json[kMAPSettingsUploadHash];
                 
-                ok = MAPLatitude && MAPLongitude && MAPSettingsUserKey;
+                ok = MAPLatitude && MAPLongitude && MAPSettingsUserKey && MAPSettingsUploadHash;
             }
         }
         
@@ -52,77 +53,73 @@
 {
     BOOL success = YES;
     
-    //if (![self imageHasMapillaryTags:image])
+    // Get source and metadata
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
+    CGImageMetadataRef metadata = CGImageSourceCopyMetadataAtIndex(imageSource, 0, NULL);
+    CGMutableImageMetadataRef mutableMetadata = CGImageMetadataCreateMutable();
+    
+    
+    // Cleanup existing metadata
+    [self cleanMetadata:metadata mutableMetadata:mutableMetadata];
+    
+    
+    // Add GPS position based on time to metadata
+    [self addGps:image.location mutableMetadata:mutableMetadata];
+    
+    
+    // Update and add Mapillary tags to metadata
+    
+    float atanAngle = atan2(image.location.deviceMotion.gravity.y, -image.location.deviceMotion.gravity.x);
+    NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:-image.location.deviceMotion.gravity.x],
+                                          @"y": [NSNumber numberWithDouble:image.location.deviceMotion.gravity.y],
+                                          @"z": [NSNumber numberWithDouble:image.location.deviceMotion.gravity.z]};
+    
+    NSMutableDictionary* description = [sequence meta];
+    description[kMAPLatitude] = [NSNumber numberWithDouble:image.location.location.coordinate.latitude];
+    description[kMAPLongitude] = [NSNumber numberWithDouble:image.location.location.coordinate.longitude];
+    description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
+    description[kMAPGpsTime] = [self getUTCFormattedDate:image.captureDate]; // TODO get from GPS
+    description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:image.location.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:image.location.magneticHeading]};
+    description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:image.location.location.horizontalAccuracy];
+    description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
+    description[kMAPAccelerometerVector] = accelerometerVector;
+    description[kMAPPhotoUUID] = [[NSUUID UUID] UUIDString];
+    description[kMAPAltitude] = [NSNumber numberWithDouble:image.location.location.altitude];
+    description[kMAPSettingsUploadHash] = [MAPInternalUtils getSHA256HashFromString:[NSString stringWithFormat:@"%@%@%@",[MAPLoginManager currentUser].accessToken, [MAPLoginManager currentUser].userKey, image.imagePath.lastPathComponent]];
+    
+    NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
+    NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
+    
+    [self addTiffMetadata:mutableMetadata tag:@"ImageDescription" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    
+    
+    // Write new metadata to image
+    CFMutableDictionaryRef options = CFDictionaryCreateMutable(CFAllocatorGetDefault(), 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFDictionarySetValue(options, kCGImageDestinationMetadata, mutableMetadata);
+    
+    CFStringRef UTI = CGImageSourceGetType(imageSource);
+    if (UTI == NULL)
     {
-        // Get source and metadata
-        CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
-        CGImageMetadataRef metadata = CGImageSourceCopyMetadataAtIndex(imageSource, 0, NULL);
-        CGMutableImageMetadataRef mutableMetadata = CGImageMetadataCreateMutable();
-        
-        
-        // Cleanup existing metadata
-        [self cleanMetadata:metadata mutableMetadata:mutableMetadata];
-        
-        
-        // Add GPS position based on time to metadata
-        [self addGps:image.location mutableMetadata:mutableMetadata];
-        
-        
-        // Update and add Mapillary tags to metadata
-        
-        float atanAngle = atan2(image.location.deviceMotion.gravity.y, -image.location.deviceMotion.gravity.x);
-        NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:-image.location.deviceMotion.gravity.x],
-                                              @"y": [NSNumber numberWithDouble:image.location.deviceMotion.gravity.y],
-                                              @"z": [NSNumber numberWithDouble:image.location.deviceMotion.gravity.z]};
-        
-        NSMutableDictionary* description = [sequence meta];
-        description[kMAPSettingsUserKey] = [MAPLoginManager currentUser].userKey;
-        description[kMAPLatitude] = [NSNumber numberWithDouble:image.location.location.coordinate.latitude];
-        description[kMAPLongitude] = [NSNumber numberWithDouble:image.location.location.coordinate.longitude];
-        description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
-        description[kMAPGpsTime] = [self getUTCFormattedDate:image.captureDate]; // TODO get from GPS
-        description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:image.location.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:image.location.magneticHeading]};
-        description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:image.location.location.horizontalAccuracy];
-        description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
-        description[kMAPAccelerometerVector] = accelerometerVector;
-        description[kMAPPhotoUUID] = [[NSUUID UUID] UUIDString];
-        description[kMAPAltitude] = [NSNumber numberWithDouble:image.location.location.altitude];
-        description[kMAPSettingsUploadHash] = [MAPInternalUtils getSHA256HashFromString:[NSString stringWithFormat:@"%@%@%@",[MAPLoginManager currentUser].accessToken, [MAPLoginManager currentUser].userKey, image.imagePath.lastPathComponent]];        
-        
-        NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
-        NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
-        
-        [self addTiffMetadata:mutableMetadata tag:@"ImageDescription" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
-        
-        
-        // Write new metadata to image
-        CFMutableDictionaryRef options = CFDictionaryCreateMutable(CFAllocatorGetDefault(), 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-        CFDictionarySetValue(options, kCGImageDestinationMetadata, mutableMetadata);
-        
-        CFStringRef UTI = CGImageSourceGetType(imageSource);
-        if (UTI == NULL)
-        {
-            UTI = kUTTypeJPEG;
-        }
-        
-        CGImageDestinationRef destination = CGImageDestinationCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], UTI, 1, NULL);
-        
-        CFErrorRef errorRef = nil;
-        success = CGImageDestinationCopyImageSource(destination, imageSource, options, &errorRef);
-        
-        if (!success)
-        {
-            CFStringRef error_description = CFErrorCopyDescription(errorRef);
-            CFRelease(error_description);
-        }
-        
-        
-        // Cleanup
-        CFRelease(destination);
-        CFRelease(imageSource);
-        CFRelease(mutableMetadata);
+        UTI = kUTTypeJPEG;
     }
-
+    
+    CGImageDestinationRef destination = CGImageDestinationCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], UTI, 1, NULL);
+    
+    CFErrorRef errorRef = nil;
+    success = CGImageDestinationCopyImageSource(destination, imageSource, options, &errorRef);
+    
+    if (!success)
+    {
+        CFStringRef error_description = CFErrorCopyDescription(errorRef);
+        CFRelease(error_description);
+    }
+    
+    
+    // Cleanup
+    CFRelease(destination);
+    CFRelease(imageSource);
+    CFRelease(mutableMetadata);
+    
     return success;
 }
 
