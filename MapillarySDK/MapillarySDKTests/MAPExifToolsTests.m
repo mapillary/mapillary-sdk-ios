@@ -32,7 +32,7 @@
 {
     NSData* imageData = [self createImageData];
     
-    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:[MAPDevice currentDevice]];
+    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:[MAPDevice thisDevice]];
     [sequence addImageWithData:imageData date:nil location:nil];
     
     MAPImage* image = [sequence listImages][0];
@@ -44,7 +44,7 @@
 
 - (void)testAddMapillaryTags
 {
-    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:[MAPDevice currentDevice]];
+    MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:[MAPDevice thisDevice]];
     
     NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
     NSData* imageData = [NSData dataWithContentsOfFile:path];

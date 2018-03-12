@@ -6,8 +6,7 @@
 //  Copyright © 2017 Mapillary. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 #import "MAPLocation.h"
 
 #define AVG(A, B) ((A+B)/2.0)
@@ -34,5 +33,9 @@
 + (NSDateFormatter*)defaultDateFormatter;
 
 + (MAPLocation*)locationBetweenLocationA:(MAPLocation*)locationA andLocationB:(MAPLocation*)locationB forDate:(NSDate*)date;
+
++ (void)createThumbnailForImage:(UIImage*)sourceImage atPath:(NSString*)path withSize:(CGSize)size;
+
++ (NSString*)getSHA256HashFromString:(NSString*)string;
 
 @end

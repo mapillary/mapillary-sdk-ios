@@ -21,4 +21,5 @@ Pod::Spec.new do |s|
   s.dependency 'AWSS3', '~> 2.6'
   s.dependency 'PodAsset', '~> 0.22'
   s.dependency 'SAMKeychain', '~> 1.5'
+  s.dependency 'NSHash', '~> 1.2.0'
 end

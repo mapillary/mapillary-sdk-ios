@@ -15,6 +15,7 @@
 #import "MAPGpxParser.h"
 #import "MAPUtils.h"
 #import "MAPImage+Private.h"
+#import "MAPExifTools.h"
 
 static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
@@ -54,7 +55,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.timeOffset = 0;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
-        self.device = device ? device : [MAPDevice currentDevice];
+        self.device = device ? device : [MAPDevice thisDevice];
         self.project = project ? project : @"Public";
         self.cachedLocations = nil;
         self.imageCount = 0;
@@ -165,7 +166,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
     
     // TODO perhaps make optionable
-    [MAPUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
+    [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
 
     [self addLocation:location];
     
@@ -226,6 +227,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             done();
         }
     }];    
+}
+
+- (void)processImage:(MAPImage*)image
+{
+    [MAPExifTools addExifTagsToImage:image fromSequence:self];
 }
 
 - (void)deleteImage:(MAPImage*)image
@@ -307,6 +313,8 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
 - (MAPLocation*)locationForDate:(NSDate*)date
 {
+    // TODO handle compass direction
+    
     __block MAPLocation* location = nil;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     

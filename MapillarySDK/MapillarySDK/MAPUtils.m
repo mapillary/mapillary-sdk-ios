@@ -7,18 +7,8 @@
 //
 
 #import "MAPUtils.h"
-#import "MAPInternalUtils.h"
-#import "BOSImageResizeOperation.h"
+#import "MAPFileManager.h"
 
 @implementation MAPUtils
-
-+ (void)createThumbnailForImage:(UIImage*)sourceImage atPath:(NSString*)path withSize:(CGSize)size
-{
-    BOSImageResizeOperation* op = [[BOSImageResizeOperation alloc] initWithImage:sourceImage];
-    [op resizeToFitWithinSize:size];
-    op.JPEGcompressionQuality = 0.5;
-    [op writeResultToPath:path];
-    [op start];
-}
 
 @end

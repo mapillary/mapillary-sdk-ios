@@ -10,6 +10,7 @@ target 'MapillarySDK' do
     pod 'AWSS3', '~> 2.6'
     pod 'PodAsset', '~> 0.22'
     pod 'SAMKeychain', '~> 1.5'
+    pod 'NSHash', '~> 1.2'
 
     target 'MapillarySDKTests' do
         

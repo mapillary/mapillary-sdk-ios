@@ -9,6 +9,7 @@
 #import "MAPImage.h"
 #import "MAPLoginManager.h"
 #import "MAPUtils.h"
+#import "MAPInternalUtils.h"
 
 @implementation MAPImage
 
@@ -30,10 +31,15 @@
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self thumbPath]])
     {
+        UIImage* image = [self loadImage];
         float screenWidth = [[UIScreen mainScreen] bounds].size.width;
         float screenHeight = [[UIScreen mainScreen] bounds].size.width;
         CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
-        [MAPUtils createThumbnailForImage:[self loadImage] atPath:[self thumbPath] withSize:thumbSize];
+        
+        if (image)
+        {
+            [MAPInternalUtils createThumbnailForImage:[self loadImage] atPath:[self thumbPath] withSize:thumbSize];
+        }        
     }
     
     return self;

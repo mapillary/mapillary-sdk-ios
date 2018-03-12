@@ -14,10 +14,10 @@
 #define MAPILLARY_CLIENT_ID                 @"MapillaryClientId"
 #define MAPILLARY_CLIENT_REDIRECT_URL       @"MapillaryRedirectUrl"
 
-#define MAPILLARY_KEYCHAIN_SERVICE          @"kMapillaryKeychainService"
-#define MAPILLARY_KEYCHAIN_ACCOUNT          @"kMapillaryKeychainAccount"
-#define MAPILLARY_CURRENT_USER_NAME         @"kMapillaryCurrentUserName"
-#define MAPILLARY_CURRENT_USER_KEY          @"kMapillaryCurrentUserKey"
+#define MAPILLARY_KEYCHAIN_SERVICE          @"MapillaryKeychainService"
+#define MAPILLARY_KEYCHAIN_ACCOUNT          @"MapillaryKeychainAccount"
+#define MAPILLARY_CURRENT_USER_NAME         @"MapillaryCurrentUserName"
+#define MAPILLARY_CURRENT_USER_KEY          @"MapillaryCurrentUserKey"
 
 #define kMAPLatitude                        @"MAPLatitude"
 #define kMAPLongitude                       @"MAPLongitude"
@@ -35,5 +35,12 @@
 #define kMAPPrivate                         @"MAPPrivate"
 #define kMAPVersionString                   @"MAPVersionString"
 #define kMAPLocalTimeZone                   @"MAPLocalTimeZone"
+#define kMAPAppNameString                   @"MAPAppNameString"
+#define kMAPCameraUUID                      @"MAPCameraUUID"
+#define kMAPDeviceModel                     @"MAPDeviceModel"
+#define kMAPDeviceMake                      @"MAPDeviceMake"
+#define kMAPPhotoUUID                       @"MAPPhotoUUID"
+#define kMAPAltitude                        @"MAPAltitude"
+#define kMAPSettingsUploadHash              @"MAPSettingsUploadHash"
 
 #endif /* MAPDefines_h */

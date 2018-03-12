@@ -33,6 +33,7 @@
 - (void)addLocation:(MAPLocation*)location;
 - (void)addGpx:(NSString*)path done:(void(^)(void))done;
 
+- (void)processImage:(MAPImage*)image;
 - (void)deleteImage:(MAPImage*)image;
 
 - (NSArray*)listImages; // TODO make async
@@ -41,7 +42,5 @@
 - (MAPLocation*)locationForDate:(NSDate*)date;
 
 - (BOOL)isLocked;
-
-
 
 @end

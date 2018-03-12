@@ -60,7 +60,7 @@
         self.directionOffset = @-1;
         self.sequenceDate = [NSDate date];
         
-        MAPDevice* defaultDevice = [MAPDevice currentDevice];
+        MAPDevice* defaultDevice = [MAPDevice thisDevice];
         self.deviceMake = defaultDevice.make;
         self.deviceModel = defaultDevice.model;
         self.deviceUUID = defaultDevice.UUID;

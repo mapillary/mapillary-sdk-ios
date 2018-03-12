@@ -24,7 +24,7 @@
 {
     [super setUp];
     
-    self.device = [MAPDevice currentDevice];    
+    self.device = [MAPDevice thisDevice];    
     self.sequence = [[MAPSequence alloc] initWithDevice:self.device];
 }
 

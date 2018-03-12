@@ -16,7 +16,8 @@
     if (self)
     {
         self.uploading = NO;
-        self.imagesToUpload = 0;
+        self.processing = NO;
+        self.imageCount = 0;
         self.imagesUploaded = 0;
         self.imagesFailed = 0;
         self.imagesProcessed = 0;

@@ -14,6 +14,7 @@
 @property NSString* model;
 @property NSString* UUID;
 
-+ (id)currentDevice;
+- (id)initWithMake:(NSString*)make andModel:(NSString*)model;
++ (id)thisDevice;
 
 @end

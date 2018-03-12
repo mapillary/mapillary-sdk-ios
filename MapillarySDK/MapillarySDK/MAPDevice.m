@@ -12,7 +12,19 @@
 
 @implementation MAPDevice
 
-+ (id)currentDevice
+- (id)initWithMake:(NSString*)make andModel:(NSString*)model
+{
+    self = [super init];
+    if (self)
+    {
+        self.make = make;
+        self.model = model;
+        self.UUID = [NSString stringWithFormat:@"%@-%@-%@", [[[UIDevice currentDevice] identifierForVendor] UUIDString], make, model];
+    }
+    return self;
+}
+
++ (id)thisDevice
 {
     MAPDevice* current = [[MAPDevice alloc] init];
     current.make = @"Apple";

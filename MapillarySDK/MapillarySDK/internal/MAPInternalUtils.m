@@ -8,6 +8,8 @@
 
 #import "MAPInternalUtils.h"
 #include <sys/xattr.h>
+#import "BOSImageResizeOperation.h"
+#import <NSHash/NSString+NSHash.h>
 
 @implementation MAPInternalUtils
 
@@ -200,6 +202,20 @@
     // TODO add more
     
     return result;
+}
+
++ (void)createThumbnailForImage:(UIImage*)sourceImage atPath:(NSString*)path withSize:(CGSize)size
+{
+    BOSImageResizeOperation* op = [[BOSImageResizeOperation alloc] initWithImage:sourceImage];
+    [op resizeToFitWithinSize:size];
+    op.JPEGcompressionQuality = 0.5;
+    [op writeResultToPath:path];
+    [op start];
+}
+
++ (NSString*)getSHA256HashFromString:(NSString*)string
+{
+    return [[string lowercaseString] SHA256];
 }
 
 @end

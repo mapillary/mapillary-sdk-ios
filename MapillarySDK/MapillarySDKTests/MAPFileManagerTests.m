@@ -29,7 +29,7 @@
 {
     XCTestExpectation* expectation = [self expectationWithDescription:@"Failed to list and delete sequences"];
     
-    MAPDevice* device = [MAPDevice currentDevice];
+    MAPDevice* device = [MAPDevice thisDevice];
     
     [MAPFileManager listSequences:^(NSArray *sequences) {
         

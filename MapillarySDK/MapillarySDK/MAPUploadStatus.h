@@ -11,7 +11,8 @@
 @interface MAPUploadStatus : NSObject
 
 @property (nonatomic) BOOL uploading;
-@property (nonatomic) NSUInteger imagesToUpload;
+@property (nonatomic) BOOL processing;
+@property (nonatomic) NSUInteger imageCount;
 @property (nonatomic) NSUInteger imagesUploaded;
 @property (nonatomic) NSUInteger imagesFailed;
 @property (nonatomic) NSUInteger imagesProcessed;
