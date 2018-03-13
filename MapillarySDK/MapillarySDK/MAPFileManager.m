@@ -34,6 +34,12 @@
                 MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, path]];
                 [sequences addObject:sequence];
             }
+            
+            [sequences sortUsingComparator:^NSComparisonResult(MAPSequence* obj1, MAPSequence* obj2) {
+                
+                return [obj2.sequenceDate compare:obj1.sequenceDate];
+                
+            }];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
