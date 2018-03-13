@@ -45,8 +45,6 @@
         MAPLocation* location = [[MAPLocation alloc] init];
         location.location = [[CLLocation alloc] initWithLatitude:50+i*0.1 longitude:50+i*0.1];
         location.timestamp = [NSDate dateWithTimeIntervalSince1970:0];
-        //location.heading = [[CLHeading alloc] init];
-        //location.deviceMotion = [[CMDeviceMotion alloc] init];
         
         [self.sequence addLocation:location];
     }

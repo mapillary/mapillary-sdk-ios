@@ -199,7 +199,8 @@
                                             verticalAccuracy:AVG(locationA.location.verticalAccuracy,   locationB.location.verticalAccuracy)
                                                    timestamp:date];
     
-    // TODO add more
+    result.magneticHeading = [self calculateHeadingFromCoordA:locationA.location.coordinate B:locationB.location.coordinate];
+    result.trueHeading = result.magneticHeading;
     
     return result;
 }

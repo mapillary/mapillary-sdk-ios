@@ -78,7 +78,7 @@
     description[kMAPLatitude] = [NSNumber numberWithDouble:image.location.location.coordinate.latitude];
     description[kMAPLongitude] = [NSNumber numberWithDouble:image.location.location.coordinate.longitude];
     description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
-    description[kMAPGpsTime] = [self getUTCFormattedDate:image.captureDate]; // TODO get from GPS
+    description[kMAPGpsTime] = [self getUTCFormattedDate:image.location.timestamp];
     description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:image.location.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:image.location.magneticHeading]};
     description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:image.location.location.horizontalAccuracy];
     description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];

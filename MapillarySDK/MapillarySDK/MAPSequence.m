@@ -160,12 +160,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
     UIImage* srcImage = [UIImage imageWithData:imageData];
     
-    // TODO perhaps make configurable
     float screenWidth = [[UIScreen mainScreen] bounds].size.width;
     float screenHeight = [[UIScreen mainScreen] bounds].size.width;
     CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
     
-    // TODO perhaps make optionable
     [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
 
     [self addLocation:location];
@@ -313,8 +311,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
 - (MAPLocation*)locationForDate:(NSDate*)date
 {
-    // TODO handle compass direction
-    
     __block MAPLocation* location = nil;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
@@ -407,10 +403,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             else if (before || after)
             {
                 location = (before ? before : after);
-            }
-            
-            location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:after.location.coordinate];
-            location.trueHeading = location.magneticHeading;
+            }                        
         }
 
         dispatch_semaphore_signal(semaphore);

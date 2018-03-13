@@ -13,8 +13,6 @@
 
 @end
 
-// TODO add more tests
-
 @implementation MAPApplicationDelegateTests
 
 - (void)setUp
