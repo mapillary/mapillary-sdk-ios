@@ -53,12 +53,26 @@
         self.quickParse = NO;
         
         // Default values
-        self.localTimeZone = [[NSTimeZone localTimeZone] description];
-        self.project = @"Public";
-        self.sequenceKey = [[NSUUID UUID] UUIDString];
-        self.timeOffset = @0;
-        self.directionOffset = @-1;
-        self.sequenceDate = [NSDate date];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+        {
+            self.localTimeZone = nil;
+            self.project = nil;
+            self.sequenceKey = nil;
+            self.timeOffset = nil;
+            self.directionOffset = nil;
+            self.sequenceDate = nil;
+        }
+        else
+        {
+            self.localTimeZone = [[NSTimeZone localTimeZone] description];
+            self.project = @"Public";
+            self.sequenceKey = [[NSUUID UUID] UUIDString];
+            self.timeOffset = @0;
+            self.directionOffset = @-1;
+            self.sequenceDate = [NSDate date];
+        }
+        
+        
         
         MAPDevice* defaultDevice = [MAPDevice thisDevice];
         self.deviceMake = defaultDevice.make;
