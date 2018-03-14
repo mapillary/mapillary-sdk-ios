@@ -563,8 +563,7 @@
             MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[filePath stringByDeletingLastPathComponent]];
             [sequence deleteImage:image];
             
-            NSArray* imagesLeft = [sequence listImages];
-            if (imagesLeft.count == 0)
+            if (sequence.imageCount == 0)
             {
                 [MAPFileManager deleteSequence:sequence];
             }

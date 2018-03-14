@@ -246,6 +246,14 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     }
 }
 
+- (void)deleteAllImages
+{
+    for (MAPImage* image in [self listImages])
+    {
+        [self deleteImage:image];
+    }
+}
+
 - (NSArray*)listImages
 {
     MAPUser* author = [MAPLoginManager currentUser];
@@ -437,6 +445,37 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void)saveMetaChanges:(void(^)(void))done
+{
+    NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
+    NSString* gpxPathBackup = [NSString stringWithFormat:@"%@/sequence.bak", self.path];
+    
+    // Move old file
+    [[NSFileManager defaultManager] moveItemAtPath:gpxPath toPath:gpxPathBackup error:nil];
+    
+    // Create new file
+    self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:gpxPath andSequence:self];
+    
+    [self listLocations:^(NSArray *locations) {
+        
+        for (MAPLocation* l in locations)
+        {
+            [self.gpxLogger addLocation:l];
+        }
+        
+        // TODO check that everything is ok
+        
+        // Delete old file
+        [[NSFileManager defaultManager] removeItemAtPath:gpxPathBackup error:nil];
+        
+        if (done)
+        {
+            done();
+        }
+        
+    }];
 }
 
 @end

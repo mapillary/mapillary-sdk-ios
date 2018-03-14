@@ -35,6 +35,7 @@
 
 - (void)processImage:(MAPImage*)image;
 - (void)deleteImage:(MAPImage*)image;
+- (void)deleteAllImages;
 
 - (NSArray*)listImages; // TODO make async
 - (void)listLocations:(void(^)(NSArray* locations))done;
@@ -42,5 +43,7 @@
 - (MAPLocation*)locationForDate:(NSDate*)date;
 
 - (BOOL)isLocked;
+
+- (void)saveMetaChanges:(void(^)(void))done;
 
 @end
