@@ -14,7 +14,7 @@
 @interface MAPSequence : NSObject
 
 @property CLLocationDirection directionOffset; // (-1 = undefined, 0-360 = set),
-@property NSTimeInterval timeOffset; // in milliseconds, +1 means the image date is increased by 1 ms
+@property NSTimeInterval timeOffset; // in milliseconds, +1 means the image date is increased by 1 ms. NSTimeIntervalSince1970 means not set
 @property NSDate* sequenceDate;
 @property NSString* path;
 @property NSString* project;
@@ -37,7 +37,7 @@
 - (void)deleteImage:(MAPImage*)image;
 
 - (NSArray*)listImages; // TODO make async
-- (void)listLocations:(void(^)(NSArray*))done;
+- (void)listLocations:(void(^)(NSArray* locations))done;
 
 - (MAPLocation*)locationForDate:(NSDate*)date;
 

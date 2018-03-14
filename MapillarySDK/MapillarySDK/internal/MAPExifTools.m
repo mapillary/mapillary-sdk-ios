@@ -202,7 +202,6 @@
     {
         longitude *= -1;
         longitudeRef = @"W";
-        
     }
     else
     {

@@ -52,13 +52,12 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     {
         self.sequenceDate = [NSDate date];
         self.directionOffset = -1;
-        self.timeOffset = 0;
+        self.timeOffset = NSTimeIntervalSince1970;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device ? device : [MAPDevice thisDevice];
         self.project = project ? project : @"Public";
         self.cachedLocations = nil;
-        self.imageCount = 0;
         self.imageCount = 0;
         
         if (path == nil)
@@ -296,7 +295,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             NSArray* locations = dict[@"locations"];
             
             NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
-                return [b.timestamp compare:a.timestamp];
+                return [a.timestamp compare:b.timestamp];
             }];
             
             self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];

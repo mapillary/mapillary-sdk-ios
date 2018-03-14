@@ -14,9 +14,9 @@ PODS:
   - AFNetworking/Serialization (3.2.0)
   - AFNetworking/UIKit (3.2.0):
     - AFNetworking/NSURLSession
-  - AWSCore (2.6.12)
-  - AWSS3 (2.6.12):
-    - AWSCore (= 2.6.12)
+  - AWSCore (2.6.13)
+  - AWSS3 (2.6.13):
+    - AWSCore (= 2.6.13)
   - BOSImageResizeOperation (0.1.0)
   - NSHash (1.2.0)
   - OCHamcrest (7.0.2)
@@ -39,8 +39,8 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 8ac6017b94ea105479f7776e5288e48ae9c59bb4
-  AWSCore: d0d6e4f6831754aaf98058d2306a016ae71510fe
-  AWSS3: c35608e0cdd5172f9e1d943221fd5fde01c5f749
+  AWSCore: 5da797bc476188fdaf00dec134fa18d84708eca9
+  AWSS3: 7c178c82c2e648559b7075a663335055327dd4f5
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   NSHash: 036c03781d372c288d332b512b203e7bb832e46e
   OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
