@@ -262,8 +262,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
     NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
     NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
+    NSArray* sortedFiles = [files sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+        return [obj1 compare:obj2];
+    }];
     
-    for (NSString* path in files)
+    for (NSString* path in sortedFiles)
     {
         MAPImage* image = [[MAPImage alloc] init];
         image.imagePath = [self.path stringByAppendingPathComponent:path];
@@ -306,7 +309,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 return [a.timestamp compare:b.timestamp];
             }];
             
-            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
+            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];            
             
             done(sorted);
             
@@ -327,7 +330,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         MAPLocation* last = locations.lastObject;
         
         // Outside of range, clamp
-        if ([date compare:first.timestamp] == NSOrderedDescending || [date compare:last.timestamp] == NSOrderedAscending)
+        if ([date compare:first.timestamp] == NSOrderedAscending || [date compare:last.timestamp] == NSOrderedDescending)
         {
             NSTimeInterval diff1 = [date timeIntervalSinceDate:first.timestamp];
             NSTimeInterval diff2 = [date timeIntervalSinceDate:last.timestamp];
@@ -431,7 +434,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 #pragma mark - Internal
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (object == self.gpxLogger && [keyPath isEqualToString:@"busy"] && context == &kGpxLoggerBusy)
     {

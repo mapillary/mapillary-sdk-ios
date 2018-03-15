@@ -169,10 +169,10 @@ unsigned long long footerLength;
     return self;
 }
 
-/*- (void)dealloc
+- (void)dealloc
 {
     [self.operationQueue removeObserver:self forKeyPath:@"operations"];
-}*/
+}
 
 - (void)addLocation:(MAPLocation*)location
 {
