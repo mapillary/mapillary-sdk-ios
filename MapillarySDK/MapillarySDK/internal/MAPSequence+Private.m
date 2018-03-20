@@ -29,8 +29,8 @@
     dict[kMAPSettingsTokenValid]    = @1;
     dict[kMAPSettingsUserKey]       = [[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CURRENT_USER_KEY];
     dict[kMAPLocalTimeZone]         = [NSString stringWithFormat:@"%@", [NSTimeZone systemTimeZone]];
-    // dict[kMAPOrganizationKey]    = [NSNumber numberWithDouble:self.directionOffset]; // TODO
-    // dict[kMAPPrivate]            = [NSNumber numberWithDouble:self.directionOffset]; // TODO
+    // dict[kMAPOrganizationKey]    = // TODO
+    // dict[kMAPPrivate]            = // TODO
     dict[kMAPAppNameString]         = @"mapillary_ios";
     dict[kMAPDeviceMake]            = self.device.make;
     dict[kMAPDeviceModel]           = self.device.model;

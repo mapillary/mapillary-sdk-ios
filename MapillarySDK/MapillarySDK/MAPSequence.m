@@ -462,6 +462,12 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 break;
         }
         
+        if (self.directionOffset > 0)
+        {
+            location.trueHeading += self.directionOffset;
+            location.magneticHeading += self.directionOffset;
+        }
+        
         location.trueHeading = fmodf(location.trueHeading + 360.0f, 360.0f);
         location.magneticHeading = fmodf(location.magneticHeading + 360.0f, 360.0f);
 
