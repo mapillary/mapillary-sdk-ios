@@ -56,7 +56,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device ? device : [MAPDevice thisDevice];
-        self.project = project ? project : @"Public";
+        self.project = project ? project : @"";
         self.cachedLocations = nil;
         self.imageCount = 0;
         

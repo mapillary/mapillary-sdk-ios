@@ -308,7 +308,6 @@
                     [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
                     
                     self.status.imagesProcessed++;
-                    [self setBookkeepingProcessedForImage:image];
                     
                     if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:uploadStatus:)])
                     {
@@ -457,7 +456,7 @@
 
 - (void)setBookkeepingDoneForImage:(MAPImage*)image
 {
-    //NSLog(@"done: %@", image.imagePath.lastPathComponent);
+    NSLog(@"done: %@", image.imagePath.lastPathComponent);
     
     NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
     NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
@@ -466,7 +465,7 @@
 
 - (void)setBookkeepingFailedForImage:(MAPImage*)image
 {
-    //NSLog(@"failed: %@", image.imagePath.lastPathComponent);
+    NSLog(@"failed: %@", image.imagePath.lastPathComponent);
     
     NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
     NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
@@ -558,15 +557,10 @@
     
     if (error == nil && task.state == NSURLSessionTaskStateCompleted)
     {
-        if (self.testUpload && self.deleteAfterUpload)
+        if (self.deleteAfterUpload || (!self.testUpload && !self.deleteAfterUpload))
         {
             MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[filePath stringByDeletingLastPathComponent]];
             [sequence deleteImage:image];
-            
-            if (sequence.imageCount == 0)
-            {
-                [MAPFileManager deleteSequence:sequence];
-            }
         }
         
         self.status.imagesUploaded++;

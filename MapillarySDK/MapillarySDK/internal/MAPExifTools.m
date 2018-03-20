@@ -27,6 +27,10 @@
         NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
         NSDictionary* TIFF = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
         
+        NSDictionary* exif = [metadata objectForKey:(NSString *)kCGImagePropertyExifDictionary];
+        
+        NSLog(@"%@", metadata);
+        
         if (TIFF)
         {
             NSString* description = [TIFF objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
@@ -69,17 +73,17 @@
     
     // Update and add Mapillary tags to metadata
     
-    float atanAngle = atan2(image.location.deviceMotion.gravity.y, -image.location.deviceMotion.gravity.x);
-    NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:-image.location.deviceMotion.gravity.x],
-                                          @"y": [NSNumber numberWithDouble:image.location.deviceMotion.gravity.y],
-                                          @"z": [NSNumber numberWithDouble:image.location.deviceMotion.gravity.z]};
+    float atanAngle = atan2(image.location.deviceMotionY, image.location.deviceMotionX);
+    NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:image.location.deviceMotionX],
+                                          @"y": [NSNumber numberWithDouble:image.location.deviceMotionY],
+                                          @"z": [NSNumber numberWithDouble:image.location.deviceMotionZ]};
     
     NSMutableDictionary* description = [sequence meta];
     description[kMAPLatitude] = [NSNumber numberWithDouble:image.location.location.coordinate.latitude];
     description[kMAPLongitude] = [NSNumber numberWithDouble:image.location.location.coordinate.longitude];
-    description[kMAPCaptureTime] = [self getUTCFormattedTime:image.captureDate];
-    description[kMAPGpsTime] = [self getUTCFormattedDate:image.location.timestamp];
-    description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:image.location.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:image.location.magneticHeading]};
+    description[kMAPCaptureTime] = [self getUTCFormattedDateAndTime:image.captureDate];
+    description[kMAPGpsTime] = [self getUTCFormattedDateAndTime:image.location.timestamp];
+    description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:image.location.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:image.location.magneticHeading], kMAPAccuracyDegrees:[NSNumber numberWithDouble:image.location.headingAccuracy]};
     description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:image.location.location.horizontalAccuracy];
     description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
     description[kMAPAccelerometerVector] = accelerometerVector;
@@ -90,7 +94,22 @@
     NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
     NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
     
-    [self addTiffMetadata:mutableMetadata tag:@"ImageDescription" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    //[self addExifMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyExifUserComment type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    //[self addTiffMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyTIFFImageDescription type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    
+    
+    {
+        NSString* tag = (NSString*)kCGImagePropertyTIFFImageDescription;
+        //NSString* tag = (NSString*)@"ImageDescription";
+        CGImageMetadataType type = kCGImageMetadataTypeString;
+        CFTypeRef value = (__bridge CFStringRef)descriptionString;
+        
+        NSString* tagPath = [NSString stringWithFormat:@"%@:%@", kCGImageMetadataPrefixExif, tag];
+        CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(kCGImageMetadataNamespaceTIFF, kCGImageMetadataPrefixExif, (__bridge CFStringRef)tag, type, value);
+        CGImageMetadataSetTagWithPath(mutableMetadata, NULL, (__bridge CFStringRef)tagPath, tagValue);
+        CFRelease(tagValue);
+    }
+    
     
     
     // Write new metadata to image
@@ -140,6 +159,8 @@
     CGImageMetadataSetTagWithPath(container, NULL, (__bridge CFStringRef)tagPath, tagValue);
     CFRelease(tagValue);
 }
+
+
 
 + (void)cleanMetadata:(CGImageMetadataRef)metadata mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
 {
@@ -247,6 +268,21 @@
         
     });
         
+    return [dateFormatter stringFromDate:localDate];
+}
+
++ (NSString*)getUTCFormattedDateAndTime:(NSDate*)localDate
+{
+    static NSDateFormatter* dateFormatter = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
+        
+    });
+    
     return [dateFormatter stringFromDate:localDate];
 }
 

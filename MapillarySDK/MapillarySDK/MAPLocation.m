@@ -22,7 +22,9 @@
         self.magneticHeading = 0;
         self.headingAccuracy = 0;
         self.timestamp = [NSDate date];
-        self.deviceMotion = nil;
+        self.deviceMotionX = 0;
+        self.deviceMotionY = 0;
+        self.deviceMotionZ = 0;
     }
     return self;
 }
@@ -82,7 +84,9 @@
         [copy setMagneticHeading:self.magneticHeading];
         [copy setHeadingAccuracy:self.headingAccuracy];
         [copy setTimestamp:self.timestamp.copy];
-        [copy setDeviceMotion:self.deviceMotion.copy];
+        [copy setDeviceMotionX:self.deviceMotionX];
+        [copy setDeviceMotionY:self.deviceMotionY];
+        [copy setDeviceMotionZ:self.deviceMotionZ];
     }
     
     return copy;

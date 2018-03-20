@@ -26,7 +26,7 @@
 - (NSMutableDictionary*)meta
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    dict[kMAPSettingsTokenValid]    = @YES;
+    dict[kMAPSettingsTokenValid]    = @1;
     dict[kMAPSettingsUserKey]       = [[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CURRENT_USER_KEY];
     dict[kMAPLocalTimeZone]         = [NSString stringWithFormat:@"%@", [NSTimeZone systemTimeZone]];
     // dict[kMAPOrganizationKey]    = [NSNumber numberWithDouble:self.directionOffset]; // TODO
@@ -35,7 +35,9 @@
     dict[kMAPDeviceMake]            = self.device.make;
     dict[kMAPDeviceModel]           = self.device.model;
     dict[kMAPCameraUUID]            = self.device.UUID;
-    
+    dict[kMAPSequenceUUID]          = self.sequenceKey;
+    dict[kMAPSettingsProject]       = self.project;
+        
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString* bundle = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     dict[kMAPVersionString] = [NSString stringWithFormat:@"%@ (%@)", version, bundle];

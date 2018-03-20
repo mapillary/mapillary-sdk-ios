@@ -65,13 +65,9 @@ unsigned long long footerLength;
             [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>\n", self.location.headingAccuracy];
         }
         
-        if (self.location.deviceMotion)
-        {
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionX>%f</mapillary:motionX>\n", -self.location.deviceMotion.gravity.x];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionY>%f</mapillary:motionY>\n", self.location.deviceMotion.gravity.y];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionZ>%f</mapillary:motionZ>\n", self.location.deviceMotion.gravity.z];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionAngle>%f</mapillary:motionAngle>\n", atan2(self.location.deviceMotion.gravity.y, -self.location.deviceMotion.gravity.x)];
-        }
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionX>%f</mapillary:motionX>\n", -self.location.deviceMotionX];
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionY>%f</mapillary:motionY>\n", self.location.deviceMotionY];
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionZ>%f</mapillary:motionZ>\n", self.location.deviceMotionZ];
         
         [locationString appendFormat:@"\t\t\t\t<extensions>\n%@\t\t\t\t</extensions>\n", extensionsString];
         
@@ -131,7 +127,7 @@ unsigned long long footerLength;
             
             NSMutableString* extensionsString = [[NSMutableString alloc] init];
             [extensionsString appendFormat:@"\t\t<mapillary:localTimeZone>%@</mapillary:localTimeZone>\n", [[NSTimeZone systemTimeZone] description]];
-            [extensionsString appendFormat:@"\t\t<mapillary:project>%@</mapillary:project>\n", sequence.project ? sequence.project : @"Public"];
+            [extensionsString appendFormat:@"\t\t<mapillary:project>%@</mapillary:project>\n", sequence.project ? sequence.project : @""];
             [extensionsString appendFormat:@"\t\t<mapillary:sequenceKey>%@</mapillary:sequenceKey>\n", sequence.sequenceKey];
             [extensionsString appendFormat:@"\t\t<mapillary:timeOffset>%f</mapillary:timeOffset>\n", sequence.timeOffset];
             [extensionsString appendFormat:@"\t\t<mapillary:directionOffset>%f</mapillary:directionOffset>\n", sequence.directionOffset];

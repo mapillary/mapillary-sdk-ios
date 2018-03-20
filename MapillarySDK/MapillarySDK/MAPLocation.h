@@ -17,7 +17,9 @@
 @property double trueHeading;
 @property double headingAccuracy;
 @property NSDate* timestamp;
-@property CMDeviceMotion* deviceMotion;
+@property double deviceMotionX;
+@property double deviceMotionY;
+@property double deviceMotionZ;
 
 - (BOOL)isEqualToLocation:(MAPLocation*)aLocation;
 - (NSString*)timeString;

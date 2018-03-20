@@ -25,6 +25,7 @@
 #define kMAPGpsTime                         @"MAPGpsTime"
 #define kMAPCompassHeading                  @"MAPCompassHeading"
 #define kMAPTrueHeading                     @"TrueHeading"
+#define kMAPAccuracyDegrees                 @"AccuracyDegrees"
 #define kMAPMagneticHeading                 @"MagneticHeading"
 #define kMAPGPSAccuracyMeters               @"MAPGPSAccuracyMeters"
 #define kMAPAtanAngle                       @"MAPAtanAngle"
@@ -42,5 +43,8 @@
 #define kMAPPhotoUUID                       @"MAPPhotoUUID"
 #define kMAPAltitude                        @"MAPAltitude"
 #define kMAPSettingsUploadHash              @"MAPSettingsUploadHash"
+#define kMAPSequenceUUID                    @"MAPSequenceUUID"
+#define kMAPSettingsProject                 @"MAPSettingsProject"
+
 
 #endif /* MAPDefines_h */

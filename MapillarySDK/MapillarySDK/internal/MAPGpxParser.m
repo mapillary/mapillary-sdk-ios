@@ -65,14 +65,12 @@
         else
         {
             self.localTimeZone = [[NSTimeZone localTimeZone] description];
-            self.project = @"Public";
+            self.project = @"";
             self.sequenceKey = [[NSUUID UUID] UUIDString];
             self.timeOffset = @0;
             self.directionOffset = @-1;
             self.sequenceDate = [NSDate date];
         }
-        
-        
         
         MAPDevice* defaultDevice = [MAPDevice thisDevice];
         self.deviceMake = defaultDevice.make;
@@ -188,10 +186,10 @@
         if ([elementName isEqualToString:@"trkpt"])
         {
             CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([self.currentTrackPoint[@"lat"] doubleValue], [self.currentTrackPoint[@"lon"] doubleValue]);
-            CLLocationDistance altitude = 0;
+            CLLocationDistance altitude = [self.currentTrackPoint[@"ele"] doubleValue];
             CLLocationAccuracy horizontalAccuracy = [self.currentTrackPoint[@"gpsAccuracyMeters"] doubleValue];
             CLLocationAccuracy verticalAccuracy = 0;
-            CLLocationDirection course = [self.currentTrackPoint[@"gpsAccuracyMeters"] doubleValue];
+            CLLocationDirection course = [self.currentTrackPoint[@"compassTrueHeading"] doubleValue];
             CLLocationSpeed speed = 0;
             NSDate* timestamp = [self.dateFormatter dateFromString:self.currentTrackPoint[@"time"]];
             
@@ -206,6 +204,12 @@
             
             
             location.timestamp = timestamp;
+            location.deviceMotionX = [self.currentTrackPoint[@"motionX"] doubleValue];
+            location.deviceMotionY = [self.currentTrackPoint[@"motionY"] doubleValue];
+            location.deviceMotionZ = [self.currentTrackPoint[@"motionZ"] doubleValue];
+            location.headingAccuracy = [self.currentTrackPoint[@"compassAccuracyDegrees"] doubleValue];
+            location.magneticHeading = [self.currentTrackPoint[@"compassMagneticHeading"] doubleValue];
+            location.trueHeading = [self.currentTrackPoint[@"compassTrueHeading"] doubleValue];
             
             [self.locations addObject:location];
         }
