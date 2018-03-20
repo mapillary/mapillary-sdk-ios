@@ -59,6 +59,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.project = project ? project : @"";
         self.cachedLocations = nil;
         self.imageCount = 0;
+        self.imageOrientation = -1;
         
         if (path == nil)
         {
@@ -81,6 +82,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                     
                     NSNumber* directionOffset = result[@"directionOffset"];
                     NSNumber* timeOffset = result[@"timeOffset"];
+                    NSNumber* imageOrientation = result[@"imageOrientation"];
                     
                     MAPDevice* device = [[MAPDevice alloc] init];
                     device.make = result[@"deviceMake"];
@@ -92,6 +94,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                     self.directionOffset = directionOffset.doubleValue;
                     self.timeOffset = timeOffset.doubleValue;
                     self.project = result[@"project"];
+                    self.imageOrientation = imageOrientation.intValue;
                     self.device = device;
                     
                     dispatch_semaphore_signal(semaphore);
@@ -164,11 +167,33 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
     
     [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
-
+    
     [self addLocation:location];
     
     self.imageCount++;
     self.sequenceSize += imageData.length;
+    
+    if (self.imageOrientation == -1)
+    {
+        CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)(imageData), NULL);
+        if (source)
+        {
+            CFDictionaryRef cfDict = CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
+            NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
+            NSDictionary* TIFFDictionary = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+            
+            if (TIFFDictionary)
+            {
+                NSNumber* tiffOrientation = TIFFDictionary[@"Orientation"];
+                
+                if (tiffOrientation && self.imageOrientation != tiffOrientation.intValue)
+                {
+                    self.imageOrientation = tiffOrientation.intValue;
+                    [self saveMetaChanges:nil];
+                }
+            }
+        }
+    }
 }
 
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location
@@ -415,6 +440,30 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 location = (before ? before : after);
             }                        
         }
+        
+        switch (self.imageOrientation)
+        {
+            case 1:
+                location.trueHeading += 90;
+                location.magneticHeading += 90;
+                break;
+                
+            case 3:
+                location.trueHeading -= 90;
+                location.magneticHeading -= 90;
+                break;
+                
+            case 8:
+                location.trueHeading += 180;
+                location.magneticHeading += 180;
+                break;
+                
+            default:
+                break;
+        }
+        
+        location.trueHeading = fmodf(location.trueHeading + 360.0f, 360.0f);
+        location.magneticHeading = fmodf(location.magneticHeading + 360.0f, 360.0f);
 
         dispatch_semaphore_signal(semaphore);
         

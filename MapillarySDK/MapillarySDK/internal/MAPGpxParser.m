@@ -26,6 +26,7 @@
 @property NSString* deviceModel;
 @property NSString* deviceUUID;
 @property NSDate* sequenceDate;
+@property NSNumber* imageOrientation;
 @property BOOL parsingMeta;
 @property BOOL quickParse;
 
@@ -61,6 +62,7 @@
             self.timeOffset = nil;
             self.directionOffset = nil;
             self.sequenceDate = nil;
+            self.imageOrientation = nil;
         }
         else
         {
@@ -70,6 +72,7 @@
             self.timeOffset = @0;
             self.directionOffset = @-1;
             self.sequenceDate = [NSDate date];
+            self.imageOrientation = @-1;
         }
         
         MAPDevice* defaultDevice = [MAPDevice thisDevice];
@@ -180,6 +183,11 @@
         self.deviceModel = strippedValue;
     }
     
+    else if ([elementName isEqualToString:@"mapillary:imageOrientation"])
+    {
+        self.imageOrientation = strippedValue;
+    }
+    
     // GPS track points
     else if (self.currentTrackPoint)
     {
@@ -227,7 +235,7 @@
     }
     
     // Check if quick parse is done
-    if (self.quickParse && self.localTimeZone && self.project && self.sequenceKey && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate)
+    if (self.quickParse && self.localTimeZone && self.project && self.sequenceKey && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate && self.imageOrientation)
     {
         [self.xmlParser abortParsing];
     }
@@ -248,6 +256,7 @@
         [dict setObject:self.deviceModel forKey:@"deviceModel"];
         [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
         [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
+        [dict setObject:self.imageOrientation forKey:@"imageOrientation"];
         
         if (!self.quickParse)
         {

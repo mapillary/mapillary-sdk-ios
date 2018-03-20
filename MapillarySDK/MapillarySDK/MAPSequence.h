@@ -22,6 +22,7 @@
 @property MAPDevice* device;
 @property NSUInteger imageCount;
 @property NSUInteger sequenceSize;
+@property int imageOrientation;
 
 - (id) init __unavailable;
 - (id)initWithDevice:(MAPDevice*)device;
