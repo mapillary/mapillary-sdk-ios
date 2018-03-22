@@ -12,7 +12,36 @@
 
 @implementation MAPFileManager
 
-+ (void)listSequences:(void(^)(NSArray* sequences))result
++ (NSArray*)listSequences
+{
+    NSMutableArray* sequences = [[NSMutableArray alloc] init];
+    NSString* sequenceDirectory = [MAPInternalUtils sequenceDirectory];
+
+    NSError* error = nil;
+    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequenceDirectory error:&error];
+    
+    if (!error)
+    {
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"";
+        
+        for (NSString* file in contents)
+        {
+            MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, file] parseGpx:NO];
+            [sequences addObject:sequence];
+        }
+        
+        [sequences sortUsingComparator:^NSComparisonResult(MAPSequence* obj1, MAPSequence* obj2) {
+            
+            return [obj2.sequenceDate compare:obj1.sequenceDate];
+            
+        }];
+    }
+
+    return sequences;
+}
+
++ (void)getSequencesAsync:(void(^)(NSArray* sequences))result
 {
     if (result == nil)
     {
@@ -31,7 +60,7 @@
         {
             for (NSString* path in contents)
             {
-                MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, path]];
+                MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, path] parseGpx:YES];
                 [sequences addObject:sequence];
             }
             

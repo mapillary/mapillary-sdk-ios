@@ -36,7 +36,7 @@
     MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:[MAPDevice thisDevice]];
     [sequence addImageWithData:imageData date:nil location:nil];
     
-    MAPImage* image = [sequence listImages][0];
+    MAPImage* image = [sequence getImages][0];
 
     XCTAssertFalse([MAPExifTools imageHasMapillaryTags:image]);
     
@@ -61,7 +61,7 @@
     location2.location = [[CLLocation alloc] initWithLatitude:60 longitude:60];
     [sequence addLocation:location2];
     
-    MAPImage* image = [sequence listImages][0];
+    MAPImage* image = [sequence getImages][0];
     
     [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
     

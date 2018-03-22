@@ -47,11 +47,11 @@
     XCTAssertNotNil(self.sequence.device);
     XCTAssertNotNil(self.sequence.project);
     XCTAssertNotNil(self.sequence.path);
-    XCTAssertNotNil([self.sequence listImages]);
+    XCTAssertNotNil([self.sequence getImages]);
     
     XCTAssert(self.sequence.timeOffset == 0);
     XCTAssert(self.sequence.directionOffset == -1);
-    XCTAssert([self.sequence listImages].count == 0);
+    XCTAssert([self.sequence getImages].count == 0);
     
     XCTAssertTrue(directoryExists);
     XCTAssertTrue(fileExists);
@@ -80,7 +80,7 @@
 - (void)testAddImagesFromData
 {
     // There should be no images
-    NSArray* images = [self.sequence listImages];
+    NSArray* images = [self.sequence getImages];
     XCTAssertNotNil(images);
     XCTAssert(images.count == 0);
     
@@ -98,7 +98,7 @@
     }
 
     // There should now be nbrImages images
-    images = [self.sequence listImages];
+    images = [self.sequence getImages];
     XCTAssert(images.count == nbrImages);
 }
 
@@ -116,7 +116,7 @@
     }
     
     // There should now be nbrImages images
-    XCTAssert([self.sequence listImages].count == nbrImages);
+    XCTAssert([self.sequence getImages].count == nbrImages);
     
     // Cleanup
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
@@ -135,7 +135,7 @@
     
     // There should now be nbrPositions locations
     
-    [self.sequence listLocations:^(NSArray *array) {
+    [self.sequence getLocations:^(NSArray *array) {
         
          XCTAssert(array.count == nbrPositions);
         [expectation fulfill];
@@ -195,7 +195,7 @@
     XCTAssertEqual(result6.location.coordinate.latitude, b.location.coordinate.longitude);
 }
 
-- (void)testListLocationsPerformance
+- (void)testGetLocationsPerformance
 {
     srand(1234);
     
@@ -210,7 +210,7 @@
         
         XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
         
-        [self.sequence listLocations:^(NSArray *array) {
+        [self.sequence getLocations:^(NSArray *array) {
             
             [expectation fulfill];
             
@@ -263,7 +263,7 @@
     
     [weakSelf.sequence addGpx:path done:^{
         
-        [weakSelf.sequence listLocations:^(NSArray *array) {
+        [weakSelf.sequence getLocations:^(NSArray *array) {
             
             XCTAssert(array.count == 1);
             [expectation fulfill];
@@ -294,7 +294,7 @@
     
     [weakSelf.sequence addGpx:path done:^{
         
-        [weakSelf.sequence listLocations:^(NSArray *array) {
+        [weakSelf.sequence getLocations:^(NSArray *array) {
             
             XCTAssert(array.count == 206);
             [expectation fulfill];
@@ -340,7 +340,7 @@
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         timeStart = [NSDate timeIntervalSinceReferenceDate];
         
-        [self.sequence listLocations:^(NSArray *array) {
+        [self.sequence getLocations:^(NSArray *array) {
             timeEnd = [NSDate timeIntervalSinceReferenceDate];
             dispatch_semaphore_signal(semaphore);
         }];
@@ -352,7 +352,7 @@
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         timeStartCached = [NSDate timeIntervalSinceReferenceDate];
         
-        [self.sequence listLocations:^(NSArray *array) {
+        [self.sequence getLocations:^(NSArray *array) {
             timeEndCached = [NSDate timeIntervalSinceReferenceDate];
             dispatch_semaphore_signal(semaphore);
         }];
@@ -396,19 +396,19 @@
 {
     NSData* imageData = [self createImageData];
     
-    NSArray* images = [self.sequence listImages];
+    NSArray* images = [self.sequence getImages];
     XCTAssertEqual(images.count, 0);
     
     [self.sequence addImageWithData:imageData date:nil location:nil];
-    images = [self.sequence listImages];
+    images = [self.sequence getImages];
     XCTAssertEqual(images.count, 1);
     
     [self.sequence deleteImage:images.firstObject];
-    images = [self.sequence listImages];
+    images = [self.sequence getImages];
     XCTAssertEqual(images.count, 0);
     
     [self.sequence deleteImage:nil];
-    images = [self.sequence listImages];
+    images = [self.sequence getImages];
     XCTAssertEqual(images.count, 0);
 }
 
@@ -430,7 +430,7 @@
     [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:1000] location:nil];
     [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:1500] location:nil];
     
-    NSArray* images = [self.sequence listImages];
+    NSArray* images = [self.sequence getImages];
     MAPImage* image = nil;
     
     // From http://www.igismap.com/map-tool/bearing-angle the bearing should be 29.369942517564084

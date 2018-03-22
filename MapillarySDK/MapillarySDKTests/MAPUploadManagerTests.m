@@ -117,7 +117,7 @@
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    [MAPFileManager listSequences:^(NSArray *sequences) {
+    [MAPFileManager getSequences:^(NSArray *sequences) {
         
         for (MAPSequence* s in sequences)
         {

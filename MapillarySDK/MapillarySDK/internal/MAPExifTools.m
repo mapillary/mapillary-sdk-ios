@@ -94,22 +94,8 @@
     NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
     NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
     
-    //[self addExifMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyExifUserComment type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
-    //[self addTiffMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyTIFFImageDescription type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
-    
-    
-    {
-        NSString* tag = (NSString*)kCGImagePropertyTIFFImageDescription;
-        //NSString* tag = (NSString*)@"ImageDescription";
-        CGImageMetadataType type = kCGImageMetadataTypeString;
-        CFTypeRef value = (__bridge CFStringRef)descriptionString;
-        
-        NSString* tagPath = [NSString stringWithFormat:@"%@:%@", kCGImageMetadataPrefixExif, tag];
-        CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(kCGImageMetadataNamespaceTIFF, kCGImageMetadataPrefixExif, (__bridge CFStringRef)tag, type, value);
-        CGImageMetadataSetTagWithPath(mutableMetadata, NULL, (__bridge CFStringRef)tagPath, tagValue);
-        CFRelease(tagValue);
-    }
-    
+    [self addExifMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyExifUserComment type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    [self addTiffMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyTIFFImageDescription type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
     
     
     // Write new metadata to image

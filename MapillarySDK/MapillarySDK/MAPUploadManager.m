@@ -84,20 +84,17 @@
     [self.sequencesToUpload removeAllObjects];
     [self.sequencesToUpload addObjectsFromArray:sequences];
     
-    for (MAPSequence* sequence in self.sequencesToUpload)
-    {
-        NSArray* images = [sequence listImages];
-        self.status.imageCount += images.count;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        for (MAPImage* image in images)
+        for (MAPSequence* sequence in self.sequencesToUpload)
         {
-            [self createBookkeepingForImage:image];
+            self.status.imageCount += sequence.imageCount;
+            [sequence lock];
         }
         
-        [sequence lock];
-    }
-    
-    [self startProcessing];
+        [self startProcessing];
+        
+    });
 }
 
 - (void)processAndUploadSequences:(NSArray*)sequences
@@ -129,7 +126,7 @@
     
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
-        NSArray* images = [sequence listImages];
+        NSArray* images = [sequence getImages];
         self.status.imageCount += images.count;
         
         for (MAPImage* image in images)
@@ -149,11 +146,6 @@
     
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
-        for (MAPImage* image in [sequence listImages])
-        {
-            [self deleteBookkeepingForImage:image];
-        }
-        
         [sequence unlock];
     }
     
@@ -177,7 +169,7 @@
     
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
-        for (MAPImage* image in [sequence listImages])
+        for (MAPImage* image in [sequence getImages])
         {
             [self deleteBookkeepingForImage:image];
         }
@@ -215,7 +207,7 @@
             }
         }
         
-        [MAPFileManager listSequences:^(NSArray *sequences) {
+        [MAPFileManager getSequencesAsync:^(NSArray *sequences) {
             
             if (self.status.uploading)
             {
@@ -269,66 +261,56 @@
 
 - (void)startUpload
 {
-    [MAPFileManager listSequences:^(NSArray *sequences) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            for (MAPSequence* sequence in sequences)
+        for (MAPSequence* sequence in self.sequencesToUpload)
+        {
+            for (MAPImage* image in [sequence getImages])
             {
-                for (MAPImage* image in [sequence listImages])
+                if (!self.status.uploading)
                 {
-                    if (!self.status.uploading)
-                    {
-                        return;
-                    }
-                    
-                    [self createTask:image sequence:sequence];
+                    return;
                 }
+                
+                [self createTask:image sequence:sequence];
             }
-            
-        });
-    }];
+        }
+        
+    });
 }
 
 - (void)startProcessing
 {
-    [MAPFileManager listSequences:^(NSArray *sequences) {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            for (MAPSequence* sequence in sequences)
+    for (MAPSequence* sequence in self.sequencesToUpload)
+    {
+        for (MAPImage* image in [sequence getImages])
+        {
+            if (!self.status.processing)
             {
-                for (MAPImage* image in [sequence listImages])
-                {
-                    if (!self.status.processing)
-                    {
-                        return;
-                    }
-                    
-                    [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
-                    
-                    self.status.imagesProcessed++;
-                    
-                    if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:uploadStatus:)])
-                    {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.delegate imageProcessed:self image:image uploadStatus:self.status];
-                        });
-                    }
-                }
+                return;
             }
             
-            self.status.processing = NO;
+            [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
             
-            if (self.delegate && [self.delegate respondsToSelector:@selector(processingFinished:uploadStatus:)])
+            self.status.imagesProcessed++;
+            
+            if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:uploadStatus:)])
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate processingFinished:self uploadStatus:self.status];
+                    [self.delegate imageProcessed:self image:image uploadStatus:self.status];
                 });
             }
-            
+        }
+    }
+    
+    self.status.processing = NO;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(processingFinished:uploadStatus:)])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate processingFinished:self uploadStatus:self.status];
         });
-    }];
+    }
 }
 
 - (void)createSession
@@ -349,7 +331,6 @@
 
 - (void)createTask:(MAPImage*)image sequence:(MAPSequence*)sequence
 {
-    
     // Process image
     
     [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
@@ -497,7 +478,7 @@
     {
         if ([[NSFileManager defaultManager] fileExistsAtPath:sequence.path])
         {
-            for (MAPImage* image in [sequence listImages])
+            for (MAPImage* image in [sequence getImages])
             {
                 [self deleteBookkeepingForImage:image];
             }
@@ -559,7 +540,7 @@
     {
         if (self.deleteAfterUpload || (!self.testUpload && !self.deleteAfterUpload))
         {
-            MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[filePath stringByDeletingLastPathComponent]];
+            MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[filePath stringByDeletingLastPathComponent] parseGpx:NO];
             [sequence deleteImage:image];
         }
         

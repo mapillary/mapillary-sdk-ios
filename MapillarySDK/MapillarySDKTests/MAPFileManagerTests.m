@@ -31,7 +31,7 @@
     
     MAPDevice* device = [MAPDevice thisDevice];
     
-    [MAPFileManager listSequences:^(NSArray *sequences) {
+    [MAPFileManager getSequences:^(NSArray *sequences) {
         
         for (MAPSequence* s in sequences)
         {
@@ -41,26 +41,26 @@
         MAPSequence* s = [[MAPSequence alloc] initWithDevice:device];
         XCTAssertNotNil(s);
         
-        [MAPFileManager listSequences:^(NSArray *sequences) {
+        [MAPFileManager getSequences:^(NSArray *sequences) {
             
             XCTAssertEqual(sequences.count, 1);
             
             MAPSequence* s = [[MAPSequence alloc] initWithDevice:device];
             XCTAssertNotNil(s);
     
-            [MAPFileManager listSequences:^(NSArray *sequences) {
+            [MAPFileManager getSequences:^(NSArray *sequences) {
                 
                 XCTAssertEqual(sequences.count, 2);
                 
                 [MAPFileManager deleteSequence:sequences[0]];
                 
-                [MAPFileManager listSequences:^(NSArray *sequences) {
+                [MAPFileManager getSequences:^(NSArray *sequences) {
                     
                     XCTAssertEqual(sequences.count, 1);
                     
                     [MAPFileManager deleteSequence:sequences[0]];
                     
-                    [MAPFileManager listSequences:^(NSArray *sequences) {
+                    [MAPFileManager getSequences:^(NSArray *sequences) {
                         
                         XCTAssertEqual(sequences.count, 0);
 

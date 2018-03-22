@@ -24,10 +24,9 @@
 @property NSUInteger sequenceSize;
 @property int imageOrientation;
 
-- (id) init __unavailable;
 - (id)initWithDevice:(MAPDevice*)device;
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project;
-- (id)initWithPath:(NSString*)path;
+- (id)initWithPath:(NSString*)path parseGpx:(BOOL)parseGpx;
     
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location;
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location;
@@ -38,13 +37,16 @@
 - (void)deleteImage:(MAPImage*)image;
 - (void)deleteAllImages;
 
-- (NSArray*)listImages; // TODO make async
-- (void)listLocations:(void(^)(NSArray* locations))done;
+- (NSArray*)getImages;
+- (void)getImagesAsync:(void(^)(NSArray* images))done;
+- (void)getLocationsAsync:(void(^)(NSArray* locations))done;
 
 - (MAPLocation*)locationForDate:(NSDate*)date;
 
 - (BOOL)isLocked;
 
 - (void)saveMetaChanges:(void(^)(void))done;
+
+- (MAPImage*)getPreviewImage;
 
 @end

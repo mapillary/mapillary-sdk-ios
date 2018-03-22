@@ -23,29 +23,34 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 @property MAPGpxLogger* gpxLogger;
 @property MAPLocation* currentLocation;
-@property dispatch_semaphore_t listLocationsSemaphore;
+@property dispatch_semaphore_t getLocationsSemaphore;
 @property NSMutableArray* cachedLocations;
 
 @end
 
 @implementation MAPSequence
 
+- (id)init
+{
+    return [self initInternal:nil device:nil project:nil parseGpx:NO];
+}
+
 - (id)initWithDevice:(MAPDevice*)device
 {
-    return [self initInternal:nil device:device project:nil];
+    return [self initInternal:nil device:device project:nil parseGpx:NO];
 }
 
 - (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project
 {
-    return [self initInternal:nil device:device project:project];
+    return [self initInternal:nil device:device project:project parseGpx:NO];
 }
 
-- (id)initWithPath:(NSString*)path
+- (id)initWithPath:(NSString*)path parseGpx:(BOOL)parseGpx
 {
-    return [self initInternal:path device:nil project:nil];
+    return [self initInternal:path device:nil project:nil parseGpx:parseGpx];
 }
 
-- (id)initInternal:(NSString*)path device:(MAPDevice*)device project:(NSString*)project
+- (id)initInternal:(NSString*)path device:(MAPDevice*)device project:(NSString*)project parseGpx:(BOOL)parseGpx
 {
     self = [super init];
     if (self)
@@ -72,7 +77,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             
             NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
             
-            if ([[NSFileManager defaultManager] fileExistsAtPath:gpxPath])
+            if ([[NSFileManager defaultManager] fileExistsAtPath:gpxPath] && parseGpx)
             {
                 dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
                 
@@ -113,10 +118,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             NSPredicate* fltr = [NSPredicate predicateWithFormat:@"(self ENDSWITH '.jpg') AND NOT (self CONTAINS 'thumb')"];
             NSArray* dirContentsFiltered = [dirContents filteredArrayUsingPredicate:fltr];
             self.imageCount = dirContentsFiltered.count;
-            
-            NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:nil];
-            NSNumber* fileSize = [attrs objectForKey:@"NSFileSize"];
-            self.sequenceSize = fileSize.unsignedIntValue;
             
             if ([dirContentsFiltered count] > 0)
             {
@@ -273,13 +274,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)deleteAllImages
 {
-    for (MAPImage* image in [self listImages])
+    for (MAPImage* image in [self getImages])
     {
         [self deleteImage:image];
     }
 }
 
-- (NSArray*)listImages
+- (NSArray*)getImages
 {
     MAPUser* author = [MAPLoginManager currentUser];
     
@@ -298,13 +299,32 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         image.captureDate = [MAPInternalUtils dateFromFilePath:path];
         image.author = author;
         image.location = [self locationForDate:image.captureDate];
+        
         [images addObject:image];
     }
     
     return images;
 }
 
-- (void)listLocations:(void(^)(NSArray* locations))done
+- (void)getImagesAsync:(void(^)(NSArray* images))done
+{
+    if (done)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            NSArray* images = [self getImages];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                done(images);
+                
+            });
+            
+        });
+    }
+}
+
+- (void)getLocationsAsync:(void(^)(NSArray* locations))done
 {
     if (self.cachedLocations)
     {
@@ -314,11 +334,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
     if (self.gpxLogger.busy)
     {
-        self.listLocationsSemaphore = dispatch_semaphore_create(0);
+        self.getLocationsSemaphore = dispatch_semaphore_create(0);
         
         [self.gpxLogger addObserver:self forKeyPath:@"busy" options:0 context:&kGpxLoggerBusy];
         
-        dispatch_semaphore_wait(self.listLocationsSemaphore, DISPATCH_TIME_FOREVER);
+        dispatch_semaphore_wait(self.getLocationsSemaphore, DISPATCH_TIME_FOREVER);
     }
     
     dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
@@ -349,7 +369,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     __block MAPLocation* location = nil;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    [self listLocations:^(NSArray *locations) {
+    [self getLocationsAsync:^(NSArray *locations) {
 
         MAPLocation* first = locations.firstObject;
         MAPLocation* last = locations.lastObject;
@@ -487,24 +507,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
-#pragma mark - Internal
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (object == self.gpxLogger && [keyPath isEqualToString:@"busy"] && context == &kGpxLoggerBusy)
-    {
-        if (!self.gpxLogger.busy)
-        {            
-            [self.gpxLogger removeObserver:self forKeyPath:@"busy" context:&kGpxLoggerBusy];
-            dispatch_semaphore_signal(self.listLocationsSemaphore);
-        }
-    }
-    else
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
 - (void)saveMetaChanges:(void(^)(void))done
 {
     NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
@@ -516,7 +518,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     // Create new file
     self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:gpxPath andSequence:self];
     
-    [self listLocations:^(NSArray *locations) {
+    [self getLocationsAsync:^(NSArray *locations) {
         
         for (MAPLocation* l in locations)
         {
@@ -534,6 +536,41 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         }
         
     }];
+}
+
+- (MAPImage*)getPreviewImage
+{
+    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
+    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
+    
+    NSString* path = files.firstObject;
+    
+    MAPImage* image = [[MAPImage alloc] init];
+    image.imagePath = [self.path stringByAppendingPathComponent:path];
+    image.captureDate = [MAPInternalUtils dateFromFilePath:path];
+    image.author = [MAPLoginManager currentUser];
+    image.location = nil;
+
+    return image;
+}
+
+#pragma mark - Internal
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self.gpxLogger && [keyPath isEqualToString:@"busy"] && context == &kGpxLoggerBusy)
+    {
+        if (!self.gpxLogger.busy)
+        {            
+            [self.gpxLogger removeObserver:self forKeyPath:@"busy" context:&kGpxLoggerBusy];
+            dispatch_semaphore_signal(self.getLocationsSemaphore);
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 @end

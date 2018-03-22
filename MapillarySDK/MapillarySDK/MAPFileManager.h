@@ -12,7 +12,8 @@
 
 @interface MAPFileManager : NSObject
 
-+ (void)listSequences:(void(^)(NSArray* sequences))done;
++ (NSArray*)listSequences;
++ (void)getSequencesAsync:(void(^)(NSArray* sequences))done;
 + (void)deleteSequence:(MAPSequence*)sequence;
 
 
