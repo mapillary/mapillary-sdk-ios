@@ -185,7 +185,7 @@
     
     else if ([elementName isEqualToString:@"mapillary:imageOrientation"])
     {
-        self.imageOrientation = strippedValue;
+        self.imageOrientation = [NSNumber numberWithInt:strippedValue.intValue];
     }
     
     // GPS track points
@@ -247,20 +247,20 @@
     {
         NSMutableDictionary* dict = dict = [NSMutableDictionary dictionary];
         
-        [dict setObject:self.localTimeZone forKey:@"localTimeZone"];
-        [dict setObject:self.project forKey:@"project"];
-        [dict setObject:self.sequenceKey forKey:@"sequenceKey"];
-        [dict setObject:self.timeOffset forKey:@"timeOffset"];
-        [dict setObject:self.directionOffset forKey:@"directionOffset"];
-        [dict setObject:self.deviceMake forKey:@"deviceMake"];
-        [dict setObject:self.deviceModel forKey:@"deviceModel"];
-        [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
-        [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
-        [dict setObject:self.imageOrientation forKey:@"imageOrientation"];
+        if (self.localTimeZone)     [dict setObject:self.localTimeZone forKey:@"localTimeZone"];
+        if (self.project)           [dict setObject:self.project forKey:@"project"];
+        if (self.sequenceKey)       [dict setObject:self.sequenceKey forKey:@"sequenceKey"];
+        if (self.timeOffset)        [dict setObject:self.timeOffset forKey:@"timeOffset"];
+        if (self.directionOffset)   [dict setObject:self.directionOffset forKey:@"directionOffset"];
+        if (self.deviceMake)        [dict setObject:self.deviceMake forKey:@"deviceMake"];
+        if (self.deviceModel)       [dict setObject:self.deviceModel forKey:@"deviceModel"];
+        if (self.deviceUUID)        [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
+        if (self.sequenceDate)      [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
+        if (self.imageOrientation)  [dict setObject:self.imageOrientation forKey:@"imageOrientation"];
         
         if (!self.quickParse)
         {
-            [dict setObject:self.locations forKey:@"locations"];
+            if (self.locations)     [dict setObject:self.locations forKey:@"locations"];
         }
         
         self.doneCallback(dict);
