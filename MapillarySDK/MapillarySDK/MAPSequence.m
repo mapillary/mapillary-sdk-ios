@@ -397,31 +397,28 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         else
         {
             MAPLocation* before = nil;
-            MAPLocation* exact = nil;
             MAPLocation* after = nil;
             
             int i = 0;
             
-            while ((exact == nil ||  after == nil || before == nil) && i < locations.count)
+            while ((before == nil || after == nil) && i < locations.count)
             {
                 MAPLocation* currentLocation = locations[i];
                 
                 if ([currentLocation.timestamp isEqualToDate:date])
                 {
-                    if (i < locations.count-1)
+                    if (i > 0)
                     {
-                        before = locations[i+1];
+                        before = locations[i-1];
                     }
                     else
                     {
                         before = currentLocation;
                     }
                     
-                    exact = currentLocation;
-                    
-                    if (i > 0)
+                    if (i < locations.count-1)
                     {
-                        after = locations[i-1];
+                        after = locations[i+1];
                     }
                     else
                     {
@@ -431,9 +428,9 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 
                 else if ([currentLocation.timestamp compare:date] == NSOrderedAscending)
                 {
-                    if (i > 0)
+                    if (i < locations.count-1)
                     {
-                        after = locations[i-1];
+                        after = locations[i+1];
                     }
                     
                     before = currentLocation;
@@ -442,19 +439,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 i++;
             }
             
-            // Exact match
-            if (exact)
-            {
-                location = exact;
-            }
-            
-            // No match found, need to interpolate between two positions
-            else if (before && after)
+            // Need to interpolate between two positions
+            if (before && after)
             {
                 location = [MAPInternalUtils locationBetweenLocationA:before andLocationB:after forDate:date];
             }
             
-            // Not possible to interpolate, use the closest position
+            // Only found one, not possible to interpolate, use the one position we found
             else if (before || after)
             {
                 location = (before ? before : after);
