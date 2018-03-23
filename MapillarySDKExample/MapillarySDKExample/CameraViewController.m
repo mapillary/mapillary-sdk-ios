@@ -28,7 +28,7 @@
     self.captureButton.layer.cornerRadius = self.captureButton.frame.size.width/2;
     self.cameraBusy = NO;
     
-    MAPDevice* device = [MAPDevice currentDevice];
+    MAPDevice* device = [MAPDevice thisDevice];
     self.sequence = [[MAPSequence alloc] initWithDevice:device andProject:nil];
 }
 

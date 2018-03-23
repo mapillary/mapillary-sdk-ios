@@ -37,7 +37,8 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     
-    [MAPFileManager listSequences:^(NSArray *sequences) {
+
+    [MAPFileManager getSequencesAsync:^(NSArray *sequences) {
         
         self.sequences = sequences;
         
@@ -82,8 +83,8 @@
 
     if (status.uploading)
     {
-        float processProgress = (float)status.imagesProcessed/status.imagesToUpload;
-        float uploadProgress = (float)status.imagesUploaded/status.imagesToUpload;
+        float processProgress = (float)status.imagesProcessed/status.imageCount;
+        float uploadProgress = (float)status.imagesUploaded/status.imageCount;
         
         [self.imagesProcessedProgressView setProgress:processProgress animated:NO];
         [self.imagesUploadedProgressView setProgress:uploadProgress animated:NO];
@@ -96,8 +97,8 @@
         self.imagesUploadedProgressView.progress = 0;
     }
     
-    self.imagesProcessedLabel.text = [NSString stringWithFormat:@"Images processed (%lu/%lu)", (unsigned long)status.imagesProcessed, (unsigned long)status.imagesToUpload];
-    self.imagesUploadedLabel.text = [NSString stringWithFormat:@"Images uploaded (%lu/%lu)", (unsigned long)status.imagesUploaded, (unsigned long)status.imagesToUpload];
+    self.imagesProcessedLabel.text = [NSString stringWithFormat:@"Images processed (%lu/%lu)", (unsigned long)status.imagesProcessed, (unsigned long)status.imageCount];
+    self.imagesUploadedLabel.text = [NSString stringWithFormat:@"Images uploaded (%lu/%lu)", (unsigned long)status.imagesUploaded, (unsigned long)status.imageCount];
 }
 
 #pragma mark - Button actions
@@ -108,7 +109,7 @@
     
     if (!status.uploading)
     {
-        [self.uploadManager uploadSequences:self.sequences allowsCellularAccess:NO deleteAfterUpload:NO];
+        [self.uploadManager processAndUploadSequences:self.sequences];
     }
     else
     {

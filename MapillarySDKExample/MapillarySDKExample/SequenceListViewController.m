@@ -27,11 +27,11 @@
     
     self.sequences = [[NSMutableArray alloc] init];
     
-    [MAPFileManager listSequences:^(NSArray *sequences) {
+    [MAPFileManager getSequencesAsync:^(NSArray *sequences) {
         
         for (MAPSequence* s in sequences)
         {
-            NSArray* images = [s listImages];
+            NSArray* images = [s getImages];
             
             if (images.count == 0)
             {
@@ -54,8 +54,6 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO];
-    
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
