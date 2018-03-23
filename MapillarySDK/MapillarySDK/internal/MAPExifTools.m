@@ -27,10 +27,6 @@
         NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
         NSDictionary* TIFF = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
         
-        NSDictionary* exif = [metadata objectForKey:(NSString *)kCGImagePropertyExifDictionary];
-        
-        NSLog(@"%@", metadata);
-        
         if (TIFF)
         {
             NSString* description = [TIFF objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
