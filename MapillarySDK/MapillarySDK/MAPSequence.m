@@ -399,44 +399,21 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             MAPLocation* before = nil;
             MAPLocation* after = nil;
             
-            int i = 0;
-            
-            while ((before == nil || after == nil) && i < locations.count)
+            for (int i = 0; i < locations.count; i++)
             {
                 MAPLocation* currentLocation = locations[i];
                 
-                if ([currentLocation.timestamp isEqualToDate:date])
+                if ([currentLocation.timestamp compare:date] == NSOrderedDescending)
                 {
                     if (i > 0)
                     {
                         before = locations[i-1];
                     }
-                    else
-                    {
-                        before = currentLocation;
-                    }
                     
-                    if (i < locations.count-1)
-                    {
-                        after = locations[i+1];
-                    }
-                    else
-                    {
-                        after = currentLocation;
-                    }
-                }
-                
-                else if ([currentLocation.timestamp compare:date] == NSOrderedAscending)
-                {
-                    if (i < locations.count-1)
-                    {
-                        after = locations[i+1];
-                    }
+                    after = currentLocation;
                     
-                    before = currentLocation;
+                    break;
                 }
-                
-                i++;
             }
             
             // Need to interpolate between two positions
