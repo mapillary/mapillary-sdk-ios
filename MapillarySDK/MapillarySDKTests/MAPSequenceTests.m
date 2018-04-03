@@ -66,7 +66,7 @@
 {
     MAPSequence* s1 = [[MAPSequence alloc] initWithDevice:self.device];
     MAPSequence* s2 = [[MAPSequence alloc] initWithDevice:self.device andProject:@"test"];
-    MAPSequence* s3 = [[MAPSequence alloc] initWithPath:s1.path];
+    MAPSequence* s3 = [[MAPSequence alloc] initWithPath:s1.path parseGpx:NO];
     
     XCTAssertNotNil(s1);
     XCTAssertNotNil(s2);
@@ -135,7 +135,7 @@
     
     // There should now be nbrPositions locations
     
-    [self.sequence getLocations:^(NSArray *array) {
+    [self.sequence getLocationsAsync:^(NSArray *array) {
         
          XCTAssert(array.count == nbrPositions);
         [expectation fulfill];
@@ -210,7 +210,7 @@
         
         XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
         
-        [self.sequence getLocations:^(NSArray *array) {
+        [self.sequence getLocationsAsync:^(NSArray *array) {
             
             [expectation fulfill];
             
@@ -263,7 +263,7 @@
     
     [weakSelf.sequence addGpx:path done:^{
         
-        [weakSelf.sequence getLocations:^(NSArray *array) {
+        [weakSelf.sequence getLocationsAsync:^(NSArray *array) {
             
             XCTAssert(array.count == 1);
             [expectation fulfill];
@@ -294,7 +294,7 @@
     
     [weakSelf.sequence addGpx:path done:^{
         
-        [weakSelf.sequence getLocations:^(NSArray *array) {
+        [weakSelf.sequence getLocationsAsync:^(NSArray *array) {
             
             XCTAssert(array.count == 206);
             [expectation fulfill];
@@ -340,7 +340,7 @@
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         timeStart = [NSDate timeIntervalSinceReferenceDate];
         
-        [self.sequence getLocations:^(NSArray *array) {
+        [self.sequence getLocationsAsync:^(NSArray *array) {
             timeEnd = [NSDate timeIntervalSinceReferenceDate];
             dispatch_semaphore_signal(semaphore);
         }];
@@ -352,7 +352,7 @@
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         timeStartCached = [NSDate timeIntervalSinceReferenceDate];
         
-        [self.sequence getLocations:^(NSArray *array) {
+        [self.sequence getLocationsAsync:^(NSArray *array) {
             timeEndCached = [NSDate timeIntervalSinceReferenceDate];
             dispatch_semaphore_signal(semaphore);
         }];

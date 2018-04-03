@@ -27,6 +27,8 @@
         NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
         NSDictionary* TIFF = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
         
+        NSLog(@"%@", metadata);
+        
         if (TIFF)
         {
             NSString* description = [TIFF objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
@@ -89,9 +91,7 @@
     
     NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
     NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
-    
-    [self addExifMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyExifUserComment type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
-    [self addTiffMetadata:mutableMetadata tag:(NSString*)kCGImagePropertyTIFFImageDescription type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    [self addXmpMetadata:mutableMetadata tag:@"description" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
     
     
     // Write new metadata to image
@@ -134,6 +134,14 @@
     CFRelease(tagValue);
 }
 
++ (void)addXmpMetadata:(CGMutableImageMetadataRef)container tag:(NSString*)tag type:(CGImageMetadataType)type value:(CFTypeRef)value
+{
+    NSString* tagPath = [NSString stringWithFormat:@"%@:%@", @"dc", tag];
+    CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(kCGImageMetadataNamespaceXMPBasic, kCGImageMetadataPrefixXMPBasic, (__bridge CFStringRef)tag, type, value);
+    CGImageMetadataSetTagWithPath(container, NULL, (__bridge CFStringRef)tagPath, tagValue);
+    CFRelease(tagValue);
+}
+
 + (void)addTiffMetadata:(CGMutableImageMetadataRef)container tag:(NSString*)tag type:(CGImageMetadataType)type value:(CFTypeRef)value
 {
     NSString* tagPath = [NSString stringWithFormat:@"%@:%@", kCGImageMetadataPrefixTIFF, tag];
@@ -141,8 +149,6 @@
     CGImageMetadataSetTagWithPath(container, NULL, (__bridge CFStringRef)tagPath, tagValue);
     CFRelease(tagValue);
 }
-
-
 
 + (void)cleanMetadata:(CGImageMetadataRef)metadata mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
 {
@@ -184,43 +190,46 @@
 
 + (void)addGps:(MAPLocation*)location mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
 {
-    CLLocationDegrees latitude  = location.location.coordinate.latitude;
-    CLLocationDegrees longitude = location.location.coordinate.longitude;
-    
-    NSString* latitudeRef = nil;
-    NSString* longitudeRef = nil;
-    
-    if (latitude < 0.0)
+    if (location.location)
     {
-        latitude *= -1;
-        latitudeRef = @"S";
+        CLLocationDegrees latitude  = location.location.coordinate.latitude;
+        CLLocationDegrees longitude = location.location.coordinate.longitude;
         
+        NSString* latitudeRef = nil;
+        NSString* longitudeRef = nil;
+        
+        if (latitude < 0.0)
+        {
+            latitude *= -1;
+            latitudeRef = @"S";
+            
+        }
+        else
+        {
+            latitudeRef = @"N";
+        }
+        
+        if (longitude < 0.0)
+        {
+            longitude *= -1;
+            longitudeRef = @"W";
+        }
+        else
+        {
+            longitudeRef = @"E";
+        }
+        
+        [self addExifMetadata:mutableMetadata tag:@"GPSLatitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:latitude]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSLongitude"           type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:longitude]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSLatitudeRef"         type:kCGImageMetadataTypeString value:(__bridge CFStringRef)latitudeRef];
+        [self addExifMetadata:mutableMetadata tag:@"GPSLongitudeRef"        type:kCGImageMetadataTypeString value:(__bridge CFStringRef)longitudeRef];
+        [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSHPositioningError"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.trueHeading]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
     }
-    else
-    {
-        latitudeRef = @"N";
-    }
-    
-    if (longitude < 0.0)
-    {
-        longitude *= -1;
-        longitudeRef = @"W";
-    }
-    else
-    {
-        longitudeRef = @"E";
-    }
-    
-    [self addExifMetadata:mutableMetadata tag:@"GPSLatitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:latitude]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSLongitude"           type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:longitude]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSLatitudeRef"         type:kCGImageMetadataTypeString value:(__bridge CFStringRef)latitudeRef];
-    [self addExifMetadata:mutableMetadata tag:@"GPSLongitudeRef"        type:kCGImageMetadataTypeString value:(__bridge CFStringRef)longitudeRef];
-    [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSHPositioningError"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.trueHeading]];
-    [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
 }
 
 + (NSString*)getUTCFormattedTime:(NSDate*)localDate

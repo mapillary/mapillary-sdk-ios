@@ -190,7 +190,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 if (tiffOrientation && self.imageOrientation != tiffOrientation.intValue)
                 {
                     self.imageOrientation = tiffOrientation.intValue;
-                    [self saveMetaChanges:nil];
+                    [self savePropertyChanges:nil];
                 }
             }
         }
@@ -306,9 +306,9 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     return images;
 }
 
-- (void)getImagesAsync:(void(^)(NSArray* images))done
+- (void)getImagesAsync:(void(^)(NSArray* images))result
 {
-    if (done)
+    if (result)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
@@ -316,7 +316,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                done(images);
+                result(images);
                 
             });
             
@@ -426,7 +426,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             else if (before || after)
             {
                 location = (before ? before : after);
-            }                        
+            }
+            
+            // None found, not possible to interpolate, use the one position available
+            else
+            {
+                location = locations.firstObject;
+            }
         }
         
         switch (self.imageOrientation)
@@ -475,7 +481,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
-- (void)saveMetaChanges:(void(^)(void))done
+- (void)savePropertyChanges:(void(^)(void))done
 {
     NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
     NSString* gpxPathBackup = [NSString stringWithFormat:@"%@/sequence.bak", self.path];

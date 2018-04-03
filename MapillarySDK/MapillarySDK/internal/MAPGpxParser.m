@@ -247,16 +247,16 @@
     {
         NSMutableDictionary* dict = dict = [NSMutableDictionary dictionary];
         
-        if (self.localTimeZone)     [dict setObject:self.localTimeZone forKey:@"localTimeZone"];
-        if (self.project)           [dict setObject:self.project forKey:@"project"];
-        if (self.sequenceKey)       [dict setObject:self.sequenceKey forKey:@"sequenceKey"];
-        if (self.timeOffset)        [dict setObject:self.timeOffset forKey:@"timeOffset"];
-        if (self.directionOffset)   [dict setObject:self.directionOffset forKey:@"directionOffset"];
-        if (self.deviceMake)        [dict setObject:self.deviceMake forKey:@"deviceMake"];
-        if (self.deviceModel)       [dict setObject:self.deviceModel forKey:@"deviceModel"];
-        if (self.deviceUUID)        [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
-        if (self.sequenceDate)      [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
-        if (self.imageOrientation)  [dict setObject:self.imageOrientation forKey:@"imageOrientation"];
+        if (self.localTimeZone != nil)     [dict setObject:self.localTimeZone forKey:@"localTimeZone"];
+        if (self.project != nil)           [dict setObject:self.project forKey:@"project"];
+        if (self.sequenceKey != nil)       [dict setObject:self.sequenceKey forKey:@"sequenceKey"];
+        if (self.timeOffset != nil)        [dict setObject:self.timeOffset forKey:@"timeOffset"];
+        if (self.directionOffset!= nil)    [dict setObject:self.directionOffset forKey:@"directionOffset"];
+        if (self.deviceMake != nil)        [dict setObject:self.deviceMake forKey:@"deviceMake"];
+        if (self.deviceModel != nil)       [dict setObject:self.deviceModel forKey:@"deviceModel"];
+        if (self.deviceUUID != nil)        [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
+        if (self.sequenceDate != nil)      [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
+        if (self.imageOrientation!= nil)   [dict setObject:self.imageOrientation forKey:@"imageOrientation"];
         
         if (!self.quickParse)
         {
