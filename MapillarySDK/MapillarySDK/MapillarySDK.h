@@ -6,7 +6,7 @@
 //  Copyright © 2017 Mapillary. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for MapillarySDK.
 FOUNDATION_EXPORT double MapillarySDKVersionNumber;

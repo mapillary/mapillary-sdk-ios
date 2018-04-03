@@ -13,6 +13,10 @@
  */
 @interface MAPUser : NSObject
 
+///-----------------------------------------------------------------------------
+/// @name Properties
+///-----------------------------------------------------------------------------
+
 /**
  The user's username. It can be changed by the user
  */
@@ -31,10 +35,9 @@
  */
 @property (readonly) NSString* accessToken;
 
-/**
- Shouldn't be used.
- */
-- (id) init __unavailable;
+///-----------------------------------------------------------------------------
+/// @name Initializers
+///-----------------------------------------------------------------------------
 
 /**
  Creates a user object.
