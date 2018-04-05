@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MAPUploadStatus.h"
+#import "MAPUploadManagerStatus.h"
 #import "MAPImage.h"
 #import "MAPSequence.h"
 #import "MAPUploadManagerDelegate.h"
@@ -100,6 +100,6 @@
  
  @return The current status of the Upload Manager.
  */
-- (MAPUploadStatus*)getStatus;
+- (MAPUploadManagerStatus*)getStatus;
 
 @end

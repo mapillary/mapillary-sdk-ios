@@ -41,11 +41,11 @@
 		9A912D0C1FE2CE2A00B6D126 /* MAPFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D001FE2CE2A00B6D126 /* MAPFileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A912D0D1FE2CE2A00B6D126 /* MAPDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D011FE2CE2A00B6D126 /* MAPDevice.m */; };
 		9A912D0E1FE2CE2A00B6D126 /* MAPDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D021FE2CE2A00B6D126 /* MAPDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9A912D251FE2CE3A00B6D126 /* MAPUploadStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D131FE2CE3800B6D126 /* MAPUploadStatus.m */; };
+		9A912D251FE2CE3A00B6D126 /* MAPUploadManagerStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D131FE2CE3800B6D126 /* MAPUploadManagerStatus.m */; };
 		9A912D261FE2CE3A00B6D126 /* MAPUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D141FE2CE3800B6D126 /* MAPUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A912D271FE2CE3A00B6D126 /* MAPUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D151FE2CE3800B6D126 /* MAPUploadManager.m */; };
 		9A912D291FE2CE3A00B6D126 /* MAPLoginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D171FE2CE3800B6D126 /* MAPLoginManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9A912D2A1FE2CE3A00B6D126 /* MAPUploadStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D181FE2CE3800B6D126 /* MAPUploadStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D2A1FE2CE3A00B6D126 /* MAPUploadManagerStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D181FE2CE3800B6D126 /* MAPUploadManagerStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A912D2B1FE2CE3A00B6D126 /* MAPLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D191FE2CE3900B6D126 /* MAPLocation.m */; };
 		9A912D2C1FE2CE3A00B6D126 /* MAPSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D1A1FE2CE3900B6D126 /* MAPSequence.m */; };
 		9A912D2E1FE2CE3A00B6D126 /* MAPLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D1C1FE2CE3900B6D126 /* MAPLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -120,11 +120,11 @@
 		9A912D001FE2CE2A00B6D126 /* MAPFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPFileManager.h; sourceTree = "<group>"; };
 		9A912D011FE2CE2A00B6D126 /* MAPDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPDevice.m; sourceTree = "<group>"; };
 		9A912D021FE2CE2A00B6D126 /* MAPDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPDevice.h; sourceTree = "<group>"; };
-		9A912D131FE2CE3800B6D126 /* MAPUploadStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUploadStatus.m; sourceTree = "<group>"; };
+		9A912D131FE2CE3800B6D126 /* MAPUploadManagerStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUploadManagerStatus.m; sourceTree = "<group>"; };
 		9A912D141FE2CE3800B6D126 /* MAPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUtils.h; sourceTree = "<group>"; };
 		9A912D151FE2CE3800B6D126 /* MAPUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUploadManager.m; sourceTree = "<group>"; };
 		9A912D171FE2CE3800B6D126 /* MAPLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPLoginManager.h; sourceTree = "<group>"; };
-		9A912D181FE2CE3800B6D126 /* MAPUploadStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUploadStatus.h; sourceTree = "<group>"; };
+		9A912D181FE2CE3800B6D126 /* MAPUploadManagerStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUploadManagerStatus.h; sourceTree = "<group>"; };
 		9A912D191FE2CE3900B6D126 /* MAPLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPLocation.m; sourceTree = "<group>"; };
 		9A912D1A1FE2CE3900B6D126 /* MAPSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPSequence.m; sourceTree = "<group>"; };
 		9A912D1C1FE2CE3900B6D126 /* MAPLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPLocation.h; sourceTree = "<group>"; };
@@ -240,8 +240,8 @@
 				9A912D231FE2CE3A00B6D126 /* MAPUploadManager.h */,
 				9A912D151FE2CE3800B6D126 /* MAPUploadManager.m */,
 				9A3347EE2073C2330085600E /* MAPUploadManagerDelegate.h */,
-				9A912D181FE2CE3800B6D126 /* MAPUploadStatus.h */,
-				9A912D131FE2CE3800B6D126 /* MAPUploadStatus.m */,
+				9A912D181FE2CE3800B6D126 /* MAPUploadManagerStatus.h */,
+				9A912D131FE2CE3800B6D126 /* MAPUploadManagerStatus.m */,
 				9AC871941F4DB3F90012721D /* MAPUser.h */,
 				9A912D4A1FE2D11000B6D126 /* MAPUser.m */,
 				9A912D141FE2CE3800B6D126 /* MAPUtils.h */,
@@ -353,7 +353,7 @@
 				9A912D2E1FE2CE3A00B6D126 /* MAPLocation.h in Headers */,
 				9A912D291FE2CE3A00B6D126 /* MAPLoginManager.h in Headers */,
 				9A420B732019E67D001BF118 /* MAPGpxLogger.h in Headers */,
-				9A912D2A1FE2CE3A00B6D126 /* MAPUploadStatus.h in Headers */,
+				9A912D2A1FE2CE3A00B6D126 /* MAPUploadManagerStatus.h in Headers */,
 				9A912D0E1FE2CE2A00B6D126 /* MAPDevice.h in Headers */,
 				9A6B0D731F628E2B009C2454 /* MAPApplicationDelegate.h in Headers */,
 				9A88F9551F4D933F0076C311 /* MapillarySDK.h in Headers */,
@@ -597,7 +597,7 @@
 				9A420B792019E67D001BF118 /* MAPInternalUtils.m in Sources */,
 				9A420B762019E67D001BF118 /* MAPGpxParser.m in Sources */,
 				9A912D091FE2CE2A00B6D126 /* MAPFileManager.m in Sources */,
-				9A912D251FE2CE3A00B6D126 /* MAPUploadStatus.m in Sources */,
+				9A912D251FE2CE3A00B6D126 /* MAPUploadManagerStatus.m in Sources */,
 				9A1021441FE3FC7D003CF9CC /* MAPApplicationDelegate.m in Sources */,
 				9A912D321FE2CE3A00B6D126 /* MAPUtils.m in Sources */,
 				9A912D2B1FE2CE3A00B6D126 /* MAPLocation.m in Sources */,

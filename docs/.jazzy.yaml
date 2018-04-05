@@ -13,12 +13,9 @@ theme: themes/mapillary
 sdk: iphoneos
 umbrella_header: ../MapillarySDK/MapillarySDK/MapillarySDK.h
 framework_root: ../MapillarySDK
-documentation: ./guides/Getting started.md
+documentation: ../README.md
 
 custom_categories:
-  - name: Guides
-    children:
-    - Getting started
 
   - name: Authentication
     children:

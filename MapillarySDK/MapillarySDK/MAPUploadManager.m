@@ -21,7 +21,7 @@
 @interface MAPUploadManager()
 
 @property (nonatomic) NSMutableArray* sequencesToUpload;
-@property (nonatomic) MAPUploadStatus* status;
+@property (nonatomic) MAPUploadManagerStatus* status;
 
 @property (nonatomic) NSURLSession* backgroundSession;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
@@ -52,7 +52,7 @@
     {
         self.sequencesToUpload = [NSMutableArray array];
         
-        self.status = [[MAPUploadStatus alloc] init];
+        self.status = [[MAPUploadManagerStatus alloc] init];
         self.dateLastUpdate = [NSDate date];
         self.bytesUploadedSinceLastUpdate = 0;
         self.allowsCellularAccess = NO;
@@ -150,10 +150,10 @@
         [sequence unlock];
     }
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(processingStopped:uploadStatus:)])
+    if (self.delegate && [self.delegate respondsToSelector:@selector(processingStopped:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate processingStopped:self uploadStatus:self.status];
+            [self.delegate processingStopped:self status:self.status];
         });
     }
 }
@@ -178,15 +178,15 @@
         [sequence unlock];
     }
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:uploadStatus:)])
+    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate uploadStopped:self uploadStatus:self.status];
+            [self.delegate uploadStopped:self status:self.status];
         });
     }
 }
 
-- (MAPUploadStatus*)getStatus
+- (MAPUploadManagerStatus*)getStatus
 {
     return self.status;
 }
@@ -295,10 +295,10 @@
             
             self.status.imagesProcessed++;
             
-            if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:uploadStatus:)])
+            if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:status:)])
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate imageProcessed:self image:image uploadStatus:self.status];
+                    [self.delegate imageProcessed:self image:image status:self.status];
                 });
             }
         }
@@ -306,10 +306,10 @@
     
     self.status.processing = NO;
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(processingFinished:uploadStatus:)])
+    if (self.delegate && [self.delegate respondsToSelector:@selector(processingFinished:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate processingFinished:self uploadStatus:self.status];
+            [self.delegate processingFinished:self status:self.status];
         });
     }
 }
@@ -339,17 +339,17 @@
     self.status.imagesProcessed++;
     [self setBookkeepingProcessedForImage:image];
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:uploadStatus:)])
+    if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate imageProcessed:self image:image uploadStatus:self.status];
+            [self.delegate imageProcessed:self image:image status:self.status];
         });
     }
     
-    if (self.status.imagesProcessed == self.status.imageCount && self.delegate && [self.delegate respondsToSelector:@selector(processingFinished:uploadStatus:)])
+    if (self.status.imagesProcessed == self.status.imageCount && self.delegate && [self.delegate respondsToSelector:@selector(processingFinished:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate processingFinished:self uploadStatus:self.status];
+            [self.delegate processingFinished:self status:self.status];
         });
     }
 
@@ -506,10 +506,10 @@
         self.backgroundUploadSessionCompletionHandler = nil;
     }
     
-    if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:uploadStatus:)])
+    if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate uploadFinished:self uploadStatus:self.status];
+            [self.delegate uploadFinished:self status:self.status];
         });
     }
     
@@ -524,10 +524,10 @@
 {
     self.bytesUploadedSinceLastUpdate += bytesSent;
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadedData:bytesSent:uploadStatus:)])
+    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadedData:bytesSent:status:)])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate uploadedData:self bytesSent:bytesSent uploadStatus:self.status];
+            [self.delegate uploadedData:self bytesSent:bytesSent status:self.status];
         });
     }
 }
@@ -549,10 +549,10 @@
         
         [self setBookkeepingDoneForImage:image];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(imageUploaded:image:uploadStatus:)])
+        if (self.delegate && [self.delegate respondsToSelector:@selector(imageUploaded:image:status:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.delegate imageUploaded:self image:image uploadStatus:self.status];
+                [self.delegate imageUploaded:self image:image status:self.status];
             });
         }
         
@@ -564,10 +564,10 @@
         
         [self setBookkeepingFailedForImage:image];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(imageFailed:image:uploadStatus:error:)])
+        if (self.delegate && [self.delegate respondsToSelector:@selector(imageFailed:image:status:error:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.delegate imageFailed:self image:image uploadStatus:self.status error:error];
+                [self.delegate imageFailed:self image:image status:self.status error:error];
             });
         }
         
@@ -578,10 +578,10 @@
     {
         [self cleanUp];
         
-        if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:uploadStatus:)])
+        if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.delegate uploadFinished:self uploadStatus:self.status];
+                [self.delegate uploadFinished:self status:self.status];
             });
         }
         

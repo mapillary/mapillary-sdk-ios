@@ -17,7 +17,7 @@
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
 {    
-    [MAPApplicationDelegate interceptApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+    [MAPApplicationDelegate application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
 @end

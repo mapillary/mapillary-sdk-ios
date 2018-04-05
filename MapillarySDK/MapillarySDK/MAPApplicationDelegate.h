@@ -26,6 +26,6 @@
  @param identifier Forward this parameter.
  @param completionHandler Forward this parameter.
  */
-+ (void)interceptApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
++ (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
 
 @end

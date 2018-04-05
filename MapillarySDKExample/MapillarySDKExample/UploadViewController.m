@@ -61,7 +61,7 @@
 
 - (void)updateUI
 {
-    MAPUploadStatus* status = [self.uploadManager getStatus];
+    MAPUploadManagerStatus* status = [self.uploadManager getStatus];
     
     if (!status.uploading)
     {
@@ -79,7 +79,7 @@
 
 - (void)updateProgress
 {
-    MAPUploadStatus* status = [self.uploadManager getStatus];
+    MAPUploadManagerStatus* status = [self.uploadManager getStatus];
 
     if (status.uploading)
     {
@@ -105,7 +105,7 @@
 
 - (IBAction)buttonAction:(id)sender
 {
-    MAPUploadStatus* status = [self.uploadManager getStatus];
+    MAPUploadManagerStatus* status = [self.uploadManager getStatus];
     
     if (!status.uploading)
     {
@@ -121,28 +121,28 @@
 
 #pragma mark - MAPUploadManagerDelegate
 
-- (void)imageProcessed:(MAPUploadManager *)uploadManager image:(MAPImage *)image uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)imageProcessed:(MAPUploadManager *)uploadManager image:(MAPImage *)image status:(MAPUploadManagerStatus*)status
 {
     [self updateProgress];
 }
 
-- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image status:(MAPUploadManagerStatus*)status
 {
     [self updateProgress];
 }
 
-- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
+- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image status:(MAPUploadManagerStatus*)status error:(NSError*)error
 {
     [self updateProgress];
 }
 
-- (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)uploadFinished:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
 {
     self.statusLabel.text = @"Upload finished";
     [self.button setTitle:@"Start" forState:UIControlStateNormal];
 }
 
-- (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+- (void)uploadStopped:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
 {
     self.statusLabel.text = @"Upload stopped";
     [self.button setTitle:@"Start" forState:UIControlStateNormal];

@@ -1,5 +1,5 @@
 //
-//  MAPUploadStatus.h
+//  MAPUploadManagerStatus.h
 //  MapillarySDK
 //
 //  Created by Anders Mårtensson on 2017-08-24.
@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 /**
- The `MAPUploadStatus` class encapsulates the information about the upload
+ The `MAPUploadManagerStatus` class encapsulates the information about the upload
  progress.
 */
-@interface MAPUploadStatus : NSObject
+@interface MAPUploadManagerStatus : NSObject
 
 /**
  The upload status that defines if we are currently uploading or not.

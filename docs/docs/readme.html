@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>getting started  Reference</title>
+    <title>README  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
@@ -11,7 +11,7 @@
 
   </head>
   <body>
-    <a title="getting started  Reference"></a>
+    <a title="README  Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">Mapillary Docs</a></p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="index.html">Mapillary Reference</a>
         <img id="carat" src="img/carat.png" />
-        getting started  Reference
+        README  Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -80,7 +80,7 @@
             <a href="Other Guides.html">Other Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="getting-started.html">getting started</a>
+                <a href="readme.html">README</a>
               </li>
             </ul>
           </li>
@@ -237,7 +237,12 @@ uploadManager.delegate = self;
 
 - (void)processingFinished:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
 {
-    // Image was processed
+    // Image processing finished
+}
+
+- (void)processingStopped:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image processing was stopped
 }
 
 - (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus

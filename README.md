@@ -173,14 +173,24 @@ uploadManager.delegate = self;
 [uploadManager processAndUploadSequences:sequencesToUpload];
 ```
 
-### Tracking upload progress
+### Tracking images processsing and upload progress
 
-To track the progress of the upload and to be able to update the UI, use `MAPUploadManagerDelegate`:
+To track the progress of the image processing and/or upload and to be able to update the UI, use `MAPUploadManagerDelegate`:
 
 ```
 - (void)imageProcessed:(MAPUploadManager *)uploadManager image:(MAPImage *)image uploadStatus:(MAPUploadStatus*)uploadStatus
 {
     // Image was processed
+}
+
+- (void)processingFinished:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image processing finished
+}
+
+- (void)processingStopped:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image processing was stopped
 }
 
 - (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus

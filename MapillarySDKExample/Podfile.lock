@@ -14,9 +14,9 @@ PODS:
   - AFNetworking/Serialization (3.2.0)
   - AFNetworking/UIKit (3.2.0):
     - AFNetworking/NSURLSession
-  - AWSCore (2.6.13)
-  - AWSS3 (2.6.13):
-    - AWSCore (= 2.6.13)
+  - AWSCore (2.6.14)
+  - AWSS3 (2.6.14):
+    - AWSCore (= 2.6.14)
   - BOSImageResizeOperation (0.1.0)
   - MapillarySDK (0.0.1):
     - AFNetworking (~> 3.0)
@@ -35,14 +35,25 @@ PODS:
 DEPENDENCIES:
   - MapillarySDK (from `../MapillarySDK.podspec`)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - AFNetworking
+    - AWSCore
+    - AWSS3
+    - BOSImageResizeOperation
+    - NSHash
+    - PodAsset
+    - SAMKeychain
+    - SDVersion
+
 EXTERNAL SOURCES:
   MapillarySDK:
-    :path: ../MapillarySDK.podspec
+    :path: "../MapillarySDK.podspec"
 
 SPEC CHECKSUMS:
   AFNetworking: 8ac6017b94ea105479f7776e5288e48ae9c59bb4
-  AWSCore: 5da797bc476188fdaf00dec134fa18d84708eca9
-  AWSS3: 7c178c82c2e648559b7075a663335055327dd4f5
+  AWSCore: 8c883c2623d314dd82cca3809527784e1d1a02e5
+  AWSS3: a8cf89448c74637e34c46839ce5b5f7850f206e6
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   MapillarySDK: f98eefe719689c6415e9c792b4e3731a8cc614c9
   NSHash: 036c03781d372c288d332b512b203e7bb832e46e
@@ -52,4 +63,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 86c388e9f27c189ad82b6a8951063d2c970b6650
 
-COCOAPODS: 1.4.0.rc.1
+COCOAPODS: 1.5.0
