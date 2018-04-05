@@ -37,4 +37,5 @@ custom_categories:
   - name: Uploading  
     children:
     - MAPUploadManager
+    - MAPUploadManagerDelegate
     - MAPUploadStatus

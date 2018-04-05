@@ -10,6 +10,7 @@
 #import "MAPApiManager.h"
 #import "MAPDefines.h"
 #import "MAPUploadManager.h"
+#import "MAPUploadManager+Private.h"
 
 @implementation MAPApplicationDelegate
 

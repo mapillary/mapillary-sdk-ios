@@ -10,88 +10,8 @@
 #import "MAPUploadStatus.h"
 #import "MAPImage.h"
 #import "MAPSequence.h"
+#import "MAPUploadManagerDelegate.h"
 
-/**
- TODO move to own file
- */
-@class MAPUploadManager;
-
-/**
- TODO
- */
-@protocol MAPUploadManagerDelegate <NSObject>
-
-@optional
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param image TODO
- @param uploadStatus TODO
- */
-- (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param uploadStatus TODO
- */
-- (void)processingFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param uploadStatus TODO
- */
-- (void)processingStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param image TODO
- @param uploadStatus TODO
- */
-- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param image TODO
- @param uploadStatus TODO
- @param error TODO
- */
-- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param bytesSent TODO
- @param uploadStatus TODO
- */
-- (void)uploadedData:(MAPUploadManager*)uploadManager bytesSent:(int64_t)bytesSent uploadStatus:(MAPUploadStatus*)uploadStatus;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param uploadStatus TODO
- */
-- (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
-
-/**
- TODO
- 
- @param uploadManager TODO
- @param uploadStatus TODO
- */
-- (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus;
-@end
 
 /**
  The `MAPUploadManager` class handles both image processing and uploading.
@@ -131,11 +51,6 @@
  Default is NO.
  */
 @property (nonatomic) BOOL allowsCellularAccess;
-
-/**
- TODO put in private.
- */
-@property (copy, nonatomic) void (^backgroundUploadSessionCompletionHandler)(void);
 
 ///-----------------------------------------------------------------------------
 /// @name Creating an Upload Manager

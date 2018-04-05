@@ -16,6 +16,7 @@
 #import "MAPDefines.h"
 #import "MAPImage+Private.h"
 #import <objc/runtime.h>
+#import "MAPUploadManager+Private.h"
 
 @interface MAPUploadManager()
 

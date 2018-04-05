@@ -23,7 +23,7 @@
     
     self.uploadManager = [MAPUploadManager sharedManager];
     self.uploadManager.delegate = self;
-    self.uploadManager.testUpload = YES; // This will upload to our test server instead
+    self.uploadManager.testUpload = NO; // This will upload to our test server instead
     
     self.imagesProcessedProgressView.progress = 0;
     self.imagesUploadedProgressView.progress = 0;

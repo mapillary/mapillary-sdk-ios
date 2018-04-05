@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Classes  Reference</title>
+    <title>Uploading  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
@@ -11,7 +11,7 @@
 
   </head>
   <body>
-    <a title="Classes  Reference"></a>
+    <a title="Uploading  Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">Mapillary Docs</a></p>
@@ -22,23 +22,65 @@
       <p id="breadcrumbs">
         <a href="index.html">Mapillary Reference</a>
         <img id="carat" src="img/carat.png" />
-        Classes  Reference
+        Uploading  Reference
       </p>
     </div>
     <div class="content-wrapper">
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a href="Classes.html">Classes</a>
+            <a href="Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+                <a href="getting-started.html">Getting started</a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Authentication.html">Authentication</a>
+            <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Classes/MAPLoginManager.html">MAPLoginManager</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/MAPUser.html">MAPUser</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Sequences.html">Sequences</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/MAPDevice.html">MAPDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPFileManager.html">MAPFileManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPImage.html">MAPImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPLocation.html">MAPLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPSequence.html">MAPSequence</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Uploading.html">Uploading</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/MAPUploadManager.html">MAPUploadManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/MAPUploadManagerDelegate.html">MAPUploadManagerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MAPUploadStatus.html">MAPUploadStatus</a>
               </li>
             </ul>
           </li>
@@ -47,9 +89,8 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Classes</h1>
-            <p>The following classes are available globally.</p>
-
+            <h1>Uploading</h1>
+            
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -57,9 +98,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPApplicationDelegate"></a>
-                    <a name="//apple_ref/objc/Class/MAPApplicationDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPApplicationDelegate">MAPApplicationDelegate</a>
+                    <a name="/c:objc(cs)MAPUploadManager"></a>
+                    <a name="//apple_ref/objc/Class/MAPUploadManager" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPUploadManager">MAPUploadManager</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -67,27 +108,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>MAPApplicationDelegate</code> is used to complete the autehntication process</p>
+                        <p>The <code>MAPUploadManager</code> class handles both image processing and uploading.</p>
 
-<ul>
-<li>initiated by the <code><a href="Classes/MAPLoginManager.html">MAPLoginManager</a></code>. You should add these methods to your</li>
-<li><code>UIApplicationDelegate</code>.
-*</li>
-<li>- see: MAPLoginManager</li>
-</ul>
-
-                        <a href="Classes/MAPApplicationDelegate.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/MAPUploadManager.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPApplicationDelegate</span> <span class="p">:</span> <span class="nc">NSObject</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPUploadManager</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">MAPApplicationDelegate</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">MAPUploadManager</span></code></pre>
 
                         </div>
                       </div>
@@ -101,9 +135,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPLoginManager"></a>
-                    <a name="//apple_ref/objc/Class/MAPLoginManager" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPLoginManager">MAPLoginManager</a>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate"></a>
+                    <a name="//apple_ref/objc/Protocol/MAPUploadManagerDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate">MAPUploadManagerDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -111,34 +145,21 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>MAPLoginManager</code> class manages the authentication of Mapillary. The</p>
+                        <p>This protocol is used for notifying the delegate what&rsquo;s happening during
+image processing and upload.</p>
 
-<ul>
-<li>signIn method starts the authentication loop. It requires two values to be</li>
-<li>defined in your application <code>.plist</code> file:
-*</li>
-<li>- MapillaryClientId</li>
-<li>- MapillaryRedirectUrl
-*</li>
-<li>You need to register your app at mapillary.com to enter the redirect URL and</li>
-<li>also to obtain a client ID. Your app must also support the custom URL scheme</li>
-<li>defined in <code>MapillaryRedirectUrl</code>.
-*</li>
-<li>- see: MAPApplicationDelegate</li>
-</ul>
-
-                        <a href="Classes/MAPLoginManager.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/MAPUploadManagerDelegate.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPLoginManager</span> <span class="p">:</span> <span class="nc">NSObject</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@protocol</span> <span class="nc">MAPUploadManagerDelegate</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">MAPLoginManager</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">protocol</span> <span class="kt">MAPUploadManagerDelegate</span></code></pre>
 
                         </div>
                       </div>
@@ -152,9 +173,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPUser"></a>
-                    <a name="//apple_ref/objc/Class/MAPUser" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPUser">MAPUser</a>
+                    <a name="/c:objc(cs)MAPUploadStatus"></a>
+                    <a name="//apple_ref/objc/Class/MAPUploadStatus" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPUploadStatus">MAPUploadStatus</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -162,20 +183,21 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>MAPUser</code> class encapsulates the information about a user.</p>
+                        <p>The <code>MAPUploadStatus</code> class encapsulates the information about the upload
+progress.</p>
 
-                        <a href="Classes/MAPUser.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/MAPUploadStatus.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPUser</span> <span class="p">:</span> <span class="nc">NSObject</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPUploadStatus</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">MAPUser</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kt">MAPUploadStatus</span></code></pre>
 
                         </div>
                       </div>
@@ -187,7 +209,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>© 2017 <a class="link" href="https://www.mapillary.com" target="_blank" rel="external">Mapillary</a>. See <a class="link" href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE" target="_blank" rel="external">license</a> for more details.</p>
+          <p>© 2018 <a class="link" href="https://www.mapillary.com" target="_blank" rel="external">Mapillary</a>. See <a class="link" href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE" target="_blank" rel="external">license</a> for more details.</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
