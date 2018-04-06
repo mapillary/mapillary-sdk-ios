@@ -366,6 +366,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
 - (MAPLocation*)locationForDate:(NSDate*)date
 {
+    if (date == nil)
+    {
+        return nil;
+    }
+    
     __block MAPLocation* location = nil;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
@@ -397,13 +402,19 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         else
         {
             MAPLocation* before = nil;
+            MAPLocation* equal = nil;
             MAPLocation* after = nil;
             
             for (int i = 0; i < locations.count; i++)
             {
                 MAPLocation* currentLocation = locations[i];
                 
-                if ([currentLocation.timestamp compare:date] == NSOrderedDescending)
+                if ([currentLocation.timestamp compare:date] == NSOrderedSame)
+                {
+                    equal = currentLocation;
+                }
+                
+                else if ([currentLocation.timestamp compare:date] == NSOrderedDescending)
                 {
                     if (i > 0)
                     {
@@ -416,8 +427,20 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 }
             }
             
+            // Found a match
+            if (equal)
+            {
+                location = equal;
+                
+                if (after)
+                {
+                    location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:equal.location.coordinate B:after.location.coordinate];
+                    location.trueHeading = location.magneticHeading;
+                }
+            }
+            
             // Need to interpolate between two positions
-            if (before && after)
+            else if (before && after)
             {
                 location = [MAPInternalUtils locationBetweenLocationA:before andLocationB:after forDate:date];
             }
@@ -485,14 +508,14 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
     NSString* gpxPathBackup = [NSString stringWithFormat:@"%@/sequence.bak", self.path];
-    
-    // Move old file
-    [[NSFileManager defaultManager] moveItemAtPath:gpxPath toPath:gpxPathBackup error:nil];
-    
-    // Create new file
-    self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:gpxPath andSequence:self];
-    
+
     [self getLocationsAsync:^(NSArray *locations) {
+        
+        // Move old file
+        [[NSFileManager defaultManager] moveItemAtPath:gpxPath toPath:gpxPathBackup error:nil];
+        
+        // Create new file
+        self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:gpxPath andSequence:self];
         
         for (MAPLocation* l in locations)
         {

@@ -35,24 +35,11 @@ unsigned long long footerLength;
         // Add location
         [locationString appendFormat:@"\t\t\t<trkpt lat=\"%f\" lon=\"%f\">\n", self.location.location.coordinate.latitude, self.location.location.coordinate.longitude];
         
-        // Add eleveation if available
-        if (self.location.location.verticalAccuracy > 0)
-        {
-            [locationString appendFormat:@"\t\t\t\t<ele>%f</ele>\n", self.location.location.altitude];
-        }
+        // Add eleveation
+        [locationString appendFormat:@"\t\t\t\t<ele>%f</ele>\n", self.location.location.altitude];
         
         // Add time
         [locationString appendFormat:@"\t\t\t\t<time>%@</time>\n", self.time];
-        
-        // Add fix
-        if (self.location.location.verticalAccuracy > 0)
-        {
-            [locationString appendString:@"\t\t\t\t<fix>3d</fix>\n"];
-        }
-        else
-        {
-            [locationString appendString:@"\t\t\t\t<fix>2d</fix>\n"];
-        }
         
         // Add exgtensions
         NSMutableString* extensionsString = [[NSMutableString alloc] init];
@@ -193,7 +180,7 @@ unsigned long long footerLength;
     //NSLog(@"%lu", (unsigned long)self.operationQueue.operationCount);
 }
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (object == self.operationQueue && [keyPath isEqualToString:@"operations"] && context == &kQueueOperationsChanged)
     {

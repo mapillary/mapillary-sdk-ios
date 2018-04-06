@@ -164,7 +164,7 @@
     double x = cos(phi1) * sin(phi2) - sin(phi1) * cos(phi2) * cos(d1);
     double heading = atan2(y, x)*180.0/M_PI;
     
-    heading = (heading < 360) ? heading + 360 : heading; // 0 - 360
+    heading = (heading <   0) ? heading + 360 : heading; // 0 - 360
     heading = (heading > 360) ? heading - 360 : heading; // 0 - 360
     
     return heading;

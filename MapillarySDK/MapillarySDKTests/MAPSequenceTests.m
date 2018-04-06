@@ -30,7 +30,7 @@
 
 - (void)tearDown
 {
-    [MAPFileManager deleteSequence:self.sequence];
+    [MAPFileManager deleteSequence:self.sequence];    
     self.sequence = nil;
     self.device = nil;
     
@@ -49,7 +49,7 @@
     XCTAssertNotNil(self.sequence.path);
     XCTAssertNotNil([self.sequence getImages]);
     
-    XCTAssert(self.sequence.timeOffset == 0);
+    XCTAssert(self.sequence.timeOffset == NSTimeIntervalSince1970);
     XCTAssert(self.sequence.directionOffset == -1);
     XCTAssert([self.sequence getImages].count == 0);
     
@@ -433,8 +433,7 @@
     NSArray* images = [self.sequence getImages];
     MAPImage* image = nil;
     
-    // From http://www.igismap.com/map-tool/bearing-angle the bearing should be 29.369942517564084
-    double correctHeading = 29.369942517564084;
+    double correctHeading = 119.36993408203125;
     
     image = images[0];
     XCTAssert(image.location.magneticHeading == correctHeading);
@@ -457,10 +456,8 @@
 
 - (NSData*)createImageData
 {
-    UIGraphicsBeginImageContext(CGSizeMake(100, 100));
-    CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, 100, 100));
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    return UIImageJPEGRepresentation(image, 1);
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
+    return [NSData dataWithContentsOfFile:path];
 }
 
 @end
