@@ -25,6 +25,9 @@
         self.deviceMotionX = 0;
         self.deviceMotionY = 0;
         self.deviceMotionZ = 0;
+        self.devicePitch = 0;
+        self.deviceRoll = 0;
+        self.deviceYaw = 0;
     }
     return self;
 }
@@ -71,7 +74,7 @@
     return [dateFormatter stringFromDate:self.timestamp];
 }
 
-#pragma mark - NSCopying>
+#pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
 {
@@ -87,11 +90,12 @@
         [copy setDeviceMotionX:self.deviceMotionX];
         [copy setDeviceMotionY:self.deviceMotionY];
         [copy setDeviceMotionZ:self.deviceMotionZ];
+        [copy setDevicePitch:self.devicePitch];
+        [copy setDeviceRoll:self.deviceRoll];
+        [copy setDeviceYaw:self.deviceYaw];
     }
     
     return copy;
 }
-
-
 
 @end

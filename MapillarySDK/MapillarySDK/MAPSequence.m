@@ -56,15 +56,16 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     if (self)
     {
         self.sequenceDate = [NSDate date];
-        self.directionOffset = -1;
-        self.timeOffset = NSTimeIntervalSince1970;
+        self.directionOffset = nil;
+        self.timeOffset = nil;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
         self.device = device ? device : [MAPDevice thisDevice];
-        self.project = project ? project : @"";
+        self.organizationKey = nil;
+        self.private = NO;
         self.cachedLocations = nil;
         self.imageCount = 0;
-        self.imageOrientation = -1;
+        self.imageOrientation = 0;
         
         if (path == nil)
         {
@@ -85,22 +86,23 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 
                 [parser quickParse:^(NSDictionary *result) {
                     
-                    NSNumber* directionOffset = result[@"directionOffset"];
-                    NSNumber* timeOffset = result[@"timeOffset"];
-                    NSNumber* imageOrientation = result[@"imageOrientation"];
+                    NSNumber* private = result[kMAPPrivate];
                     
                     MAPDevice* device = [[MAPDevice alloc] init];
-                    device.make = result[@"deviceMake"];
-                    device.model = result[@"deviceModel"];
-                    device.UUID = result[@"deviceUUID"];
+                    device.make = result[kMAPDeviceMake];
+                    device.model = result[kMAPDeviceModel];
+                    device.UUID = result[kMAPDeviceUUID];
                     
-                    self.sequenceKey = result[@"sequenceKey"];
-                    self.sequenceDate = result[@"sequenceDate"];
-                    self.directionOffset = directionOffset.doubleValue;
-                    self.timeOffset = timeOffset.doubleValue;
-                    self.project = result[@"project"];
-                    self.imageOrientation = imageOrientation.intValue;
+                    self.sequenceKey = result[kMAPSequenceUUID];
+                    self.sequenceDate = result[kMAPCaptureTime];
+                    self.directionOffset = result[kMAPDirectionOffset];
+                    self.timeOffset = result[kMAPTimeOffset];
+                    self.organizationKey = result[kMAPOrganizationKey];
+                    self.private = private.boolValue;
                     self.device = device;
+                    self.imageOrientation = result[kMAPOrientation];
+                    self.rigSequenceUUID = result[kMAPRigSequenceUUID];
+                    self.rigUUID = result[kMAPRigUUID];
                     
                     dispatch_semaphore_signal(semaphore);
                     
@@ -174,7 +176,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     self.imageCount++;
     self.sequenceSize += imageData.length;
     
-    if (self.imageOrientation == -1)
+    if (self.imageOrientation == nil)
     {
         CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)(imageData), NULL);
         if (source)
@@ -187,12 +189,14 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             {
                 NSNumber* tiffOrientation = TIFFDictionary[@"Orientation"];
                 
-                if (tiffOrientation && self.imageOrientation != tiffOrientation.intValue)
+                if (tiffOrientation && self.imageOrientation.intValue != tiffOrientation.intValue)
                 {
-                    self.imageOrientation = tiffOrientation.intValue;
+                    self.imageOrientation = tiffOrientation;
                     [self savePropertyChanges:nil];
                 }
             }
+            
+            CFRelease(source);
         }
     }
 }
@@ -458,35 +462,44 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             }
         }
         
-        switch (self.imageOrientation)
+        float trueHeading = location.trueHeading.floatValue;
+        float magneticHeading = location.magneticHeading.floatValue;
+        
+        if (self.imageOrientation != nil)
         {
-            case 1:
-                location.trueHeading += 90;
-                location.magneticHeading += 90;
-                break;
-                
-            case 3:
-                location.trueHeading -= 90;
-                location.magneticHeading -= 90;
-                break;
-                
-            case 8:
-                location.trueHeading += 180;
-                location.magneticHeading += 180;
-                break;
-                
-            default:
-                break;
+            switch (self.imageOrientation.intValue)
+            {
+                case 1:
+                    trueHeading += 90;
+                    magneticHeading += 90;
+                    break;
+                    
+                case 3:
+                    trueHeading -= 90;
+                    magneticHeading -= 90;
+                    break;
+                    
+                case 8:
+                    trueHeading += 180;
+                    magneticHeading += 180;
+                    break;
+                    
+                default:
+                    break;
+            }
         }
         
-        if (self.directionOffset > 0)
+        if (self.directionOffset != nil)
         {
-            location.trueHeading += self.directionOffset;
-            location.magneticHeading += self.directionOffset;
+            trueHeading += self.directionOffset.floatValue;
+            magneticHeading += self.directionOffset.floatValue;
         }
         
-        location.trueHeading = fmodf(location.trueHeading + 360.0f, 360.0f);
-        location.magneticHeading = fmodf(location.magneticHeading + 360.0f, 360.0f);
+        trueHeading = fmodf(trueHeading + 360.0f, 360.0f);
+        magneticHeading = fmodf(magneticHeading + 360.0f, 360.0f);
+        
+        location.trueHeading = [NSNumber numberWithFloat:trueHeading];
+        location.magneticHeading = [NSNumber numberWithFloat:magneticHeading];
 
         dispatch_semaphore_signal(semaphore);
         

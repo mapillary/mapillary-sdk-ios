@@ -42,18 +42,16 @@
  If the value is >0, the compass angle is ignored and instead the value is
  interpolated between two locations and also adds this value.
  */
-@property CLLocationDirection directionOffset;
+@property NSNumber* directionOffset;
 
 /**
  The time offset in milliseconds.
  
- Default is NSTimeIntervalSince1970. It means it is not set.
- +1 means the image date is increased by 1 ms when calculating the position of
- and image.
- -1 means the image date is decreased by 1 ms when calculating the position of
- and image.
+ Default is nil. It means it is not set. +1 means the image date is increased
+ by 1 ms when calculating the position of and image. -1 means the image date
+ is decreased by 1 ms when calculating the position of and image.
  */
-@property NSTimeInterval timeOffset;
+@property NSNumber* timeOffset;
 
 /**
  The date the sequence was captured.
@@ -66,9 +64,15 @@
 @property NSString* path;
 
 /**
- The project this sequence belongs to.
+ The organization this sequence belongs to. Default is nil.
  */
-@property NSString* project;
+@property NSString* organizationKey;
+
+/**
+ If the sequence is private or public. Only used if organizationUUID is set.
+ Default is NO.
+ */
+@property BOOL private;
 
 /**
  The unique ID of this sequence.
@@ -93,7 +97,11 @@
 /**
  The image orientation this sequence was captured in.
  */
-@property int imageOrientation;
+@property NSNumber* imageOrientation;
+
+
+@property NSString* rigSequenceUUID;
+@property NSString* rigUUID;
 
 ///-----------------------------------------------------------------------------
 /// @name Initializers

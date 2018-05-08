@@ -149,7 +149,7 @@
                                       (1-factor)*location1.longitude+factor*location2.longitude);
 }
 
-+ (double)calculateHeadingFromCoordA:(CLLocationCoordinate2D)A B:(CLLocationCoordinate2D)B
++ (NSNumber*)calculateHeadingFromCoordA:(CLLocationCoordinate2D)A B:(CLLocationCoordinate2D)B
 {
     double lat1 = A.latitude;
     double lon1 = A.longitude;
@@ -167,7 +167,7 @@
     heading = (heading <   0) ? heading + 360 : heading; // 0 - 360
     heading = (heading > 360) ? heading - 360 : heading; // 0 - 360
     
-    return heading;
+    return [NSNumber numberWithDouble:heading];
 }
 
 + (MAPLocation*)locationBetweenLocationA:(MAPLocation*)locationA andLocationB:(MAPLocation*)locationB forDate:(NSDate*)date

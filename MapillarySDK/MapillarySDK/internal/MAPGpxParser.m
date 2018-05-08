@@ -9,6 +9,7 @@
 #import "MAPGpxParser.h"
 #import "MAPLocation.h"
 #import "MAPInternalUtils.h"
+#import "MAPDefines.h"
 
 @interface MAPGpxParser()
 
@@ -17,18 +18,23 @@
 @property NSMutableDictionary* currentTrackPoint;
 @property NSMutableString* currentElementValue;
 @property NSDateFormatter* dateFormatter;
-@property NSString* localTimeZone;
-@property NSString* project;
-@property NSString* sequenceKey;
-@property NSNumber* timeOffset;
-@property NSNumber* directionOffset;
+@property BOOL parsingMeta;
+@property BOOL quickParse;
+
 @property NSString* deviceMake;
 @property NSString* deviceModel;
 @property NSString* deviceUUID;
+@property NSNumber* directionOffset;
+@property NSString* localTimeZone;
+@property NSString* organizationKey;
+@property NSNumber* private;
+@property NSString* rigSequenceUUID; // NEW
+@property NSString* rigUUID; // NEW
+@property NSString* sequenceUUID;
+@property NSNumber* timeOffset;
+
 @property NSDate* sequenceDate;
-@property NSNumber* imageOrientation;
-@property BOOL parsingMeta;
-@property BOOL quickParse;
+@property NSNumber* orientation;
 
 @property (nonatomic, copy) void (^doneCallback)(NSDictionary* dict);
 
@@ -57,22 +63,28 @@
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
             self.localTimeZone = nil;
-            self.project = nil;
-            self.sequenceKey = nil;
+            self.organizationKey = nil;
+            self.private = @NO;
+            self.sequenceUUID = nil;
             self.timeOffset = nil;
             self.directionOffset = nil;
             self.sequenceDate = nil;
-            self.imageOrientation = nil;
+            self.orientation = nil;
+            self.rigUUID = nil;
+            self.rigSequenceUUID = nil;
         }
         else
         {
             self.localTimeZone = [[NSTimeZone localTimeZone] description];
-            self.project = @"";
-            self.sequenceKey = [[NSUUID UUID] UUIDString];
+            self.organizationKey = nil;
+            self.private = @NO;
+            self.sequenceUUID = [[NSUUID UUID] UUIDString];
             self.timeOffset = @0;
             self.directionOffset = @-1;
             self.sequenceDate = [NSDate date];
-            self.imageOrientation = @-1;
+            self.orientation = @-1;
+            self.rigUUID = [[NSUUID UUID] UUIDString];
+            self.rigSequenceUUID = [[NSUUID UUID] UUIDString];
         }
         
         MAPDevice* defaultDevice = [MAPDevice thisDevice];
@@ -94,6 +106,11 @@
     self.quickParse = YES;
     self.doneCallback = done;
     [self.xmlParser parse];
+}
+
+- (NSString*)stringForKey:(NSString*)key
+{
+    return [NSString stringWithFormat:@"mapillary:%@", key];
 }
 
 #pragma mark - NSXMLParserDelegate
@@ -137,22 +154,37 @@
         self.sequenceDate = [self.dateFormatter dateFromString:strippedValue];
     }
     
-    else if ([elementName isEqualToString:@"mapillary:localTimeZone"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPLocalTimeZone]])
     {
         self.localTimeZone = strippedValue;
     }
     
-    else if ([elementName isEqualToString:@"mapillary:project"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPOrganizationKey]])
     {
-        self.project = strippedValue;
+        self.organizationKey = strippedValue;
+    }
+              
+    else if ([elementName isEqualToString:[self stringForKey:kMAPPrivate]])
+    {
+        self.private = [NSNumber numberWithBool:strippedValue.boolValue];
     }
     
-    else if ([elementName isEqualToString:@"mapillary:sequenceKey"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPSequenceUUID]])
     {
-        self.sequenceKey = strippedValue;
+        self.sequenceUUID = strippedValue;
     }
     
-    else if ([elementName isEqualToString:@"mapillary:timeOffset"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPRigSequenceUUID]])
+    {
+        self.rigSequenceUUID = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:[self stringForKey:kMAPRigUUID]])
+    {
+        self.rigUUID = strippedValue;
+    }
+    
+    else if ([elementName isEqualToString:[self stringForKey:kMAPTimeOffset]])
     {
         NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
@@ -160,7 +192,7 @@
         self.timeOffset = [f numberFromString:strippedValue];
     }
     
-    else if ([elementName isEqualToString:@"mapillary:directionOffset"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPDirectionOffset]])
     {
         NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
@@ -168,24 +200,24 @@
         self.directionOffset = [f numberFromString:strippedValue];
     }
     
-    else if ([elementName isEqualToString:@"mapillary:deviceUUID"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPDeviceUUID]])
     {
         self.deviceUUID = strippedValue;
     }
     
-    else if ([elementName isEqualToString:@"mapillary:deviceMake"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPDeviceMake]])
     {
         self.deviceMake = strippedValue;
     }
     
-    else if ([elementName isEqualToString:@"mapillary:deviceModel"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPDeviceModel]])
     {
         self.deviceModel = strippedValue;
     }
     
-    else if ([elementName isEqualToString:@"mapillary:imageOrientation"])
+    else if ([elementName isEqualToString:[self stringForKey:kMAPOrientation]])
     {
-        self.imageOrientation = [NSNumber numberWithInt:strippedValue.intValue];
+        self.orientation = [NSNumber numberWithInt:strippedValue.intValue];
     }
     
     // GPS track points
@@ -195,10 +227,12 @@
         {
             CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([self.currentTrackPoint[@"lat"] doubleValue], [self.currentTrackPoint[@"lon"] doubleValue]);
             CLLocationDistance altitude = [self.currentTrackPoint[@"ele"] doubleValue];
-            CLLocationAccuracy horizontalAccuracy = [self.currentTrackPoint[@"gpsAccuracyMeters"] doubleValue];
+            
+            
+            CLLocationAccuracy horizontalAccuracy = [self.currentTrackPoint[kMAPGPSAccuracyMeters] doubleValue];
             CLLocationAccuracy verticalAccuracy = 0;
-            CLLocationDirection course = [self.currentTrackPoint[@"compassTrueHeading"] doubleValue];
-            CLLocationSpeed speed = 0;
+            CLLocationDirection course = [self.currentTrackPoint[kMAPCompassHeading] doubleValue];
+            CLLocationSpeed speed = [self.currentTrackPoint[kMAPGPSSpeed] doubleValue];
             NSDate* timestamp = [self.dateFormatter dateFromString:self.currentTrackPoint[@"time"]];
             
             MAPLocation* location = [[MAPLocation alloc] init];
@@ -210,18 +244,29 @@
                                                                  speed:speed
                                                              timestamp:timestamp];
             
-            
             location.timestamp = timestamp;
-            location.deviceMotionX = [self.currentTrackPoint[@"motionX"] doubleValue];
-            location.deviceMotionY = [self.currentTrackPoint[@"motionY"] doubleValue];
-            location.deviceMotionZ = [self.currentTrackPoint[@"motionZ"] doubleValue];
-            location.headingAccuracy = [self.currentTrackPoint[@"compassAccuracyDegrees"] doubleValue];
-            location.magneticHeading = [self.currentTrackPoint[@"compassMagneticHeading"] doubleValue];
-            location.trueHeading = [self.currentTrackPoint[@"compassTrueHeading"] doubleValue];
+     
+            location.headingAccuracy = self.currentTrackPoint[kMAPAccuracyDegrees];
+            location.magneticHeading = self.currentTrackPoint[kMAPMagneticHeading];
+            location.trueHeading = self.currentTrackPoint[kMAPTrueHeading];
+            
+            if (self.currentTrackPoint[kMAPAccelerometerVector] != nil)
+            {
+                location.deviceMotionX = self.currentTrackPoint[kMAPAccelerometerVector][@"x"];
+                location.deviceMotionY = self.currentTrackPoint[kMAPAccelerometerVector][@"y"];
+                location.deviceMotionZ = self.currentTrackPoint[kMAPAccelerometerVector][@"z"];
+            }
+            
+            if (self.currentTrackPoint[kMAPDeviceAngle] != nil)
+            {
+                location.devicePitch = self.currentTrackPoint[kMAPDeviceAngle][@"pitch"];
+                location.deviceRoll = self.currentTrackPoint[kMAPDeviceAngle][@"roll"];
+                location.deviceYaw = self.currentTrackPoint[kMAPDeviceAngle][@"yaw"];
+            }            
             
             [self.locations addObject:location];
         }
-        else if (![elementName isEqualToString:@"extensions"] && ![elementName isEqualToString:@"fix"])
+        else if (![elementName isEqualToString:@"extensions"])
         {
             if ([elementName containsString:@"mapillary:"])
             {
@@ -235,7 +280,7 @@
     }
     
     // Check if quick parse is done
-    if (self.quickParse && self.localTimeZone && self.project && self.sequenceKey && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate && self.imageOrientation)
+    if (self.quickParse && self.localTimeZone && self.sequenceUUID && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate && self.orientation)
     {
         [self.xmlParser abortParsing];
     }
@@ -247,16 +292,19 @@
     {
         NSMutableDictionary* dict = dict = [NSMutableDictionary dictionary];
         
-        if (self.localTimeZone != nil)     [dict setObject:self.localTimeZone forKey:@"localTimeZone"];
-        if (self.project != nil)           [dict setObject:self.project forKey:@"project"];
-        if (self.sequenceKey != nil)       [dict setObject:self.sequenceKey forKey:@"sequenceKey"];
-        if (self.timeOffset != nil)        [dict setObject:self.timeOffset forKey:@"timeOffset"];
-        if (self.directionOffset!= nil)    [dict setObject:self.directionOffset forKey:@"directionOffset"];
-        if (self.deviceMake != nil)        [dict setObject:self.deviceMake forKey:@"deviceMake"];
-        if (self.deviceModel != nil)       [dict setObject:self.deviceModel forKey:@"deviceModel"];
-        if (self.deviceUUID != nil)        [dict setObject:self.deviceUUID forKey:@"deviceUUID"];
-        if (self.sequenceDate != nil)      [dict setObject:self.sequenceDate forKey:@"sequenceDate"];
-        if (self.imageOrientation!= nil)   [dict setObject:self.imageOrientation forKey:@"imageOrientation"];
+        if (self.localTimeZone != nil)     [dict setObject:self.localTimeZone forKey:kMAPLocalTimeZone];
+        if (self.organizationKey != nil)   [dict setObject:self.organizationKey forKey:kMAPOrganizationKey];
+        if (self.private != nil)           [dict setObject:self.private forKey:kMAPPrivate];
+        if (self.sequenceUUID != nil)      [dict setObject:self.sequenceUUID forKey:kMAPSequenceUUID];
+        if (self.timeOffset != nil)        [dict setObject:self.timeOffset forKey:kMAPTimeOffset];
+        if (self.directionOffset!= nil)    [dict setObject:self.directionOffset forKey:kMAPDirectionOffset];
+        if (self.deviceMake != nil)        [dict setObject:self.deviceMake forKey:kMAPDeviceMake];
+        if (self.deviceModel != nil)       [dict setObject:self.deviceModel forKey:kMAPDeviceModel];
+        if (self.deviceUUID != nil)        [dict setObject:self.deviceUUID forKey:kMAPDeviceUUID];
+        if (self.sequenceDate != nil)      [dict setObject:self.sequenceDate forKey:kMAPCaptureTime];
+        if (self.orientation != nil)       [dict setObject:self.orientation forKey:kMAPOrientation];
+        if (self.rigSequenceUUID != nil)   [dict setObject:self.rigSequenceUUID forKey:kMAPRigSequenceUUID];
+        if (self.rigUUID != nil)           [dict setObject:self.rigUUID forKey:kMAPRigUUID];
         
         if (!self.quickParse)
         {

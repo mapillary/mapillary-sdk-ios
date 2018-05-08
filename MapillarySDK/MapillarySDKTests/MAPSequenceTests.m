@@ -45,12 +45,12 @@
     XCTAssertNotNil(self.sequence.sequenceDate);
     XCTAssertNotNil(self.sequence.sequenceKey);
     XCTAssertNotNil(self.sequence.device);
-    XCTAssertNotNil(self.sequence.project);
     XCTAssertNotNil(self.sequence.path);
     XCTAssertNotNil([self.sequence getImages]);
     
-    XCTAssert(self.sequence.timeOffset == NSTimeIntervalSince1970);
-    XCTAssert(self.sequence.directionOffset == -1);
+    XCTAssertNil(self.sequence.timeOffset);
+    XCTAssertNil(self.sequence.directionOffset);
+    
     XCTAssert([self.sequence getImages].count == 0);
     
     XCTAssertTrue(directoryExists);
@@ -436,20 +436,20 @@
     double correctHeading = 119.36993408203125;
     
     image = images[0];
-    XCTAssert(image.location.magneticHeading == correctHeading);
-    XCTAssert(image.location.trueHeading == correctHeading);
+    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
+    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
     
     image = images[1];
-    XCTAssert(image.location.magneticHeading == correctHeading);
-    XCTAssert(image.location.trueHeading == correctHeading);
+    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
+    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
     
     image = images[2];
-    XCTAssert(image.location.magneticHeading == correctHeading);
-    XCTAssert(image.location.trueHeading == correctHeading);
+    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
+    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
     
     image = images[3];
-    XCTAssert(image.location.magneticHeading == correctHeading);
-    XCTAssert(image.location.trueHeading == correctHeading);
+    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
+    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
 }
 
 #pragma mark - Utils

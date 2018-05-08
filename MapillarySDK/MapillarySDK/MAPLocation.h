@@ -30,17 +30,17 @@
 /**
  The magnetic heading when this location was recorded.
  */
-@property double magneticHeading;
+@property NSNumber* magneticHeading;
 
 /**
  The true heading when this location was recorded.
  */
-@property double trueHeading;
+@property NSNumber* trueHeading;
 
 /**
  The heading accuracy when this location was recorded.
  */
-@property double headingAccuracy;
+@property NSNumber* headingAccuracy;
 
 /**
  The date when this location was recorded.
@@ -54,7 +54,7 @@
  @see CMMotionManager
  @see CMDeviceMotion
  */
-@property double deviceMotionX;
+@property NSNumber* deviceMotionX;
 
 /**
  The device motion Y value when this location was recorded. This value should be
@@ -63,7 +63,7 @@
  @see CMMotionManager
  @see CMDeviceMotion
  */
-@property double deviceMotionY;
+@property NSNumber* deviceMotionY;
 
 /**
  The device motion Z value when this location was recorded. This value should be
@@ -72,7 +72,43 @@
  @see CMMotionManager
  @see CMDeviceMotion
  */
-@property double deviceMotionZ;
+@property NSNumber* deviceMotionZ;
+
+/**
+ The device's attitude - its orientation relative to a known frame of
+ reference—at a point in time obtained from a `CMDeviceMotion` object returned
+ by a `CMMotionManager`.
+ 
+ @see CMMotionManager
+ @see CMDeviceMotion
+ */
+
+/**
+ The device motion X value when this location was recorded. This value should be
+ obtained from a `CMDeviceMotion` object returned by a `CMMotionManager`.
+ 
+ @see CMMotionManager
+ @see CMDeviceMotion
+ */
+@property NSNumber* deviceRoll;
+
+/**
+ The device motion Y value when this location was recorded. This value should be
+ obtained from a `CMDeviceMotion` object returned by a `CMMotionManager`.
+ 
+ @see CMMotionManager
+ @see CMDeviceMotion
+ */
+@property NSNumber* devicePitch;
+
+/**
+ The device motion Z value when this location was recorded. This value should be
+ obtained from a `CMDeviceMotion` object returned by a `CMMotionManager`.
+ 
+ @see CMMotionManager
+ @see CMDeviceMotion
+ */
+@property NSNumber* deviceYaw;
 
 ///-----------------------------------------------------------------------------
 /// @name Utility

@@ -9,6 +9,7 @@
 #import "MAPGpxLogger.h"
 #import "MAPInternalUtils.h"
 #import "MAPLoginManager.h"
+#import "MAPDefines.h"
 
 static NSString* kQueueOperationsChanged = @"kQueueOperationsChanged";
 
@@ -17,6 +18,7 @@ static NSString* kQueueOperationsChanged = @"kQueueOperationsChanged";
 @property (nonatomic) NSString* path;
 @property (nonatomic) MAPLocation* location;
 @property (nonatomic) NSString* time;
+@property (nonatomic) int imageOrientation;
 
 @end
 
@@ -41,20 +43,44 @@ unsigned long long footerLength;
         // Add time
         [locationString appendFormat:@"\t\t\t\t<time>%@</time>\n", self.time];
         
-        // Add exgtensions
+        // Add extensions
         NSMutableString* extensionsString = [[NSMutableString alloc] init];
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:gpsAccuracyMeters>%f</mapillary:gpsAccuracyMeters>\n", self.location.location.horizontalAccuracy];
         
-        if (self.location.trueHeading)
+        if (self.location.deviceMotionX != nil && self.location.deviceMotionY != nil && self.location.deviceMotionZ != nil)
         {
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassTrueHeading>%f</mapillary:compassTrueHeading>\n", self.location.trueHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassMagneticHeading>%f</mapillary:compassMagneticHeading>\n", self.location.magneticHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:compassAccuracyDegrees>%f</mapillary:compassAccuracyDegrees>\n", self.location.headingAccuracy];
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPAccelerometerVector];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<x>%f</x>\n", -self.location.deviceMotionX.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<y>%f</y>\n", self.location.deviceMotionY.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<z>%f</z>\n", self.location.deviceMotionZ.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPAccelerometerVector];
         }
         
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionX>%f</mapillary:motionX>\n", -self.location.deviceMotionX];
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionY>%f</mapillary:motionY>\n", self.location.deviceMotionY];
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:motionZ>%f</mapillary:motionZ>\n", self.location.deviceMotionZ];
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSAccuracyMeters, self.location.location.horizontalAccuracy, kMAPGPSAccuracyMeters];
+        
+        float atanAngle = atan2(self.location.deviceMotionY.doubleValue, self.location.deviceMotionX.doubleValue);
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPAtanAngle, atanAngle, kMAPAtanAngle];
+        
+        if (self.location.trueHeading != nil)
+        {
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPCompassHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTrueHeading, self.location.trueHeading.floatValue, kMAPTrueHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPMagneticHeading, self.location.magneticHeading.floatValue, kMAPMagneticHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPAccuracyDegrees, self.location.headingAccuracy.floatValue, kMAPAccuracyDegrees];
+            [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPCompassHeading];
+        }
+        
+        if (self.location.devicePitch != nil && self.location.deviceRoll != nil && self.location.deviceYaw != nil)
+        {
+            [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPDeviceAngle];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<pitch>%f</pitch>\n", self.location.devicePitch.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<roll>%f</roll>\n", self.location.deviceRoll.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<yaw>%f</yaw>\n", self.location.deviceYaw.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPDeviceAngle];
+        }
+        
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSSpeed, self.location.location.speed, kMAPGPSSpeed];
+        
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%d</mapillary:%@>\n", kMAPOrientation, self.imageOrientation, kMAPOrientation];
         
         [locationString appendFormat:@"\t\t\t\t<extensions>\n%@\t\t\t\t</extensions>\n", extensionsString];
         
@@ -85,6 +111,7 @@ unsigned long long footerLength;
 @property (nonatomic) NSOperationQueue* operationQueue;
 @property (nonatomic) NSString* path;
 @property (nonatomic) NSDateFormatter* dateFormatter;
+@property (nonatomic) MAPSequence* sequence;
 
 @end
 
@@ -97,6 +124,7 @@ unsigned long long footerLength;
     if (self)
     {
         self.path = path;
+        self.sequence = sequence;
         
         self.dateFormatter = [MAPInternalUtils defaultDateFormatter];
         self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -113,18 +141,31 @@ unsigned long long footerLength;
             NSString* authorString = [[MAPLoginManager currentUser] userName];
             
             NSMutableString* extensionsString = [[NSMutableString alloc] init];
-            [extensionsString appendFormat:@"\t\t<mapillary:localTimeZone>%@</mapillary:localTimeZone>\n", [[NSTimeZone systemTimeZone] description]];
-            [extensionsString appendFormat:@"\t\t<mapillary:project>%@</mapillary:project>\n", sequence.project ? sequence.project : @""];
-            [extensionsString appendFormat:@"\t\t<mapillary:sequenceKey>%@</mapillary:sequenceKey>\n", sequence.sequenceKey];
-            [extensionsString appendFormat:@"\t\t<mapillary:timeOffset>%f</mapillary:timeOffset>\n", sequence.timeOffset];
-            [extensionsString appendFormat:@"\t\t<mapillary:directionOffset>%f</mapillary:directionOffset>\n", sequence.directionOffset];
-            [extensionsString appendFormat:@"\t\t<mapillary:deviceUUID>%@</mapillary:deviceUUID>\n", sequence.device.UUID];
-            [extensionsString appendFormat:@"\t\t<mapillary:deviceMake>%@</mapillary:deviceMake>\n", sequence.device.make];
-            [extensionsString appendFormat:@"\t\t<mapillary:deviceModel>%@</mapillary:deviceModel>\n", sequence.device.model];
-            [extensionsString appendFormat:@"\t\t<mapillary:appVersion>%@</mapillary:appVersion>\n", versionString];
-            [extensionsString appendFormat:@"\t\t<mapillary:userKey>%@</mapillary:userKey>\n", [[MAPLoginManager currentUser] userKey]];
-            [extensionsString appendFormat:@"\t\t<mapillary:appNameString>mapillary_ios</mapillary:appNameString>\n"];
-            [extensionsString appendFormat:@"\t\t<mapillary:imageOrientation>%d</mapillary:imageOrientation>\n", sequence.imageOrientation];
+            
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>mapillary_ios</mapillary:%@>\n", kMAPAppNameString, kMAPAppNameString];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPDeviceMake, sequence.device.make, kMAPDeviceMake];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPDeviceModel, sequence.device.model, kMAPDeviceModel];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPDeviceUUID, sequence.device.UUID, kMAPDeviceUUID];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPDirectionOffset, sequence.directionOffset.floatValue, kMAPDirectionOffset];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPLocalTimeZone, [[NSTimeZone systemTimeZone] description], kMAPLocalTimeZone];
+            
+            if (sequence.organizationKey)
+            {
+                [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPOrganizationKey, sequence.organizationKey, kMAPOrganizationKey];
+                [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPPrivate, sequence.private ? @"true" : @"false", kMAPPrivate];
+            }
+            
+            if (sequence.rigSequenceUUID && sequence.rigUUID)
+            {
+                [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPRigSequenceUUID, sequence.rigSequenceUUID, kMAPRigSequenceUUID];
+                [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPRigUUID, sequence.rigUUID, kMAPRigUUID];
+            }
+            
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPSettingsUserKey, [[MAPLoginManager currentUser] userKey], kMAPSettingsUserKey];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPSequenceUUID, sequence.sequenceKey, kMAPSequenceUUID];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTimeOffset, sequence.timeOffset.floatValue, kMAPTimeOffset];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPVersionString, versionString, kMAPVersionString];
+            
             
             NSMutableString* header = [[NSMutableString alloc] init];
             [header appendFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"];
@@ -134,11 +175,11 @@ unsigned long long footerLength;
             [header appendFormat:@"\t\t<link href=\"https://www.mapillary.com/app/user/%@\"/>\n", authorString];
             [header appendFormat:@"\t\t<time>%@</time>\n", dateString];
             [header appendFormat:@"\t</metadata>\n"];
+            [header appendFormat:@"\t<extensions>\n%@\t</extensions>\n", extensionsString];
             [header appendFormat:@"\t<trk>\n"];
             [header appendFormat:@"\t\t<src>Logged by %@ using Mapillary</src>\n", authorString];
             [header appendFormat:@"\t\t<trkseg>\n"];
-            
-            footer = [NSString stringWithFormat:@"\t\t</trkseg>\n\t</trk>\n\t<extensions>\n%@\t</extensions>\n</gpx>", extensionsString];
+            footer = [NSString stringWithFormat:@"\t\t</trkseg>\n\t</trk>\n</gpx>"];
             
             [header appendString:footer];
             
@@ -165,6 +206,7 @@ unsigned long long footerLength;
     MAPGpxOperation* op = [[MAPGpxOperation alloc] init];
     op.path = self.path;
     op.location = location;
+    op.imageOrientation = self.sequence.imageOrientation.intValue;
     
     if (location.timestamp)
     {

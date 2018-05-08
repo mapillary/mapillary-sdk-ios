@@ -23,20 +23,30 @@
     NSString* path = [self.path stringByAppendingPathComponent:@"lock"];
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
+
 - (NSMutableDictionary*)meta
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
     dict[kMAPSettingsTokenValid]    = @1;
     dict[kMAPSettingsUserKey]       = [[NSUserDefaults standardUserDefaults] objectForKey:MAPILLARY_CURRENT_USER_KEY];
     dict[kMAPLocalTimeZone]         = [NSString stringWithFormat:@"%@", [NSTimeZone systemTimeZone]];
-    // dict[kMAPOrganizationKey]    = // TODO
-    // dict[kMAPPrivate]            = // TODO
     dict[kMAPAppNameString]         = @"mapillary_ios";
     dict[kMAPDeviceMake]            = self.device.make;
     dict[kMAPDeviceModel]           = self.device.model;
-    dict[kMAPCameraUUID]            = self.device.UUID;
+    dict[kMAPDeviceUUID]            = self.device.UUID;
     dict[kMAPSequenceUUID]          = self.sequenceKey;
-    dict[kMAPSettingsProject]       = self.project;
+    
+    if (self.organizationKey)
+    {
+        dict[kMAPOrganizationKey]       = self.organizationKey;
+        dict[kMAPPrivate]               = [NSNumber numberWithBool:self.private];
+    }
+    
+    if (self.rigSequenceUUID && self.rigUUID)
+    {
+        dict[kMAPRigSequenceUUID]       = self.rigSequenceUUID;
+        dict[kMAPRigUUID]               = self.rigUUID;
+    }
         
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString* bundle = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];

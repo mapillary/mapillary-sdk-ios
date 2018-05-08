@@ -71,23 +71,33 @@
     
     // Update and add Mapillary tags to metadata
     
-    float atanAngle = atan2(image.location.deviceMotionY, image.location.deviceMotionX);
-    NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:image.location.deviceMotionX],
-                                          @"y": [NSNumber numberWithDouble:image.location.deviceMotionY],
-                                          @"z": [NSNumber numberWithDouble:image.location.deviceMotionZ]};
     
     NSMutableDictionary* description = [sequence meta];
     description[kMAPLatitude] = [NSNumber numberWithDouble:image.location.location.coordinate.latitude];
     description[kMAPLongitude] = [NSNumber numberWithDouble:image.location.location.coordinate.longitude];
     description[kMAPCaptureTime] = [self getUTCFormattedDateAndTime:image.captureDate];
     description[kMAPGpsTime] = [self getUTCFormattedDateAndTime:image.location.timestamp];
-    description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:image.location.trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:image.location.magneticHeading], kMAPAccuracyDegrees:[NSNumber numberWithDouble:image.location.headingAccuracy]};
     description[kMAPGPSAccuracyMeters] = [NSNumber numberWithDouble:image.location.location.horizontalAccuracy];
-    description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
-    description[kMAPAccelerometerVector] = accelerometerVector;
     description[kMAPPhotoUUID] = [[NSUUID UUID] UUIDString];
     description[kMAPAltitude] = [NSNumber numberWithDouble:image.location.location.altitude];
     description[kMAPSettingsUploadHash] = [MAPInternalUtils getSHA256HashFromString:[NSString stringWithFormat:@"%@%@%@",[MAPLoginManager currentUser].accessToken, [MAPLoginManager currentUser].userKey, image.imagePath.lastPathComponent]];
+    description[kMAPGPSSpeed] = [NSNumber numberWithDouble:image.location.location.speed];
+    
+    if (image.location.deviceMotionX != nil && image.location.deviceMotionY != nil && image.location.deviceMotionZ != nil)
+    {
+        float atanAngle = atan2(image.location.deviceMotionY.doubleValue, image.location.deviceMotionX.doubleValue);
+        NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:image.location.deviceMotionX.floatValue],
+                                              @"y": [NSNumber numberWithDouble:image.location.deviceMotionY.floatValue],
+                                              @"z": [NSNumber numberWithDouble:image.location.deviceMotionZ.floatValue]};
+        
+        description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
+        description[kMAPAccelerometerVector] = accelerometerVector;
+    }
+    
+    if (image.location.trueHeading != nil && image.location.magneticHeading != nil && image.location.headingAccuracy != nil)
+    {
+        description[kMAPCompassHeading] = @{kMAPTrueHeading:image.location.trueHeading, kMAPMagneticHeading:image.location.magneticHeading, kMAPAccuracyDegrees:image.location.headingAccuracy};
+    }
     
     NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
     NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
@@ -223,11 +233,11 @@
         [self addExifMetadata:mutableMetadata tag:@"GPSLongitude"           type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:longitude]];
         [self addExifMetadata:mutableMetadata tag:@"GPSLatitudeRef"         type:kCGImageMetadataTypeString value:(__bridge CFStringRef)latitudeRef];
         [self addExifMetadata:mutableMetadata tag:@"GPSLongitudeRef"        type:kCGImageMetadataTypeString value:(__bridge CFStringRef)longitudeRef];
-        [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]];
-        [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]]; // TODO?
+        [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]]; // TODO?
         [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
         [self addExifMetadata:mutableMetadata tag:@"GPSHPositioningError"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
-        [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.trueHeading]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)location.trueHeading];
         [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
     }
 }

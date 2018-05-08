@@ -8,7 +8,6 @@
 
 #import "MAPFileManager.h"
 #import "MAPInternalUtils.h"
-#import "MAPGpxParser.h"
 
 @implementation MAPFileManager
 
