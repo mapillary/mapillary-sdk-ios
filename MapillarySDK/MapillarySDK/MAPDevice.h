@@ -42,8 +42,10 @@
  
  @param make The make of the device.
  @param model The model of the device.
+ @param uuid A unique identifier of the device.
  */
-- (id)initWithMake:(NSString*)make andModel:(NSString*)model;
+- (id)initWithMake:(NSString*)make andModel:(NSString*)model
+           andUUID:(NSString*)uuid;
 
 /**
  Returns the device the app is running on.

@@ -12,24 +12,21 @@
 
 @implementation MAPDevice
 
-- (id)initWithMake:(NSString*)make andModel:(NSString*)model
+- (id)initWithMake:(NSString*)make andModel:(NSString*)model andUUID:(NSString*)uuid
 {
     self = [super init];
     if (self)
     {
         self.make = make;
         self.model = model;
-        self.UUID = [NSString stringWithFormat:@"%@-%@-%@", [[[UIDevice currentDevice] identifierForVendor] UUIDString], make, model];
+        self.UUID = uuid;
     }
     return self;
 }
 
 + (id)thisDevice
 {
-    MAPDevice* current = [[MAPDevice alloc] init];
-    current.make = @"Apple";
-    current.model = [SDVersion deviceNameString];
-    current.UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    MAPDevice* current = [[MAPDevice alloc] initWithMake:@"Apple" andModel:[SDVersion deviceNameString] andUUID:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
     
     return current;
 }
