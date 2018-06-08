@@ -278,7 +278,22 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)deleteAllImages
 {
-    for (MAPImage* image in [self getImages])
+    NSMutableArray* images = [[NSMutableArray alloc] init];
+    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
+    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
+    NSArray* sortedFiles = [files sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    for (NSString* path in sortedFiles)
+    {
+        MAPImage* image = [[MAPImage alloc] init];
+        image.imagePath = [self.path stringByAppendingPathComponent:path];
+        [images addObject:image];
+    }
+    
+    for (MAPImage* image in images)
     {
         [self deleteImage:image];
     }
