@@ -28,13 +28,15 @@
 @property NSString* localTimeZone;
 @property NSString* organizationKey;
 @property NSNumber* private;
-@property NSString* rigSequenceUUID; // NEW
-@property NSString* rigUUID; // NEW
+@property NSString* rigSequenceUUID;
+@property NSString* rigUUID;
 @property NSString* sequenceUUID;
 @property NSNumber* timeOffset;
-
 @property NSDate* sequenceDate;
 @property NSNumber* orientation;
+@property NSMutableDictionary* accelerometerVector;
+@property NSMutableDictionary* deviceAngle;
+@property NSMutableDictionary* compassHeading;
 
 @property (nonatomic, copy) void (^doneCallback)(NSDictionary* dict);
 
@@ -130,9 +132,24 @@
     }
     
     // Skip GPS track if we are doing a quick parse
-    if (!self.quickParse && [elementName isEqualToString:@"trkpt"])
+    if (!self.quickParse)
     {
-        self.currentTrackPoint = [NSMutableDictionary dictionaryWithDictionary:attributeDict];
+        if ([elementName isEqualToString:@"trkpt"])
+        {
+            self.currentTrackPoint = [NSMutableDictionary dictionaryWithDictionary:attributeDict];
+        }
+        else if ([elementName isEqualToString:[self stringForKey:kMAPAccelerometerVector]])
+        {
+            self.accelerometerVector = [NSMutableDictionary dictionary];
+        }
+        else if ([elementName isEqualToString:[self stringForKey:kMAPDeviceAngle]])
+        {
+            self.deviceAngle = [NSMutableDictionary dictionary];
+        }
+        else if ([elementName isEqualToString:[self stringForKey:kMAPCompassHeading]])
+        {
+            self.compassHeading = [NSMutableDictionary dictionary];
+        }
     }
 }
 
@@ -231,7 +248,7 @@
             
             CLLocationAccuracy horizontalAccuracy = [self.currentTrackPoint[kMAPGPSAccuracyMeters] doubleValue];
             CLLocationAccuracy verticalAccuracy = 0;
-            CLLocationDirection course = [self.currentTrackPoint[kMAPCompassHeading] doubleValue];
+            CLLocationDirection course = [self.currentTrackPoint[kMAPCompassHeading][kMAPTrueHeading] doubleValue];
             CLLocationSpeed speed = [self.currentTrackPoint[kMAPGPSSpeed] doubleValue];
             NSDate* timestamp = [self.dateFormatter dateFromString:self.currentTrackPoint[@"time"]];
             
@@ -245,10 +262,6 @@
                                                              timestamp:timestamp];
             
             location.timestamp = timestamp;
-     
-            location.headingAccuracy = self.currentTrackPoint[kMAPAccuracyDegrees];
-            location.magneticHeading = self.currentTrackPoint[kMAPMagneticHeading];
-            location.trueHeading = self.currentTrackPoint[kMAPTrueHeading];
             
             if (self.currentTrackPoint[kMAPAccelerometerVector] != nil)
             {
@@ -262,7 +275,14 @@
                 location.devicePitch = self.currentTrackPoint[kMAPDeviceAngle][@"pitch"];
                 location.deviceRoll = self.currentTrackPoint[kMAPDeviceAngle][@"roll"];
                 location.deviceYaw = self.currentTrackPoint[kMAPDeviceAngle][@"yaw"];
-            }            
+            }
+            
+            if (self.currentTrackPoint[kMAPCompassHeading] != nil)
+            {
+                location.headingAccuracy = self.currentTrackPoint[kMAPCompassHeading][kMAPAccuracyDegrees];
+                location.magneticHeading = self.currentTrackPoint[kMAPCompassHeading][kMAPMagneticHeading];
+                location.trueHeading = self.currentTrackPoint[kMAPCompassHeading][kMAPTrueHeading];
+            }
             
             [self.locations addObject:location];
         }
@@ -275,7 +295,53 @@
             
             NSString* trimmedValue = [self.currentElementValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
-            [self.currentTrackPoint setObject:trimmedValue forKey:elementName];
+            // Finished parsing kMAPAccelerometerVector
+            if ([elementName isEqualToString:kMAPAccelerometerVector])
+            {
+                [self.currentTrackPoint setObject:self.accelerometerVector forKey:elementName];
+                self.accelerometerVector = nil;
+            }
+            
+            // Finished parsing kMAPDeviceAngle
+            else if ([elementName isEqualToString:kMAPDeviceAngle])
+            {
+                [self.currentTrackPoint setObject:self.deviceAngle forKey:elementName];
+                self.deviceAngle = nil;
+            }
+            
+            // Finished parsing kMAPCompassHeading
+            else if ([elementName isEqualToString:kMAPCompassHeading])
+            {
+                [self.currentTrackPoint setObject:self.compassHeading forKey:elementName];
+                self.compassHeading = nil;
+            }
+            
+            // Other
+            else
+            {
+                // Currently parsing kMAPAccelerometerVector
+                if (self.accelerometerVector)
+                {
+                    [self.accelerometerVector setObject:trimmedValue forKey:elementName];
+                }
+                
+                // Currently parsing kMAPDeviceAngle
+                else if (self.deviceAngle)
+                {
+                    [self.deviceAngle setObject:trimmedValue forKey:elementName];
+                }
+                
+                // Currently parsing kMAPCompassHeading
+                else if (self.compassHeading)
+                {
+                    [self.compassHeading setObject:trimmedValue forKey:elementName];
+                }
+                
+                else
+                {
+                    [self.currentTrackPoint setObject:trimmedValue forKey:elementName];
+                }
+            }
         }
     }
     
@@ -308,7 +374,7 @@
         
         if (!self.quickParse)
         {
-            if (self.locations)     [dict setObject:self.locations forKey:@"locations"];
+            if (self.locations)            [dict setObject:self.locations forKey:@"locations"];
         }
         
         self.doneCallback(dict);
