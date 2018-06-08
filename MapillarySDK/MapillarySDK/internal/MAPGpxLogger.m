@@ -49,32 +49,32 @@ unsigned long long footerLength;
         if (self.location.deviceMotionX != nil && self.location.deviceMotionY != nil && self.location.deviceMotionZ != nil)
         {
             [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPAccelerometerVector];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<x>%f</x>\n", -self.location.deviceMotionX.floatValue];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<y>%f</y>\n", self.location.deviceMotionY.floatValue];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<z>%f</z>\n", self.location.deviceMotionZ.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<x>%f</x>\n", -self.location.deviceMotionX.doubleValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<y>%f</y>\n", self.location.deviceMotionY.doubleValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<z>%f</z>\n", self.location.deviceMotionZ.doubleValue];
             [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPAccelerometerVector];
         }
         
         [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSAccuracyMeters, self.location.location.horizontalAccuracy, kMAPGPSAccuracyMeters];
         
-        float atanAngle = atan2(self.location.deviceMotionY.doubleValue, self.location.deviceMotionX.doubleValue);
+        double atanAngle = atan2(self.location.deviceMotionY.doubleValue, self.location.deviceMotionX.doubleValue);
         [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPAtanAngle, atanAngle, kMAPAtanAngle];
         
         if (self.location.trueHeading != nil)
         {
             [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPCompassHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTrueHeading, self.location.trueHeading.floatValue, kMAPTrueHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPMagneticHeading, self.location.magneticHeading.floatValue, kMAPMagneticHeading];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPAccuracyDegrees, self.location.headingAccuracy.floatValue, kMAPAccuracyDegrees];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTrueHeading, self.location.trueHeading.doubleValue, kMAPTrueHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPMagneticHeading, self.location.magneticHeading.doubleValue, kMAPMagneticHeading];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPAccuracyDegrees, self.location.headingAccuracy.doubleValue, kMAPAccuracyDegrees];
             [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPCompassHeading];
         }
         
         if (self.location.devicePitch != nil && self.location.deviceRoll != nil && self.location.deviceYaw != nil)
         {
             [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPDeviceAngle];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<pitch>%f</pitch>\n", self.location.devicePitch.floatValue];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<roll>%f</roll>\n", self.location.deviceRoll.floatValue];
-            [extensionsString appendFormat:@"\t\t\t\t\t\t<yaw>%f</yaw>\n", self.location.deviceYaw.floatValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<pitch>%f</pitch>\n", self.location.devicePitch.doubleValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<roll>%f</roll>\n", self.location.deviceRoll.doubleValue];
+            [extensionsString appendFormat:@"\t\t\t\t\t\t<yaw>%f</yaw>\n", self.location.deviceYaw.doubleValue];
             [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPDeviceAngle];
         }
         
@@ -146,7 +146,7 @@ unsigned long long footerLength;
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPDeviceMake, sequence.device.make, kMAPDeviceMake];
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPDeviceModel, sequence.device.model, kMAPDeviceModel];
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPDeviceUUID, sequence.device.UUID, kMAPDeviceUUID];
-            [extensionsString appendFormat:@"\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPDirectionOffset, sequence.directionOffset.floatValue, kMAPDirectionOffset];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPDirectionOffset, sequence.directionOffset.doubleValue, kMAPDirectionOffset];
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPLocalTimeZone, [[NSTimeZone systemTimeZone] description], kMAPLocalTimeZone];
             
             if (sequence.organizationKey)
@@ -163,7 +163,7 @@ unsigned long long footerLength;
             
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPSettingsUserKey, [[MAPLoginManager currentUser] userKey], kMAPSettingsUserKey];
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPSequenceUUID, sequence.sequenceKey, kMAPSequenceUUID];
-            [extensionsString appendFormat:@"\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTimeOffset, sequence.timeOffset.floatValue, kMAPTimeOffset];
+            [extensionsString appendFormat:@"\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTimeOffset, sequence.timeOffset.doubleValue, kMAPTimeOffset];
             [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPVersionString, versionString, kMAPVersionString];
             
             

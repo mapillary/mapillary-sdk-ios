@@ -86,9 +86,9 @@
     if (image.location.deviceMotionX != nil && image.location.deviceMotionY != nil && image.location.deviceMotionZ != nil)
     {
         float atanAngle = atan2(image.location.deviceMotionY.doubleValue, image.location.deviceMotionX.doubleValue);
-        NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:image.location.deviceMotionX.floatValue],
-                                              @"y": [NSNumber numberWithDouble:image.location.deviceMotionY.floatValue],
-                                              @"z": [NSNumber numberWithDouble:image.location.deviceMotionZ.floatValue]};
+        NSDictionary* accelerometerVector = @{@"x": [NSNumber numberWithDouble:image.location.deviceMotionX.doubleValue],
+                                              @"y": [NSNumber numberWithDouble:image.location.deviceMotionY.doubleValue],
+                                              @"z": [NSNumber numberWithDouble:image.location.deviceMotionZ.doubleValue]};
         
         description[kMAPAtanAngle] = [NSNumber numberWithDouble:atanAngle];
         description[kMAPAccelerometerVector] = accelerometerVector;

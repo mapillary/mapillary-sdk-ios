@@ -477,8 +477,8 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             }
         }
         
-        float trueHeading = location.trueHeading.floatValue;
-        float magneticHeading = location.magneticHeading.floatValue;
+        double trueHeading = location.trueHeading.doubleValue;
+        double magneticHeading = location.magneticHeading.doubleValue;
         
         if (self.imageOrientation != nil)
         {
@@ -506,8 +506,8 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         
         if (self.directionOffset != nil)
         {
-            trueHeading += self.directionOffset.floatValue;
-            magneticHeading += self.directionOffset.floatValue;
+            trueHeading += self.directionOffset.doubleValue;
+            magneticHeading += self.directionOffset.doubleValue;
         }
         
         trueHeading = fmodf(trueHeading + 360.0f, 360.0f);
