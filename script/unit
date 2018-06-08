@@ -16,7 +16,7 @@ xcodebuild test-without-building \
            -workspace MapillarySDK/MapillarySDK.xcworkspace \
            -scheme Test \
            -configuration Debug \
-           -destination 'platform=iOS Simulator,OS=11.0.1,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
+           -destination 'platform=iOS Simulator,OS=11.4,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
 
 echo "Collecting code coverage..."
 /usr/local/bin/slather
