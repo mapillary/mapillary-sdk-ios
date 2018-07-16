@@ -37,3 +37,4 @@ if [ $RC = 0 ]; then
 else
     echo "Unit tests failed"
     exit $RC
+fi
