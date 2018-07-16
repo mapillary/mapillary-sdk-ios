@@ -5,3 +5,5 @@
 xcuserdata
 Pods
 build
+IDEWorkspaceChecks.plist
+test_results/
