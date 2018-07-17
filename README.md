@@ -39,37 +39,20 @@ To use the SDK, you need to obtain a Mapillary `client_id` first.
 
 When you fill in the form, make sure the redirect URL is similar to this:
 
-`com.mycompany.myapp.mapillary://`
+`com.mycompany.myapp.mapillary`
 
-> The `://` at the end is very important!
+##### Client id
 
-##### client_id
-
-Copy your `client_id`, you need it to initialize the SDK later.
+Copy your client id, you need it to initialize the SDK later.
 
 ### Edit your application plist
 
-Now you need to add a custom URL scheme to your app. This is needed so that after authentication in the browser, your app can get focus again. Enter the same scheme as you provided in the redirect URL previously (but without ://). 
 
-You also need to add `MapillaryClientId` and `MapillaryRedirectUrl` to the plist.
-
-Below is an example of parts of a plist file.
+Add `MapillaryClientId` and `MapillaryRedirectUrl` to your plist file. Below is an example of parts of a plist file.
 
 ```
 <plist version="1.0">
 <dict>
-	...
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>YOUR_REDIRECT_URL</string>
-			</array>
-		</dict>
-	</array>
 	...
 	<key>MapillaryClientId</key>
 	<string>YOUR_CLIENT_ID</string>
@@ -83,48 +66,152 @@ Below is an example of parts of a plist file.
 
 ### App Delegate
 
-Add this to your `AppDelegate.m` file:
+Add this to your `AppDelegate.m` file. This is needed to handle background uploading properly.
 
 ```
 #import <MapillarySDK/MapillarySDK.h>
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    return [MAPApplicationDelegate application:application didFinishLaunchingWithOptions:launchOptions];
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    return [MAPApplicationDelegate application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{    
+    [MAPApplicationDelegate interceptApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 ```
 
 ## Documentation
 
-The latest generated documentation can found here: https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html
+The latest generated documentation can found [here](https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html).
+
+## Example app
+
+There is an example app called [MapillarySDKExample](https://github.com/mapillary/mapillary-sdk-ios/blob/master/MapillarySDKExample) that demonstrates how to use most of the features in the SDK.
 
 ## Usage
+
+Below is a quick-start guide to get you started. Refer to the full [docs](https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html) for details.
 
 
 ### Signing in
 ```
-[MAPLoginManager signIn:^(BOOL success) {
-                
+[MAPLoginManager signInFromViewController:self result:^(BOOL success) {            
+    
     if (success)
     {
-        NSLog(@"Sign in was a success");
+        // Sign in was sucessful
     }
     else
     {
-        NSLog(@"Sign in failed");
-    }                        
-
+        // Sign in failed
+    }        
+            
+} cancelled:^{
+            
+    // The user cancelled the sign in process
+            
 }];
 ```
 
 ### Signing out
 ```
 [MAPLoginManager signOut];
+```
+
+### Creating a new sequewnce
+```
+MAPDevice* device = [MAPDevice thisDevice];
+MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:device];    
+```
+
+### Adding images to a new sequences
+
+To just add image data to a sequence, use this:
+
+```
+[sequence addImageWithData:imageData date:nil location:nil];
+```
+
+### Adding locations to a new sequences
+
+To just add a location to a sequence, use this:
+
+```
+MAPLocation* location = [[MAPLocation alloc] init];
+location.location = self.lastLocation; // From 
+[sequence addLocation:location];
+```
+
+
+### Listing sequences
+```
+[MAPFileManager getSequencesAsync:^(NSArray *sequences) {
+        
+    // Do something
+                    
+}];
+```
+
+### Uploading sequences
+
+The uploading is a two-part process; image processing and the actual upload. Before an image can be scheduled for upload, it needs to be processed first. What this means is that the necessary information is written into the EXIF of the image, such as the GPS position, your user key, direction etc.
+
+Image processing cannot be performed in the background. Once all images are processed you can put the app in the background and the upload will continue until all images are uploaded.
+
+For testing the upload, use the two properties `testUpload` and `deleteAfterUpload` (only used if `testUpload` is set to `YES`) to configure the uploader:
+
+```
+MAPUploadManager* uploadManager = [MAPUploadManager sharedManager];
+uploadManager.delegate = self;
+uploadManager.testUpload = YES; // Upload to our test server instead
+uploadManager.deleteAfterUpload = NO; // Keep the images after upload
+[uploadManager processAndUploadSequences:sequencesToUpload];
+```
+
+When your app is ready for production, just omit those two lines:
+
+```
+MAPUploadManager* uploadManager = [MAPUploadManager sharedManager];
+uploadManager.delegate = self;
+[uploadManager processAndUploadSequences:sequencesToUpload];
+```
+
+### Tracking images processsing and upload progress
+
+To track the progress of the image processing and/or upload and to be able to update the UI, use `MAPUploadManagerDelegate`:
+
+```
+- (void)imageProcessed:(MAPUploadManager *)uploadManager image:(MAPImage *)image uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image was processed
+}
+
+- (void)processingFinished:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image processing finished
+}
+
+- (void)processingStopped:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image processing was stopped
+}
+
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+    // Image was uploaded sucessfully
+}
+
+- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
+{
+    // Image failed to uploaded
+}
+
+- (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+	// Upload finished
+}
+
+- (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+{
+	// Upload stopped
+}
 ```
 
 ## Maintainers
@@ -137,4 +224,4 @@ Give feedback and report bugs on the SDK [here](https://github.com/mapillary/map
 
 ## License
 
-Copyright (C) Mapillary 2017
+Copyright (C) Mapillary 2018

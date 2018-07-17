@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MAPUploadManagerDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    <link rel='shortcut icon' href='https://www.mapillary.com/img/favicon.ico' type='image/x-icon' />
+
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Protocol/MAPUploadManagerDelegate" class="dashAnchor"></a>
+    <a title="MAPUploadManagerDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Mapillary Docs</a></p>
+        <p class="header-right"><a href="https://github.com/mapillary/mapillary-sdk-ios"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Mapillary Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        MAPUploadManagerDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../getting-started.html">Getting started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Authentication.html">Authentication</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPLoginManager.html">MAPLoginManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUser.html">MAPUser</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Sequences.html">Sequences</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPDevice.html">MAPDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPFileManager.html">MAPFileManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPImage.html">MAPImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPLocation.html">MAPLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPSequence.html">MAPSequence</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Uploading.html">Uploading</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUploadManager.html">MAPUploadManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MAPUploadManagerDelegate.html">MAPUploadManagerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>MAPUploadManagerDelegate</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="k">@protocol</span> <span class="nc">MAPUploadManagerDelegate</span></code></pre>
+
+                </div>
+              </div>
+            <p>This protocol is used for notifying the delegate what&rsquo;s happening during
+image processing and upload.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)imageProcessed:image:status:"></a>
+                    <a name="//apple_ref/objc/Method/-imageProcessed:image:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)imageProcessed:image:status:">-imageProcessed:image:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when an image is processed.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">imageProcessed</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+                 <span class="nf">image</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPImage.html">MAPImage</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span>
+                <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">imageProcessed</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">image</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is processing the image.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image that has been processed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)processingFinished:status:"></a>
+                    <a name="//apple_ref/objc/Method/-processingFinished:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)processingFinished:status:">-processingFinished:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when all images have been processed.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processingFinished</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+                    <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">processingFinished</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is processing the image.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)processingStopped:status:"></a>
+                    <a name="//apple_ref/objc/Method/-processingStopped:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)processingStopped:status:">-processingStopped:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when image processing has was stopped by calling stopProcessing.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processingStopped</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+                   <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">processingStopped</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is processing the image.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)imageUploaded:image:status:"></a>
+                    <a name="//apple_ref/objc/Method/-imageUploaded:image:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)imageUploaded:image:status:">-imageUploaded:image:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when an image was sucessfully uploaded.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">imageUploaded</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+                <span class="nf">image</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPImage.html">MAPImage</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span>
+               <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">imageUploaded</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">image</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is uploading the image.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image that has been uploaded.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)imageFailed:image:status:error:"></a>
+                    <a name="//apple_ref/objc/Method/-imageFailed:image:status:error:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)imageFailed:image:status:error:">-imageFailed:image:status:error:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when an image failed to upload.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">imageFailed</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+              <span class="nf">image</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPImage.html">MAPImage</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span>
+             <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span>
+              <span class="nf">error</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">error</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">imageFailed</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">image</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is uploading the image.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image that failed to upload.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The error explaining what went wrong.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)uploadedData:bytesSent:status:"></a>
+                    <a name="//apple_ref/objc/Method/-uploadedData:bytesSent:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)uploadedData:bytesSent:status:">-uploadedData:bytesSent:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when a chunk of data has been uploaded.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">uploadedData</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+           <span class="nf">bytesSent</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">bytesSent</span>
+              <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">uploadedData</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">bytesSent</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is uploading the images.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>bytesSent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of bytes sent since the last invocation of this method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)uploadFinished:status:"></a>
+                    <a name="//apple_ref/objc/Method/-uploadFinished:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)uploadFinished:status:">-uploadFinished:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when all images have been uploaded.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">uploadFinished</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+                <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">uploadFinished</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is uploading the images.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(pl)MAPUploadManagerDelegate(im)uploadStopped:status:"></a>
+                    <a name="//apple_ref/objc/Method/-uploadStopped:status:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(pl)MAPUploadManagerDelegate(im)uploadStopped:status:">-uploadStopped:status:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate method for when image uploading has was stopped by calling stopUpload.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">uploadStopped</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">uploadManager</span>
+               <span class="nf">status</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">status</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">optional</span> <span class="kd">func</span> <span class="nf">uploadStopped</span><span class="p">(</span><span class="n">_</span> <span class="nv">uploadManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The upload manager object that is uploading the images.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>status</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current status of the upload manager.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018 <a class="link" href="https://www.mapillary.com" target="_blank" rel="external">Mapillary</a>. See <a class="link" href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE" target="_blank" rel="external">license</a> for more details.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

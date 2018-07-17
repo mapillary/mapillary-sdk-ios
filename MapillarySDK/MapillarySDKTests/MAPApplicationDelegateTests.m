@@ -13,8 +13,6 @@
 
 @end
 
-// TODO add more tests
-
 @implementation MAPApplicationDelegateTests
 
 - (void)setUp
@@ -27,18 +25,6 @@
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-}
-
-- (void)testDidFinishLaunchingWithOptionsWithNil
-{
-    BOOL ok = [MAPApplicationDelegate application:nil didFinishLaunchingWithOptions:nil];
-    XCTAssertFalse(ok);
-}
-
-- (void)testopenURLWithNil
-{
-    BOOL ok = [MAPApplicationDelegate application:nil openURL:nil sourceApplication:nil annotation:nil];
-    XCTAssertFalse(ok);
 }
 
 @end
