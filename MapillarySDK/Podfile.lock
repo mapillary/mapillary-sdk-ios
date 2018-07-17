@@ -40,6 +40,15 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
+    - AWSCore
+    - AWSS3
+    - BOSImageResizeOperation
+    - NSHash
+    - OCHamcrest
+    - OCMockito
+    - PodAsset
+    - SAMKeychain
+    - SDVersion
 
 SPEC CHECKSUMS:
   AFNetworking: 8ac6017b94ea105479f7776e5288e48ae9c59bb4
@@ -55,8 +64,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 45d9290aaccc769e067f72c620d9553e6b9b078c
 
-<<<<<<< HEAD
 COCOAPODS: 1.5.3
-=======
-COCOAPODS: 1.4.0.rc.1
->>>>>>> develop
