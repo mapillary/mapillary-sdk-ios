@@ -1,15 +1,13 @@
 #!/bin/bash
-
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PARRENT_DIR="$(dirname "$current_dir")"
 
-cd MapillarySDK
+echo "Cleaning the environment..."
+rm -rf $PARRENT_DIR/MapillarySDK/Podfile.lock $PARRENT_DIR/MapillarySDK/Pods $PARENT_DIR/MapillarySDK/MapillarySDK.xcworkspace
 
 echo "Generating workspace"
 export LANG=en_US.UTF-8
-/usr/local/bin/pod install
-
-cd ..
+pod install --project-directory=$PARRENT_DIR/MapillarySDK
 
 echo "Running tests..."
 xcodebuild test-without-building \
