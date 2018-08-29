@@ -1,23 +1,15 @@
 #!/bin/bash
-set -e
-
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PARRENT_DIR="$(dirname "$current_dir")"
-
-cd MapillarySDK
-
-echo "Generating workspace"
 export LANG=en_US.UTF-8
-/usr/local/bin/pod install
-
-cd ..
 
 echo "Running tests..."
-xcodebuild test-without-building \
+set -o pipefail && xcodebuild test-without-building \
            -workspace MapillarySDK/MapillarySDK.xcworkspace \
            -scheme Test \
            -configuration Debug \
-           -destination 'platform=iOS Simulator,OS=11.4,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit
+           -skip-testing:MAPGpxLoggerTests.testGpxLogger \
+           -destination 'platform=iOS Simulator,OS=11.4,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit 
+
+RC=$?
 
 echo "Collecting code coverage..."
 /usr/local/bin/slather
@@ -29,4 +21,5 @@ cp -a test-reports/. test_results/unit/
 cp -a cobertura/cobertura.xml test_results/cobertura/coverage.xml
 rm -rf test-reports
 rm -rf cobertura
-echo "DONE."
+
+exit $RC
