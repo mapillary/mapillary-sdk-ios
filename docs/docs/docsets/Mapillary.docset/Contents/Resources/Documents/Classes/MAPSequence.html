@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MAPSequence Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    <link rel='shortcut icon' href='https://www.mapillary.com/img/favicon.ico' type='image/x-icon' />
+
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/MAPSequence" class="dashAnchor"></a>
+    <a title="MAPSequence Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Mapillary Docs</a></p>
+        <p class="header-right"><a href="https://github.com/mapillary/mapillary-sdk-ios"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Mapillary Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        MAPSequence Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../getting-started.html">Getting started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Authentication.html">Authentication</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPLoginManager.html">MAPLoginManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUser.html">MAPUser</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Sequences.html">Sequences</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPDevice.html">MAPDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPFileManager.html">MAPFileManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPImage.html">MAPImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPLocation.html">MAPLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPSequence.html">MAPSequence</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Uploading.html">Uploading</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUploadManager.html">MAPUploadManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MAPUploadManagerDelegate.html">MAPUploadManagerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MAPUploadManagerStatus.html">MAPUploadManagerStatus</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>MAPSequence</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="k">@interface</span> <span class="nc">MAPSequence</span></code></pre>
+
+                </div>
+              </div>
+            <p>The MAPSequence class describes a sequence. A sequence consists of images and
+locations. Internally, all data is stored in a compliant GPX file which works
+in other programs as well if you decide to export it.</p>
+
+<p>The location of an image is calculated using the date and time the image was
+captured and is interpolated between GPS points in the GPX file.
+processImage
+If you want to export the image and get all the EXIF data added, you need to
+process the image first using <code><a href="../Classes/MAPSequence.html#/c:objc(cs)MAPSequence(im)processImage:">-[MAPSequence processImage:]</a></code>.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <a href="http://www.topografix.com/gpx.asp">http://www.topografix.com/gpx.asp</a>
+
+</div>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <a href="http://www.topografix.com/gpx/1/1/">http://www.topografix.com/gpx/1/1/</a>
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/objc/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)directionOffset"></a>
+                    <a name="//apple_ref/objc/Property/directionOffset" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)directionOffset">directionOffset</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The direction offset in degrees. -1 means not set, 0 means straight forward,
+90 means 90 degress to the right etc. When the heading is calculated it uses
+this value to correct the heading.</p>
+
+<p>If the value is -1 the compass angle will be used.
+If the value is 0, the compass angle is ignored and instead the value is
+interpolated between two locations.
+If the value is &gt;0, the compass angle is ignored and instead the value is
+interpolated between two locations and also adds this value.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">directionOffset</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">directionOffset</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)timeOffset"></a>
+                    <a name="//apple_ref/objc/Property/timeOffset" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)timeOffset">timeOffset</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The time offset in milliseconds.</p>
+
+<p>Default is NSTimeIntervalSince1970. It means it is not set.
++1 means the image date is increased by 1 ms when calculating the position of
+and image.
+-1 means the image date is decreased by 1 ms when calculating the position of
+and image.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">timeOffset</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">timeOffset</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)sequenceDate"></a>
+                    <a name="//apple_ref/objc/Property/sequenceDate" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)sequenceDate">sequenceDate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The date the sequence was captured.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">sequenceDate</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceDate</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)path"></a>
+                    <a name="//apple_ref/objc/Property/path" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)path">path</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The path to the directory containing this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">path</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)project"></a>
+                    <a name="//apple_ref/objc/Property/project" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)project">project</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The project this sequence belongs to.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">project</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">project</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)sequenceKey"></a>
+                    <a name="//apple_ref/objc/Property/sequenceKey" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)sequenceKey">sequenceKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The unique ID of this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">sequenceKey</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceKey</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)device"></a>
+                    <a name="//apple_ref/objc/Property/device" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)device">device</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The device used to capture this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="n"><a href="../Classes/MAPDevice.html">MAPDevice</a></span> <span class="o">*</span><span class="n">device</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">device</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPDevice.html">MAPDevice</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)imageCount"></a>
+                    <a name="//apple_ref/objc/Property/imageCount" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)imageCount">imageCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Number of images in this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">imageCount</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">imageCount</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)sequenceSize"></a>
+                    <a name="//apple_ref/objc/Property/sequenceSize" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)sequenceSize">sequenceSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The size in bytes of the all the images in this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">sequenceSize</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceSize</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)imageOrientation"></a>
+                    <a name="//apple_ref/objc/Property/imageOrientation" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)imageOrientation">imageOrientation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The image orientation this sequence was captured in.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">imageOrientation</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">imageOrientation</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/objc/Section/Initializers" class="dashAnchor"></a>
+                <a href="#/Initializers">
+                  <h3 class="section-name">Initializers</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)initWithDevice:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithDevice:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)initWithDevice:">-initWithDevice:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new sequence for a specific device.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithDevice</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPDevice.html">MAPDevice</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">device</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">device</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPDevice.html">MAPDevice</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>device</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A device.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)initWithDevice:andProject:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithDevice:andProject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)initWithDevice:andProject:">-initWithDevice:andProject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new sequence for a specific device and project.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithDevice</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPDevice.html">MAPDevice</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">device</span> <span class="nf">andProject</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">project</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">device</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPDevice.html">MAPDevice</a></span><span class="o">!</span><span class="p">,</span> <span class="n">andProject</span> <span class="nv">project</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>device</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A device.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>project</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A project UUID.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)initWithPath:parseGpx:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithPath:parseGpx:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)initWithPath:parseGpx:">-initWithPath:parseGpx:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and initilizes a sequence from an existing sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithPath</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">path</span> <span class="nf">parseGpx</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">parseGpx</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">path</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">parseGpx</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The path to the directory containing the sequence.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parseGpx</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If YES, the GPX file will be parsed and all properties will
+            be initialized. If NO, the GPX file will not be parsed and some
+            properties will not be initialized. Setting this parameter to
+            YES is much slower than NO.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Adding%20images"></a>
+                <a name="//apple_ref/objc/Section/Adding images" class="dashAnchor"></a>
+                <a href="#/Adding%20images">
+                  <h3 class="section-name">Adding images</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)addImageWithData:date:location:"></a>
+                    <a name="//apple_ref/objc/Method/-addImageWithData:date:location:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)addImageWithData:date:location:">-addImageWithData:date:location:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds an image to the sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addImageWithData</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">imageData</span>
+                    <span class="nf">date</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">date</span>
+                <span class="nf">location</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPLocation.html">MAPLocation</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">location</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addImage</span><span class="p">(</span><span class="n">withData</span> <span class="nv">imageData</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPLocation.html">MAPLocation</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>imageData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image data of an image.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>date</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The date the image was captured. If <code>nil</code> the current date is used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>location</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The location the image was captured. Can be nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)addImageWithPath:date:location:"></a>
+                    <a name="//apple_ref/objc/Method/-addImageWithPath:date:location:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)addImageWithPath:date:location:">-addImageWithPath:date:location:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds an image to the sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addImageWithPath</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">imagePath</span>
+                    <span class="nf">date</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">date</span>
+                <span class="nf">location</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPLocation.html">MAPLocation</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">location</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addImage</span><span class="p">(</span><span class="n">withPath</span> <span class="nv">imagePath</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">location</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPLocation.html">MAPLocation</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>imagePath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The file path to the image on disk.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>date</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The date the image was captured. If <code>nil</code> the current date is used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>location</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The location the image was captured. Can be nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Deleting%20images"></a>
+                <a name="//apple_ref/objc/Section/Deleting images" class="dashAnchor"></a>
+                <a href="#/Deleting%20images">
+                  <h3 class="section-name">Deleting images</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)deleteImage:"></a>
+                    <a name="//apple_ref/objc/Method/-deleteImage:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)deleteImage:">-deleteImage:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes an image.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">deleteImage</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPImage.html">MAPImage</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">_</span> <span class="nv">image</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPImage.html">MAPImage</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image to delete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)deleteAllImages"></a>
+                    <a name="//apple_ref/objc/Method/-deleteAllImages" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)deleteAllImages">-deleteAllImages</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes all the images in this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">deleteAllImages</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteAllImages</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Getting%20images"></a>
+                <a name="//apple_ref/objc/Section/Getting images" class="dashAnchor"></a>
+                <a href="#/Getting%20images">
+                  <h3 class="section-name">Getting images</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)getImages"></a>
+                    <a name="//apple_ref/objc/Method/-getImages" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)getImages">-getImages</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the images in this sequence as an array of <code><a href="../Classes/MAPImage.html">MAPImage</a></code> objects.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    MAPImage
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">getImages</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getImages</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The images in this sequence.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)getImagesAsync:"></a>
+                    <a name="//apple_ref/objc/Method/-getImagesAsync:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)getImagesAsync:">-getImagesAsync:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the images in this sequence as an array of <code><a href="../Classes/MAPImage.html">MAPImage</a></code> objects.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    MAPImage
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getImagesAsync</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">int</span> <span class="o">*</span><span class="p">))</span><span class="nv">images</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getImagesAsync</span><span class="p">(</span><span class="n">_</span> <span class="nv">images</span><span class="p">:</span> <span class="p">((</span><span class="kt">UnsafeMutablePointer</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>images</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The images in this sequence.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Adding%20locations"></a>
+                <a name="//apple_ref/objc/Section/Adding locations" class="dashAnchor"></a>
+                <a href="#/Adding%20locations">
+                  <h3 class="section-name">Adding locations</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)addLocation:"></a>
+                    <a name="//apple_ref/objc/Method/-addLocation:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)addLocation:">-addLocation:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds a location to the sequence.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    MAPLocation
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addLocation</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPLocation.html">MAPLocation</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">location</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="n">_</span> <span class="nv">location</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPLocation.html">MAPLocation</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>location</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The location to add.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)addGpx:done:"></a>
+                    <a name="//apple_ref/objc/Method/-addGpx:done:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)addGpx:done:">-addGpx:done:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds all locations from a GPX file to the sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addGpx</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">path</span> <span class="nf">done</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span><span class="nv">done</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addGpx</span><span class="p">(</span><span class="n">_</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">done</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The file path to the GPX file.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>done</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The execution block to be executed after the process has finished.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Getting%20locations"></a>
+                <a name="//apple_ref/objc/Section/Getting locations" class="dashAnchor"></a>
+                <a href="#/Getting%20locations">
+                  <h3 class="section-name">Getting locations</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)getLocationsAsync:"></a>
+                    <a name="//apple_ref/objc/Method/-getLocationsAsync:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)getLocationsAsync:">-getLocationsAsync:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the locations in this sequence as an array of <code><a href="../Classes/MAPLocation.html">MAPLocation</a></code> objects.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    MAPLocation
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getLocationsAsync</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">int</span> <span class="o">*</span><span class="p">))</span><span class="nv">locations</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getLocationsAsync</span><span class="p">(</span><span class="n">_</span> <span class="nv">locations</span><span class="p">:</span> <span class="p">((</span><span class="kt">UnsafeMutablePointer</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>locations</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The images in this sequence.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)locationForDate:"></a>
+                    <a name="//apple_ref/objc/Method/-locationForDate:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)locationForDate:">-locationForDate:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the location for a specific date.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    MAPLocation
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/MAPLocation.html">MAPLocation</a></span> <span class="o">*</span><span class="p">)</span><span class="nf">locationForDate</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">date</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">location</span><span class="p">(</span><span class="n">forDate</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/MAPLocation.html">MAPLocation</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>date</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The date the desired location.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Processing%20images"></a>
+                <a name="//apple_ref/objc/Section/Processing images" class="dashAnchor"></a>
+                <a href="#/Processing%20images">
+                  <h3 class="section-name">Processing images</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)processImage:"></a>
+                    <a name="//apple_ref/objc/Method/-processImage:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)processImage:">-processImage:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds Mapillary EXIF tags from the GPX file and also updates the GPS tags.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    MAPImage
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processImage</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPImage.html">MAPImage</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">processImage</span><span class="p">(</span><span class="n">_</span> <span class="nv">image</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPImage.html">MAPImage</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image that should be processed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Determining%20lock%20status"></a>
+                <a name="//apple_ref/objc/Section/Determining lock status" class="dashAnchor"></a>
+                <a href="#/Determining%20lock%20status">
+                  <h3 class="section-name">Determining lock status</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)isLocked"></a>
+                    <a name="//apple_ref/objc/Method/-isLocked" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)isLocked">-isLocked</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if this sequence is locked for editing.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">isLocked</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">isLocked</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>YES if the sequence is locked for editing, NO otherwise.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Saving%20property%20changes"></a>
+                <a name="//apple_ref/objc/Section/Saving property changes" class="dashAnchor"></a>
+                <a href="#/Saving%20property%20changes">
+                  <h3 class="section-name">Saving property changes</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)savePropertyChanges:"></a>
+                    <a name="//apple_ref/objc/Method/-savePropertyChanges:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)savePropertyChanges:">-savePropertyChanges:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Saves any property changes you have made to this sequence. Note that changes
+aren&rsquo;t saved automatically because it requires a complete rewrite of the
+internal GPX file and thus is very slow.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">savePropertyChanges</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span><span class="nv">done</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">savePropertyChanges</span><span class="p">(</span><span class="n">_</span> <span class="nv">done</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>done</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Execution block performed when the process is finished.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Getting%20a%20preview%20image"></a>
+                <a name="//apple_ref/objc/Section/Getting a preview image" class="dashAnchor"></a>
+                <a href="#/Getting%20a%20preview%20image">
+                  <h3 class="section-name">Getting a preview image</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)getPreviewImage"></a>
+                    <a name="//apple_ref/objc/Method/-getPreviewImage" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)getPreviewImage">-getPreviewImage</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a MAPImage object suitable for a visual preview of this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/MAPImage.html">MAPImage</a></span> <span class="o">*</span><span class="p">)</span><span class="n">getPreviewImage</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getPreviewImage</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/MAPImage.html">MAPImage</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A preview MAPImage.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018 <a class="link" href="https://www.mapillary.com" target="_blank" rel="external">Mapillary</a>. See <a class="link" href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE" target="_blank" rel="external">license</a> for more details.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

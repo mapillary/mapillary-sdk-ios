@@ -13,8 +13,12 @@
  */
 @interface MAPUser : NSObject
 
+///-----------------------------------------------------------------------------
+/// @name Properties
+///-----------------------------------------------------------------------------
+
 /**
- The user's username. It can be changed by the user
+ The user's username. It can be changed by the user.
  */
 @property (readonly) NSString* userName;
 
@@ -24,12 +28,22 @@
 @property (readonly) NSString* userKey;
 
 /**
- The user's access token. It will only be non-nil for the current signed in
+ The user's email adress. It can be changed by the user. It will only be
+ non-nil for the currently signed in user.
+ */
+@property (readonly) NSString* userEmail;
+
+/**
+ The user's access token. It will only be non-nil for the currently signed in
  user.
  
  @see [MAPLoginManager currentUser]
  */
 @property (readonly) NSString* accessToken;
+
+///-----------------------------------------------------------------------------
+/// @name Initializers
+///-----------------------------------------------------------------------------
 
 /**
  Creates a user object.
@@ -44,8 +58,9 @@
  
  @param userName The user's user name.
  @param userKey The unique key to identify the user.
+ @param userEmail The user's email adress.
  @param accessToken The access token to be used with API calls.
  */
-- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey andAccessToken:(NSString*)accessToken;
+- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey andUserEmail:(NSString*)userEmail andAccessToken:(NSString*)accessToken;
 
 @end
