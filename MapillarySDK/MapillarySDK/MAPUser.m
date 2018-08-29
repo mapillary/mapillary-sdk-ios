@@ -12,6 +12,7 @@
 
 @property NSString* _userName;
 @property NSString* _userKey;
+@property NSString* _userEmail;
 @property NSString* _accessToken;
 
 @end
@@ -20,16 +21,17 @@
 
 - (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey
 {
-    return [self initWithUserName:userName andUserKey:userKey andAccessToken:nil];
+    return [self initWithUserName:userName andUserKey:userKey andUserEmail:nil andAccessToken:nil];
 }
 
-- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey andAccessToken:(NSString*)accessToken
+- (id)initWithUserName:(NSString*)userName andUserKey:(NSString*)userKey andUserEmail:(NSString*)userEmail andAccessToken:(NSString*)accessToken
 {
     self = [super init];
     if (self)
     {
         self._userName = userName;
         self._userKey = userKey;
+        self._userEmail = userEmail;
         self._accessToken = accessToken;
     }
     return self;
@@ -43,6 +45,11 @@
 - (NSString*)userKey
 {
     return self._userKey;
+}
+
+- (NSString*)userEmail
+{
+    return self._userEmail;
 }
 
 - (NSString*)accessToken

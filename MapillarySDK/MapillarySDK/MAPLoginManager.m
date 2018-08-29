@@ -49,12 +49,12 @@ static MAPLoginManager* singleInstance;
     NSAssert(redirectUrl != nil, @"MapillaryRedirectUrl is not specified in application plist file");
     
     // If we don't include :// in the redirect URL, the backend won't launch the app
-    if (![redirectUrl containsString:@"://"])
+    /*if (![redirectUrl containsString:@"://"])
     {
         redirectUrl = [redirectUrl stringByAppendingString:@"://"];
-    }
+    }*/
     
-    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:read&state=return&redirect_uri=%@&response_type=token&client_id=%@", redirectUrl, clientId];
+    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:email%%20user:read%%20user:write%%20public:write%%20public:upload%%20private:read%%20private:write%%20private:upload&state=return&redirect_uri=%@&response_type=token&client_id=%@", redirectUrl, clientId];
     
     [MAPLoginManager getInstance].loginCompletionHandler = result;
     [MAPLoginManager getInstance].loginCancelledHandler = cancelled;
@@ -70,6 +70,7 @@ static MAPLoginManager* singleInstance;
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_NAME];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_EMAIL];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     for (NSString* account in [SAMKeychain accountsForService:MAPILLARY_KEYCHAIN_SERVICE])
@@ -87,11 +88,12 @@ static MAPLoginManager* singleInstance;
 {
     NSString* userName = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_NAME];
     NSString* userKey = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_KEY];
+    NSString* userEmail = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_EMAIL];
     NSString* userAccessToken = [SAMKeychain passwordForService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
     
     if (userName && userKey && userAccessToken)
     {
-        return [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andAccessToken:userAccessToken];
+        return [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andUserEmail:userEmail andAccessToken:userAccessToken];
     }
     
     return nil;
@@ -105,14 +107,15 @@ static MAPLoginManager* singleInstance;
     
     if (accessToken && accessToken.length > 0)
     {
+        [SAMKeychain setPassword:accessToken forService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
+        
         [MAPApiManager getCurrentUser:^(MAPUser *user) {
-            
-            [SAMKeychain setPassword:accessToken forService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
             
             if (user)
             {
                 [[NSUserDefaults standardUserDefaults] setObject:user.userName forKey:MAPILLARY_CURRENT_USER_NAME];
                 [[NSUserDefaults standardUserDefaults] setObject:user.userKey forKey:MAPILLARY_CURRENT_USER_KEY];
+                [[NSUserDefaults standardUserDefaults] setObject:user.userEmail forKey:MAPILLARY_CURRENT_USER_EMAIL];
                 
                 if (self.loginCompletionHandler)
                 {

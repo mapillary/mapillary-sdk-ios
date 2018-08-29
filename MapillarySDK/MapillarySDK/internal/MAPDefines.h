@@ -17,6 +17,7 @@
 #define MAPILLARY_KEYCHAIN_SERVICE          @"MapillaryKeychainService"
 #define MAPILLARY_KEYCHAIN_ACCOUNT          @"MapillaryKeychainAccount"
 #define MAPILLARY_CURRENT_USER_NAME         @"MapillaryCurrentUserName"
+#define MAPILLARY_CURRENT_USER_EMAIL        @"MapillaryCurrentUserEmail"
 #define MAPILLARY_CURRENT_USER_KEY          @"MapillaryCurrentUserKey"
 
 // Sequence

@@ -25,10 +25,11 @@
         {
             NSString* username = responseObject[@"username"];
             NSString* key = responseObject[@"key"];
+            NSString* email = responseObject[@"email"];
             
             if (username && key)
             {
-                user = [[MAPUser alloc] initWithUserName:username andUserKey:key];
+                user = [[MAPUser alloc] initWithUserName:username andUserKey:key andUserEmail:email andAccessToken:nil];
             }
         }
         

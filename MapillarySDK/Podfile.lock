@@ -1,26 +1,26 @@
 PODS:
-  - AFNetworking (3.2.0):
-    - AFNetworking/NSURLSession (= 3.2.0)
-    - AFNetworking/Reachability (= 3.2.0)
-    - AFNetworking/Security (= 3.2.0)
-    - AFNetworking/Serialization (= 3.2.0)
-    - AFNetworking/UIKit (= 3.2.0)
-  - AFNetworking/NSURLSession (3.2.0):
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.2.0)
-  - AFNetworking/Security (3.2.0)
-  - AFNetworking/Serialization (3.2.0)
-  - AFNetworking/UIKit (3.2.0):
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - AWSCore (2.6.13)
-  - AWSS3 (2.6.13):
-    - AWSCore (= 2.6.13)
+  - AWSCore (2.6.22)
+  - AWSS3 (2.6.22):
+    - AWSCore (= 2.6.22)
   - BOSImageResizeOperation (0.1.0)
   - NSHash (1.2.0)
-  - OCHamcrest (7.0.2)
-  - OCMockito (5.0.1):
+  - OCHamcrest (7.1.1)
+  - OCMockito (5.1.0):
     - OCHamcrest (~> 7.0)
   - PodAsset (0.22.0)
   - SAMKeychain (1.5.3)
@@ -37,18 +37,31 @@ DEPENDENCIES:
   - SAMKeychain (~> 1.5)
   - SDVersion (~> 4.0)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - AWSCore
+    - AWSS3
+    - BOSImageResizeOperation
+    - NSHash
+    - OCHamcrest
+    - OCMockito
+    - PodAsset
+    - SAMKeychain
+    - SDVersion
+
 SPEC CHECKSUMS:
-  AFNetworking: 8ac6017b94ea105479f7776e5288e48ae9c59bb4
-  AWSCore: 5da797bc476188fdaf00dec134fa18d84708eca9
-  AWSS3: 7c178c82c2e648559b7075a663335055327dd4f5
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  AWSCore: faae134779f0f6e46a8d426c0ccc02e34466b785
+  AWSS3: 2b70463225a455ba26494f06346bddb74dedf73d
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   NSHash: 036c03781d372c288d332b512b203e7bb832e46e
-  OCHamcrest: 706bfbf69a3df55a873bad096014e80e2e8ca93c
-  OCMockito: 063837a086c058e764fcd23e771089c1759e7197
+  OCHamcrest: 3506736397451c35d8763ff0a9b13492e544115f
+  OCMockito: f420d00dc5ffbb7452f9f499cd1766e6583d61a5
   PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
 PODFILE CHECKSUM: 45d9290aaccc769e067f72c620d9553e6b9b078c
 
-COCOAPODS: 1.4.0.rc.1
+COCOAPODS: 1.5.2
