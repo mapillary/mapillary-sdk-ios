@@ -56,7 +56,41 @@
     
     MAPDevice* device = [MAPDevice thisDevice];
     
-    NSString* expected = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<gpx version=\"1.1\" creator=\"Mapillary iOS (null)\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<metadata>\n\t\t<author>\n\t\t\t<name>(null)</name>\n\t\t</author>\n\t\t<link href=\"https://www.mapillary.com/app/user/(null)\"/>\n\t\t<time>%@</time>\n\t</metadata>\n\t<trk>\n\t\t<src>Logged by (null) using Mapillary</src>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"50.000000\" lon=\"50.000000\">\n\t\t\t\t<time>1970-01-01T00:00:00.000Z</time>\n\t\t\t\t<fix>2d</fix>\n\t\t\t\t<extensions>\n\t\t\t\t\t<mapillary:gpsAccuracyMeters>0.000000</mapillary:gpsAccuracyMeters>\n\t\t\t\t</extensions>\n\t\t\t</trkpt>\n\t\t</trkseg>\n\t</trk>\n\t<extensions>\n\t\t<mapillary:localTimeZone>Europe/Stockholm (GMT+1) offset 3600</mapillary:localTimeZone>\n\t\t<mapillary:project>Public</mapillary:project>\n\t\t<mapillary:sequenceKey>%@</mapillary:sequenceKey>\n\t\t<mapillary:timeOffset>-1.000000</mapillary:timeOffset>\n\t\t<mapillary:directionOffset>-1.000000</mapillary:directionOffset>\n\t\t<mapillary:deviceUUID>%@</mapillary:deviceUUID>\n\t\t<mapillary:deviceMake>%@</mapillary:deviceMake>\n\t\t<mapillary:deviceModel>%@</mapillary:deviceModel>\n\t\t<mapillary:appVersion>(null)</mapillary:appVersion>\n\t\t<mapillary:userKey>(null)</mapillary:userKey>\n\t\t<mapillary:appNameString>mapillary_ios</mapillary:appNameString>\n\t</extensions>\n</gpx>", [dateFormatter stringFromDate:self.sequence.sequenceDate], self.sequence.sequenceKey, device.UUID, device.make, device.model];
+    NSString* expected = [NSString stringWithFormat:
+                          @"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
+                          "<gpx version=\"1.1\" creator=\"Mapillary iOS (null)\" xmlns:mapillary=\"http://www.mapillary.com\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<metadata>\n\t\t<author>\n"
+                          "\t\t\t<name>(null)</name>\n"
+                          "\t\t</author>\n"
+                          "\t\t<link href=\"https://www.mapillary.com/app/user/(null)\"/>\n"
+                          "\t\t<time>%@</time>\n"
+                          "\t</metadata>\n"
+                          "\t<extensions>\n"
+                          "\t\t<mapillary:MAPAppNameString>mapillary_ios</mapillary:MAPAppNameString>\n"
+                          "\t\t<mapillary:MAPDeviceMake>%@</mapillary:MAPDeviceMake>\n"
+                          "\t\t<mapillary:MAPDeviceModel>%@</mapillary:MAPDeviceModel>\n"
+                          "\t\t<mapillary:MAPDeviceUUID>%@</mapillary:MAPDeviceUUID>\n"
+                          "\t\t<mapillary:MAPDirectionOffset>0.000000</mapillary:MAPDirectionOffset>\n"
+                          "\t\t<mapillary:MAPLocalTimeZone>Europe/Stockholm (GMT+2) offset 7200 (Daylight)</mapillary:MAPLocalTimeZone>\n"
+                          "\t\t<mapillary:MAPSettingsUserKey>(null)</mapillary:MAPSettingsUserKey>\n"
+                          "\t\t<mapillary:MAPSequenceUUID>%@</mapillary:MAPSequenceUUID>\n"
+                          "\t\t<mapillary:MAPTimeOffset>0.000000</mapillary:MAPTimeOffset>\n"
+                          "\t\t<mapillary:MAPVersionString>(null)</mapillary:MAPVersionString>\n"
+                          "\t</extensions>\n"
+                          "\t<trk>\n"
+                          "\t\t<src>Logged by (null) using Mapillary</src>\n"
+                          "\t\t<trkseg>\n"
+                          "\t\t\t<trkpt lat=\"50.000000\" lon=\"50.000000\">\n"
+                          "\t\t\t\t<ele>0.000000</ele>\n"
+                          "\t\t\t\t<time>1970-01-01T00:00:00.000Z</time>\n"
+                          "\t\t\t\t<extensions>\n"
+                          "\t\t\t\t\t<mapillary:MAPGPSAccuracyMeters>0.000000</mapillary:MAPGPSAccuracyMeters>\n"
+                          "\t\t\t\t\t<mapillary:MAPAtanAngle>0.000000</mapillary:MAPAtanAngle>\n"
+                          "\t\t\t\t\t<mapillary:MAPGPSSpeed>-1.000000</mapillary:MAPGPSSpeed>\n"
+                          "\t\t\t\t\t<mapillary:MAPOrientation>0</mapillary:MAPOrientation>\n"
+                          "\t\t\t\t</extensions>\n"
+                          "\t\t\t</trkpt>\n\t\t</trkseg>\n"
+                          "\t</trk>\n</gpx>",
+                          [dateFormatter stringFromDate:self.sequence.sequenceDate], device.make, device.model, device.UUID, self.sequence.sequenceKey];
     
     XCTAssertTrue([contents isEqualToString:expected]);
 }
