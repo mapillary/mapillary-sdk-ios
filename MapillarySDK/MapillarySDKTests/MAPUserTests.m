@@ -39,10 +39,11 @@
 - (void)testUserNameAndUserKeyAndAccessToken
 {
     NSString* userName = @"Mappy";
+    NSString* userEmail = @"mappy@mapillary.com";
     NSString* userKey = [[NSUUID UUID] UUIDString];
     NSString* accessToken = [[NSUUID UUID] UUIDString];
-    
-    MAPUser* user = [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andAccessToken:accessToken];
+
+    MAPUser* user = [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andUserEmail:userEmail andAccessToken:accessToken];
     
     XCTAssertTrue([userName isEqualToString:[user userName]]);
     XCTAssertTrue([userKey isEqualToString:[user userKey]]);
@@ -51,7 +52,7 @@
 
 - (void)testNil
 {
-    MAPUser* user = [[MAPUser alloc] initWithUserName:nil andUserKey:nil andAccessToken:nil];
+    MAPUser* user = [[MAPUser alloc] initWithUserName:nil andUserKey:nil andUserEmail:nil andAccessToken:nil];
     
     XCTAssertNotNil(user);
 }
