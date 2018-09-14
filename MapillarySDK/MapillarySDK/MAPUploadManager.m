@@ -208,7 +208,7 @@
             }
         }
         
-        [MAPFileManager getSequencesAsync:^(NSArray *sequences) {
+        [MAPFileManager getSequencesAsync:YES done:^(NSArray *sequences) {
             
             if (self.status.uploading)
             {

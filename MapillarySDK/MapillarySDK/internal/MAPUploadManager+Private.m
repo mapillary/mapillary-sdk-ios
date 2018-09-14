@@ -10,4 +10,6 @@
 
 @implementation MAPUploadManager(Private)
 
+@dynamic backgroundUploadSessionCompletionHandler;
+
 @end

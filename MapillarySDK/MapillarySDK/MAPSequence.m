@@ -16,6 +16,7 @@
 #import "MAPUtils.h"
 #import "MAPImage+Private.h"
 #import "MAPExifTools.h"
+#import "MAPDataManager.h"
 
 static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
@@ -30,75 +31,81 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 @implementation MAPSequence
 
-- (id)init
+/*- (id)init
 {
-    return [self initInternal:nil device:nil project:nil parseGpx:NO];
-}
+    return [self initInternal:nil device:nil date:nil parseGpx:NO];
+}*/
 
 - (id)initWithDevice:(MAPDevice*)device
 {
-    return [self initInternal:nil device:device project:nil parseGpx:NO];
+    return [self initInternal:nil device:device date:nil parseGpx:NO];
 }
 
-- (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project
+- (id)initWithDevice:(MAPDevice*)device andDate:(NSDate*)date
 {
-    return [self initInternal:nil device:device project:project parseGpx:NO];
+    return [self initInternal:nil device:device date:date parseGpx:NO];
 }
 
 - (id)initWithPath:(NSString*)path parseGpx:(BOOL)parseGpx
 {
-    return [self initInternal:path device:nil project:nil parseGpx:parseGpx];
+    return [self initInternal:path device:nil date:nil parseGpx:parseGpx];
 }
 
-- (id)initInternal:(NSString*)path device:(MAPDevice*)device project:(NSString*)project parseGpx:(BOOL)parseGpx
+- (id)initInternal:(NSString*)path device:(MAPDevice*)device date:(NSDate*)date parseGpx:(BOOL)parseGpx
 {
     self = [super init];
     if (self)
     {
-        self.sequenceDate = [NSDate date];
+        if (date == nil)
+        {
+            date = [MAPInternalUtils dateFromFilePath:path];
+        }
+        
+        self.sequenceDate = date;
         self.directionOffset = nil;
         self.timeOffset = nil;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
         self.currentLocation = [[MAPLocation alloc] init];
-        self.device = device ? device : [MAPDevice thisDevice];
+        self.device = device;// ? device : [MAPDevice thisDevice];
         self.organizationKey = nil;
-        self.private = NO;
+        self.isPrivate = NO;
         self.cachedLocations = nil;
         self.imageCount = 0;
         self.imageOrientation = 0;
         
         if (path == nil)
         {
-            NSString* folderName = [MAPInternalUtils getTimeString:nil];
+            NSString* folderName = [MAPInternalUtils getTimeString:date];
             self.path = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], folderName];
+            self.gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
         }
         else
         {
             self.path = path;
+            self.gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
             
-            NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
-            
-            if ([[NSFileManager defaultManager] fileExistsAtPath:gpxPath] && parseGpx)
+            if ([self hasGpxFile] && parseGpx)
             {
                 dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
                 
-                MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:gpxPath];
+                MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:self.gpxPath];
                 
                 [parser quickParse:^(NSDictionary *result) {
                     
-                    NSNumber* private = result[kMAPPrivate];
+                    NSNumber* isPrivate = result[kMAPPrivate];
                     
                     MAPDevice* device = [[MAPDevice alloc] init];
                     device.make = result[kMAPDeviceMake];
                     device.model = result[kMAPDeviceModel];
                     device.UUID = result[kMAPDeviceUUID];
+                    device.isExternal = ![device.make isEqualToString:@"Apple"];
                     
                     self.sequenceKey = result[kMAPSequenceUUID];
                     self.sequenceDate = result[kMAPCaptureTime];
                     self.directionOffset = result[kMAPDirectionOffset];
                     self.timeOffset = result[kMAPTimeOffset];
                     self.organizationKey = result[kMAPOrganizationKey];
-                    self.private = private.boolValue;
+                    self.isPrivate = isPrivate.boolValue;
                     self.device = device;
                     self.imageOrientation = result[kMAPOrientation];
                     self.rigSequenceUUID = result[kMAPRigSequenceUUID];
@@ -140,7 +147,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             [MAPInternalUtils createFolderAtPath:self.path];
         }
         
-        self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:[self.path stringByAppendingPathComponent:@"sequence.gpx"] andSequence:self];
+        if (self.device && !self.device.isExternal)
+        {
+            self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:self.gpxPath andSequence:self];
+        }
     }
     
     return self;
@@ -192,7 +202,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 if (tiffOrientation && self.imageOrientation.intValue != tiffOrientation.intValue)
                 {
                     self.imageOrientation = tiffOrientation;
-                    [self savePropertyChanges:nil];
+                    //[self savePropertyChanges:nil];
                 }
             }
             
@@ -218,12 +228,20 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     if (location)
     {
-        if (self.cachedLocations)
+        if (self.device.isExternal)
         {
-            [self.cachedLocations addObject:[location copy]];
+            [[MAPDataManager sharedManager] addLocation:location sequence:self];
+        }
+        else
+        {
+            if (self.cachedLocations)
+            {
+                [self.cachedLocations addObject:[location copy]];
+            }
+            
+            [self.gpxLogger addLocation:location];
         }
         
-        [self.gpxLogger addLocation:location];
         self.currentLocation = location;
     }
 }
@@ -345,42 +363,52 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)getLocationsAsync:(void(^)(NSArray* locations))done
 {
-    if (self.cachedLocations)
+    if (self.device.isExternal || ![self hasGpxFile] || self.device == nil)
     {
-        done(self.cachedLocations);
-        return;
+        [[MAPDataManager sharedManager] getAllLocationsLimitedToDevice:self.device result:^(NSArray *locations, MAPDevice *device, NSString *organizationKey, bool isPrivate) {
+
+            done(locations);
+        }];
     }
-    
-    if (self.gpxLogger.busy)
+    else
     {
-        self.getLocationsSemaphore = dispatch_semaphore_create(0);
+        if (self.cachedLocations)
+        {
+            done(self.cachedLocations);
+            return;
+        }
         
-        [self.gpxLogger addObserver:self forKeyPath:@"busy" options:0 context:&kGpxLoggerBusy];
-        
-        dispatch_semaphore_wait(self.getLocationsSemaphore, DISPATCH_TIME_FOREVER);
-    }
-    
-    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(reentrantAvoidanceQueue, ^{
-        
-        MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:[self.path stringByAppendingPathComponent:@"sequence.gpx"]];
-        
-        [parser parse:^(NSDictionary *dict) {
+        if (self.gpxLogger.busy)
+        {
+            self.getLocationsSemaphore = dispatch_semaphore_create(0);
             
-            NSArray* locations = dict[@"locations"];
+            [self.gpxLogger addObserver:self forKeyPath:@"busy" options:0 context:&kGpxLoggerBusy];
             
-            NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
-                return [a.timestamp compare:b.timestamp];
+            dispatch_semaphore_wait(self.getLocationsSemaphore, DISPATCH_TIME_FOREVER);
+        }
+        
+        dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(reentrantAvoidanceQueue, ^{
+            
+            MAPGpxParser* parser = [[MAPGpxParser alloc] initWithPath:self.gpxPath];
+            
+            [parser parse:^(NSDictionary *dict) {
+                
+                NSArray* locations = dict[@"locations"];
+                
+                NSArray* sorted = [locations sortedArrayUsingComparator:^NSComparisonResult(MAPLocation* a, MAPLocation* b) {
+                    return [a.timestamp compare:b.timestamp];
+                }];
+                
+                self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
+                
+                done(sorted);
+                
             }];
             
-            self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];            
-            
-            done(sorted);
-            
-        }];
-        
-    });
-    dispatch_sync(reentrantAvoidanceQueue, ^{ });
+        });
+        dispatch_sync(reentrantAvoidanceQueue, ^{ });
+    }
 }
     
 - (MAPLocation*)locationForDate:(NSDate*)date
@@ -388,6 +416,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     if (date == nil)
     {
         return nil;
+    }
+    
+    if (self.timeOffset)
+    {
+        date = [date dateByAddingTimeInterval:self.timeOffset.doubleValue];
     }
     
     __block MAPLocation* location = nil;
@@ -534,33 +567,45 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)savePropertyChanges:(void(^)(void))done
 {
-    NSString* gpxPath = [NSString stringWithFormat:@"%@/sequence.gpx", self.path];
-    NSString* gpxPathBackup = [NSString stringWithFormat:@"%@/sequence.bak", self.path];
+    if ((self.device.isExternal && self.timeOffset != nil) || ![self hasGpxFile])
+    {
+        NSArray* images = [self getImages];
+        MAPImage* first = images.firstObject;
+        MAPImage* last = images.lastObject;
+        NSDate* from = [first.captureDate dateByAddingTimeInterval:self.timeOffset.doubleValue];
+        NSDate* to = [last.captureDate dateByAddingTimeInterval:self.timeOffset.doubleValue];
+        
+        [[MAPDataManager sharedManager] getLocationsFrom:from to:to limitedToDevice:self.device result:^(NSArray *locations, MAPDevice *device, NSString *organizationKey, bool isPrivate) {
+            
+            self.device = device;
+            self.organizationKey = organizationKey;
+            self.isPrivate = isPrivate;
+        
+            [self createGpx:locations];
+            
+            if (done)
+            {
+                done();
+            }
+        }];
+    }
+    else
+    {
+        [self getLocationsAsync:^(NSArray *locations) {
+            
+            [self createGpx:locations];
+            
+            if (done)
+            {
+                done();
+            }
+        }];
+    }
+}
 
-    [self getLocationsAsync:^(NSArray *locations) {
-        
-        // Move old file
-        [[NSFileManager defaultManager] moveItemAtPath:gpxPath toPath:gpxPathBackup error:nil];
-        
-        // Create new file
-        self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:gpxPath andSequence:self];
-        
-        for (MAPLocation* l in locations)
-        {
-            [self.gpxLogger addLocation:l];
-        }
-        
-        // TODO check that everything is ok
-        
-        // Delete old file
-        [[NSFileManager defaultManager] removeItemAtPath:gpxPathBackup error:nil];
-        
-        if (done)
-        {
-            done();
-        }
-        
-    }];
+- (BOOL)hasGpxFile
+{
+    return [[NSFileManager defaultManager] fileExistsAtPath:self.gpxPath];
 }
 
 - (MAPImage*)getPreviewImage
@@ -596,6 +641,27 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void)createGpx:(NSArray*)locations
+{
+    NSString* gpxPathBackup = [NSString stringWithFormat:@"%@/sequence.bak", self.path];
+    
+    // Move old file
+    [[NSFileManager defaultManager] moveItemAtPath:self.gpxPath toPath:gpxPathBackup error:nil];
+    
+    // Create new file
+    self.gpxLogger = [[MAPGpxLogger alloc] initWithFile:self.gpxPath andSequence:self];
+    
+    for (MAPLocation* l in locations)
+    {
+        [self.gpxLogger addLocation:l];
+    }
+    
+    // TODO check that everything is ok
+    
+    // Delete old file
+    [[NSFileManager defaultManager] removeItemAtPath:gpxPathBackup error:nil];
 }
 
 @end

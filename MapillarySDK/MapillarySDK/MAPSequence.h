@@ -64,18 +64,23 @@
 @property NSString* path;
 
 /**
+ The path to the GPX file for this sequence. Can be nil.
+ */
+@property NSString* gpxPath;
+
+/**
  The organization this sequence belongs to. Default is nil.
  */
 @property NSString* organizationKey;
 
 /**
- If the sequence is private or public. Only used if organizationUUID is set.
+ If the sequence is private or public. Only used if organizationKey is set.
  Default is NO.
  */
-@property BOOL private;
+@property BOOL isPrivate;
 
 /**
- The unique ID of this sequence.
+ The unique key of this sequence.
  */
 @property NSString* sequenceKey;
 
@@ -99,8 +104,15 @@
  */
 @property NSNumber* imageOrientation;
 
-
+/**
+ The common identifier of this sequence for a rig. This is used to connect
+ several separate sequences together.
+ */
 @property NSString* rigSequenceUUID;
+
+/**
+ The unique identifier of the rig used to capture this sequence.
+ */
 @property NSString* rigUUID;
 
 ///-----------------------------------------------------------------------------
@@ -108,19 +120,19 @@
 ///-----------------------------------------------------------------------------
 
 /**
- Creates a new sequence for a specific device.
+ Creates a new sequence for a specific device with the current date.
  
  @param device A device.
  */
 - (id)initWithDevice:(MAPDevice*)device;
 
 /**
- Creates a new sequence for a specific device and project.
+ Creates a new sequence for a specific device with a specific date.
  
  @param device A device.
- @param project A project UUID.
+ @param date The date of the sequence.
  */
-- (id)initWithDevice:(MAPDevice*)device andProject:(NSString*)project;
+- (id)initWithDevice:(MAPDevice*)device andDate:(NSDate*)date;
 
 /**
  Creates and initilizes a sequence from an existing sequence.
@@ -266,6 +278,11 @@
  @param done Execution block performed when the process is finished.
  */
 - (void)savePropertyChanges:(void(^)(void))done;
+
+/**
+ Checks if there is a GPX file generated or not.
+ */
+- (BOOL)hasGpxFile;
 
 ///-----------------------------------------------------------------------------
 /// @name Getting a preview image
