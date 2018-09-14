@@ -22,20 +22,22 @@
 ///-----------------------------------------------------------------------------
 
 /**
- A fast but incomplete method for listing sequences. It does not parse the GPX file so some
- meta data will not be initialised.
+ Get's all the sequences synchronously.
  
+ @param parseGpx If YES, the full GPX file is parsed. If NO, some properties of
+ of the MAPSequence object will be nil.
  @return A list of sequences.
  */
-+ (NSArray*)listSequences;
++ (NSArray*)getSequences:(BOOL)parseGpx;
 
 /**
- A slow but complete method for listing sequences. It parses the GPX file and
- initialises all meta data.
+ Get's all the sequences asynchronously.
  
+ @param parseGpx If YES, the full GPX file is parsed. If NO, some properties of
+ of the MAPSequence object will be nil.
  @param done A block object that contains the sequences on disk.
  */
-+ (void)getSequencesAsync:(void(^)(NSArray* sequences))done;
++ (void)getSequencesAsync:(BOOL)parseGpx done:(void(^)(NSArray* sequences))done;
 
 /**
  Deletes a sequence from disk. This deletes everything including images and the

@@ -81,7 +81,7 @@
             self.organizationKey = nil;
             self.private = @NO;
             self.sequenceUUID = [[NSUUID UUID] UUIDString];
-            self.timeOffset = @0;
+            self.timeOffset = nil;
             self.directionOffset = @-1;
             self.sequenceDate = [NSDate date];
             self.orientation = @-1;

@@ -55,10 +55,7 @@ unsigned long long footerLength;
             [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPAccelerometerVector];
         }
         
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSAccuracyMeters, self.location.location.horizontalAccuracy, kMAPGPSAccuracyMeters];
-        
-        double atanAngle = atan2(self.location.deviceMotionY.doubleValue, self.location.deviceMotionX.doubleValue);
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPAtanAngle, atanAngle, kMAPAtanAngle];
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSAccuracyMeters, self.location.location.horizontalAccuracy, kMAPGPSAccuracyMeters];        
         
         if (self.location.trueHeading != nil)
         {
@@ -152,7 +149,7 @@ unsigned long long footerLength;
             if (sequence.organizationKey)
             {
                 [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPOrganizationKey, sequence.organizationKey, kMAPOrganizationKey];
-                [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPPrivate, sequence.private ? @"true" : @"false", kMAPPrivate];
+                [extensionsString appendFormat:@"\t\t<mapillary:%@>%@</mapillary:%@>\n", kMAPPrivate, sequence.isPrivate ? @"true" : @"false", kMAPPrivate];
             }
             
             if (sequence.rigSequenceUUID && sequence.rigUUID)

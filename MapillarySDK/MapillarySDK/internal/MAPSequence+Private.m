@@ -39,7 +39,7 @@
     if (self.organizationKey)
     {
         dict[kMAPOrganizationKey]       = self.organizationKey;
-        dict[kMAPPrivate]               = [NSNumber numberWithBool:self.private];
+        dict[kMAPPrivate]               = [NSNumber numberWithBool:self.isPrivate];
     }
     
     if (self.rigSequenceUUID && self.rigUUID)

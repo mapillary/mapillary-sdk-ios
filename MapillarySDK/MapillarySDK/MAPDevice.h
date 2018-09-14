@@ -33,6 +33,13 @@
  */
 @property NSString* UUID;
 
+/**
+ Defines if the device is an external or an internal device. If the device is
+ internal, a GPX file will be created during capture. If external, no GPX file
+ is created during capture, instead the coordinates are saved in a database.
+ */
+@property BOOL isExternal;
+
 ///-----------------------------------------------------------------------------
 /// @name Initializers
 ///-----------------------------------------------------------------------------
@@ -43,9 +50,10 @@
  @param make The make of the device.
  @param model The model of the device.
  @param uuid A unique identifier of the device.
+ @param isExternal Defines if the device is external or not.
  */
 - (id)initWithMake:(NSString*)make andModel:(NSString*)model
-           andUUID:(NSString*)uuid;
+           andUUID:(NSString*)uuid isExternal:(BOOL)isExternal;
 
 /**
  Returns the device the app is running on.

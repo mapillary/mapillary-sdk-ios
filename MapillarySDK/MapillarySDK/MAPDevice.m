@@ -12,7 +12,7 @@
 
 @implementation MAPDevice
 
-- (id)initWithMake:(NSString*)make andModel:(NSString*)model andUUID:(NSString*)uuid
+- (id)initWithMake:(NSString*)make andModel:(NSString*)model andUUID:(NSString*)uuid isExternal:(BOOL)isExternal
 {
     self = [super init];
     if (self)
@@ -20,13 +20,14 @@
         self.make = make;
         self.model = model;
         self.UUID = uuid;
+        self.isExternal = isExternal;
     }
     return self;
 }
 
 + (id)thisDevice
 {
-    MAPDevice* current = [[MAPDevice alloc] initWithMake:@"Apple" andModel:[SDVersion deviceNameString] andUUID:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
+    MAPDevice* current = [[MAPDevice alloc] initWithMake:@"Apple" andModel:[SDVersion deviceNameString] andUUID:[[[UIDevice currentDevice] identifierForVendor] UUIDString] isExternal:NO];
     
     return current;
 }

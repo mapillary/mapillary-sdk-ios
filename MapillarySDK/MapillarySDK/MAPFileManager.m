@@ -11,7 +11,7 @@
 
 @implementation MAPFileManager
 
-+ (NSArray*)listSequences
++ (NSArray*)getSequences:(BOOL)parseGpx;
 {
     NSMutableArray* sequences = [[NSMutableArray alloc] init];
     NSString* sequenceDirectory = [MAPInternalUtils sequenceDirectory];
@@ -26,7 +26,7 @@
         
         for (NSString* file in contents)
         {
-            MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, file] parseGpx:NO];
+            MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, file] parseGpx:parseGpx];
             [sequences addObject:sequence];
         }
         
@@ -40,35 +40,16 @@
     return sequences;
 }
 
-+ (void)getSequencesAsync:(void(^)(NSArray* sequences))result
++ (void)getSequencesAsync:(BOOL)parseGpx done:(void(^)(NSArray* sequences))result
 {
     if (result == nil)
     {
         return;
     }
     
-    NSMutableArray* sequences = [[NSMutableArray alloc] init];
-    NSString* sequenceDirectory = [MAPInternalUtils sequenceDirectory];
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSError* error = nil;
-        NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequenceDirectory error:&error];
-        
-        if (!error)
-        {
-            for (NSString* path in contents)
-            {
-                MAPSequence* sequence = [[MAPSequence alloc] initWithPath:[NSString stringWithFormat:@"%@/%@", sequenceDirectory, path] parseGpx:YES];
-                [sequences addObject:sequence];
-            }
-            
-            [sequences sortUsingComparator:^NSComparisonResult(MAPSequence* obj1, MAPSequence* obj2) {
-                
-                return [obj2.sequenceDate compare:obj1.sequenceDate];
-                
-            }];
-        }
+        NSArray* sequences = [self getSequences:parseGpx];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             

@@ -64,7 +64,7 @@
     
 - (NSString*)description
 {
-    return [NSString stringWithFormat: @"Date: %@ Latitude: %f Longitude: %f", [self timeString], self.location.coordinate.latitude, self.location.coordinate.latitude];
+    return [NSString stringWithFormat: @"Date: %@ Latitude: %f Longitude: %f", [self timeString], self.location.coordinate.latitude, self.location.coordinate.longitude];
 }
 
 - (NSString*)timeString
