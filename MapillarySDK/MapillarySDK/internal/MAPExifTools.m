@@ -70,8 +70,6 @@
     
     
     // Update and add Mapillary tags to metadata
-    
-    
     NSMutableDictionary* description = [sequence meta];
     description[kMAPLatitude] = [NSNumber numberWithDouble:image.location.location.coordinate.latitude];
     description[kMAPLongitude] = [NSNumber numberWithDouble:image.location.location.coordinate.longitude];
@@ -96,7 +94,28 @@
     
     if (image.location.trueHeading != nil && image.location.magneticHeading != nil && image.location.headingAccuracy != nil)
     {
-        description[kMAPCompassHeading] = @{kMAPTrueHeading:image.location.trueHeading, kMAPMagneticHeading:image.location.magneticHeading, kMAPAccuracyDegrees:image.location.headingAccuracy};
+        CLLocationDirection trueHeading = image.location.trueHeading.doubleValue;
+        CLLocationDirection magneticHeading = image.location.magneticHeading.doubleValue;
+        int orientationValue = sequence.imageOrientation.intValue;
+        
+        // Correct compass with orientation
+        if (orientationValue == 1)
+        {
+            trueHeading += 90;
+            magneticHeading += 90;
+        }
+        else if (orientationValue == 3)
+        {
+            trueHeading -= 90;
+            magneticHeading -= 90;
+        }
+        else if (orientationValue == 8)
+        {
+            trueHeading += 180;
+            magneticHeading -= 90;
+        }
+        
+        description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:magneticHeading], kMAPAccuracyDegrees:image.location.headingAccuracy};
     }
     
     NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
