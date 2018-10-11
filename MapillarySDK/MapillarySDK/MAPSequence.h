@@ -100,11 +100,6 @@
 @property NSUInteger sequenceSize;
 
 /**
- The image orientation this sequence was captured in.
- */
-@property NSNumber* imageOrientation;
-
-/**
  The common identifier of this sequence for a rig. This is used to connect
  several separate sequences together.
  */

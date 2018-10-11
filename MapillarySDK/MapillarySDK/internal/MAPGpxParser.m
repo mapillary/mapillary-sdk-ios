@@ -33,7 +33,6 @@
 @property NSString* sequenceUUID;
 @property NSNumber* timeOffset;
 @property NSDate* sequenceDate;
-@property NSNumber* orientation;
 @property NSMutableDictionary* accelerometerVector;
 @property NSMutableDictionary* deviceAngle;
 @property NSMutableDictionary* compassHeading;
@@ -71,7 +70,6 @@
             self.timeOffset = nil;
             self.directionOffset = nil;
             self.sequenceDate = nil;
-            self.orientation = nil;
             self.rigUUID = nil;
             self.rigSequenceUUID = nil;
         }
@@ -84,7 +82,6 @@
             self.timeOffset = nil;
             self.directionOffset = @-1;
             self.sequenceDate = [NSDate date];
-            self.orientation = @-1;
             self.rigUUID = [[NSUUID UUID] UUIDString];
             self.rigSequenceUUID = [[NSUUID UUID] UUIDString];
         }
@@ -232,11 +229,6 @@
         self.deviceModel = strippedValue;
     }
     
-    else if ([elementName isEqualToString:[self stringForKey:kMAPOrientation]])
-    {
-        self.orientation = [NSNumber numberWithInt:strippedValue.intValue];
-    }
-    
     // GPS track points
     else if (self.currentTrackPoint)
     {
@@ -346,7 +338,7 @@
     }
     
     // Check if quick parse is done
-    if (self.quickParse && self.localTimeZone && self.sequenceUUID && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate && self.orientation)
+    if (self.quickParse && self.localTimeZone && self.sequenceUUID && self.timeOffset && self.directionOffset && self.deviceMake && self.deviceModel && self.deviceUUID && self.sequenceDate)
     {
         [self.xmlParser abortParsing];
     }
@@ -368,7 +360,6 @@
         if (self.deviceModel != nil)       [dict setObject:self.deviceModel forKey:kMAPDeviceModel];
         if (self.deviceUUID != nil)        [dict setObject:self.deviceUUID forKey:kMAPDeviceUUID];
         if (self.sequenceDate != nil)      [dict setObject:self.sequenceDate forKey:kMAPCaptureTime];
-        if (self.orientation != nil)       [dict setObject:self.orientation forKey:kMAPOrientation];
         if (self.rigSequenceUUID != nil)   [dict setObject:self.rigSequenceUUID forKey:kMAPRigSequenceUUID];
         if (self.rigUUID != nil)           [dict setObject:self.rigUUID forKey:kMAPRigUUID];
         

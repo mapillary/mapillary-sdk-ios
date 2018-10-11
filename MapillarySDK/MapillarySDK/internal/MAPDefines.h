@@ -51,7 +51,6 @@
 #define kMAPAccuracyDegrees                 @"AccuracyDegrees"
 #define kMAPDeviceAngle                     @"MAPDeviceAngle"
 #define kMAPGPSSpeed                        @"MAPGPSSpeed"
-#define kMAPOrientation                     @"MAPOrientation"
 
 // At export
 #define kMAPSettingsUploadHash              @"MAPSettingsUploadHash"

@@ -18,7 +18,6 @@ static NSString* kQueueOperationsChanged = @"kQueueOperationsChanged";
 @property (nonatomic) NSString* path;
 @property (nonatomic) MAPLocation* location;
 @property (nonatomic) NSString* time;
-@property (nonatomic) int imageOrientation;
 
 @end
 
@@ -75,9 +74,7 @@ unsigned long long footerLength;
             [extensionsString appendFormat:@"\t\t\t\t\t</mapillary:%@>\n", kMAPDeviceAngle];
         }
         
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSSpeed, self.location.location.speed, kMAPGPSSpeed];
-        
-        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%d</mapillary:%@>\n", kMAPOrientation, self.imageOrientation, kMAPOrientation];
+        [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSSpeed, self.location.location.speed, kMAPGPSSpeed];        
         
         [locationString appendFormat:@"\t\t\t\t<extensions>\n%@\t\t\t\t</extensions>\n", extensionsString];
         
@@ -203,7 +200,6 @@ unsigned long long footerLength;
     MAPGpxOperation* op = [[MAPGpxOperation alloc] init];
     op.path = self.path;
     op.location = location;
-    op.imageOrientation = self.sequence.imageOrientation.intValue;
     
     if (location.timestamp)
     {
