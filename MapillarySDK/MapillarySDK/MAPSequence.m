@@ -71,7 +71,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.isPrivate = NO;
         self.cachedLocations = nil;
         self.imageCount = 0;
-        self.imageOrientation = 0;
         
         if (path == nil)
         {
@@ -107,7 +106,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                     self.organizationKey = result[kMAPOrganizationKey];
                     self.isPrivate = isPrivate.boolValue;
                     self.device = device;
-                    self.imageOrientation = result[kMAPOrientation];
                     self.rigSequenceUUID = result[kMAPRigSequenceUUID];
                     self.rigUUID = result[kMAPRigUUID];
                     
@@ -185,30 +183,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     
     self.imageCount++;
     self.sequenceSize += imageData.length;
-    
-    if (self.imageOrientation == nil)
-    {
-        CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)(imageData), NULL);
-        if (source)
-        {
-            CFDictionaryRef cfDict = CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
-            NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
-            NSDictionary* TIFFDictionary = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
-            
-            if (TIFFDictionary)
-            {
-                NSNumber* tiffOrientation = TIFFDictionary[@"Orientation"];
-                
-                if (tiffOrientation && self.imageOrientation.intValue != tiffOrientation.intValue)
-                {
-                    self.imageOrientation = tiffOrientation;
-                    //[self savePropertyChanges:nil];
-                }
-            }
-            
-            CFRelease(source);
-        }
-    }
 }
 
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location
@@ -512,30 +486,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         
         double trueHeading = location.trueHeading.doubleValue;
         double magneticHeading = location.magneticHeading.doubleValue;
-        
-        if (self.imageOrientation != nil)
-        {
-            switch (self.imageOrientation.intValue)
-            {
-                case 1:
-                    trueHeading += 90;
-                    magneticHeading += 90;
-                    break;
-                    
-                case 3:
-                    trueHeading -= 90;
-                    magneticHeading -= 90;
-                    break;
-                    
-                case 8:
-                    trueHeading += 180;
-                    magneticHeading += 180;
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
         
         if (self.directionOffset != nil)
         {
