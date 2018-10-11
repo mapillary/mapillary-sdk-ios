@@ -193,14 +193,25 @@
     CLLocationCoordinate2D coordinate = [MAPInternalUtils interpolateCoords:locationA.location.coordinate location2:locationB.location.coordinate factor:factor];
     
     result.timestamp = date;
+    
+    // TODO use factor
     result.location = [[CLLocation alloc] initWithCoordinate:coordinate
                                                     altitude:AVG(locationA.location.altitude,           locationB.location.altitude)
                                           horizontalAccuracy:AVG(locationA.location.horizontalAccuracy, locationB.location.horizontalAccuracy)
                                             verticalAccuracy:AVG(locationA.location.verticalAccuracy,   locationB.location.verticalAccuracy)
                                                    timestamp:date];
     
-    result.magneticHeading = [self calculateHeadingFromCoordA:locationA.location.coordinate B:locationB.location.coordinate];
-    result.trueHeading = result.magneticHeading;
+    // TODO use factor
+    if (locationA.trueHeading && locationB.trueHeading && locationA.magneticHeading && locationB.magneticHeading)
+    {
+        result.trueHeading = [NSNumber numberWithDouble:AVG(locationA.trueHeading.doubleValue, locationB.trueHeading.doubleValue)];
+        result.magneticHeading = [NSNumber numberWithDouble:AVG(locationA.magneticHeading.doubleValue, locationB.magneticHeading.doubleValue)];
+    }
+    else
+    {
+        result.magneticHeading = [self calculateHeadingFromCoordA:locationA.location.coordinate B:locationB.location.coordinate];
+        result.trueHeading = result.magneticHeading;
+    }
     
     return result;
 }

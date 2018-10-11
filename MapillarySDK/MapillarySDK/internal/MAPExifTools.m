@@ -19,19 +19,17 @@
 {
     BOOL ok = NO;
     
-    CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
     
-    if (source)
+    if (imageSource)
     {
-        CFDictionaryRef cfDict = CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
-        NSDictionary* metadata = (NSDictionary *)CFBridgingRelease(cfDict);
-        NSDictionary* TIFF = [metadata objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+        CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+        NSDictionary* propertiesDictionary = (NSDictionary *)CFBridgingRelease(properties);
+        NSDictionary* TIFFDictionary = [propertiesDictionary objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
         
-        NSLog(@"%@", metadata);
-        
-        if (TIFF)
+        if (TIFFDictionary)
         {
-            NSString* description = [TIFF objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
+            NSString* description = [TIFFDictionary objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
             
             if (description)
             {
@@ -45,7 +43,7 @@
             }
         }
         
-        CFRelease(source);
+        CFRelease(imageSource);
     }
     
     return ok;
@@ -63,10 +61,6 @@
     
     // Cleanup existing metadata
     [self cleanMetadata:metadata mutableMetadata:mutableMetadata];
-    
-    
-    // Add GPS position based on time to metadata
-    [self addGps:image.location mutableMetadata:mutableMetadata];
     
     
     // Update and add Mapillary tags to metadata
@@ -96,31 +90,49 @@
     {
         CLLocationDirection trueHeading = image.location.trueHeading.doubleValue;
         CLLocationDirection magneticHeading = image.location.magneticHeading.doubleValue;
-        int orientationValue = sequence.imageOrientation.intValue;
         
-        // Correct compass with orientation
-        if (orientationValue == 1)
+        CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+        NSDictionary* propertiesDictionary = (NSDictionary *)CFBridgingRelease(properties);
+        NSDictionary* TIFFDictionary = [propertiesDictionary objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+        
+        if (TIFFDictionary)
         {
-            trueHeading += 90;
-            magneticHeading += 90;
-        }
-        else if (orientationValue == 3)
-        {
-            trueHeading -= 90;
-            magneticHeading -= 90;
-        }
-        else if (orientationValue == 8)
-        {
-            trueHeading += 180;
-            magneticHeading -= 90;
+            NSNumber* tiffOrientation = TIFFDictionary[@"Orientation"];
+            
+            // Correct compass with orientation
+            if (tiffOrientation.intValue == 1)
+            {
+                trueHeading -= 90;
+                magneticHeading -= 90;
+            }
+            else if (tiffOrientation.intValue == 1)
+            {
+                trueHeading += 90;
+                magneticHeading += 90;
+            }
+            else if (tiffOrientation.intValue == 8)
+            {
+                trueHeading += 180;
+                magneticHeading += 180;
+            }
+            
+            trueHeading = fmodf(trueHeading + 360.0f, 360.0f);
+            magneticHeading = fmodf(magneticHeading + 360.0f, 360.0f);
+            
+            image.location.trueHeading = [NSNumber numberWithDouble:trueHeading];
+            image.location.magneticHeading = [NSNumber numberWithDouble:magneticHeading];
         }
         
-        description[kMAPCompassHeading] = @{kMAPTrueHeading:[NSNumber numberWithDouble:trueHeading], kMAPMagneticHeading:[NSNumber numberWithDouble:magneticHeading], kMAPAccuracyDegrees:image.location.headingAccuracy};
+        description[kMAPCompassHeading] = @{kMAPTrueHeading:image.location.trueHeading, kMAPMagneticHeading:image.location.magneticHeading, kMAPAccuracyDegrees:image.location.headingAccuracy};
     }
     
     NSData* descriptionJsonData = [NSJSONSerialization dataWithJSONObject:description options:0 error:nil];
     NSString* descriptionString = [[NSString alloc] initWithData:descriptionJsonData encoding:NSUTF8StringEncoding];
     [self addXmpMetadata:mutableMetadata tag:@"description" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
+    
+    
+    // Add to default EXIF and TIFF
+    [self addGps:image.location mutableMetadata:mutableMetadata];
     
     
     // Write new metadata to image
@@ -252,10 +264,10 @@
         [self addExifMetadata:mutableMetadata tag:@"GPSLongitude"           type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:longitude]];
         [self addExifMetadata:mutableMetadata tag:@"GPSLatitudeRef"         type:kCGImageMetadataTypeString value:(__bridge CFStringRef)latitudeRef];
         [self addExifMetadata:mutableMetadata tag:@"GPSLongitudeRef"        type:kCGImageMetadataTypeString value:(__bridge CFStringRef)longitudeRef];
-        [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]]; // TODO?
-        [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]]; // TODO?
+        [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
         [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
-        [self addExifMetadata:mutableMetadata tag:@"GPSHPositioningError"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSDOP"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
         [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)location.trueHeading];
         [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
     }
@@ -300,6 +312,21 @@
         
         dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
+        
+    });
+    
+    return [dateFormatter stringFromDate:localDate];
+}
+
++ (NSString*)getExifFormattedDateAndTime:(NSDate*)localDate
+{
+    static NSDateFormatter* dateFormatter = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy:MM:dd HH:mm:ss";
         
     });
     
