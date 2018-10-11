@@ -56,9 +56,14 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     self = [super init];
     if (self)
     {
-        if (date == nil)
+        if (date == nil && path != nil)
         {
             date = [MAPInternalUtils dateFromFilePath:path];
+        }
+        
+        if (date == nil)
+        {
+            date = [NSDate date];
         }
         
         self.sequenceDate = date;
@@ -420,8 +425,16 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 location = last;
             }
             
-            location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
-            location.trueHeading = location.magneticHeading;
+            if (first.trueHeading && last.trueHeading && first.magneticHeading && last.magneticHeading)
+            {
+                location.magneticHeading = [NSNumber numberWithDouble:AVG(first.magneticHeading.doubleValue, last.magneticHeading.doubleValue)];
+                location.trueHeading = [NSNumber numberWithDouble:AVG(first.trueHeading.doubleValue, last.trueHeading.doubleValue)];
+            }
+            else
+            {
+                location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
+                location.trueHeading = location.magneticHeading;
+            }
         }
         
         // Find position
@@ -459,9 +472,17 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 location = equal;
                 
                 if (after)
-                {
-                    location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:equal.location.coordinate B:after.location.coordinate];
-                    location.trueHeading = location.magneticHeading;
+                {                    
+                    if (first.trueHeading && last.trueHeading && first.magneticHeading && last.magneticHeading)
+                    {
+                        location.magneticHeading = [NSNumber numberWithDouble:AVG(first.magneticHeading.doubleValue, last.magneticHeading.doubleValue)];
+                        location.trueHeading = [NSNumber numberWithDouble:AVG(first.trueHeading.doubleValue, last.trueHeading.doubleValue)];
+                    }
+                    else
+                    {
+                        location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:equal.location.coordinate B:after.location.coordinate];
+                        location.trueHeading = location.magneticHeading;
+                    }
                 }
             }
             
