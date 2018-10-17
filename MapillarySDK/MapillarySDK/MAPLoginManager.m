@@ -54,7 +54,7 @@ static MAPLoginManager* singleInstance;
         redirectUrl = [redirectUrl stringByAppendingString:@"://"];
     }*/
     
-    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:email%%20user:read%%20user:write%%20public:write%%20public:upload%%20private:read%%20private:write%%20private:upload&state=return&redirect_uri=%@&response_type=token&client_id=%@", redirectUrl, clientId];
+    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=user:email%%20user:read%%20user:write%%20public:write%%20public:upload%%20private:read%%20private:write%%20private:upload&state=return&redirect_uri=%@&response_type=token&client_id=%@&simple=true", redirectUrl, clientId];
     
     [MAPLoginManager getInstance].loginCompletionHandler = result;
     [MAPLoginManager getInstance].loginCancelledHandler = cancelled;
