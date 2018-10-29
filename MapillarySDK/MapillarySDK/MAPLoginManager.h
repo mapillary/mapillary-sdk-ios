@@ -10,6 +10,30 @@
 #import "MAPUser.h"
 #import "MAPLoginViewController.h"
 
+typedef NS_ENUM(NSInteger, MAPScope) {
+    MAPScopeUserEmail,
+    MAPScopeUserRead,
+    MAPScopeUserWrite,
+    MAPScopePublicWrite,
+    MAPScopePublicUpload,
+    MAPScopePrivateRead,
+    MAPScopePrivateWrite,
+    MAPScopePrivateUpload,
+    MAPScopeAll,
+};
+
+typedef NS_OPTIONS(NSUInteger, MAPScopeMask) {
+    MAPScopeMaskUserEmail = (1 << MAPScopeUserEmail),
+    MAPScopeMaskUserRead = (1 << MAPScopeUserRead),
+    MAPScopeMaskUserWrite = (1 << MAPScopeUserWrite),
+    MAPScopeMaskPublicWrite = (1 << MAPScopePublicWrite),
+    MAPScopeMaskPublicUpload = (1 << MAPScopePublicUpload),
+    MAPScopeMaskPrivateRead = (1 << MAPScopePrivateRead),
+    MAPScopeMaskPrivateWrite = (1 << MAPScopePrivateWrite),
+    MAPScopeMaskPrivateUpload = (1 << MAPScopePrivateUpload),
+    MAPScopeMaskAll = (MAPScopeMaskUserEmail | MAPScopeMaskUserRead | MAPScopeMaskUserWrite | MAPScopeMaskPublicWrite | MAPScopeMaskPublicUpload | MAPScopeMaskPrivateRead | MAPScopeMaskPrivateWrite | MAPScopeMaskPrivateUpload)
+};
+
 /**
  The `MAPLoginManager` class manages the authentication of Mapillary. The
  signIn method starts the authentication loop. It requires two values to be
@@ -35,11 +59,13 @@
  After the user has entered the credentials and is authenticated, focus is
  returned to the app.
  
+ @oaram scope A bit mask for the scope of permissions to request. Must match
+ what you configured when created the app on mapillary.com.
  @param result A block object that is executed when the authentication loop
  finishes. This block has no return value and takes one argument: if
  authentication was sucessful or not.
  */
-+ (void)signInFromViewController:(UIViewController*)viewController result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled;
++ (void)signInFromViewController:(UIViewController*)viewController scope:(MAPScopeMask)scope result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled;
 
 /**
  Signs out the current signed in user and removes all related user data.

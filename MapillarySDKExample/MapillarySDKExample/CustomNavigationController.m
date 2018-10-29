@@ -24,9 +24,9 @@
     return (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeRight);
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
-    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+    return UIInterfaceOrientationPortrait;
 }
 
 @end

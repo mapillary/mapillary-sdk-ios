@@ -50,10 +50,6 @@ SPEC REPOS:
     - SAMKeychain
     - SDVersion
 
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - AFNetworking
-
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   AWSCore: faae134779f0f6e46a8d426c0ccc02e34466b785
@@ -66,6 +62,6 @@ SPEC CHECKSUMS:
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
-PODFILE CHECKSUM: 45d9290aaccc769e067f72c620d9553e6b9b078c
+PODFILE CHECKSUM: 75431ec01ddac5a7ed6a8740d1f9d2a75585e8ab
 
 COCOAPODS: 1.5.3

@@ -29,7 +29,7 @@
     self.cameraBusy = NO;
     
     MAPDevice* device = [MAPDevice thisDevice];
-    self.sequence = [[MAPSequence alloc] initWithDevice:device andProject:nil];
+    self.sequence = [[MAPSequence alloc] initWithDevice:device];
 }
 
 - (void)viewDidAppear:(BOOL)animated

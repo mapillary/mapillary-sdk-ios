@@ -27,7 +27,7 @@
     
     self.sequences = [[NSMutableArray alloc] init];
     
-    [MAPFileManager getSequencesAsync:^(NSArray *sequences) {
+    [MAPFileManager getSequencesAsync:YES done:^(NSArray *sequences) {
         
         for (MAPSequence* s in sequences)
         {

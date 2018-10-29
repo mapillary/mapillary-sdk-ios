@@ -37,8 +37,7 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     
-
-    [MAPFileManager getSequencesAsync:^(NSArray *sequences) {
+    [MAPFileManager getSequencesAsync:YES done:^(NSArray *sequences) {
         
         self.sequences = sequences;
         
