@@ -42,11 +42,11 @@ static MAPLoginManager* singleInstance;
 + (void)signInFromViewController:(UIViewController*)viewController scope:(MAPScopeMask)scope result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled
 {
     NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
-    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_REDIRECT_URL];
+    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_CALLBACK_URL];
     
     // Check that clientId and redirectUrl are set
     NSAssert(clientId != nil, @"MapillaryClientId is not specified in application plist file");
-    NSAssert(redirectUrl != nil, @"MapillaryRedirectUrl is not specified in application plist file");
+    NSAssert(redirectUrl != nil, @"MapillaryCallbackUrl is not specified in application plist file");
      
     NSMutableString* scopeString = [NSMutableString string];
     

@@ -397,7 +397,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         return nil;
     }
     
-    if (self.timeOffset)
+    if (self.timeOffset != nil)
     {
         date = [date dateByAddingTimeInterval:self.timeOffset.doubleValue];
     }

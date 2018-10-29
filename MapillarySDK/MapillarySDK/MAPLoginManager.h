@@ -40,11 +40,11 @@ typedef NS_OPTIONS(NSUInteger, MAPScopeMask) {
  defined in your application `.plist` file:
  
  - MapillaryClientId
- - MapillaryRedirectUrl
+ - MapillaryCallbackUrl
  
  You need to register your app at mapillary.com to enter the redirect URL and
  also to obtain a client ID. Your app must also support the custom URL scheme
- defined in `MapillaryRedirectUrl`.
+ defined in `MapillaryCallbackUrl`.
  
  @see `MAPApplicationDelegate`
  */

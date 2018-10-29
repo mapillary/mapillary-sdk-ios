@@ -37,7 +37,7 @@
 	<true/>
 	<key>MapillaryClientId</key>
 	<string>VzVVTDFEN2RlQkRPM0pCOFYtb19QdzpiODU1N2QyNTIzNGYwODIz</string>
-	<key>MapillaryRedirectUrl</key>
+	<key>MapillaryCallbackUrl</key>
 	<string>com.mapillary.sdk.example</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Needs camera to take photos</string>
