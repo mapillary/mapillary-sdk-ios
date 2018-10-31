@@ -68,13 +68,26 @@ Add `MapillaryClientId` and `MapillaryCallbackUrl` to your plist file. Below is 
 </plist>
 ```
 
-## Documentation
+### Add this to to your app delegate
 
-The latest generated documentation can found [here](https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html).
+In order for background uploads to work properly, you need to add this:
 
-## Example app
+##### Swift
 
-There is an example app called [MapillarySDKExample](https://github.com/mapillary/mapillary-sdk-ios/blob/master/MapillarySDKExample) that demonstrates most of the features in the SDK.
+```
+func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        
+	MAPApplicationDelegate.application(application, handleEventsForBackgroundURLSession: identifier, completionHandler: completionHandler)
+}
+```
+
+##### Objective-C
+```
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{    
+    [MAPApplicationDelegate application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+}
+```
 
 ## Usage
 
@@ -339,6 +352,14 @@ func uploadStopped(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerS
 	// Upload stopped
 }
 ```
+
+## Documentation
+
+The latest generated documentation can found [here](https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/getting-started.html).
+
+## Example app
+
+There is an example app called [MapillarySDKExample](https://github.com/mapillary/mapillary-sdk-ios/blob/master/MapillarySDKExample) that demonstrates most of the features in the SDK.
 
 ## Maintainers
 @millenbop, anders@mapillary.com
