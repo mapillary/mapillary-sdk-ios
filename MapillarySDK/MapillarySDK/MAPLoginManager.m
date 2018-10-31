@@ -83,9 +83,9 @@ static MAPLoginManager* singleInstance;
         [scopeString appendString:@"private:upload%20"];
     }
     
-    if (scopeString.length > 0 && [[scopeString substringFromIndex:scopeString.length-4] isEqualToString:@"%20"])
+    if (scopeString.length > 0 && [[scopeString substringFromIndex:scopeString.length-3] isEqualToString:@"%20"])
     {
-        scopeString = [NSMutableString stringWithString:[scopeString substringToIndex:scopeString.length-4]];
+        scopeString = [NSMutableString stringWithString:[scopeString substringToIndex:scopeString.length-3]];
     }
     
     NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=%@&state=return&redirect_uri=%@&response_type=token&client_id=%@&simple=true", scopeString, redirectUrl, clientId];
