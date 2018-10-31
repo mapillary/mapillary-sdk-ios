@@ -44,9 +44,6 @@
                 <a href="../Classes/MAPLoginManager.html">MAPLoginManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/MAPUser.html">MAPUser</a>
               </li>
             </ul>
@@ -74,6 +71,9 @@
           <li class="nav-group-name">
             <a href="../Uploading.html">Uploading</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Classes/MAPUploadManager.html">MAPUploadManager</a>
               </li>
@@ -175,12 +175,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">double</span> <span class="n">magneticHeading</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">magneticHeading</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">magneticHeading</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">magneticHeading</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -209,12 +209,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">double</span> <span class="n">trueHeading</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">trueHeading</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">trueHeading</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">trueHeading</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -243,12 +243,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">double</span> <span class="n">headingAccuracy</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">headingAccuracy</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">headingAccuracy</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">headingAccuracy</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -282,7 +282,7 @@
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -322,12 +322,12 @@ obtained from a <code>CMDeviceMotion</code> object returned by a <code>CMMotionM
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">double</span> <span class="n">deviceMotionX</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">deviceMotionX</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceMotionX</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceMotionX</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -367,12 +367,12 @@ obtained from a <code>CMDeviceMotion</code> object returned by a <code>CMMotionM
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">double</span> <span class="n">deviceMotionY</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">deviceMotionY</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceMotionY</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceMotionY</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -412,12 +412,147 @@ obtained from a <code>CMDeviceMotion</code> object returned by a <code>CMMotionM
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">double</span> <span class="n">deviceMotionZ</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">deviceMotionZ</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceMotionZ</span><span class="p">:</span> <span class="kt">Double</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceMotionZ</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLocation(py)deviceRoll"></a>
+                    <a name="//apple_ref/objc/Property/deviceRoll" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLocation(py)deviceRoll">deviceRoll</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The device motion X value when this location was recorded. This value should be
+obtained from a <code>CMDeviceMotion</code> object returned by a <code>CMMotionManager</code>.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    CMMotionManager
+
+</div>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    CMDeviceMotion
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">deviceRoll</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceRoll</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLocation(py)devicePitch"></a>
+                    <a name="//apple_ref/objc/Property/devicePitch" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLocation(py)devicePitch">devicePitch</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The device motion Y value when this location was recorded. This value should be
+obtained from a <code>CMDeviceMotion</code> object returned by a <code>CMMotionManager</code>.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    CMMotionManager
+
+</div>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    CMDeviceMotion
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">devicePitch</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">devicePitch</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPLocation(py)deviceYaw"></a>
+                    <a name="//apple_ref/objc/Property/deviceYaw" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLocation(py)deviceYaw">deviceYaw</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The device motion Z value when this location was recorded. This value should be
+obtained from a <code>CMDeviceMotion</code> object returned by a <code>CMMotionManager</code>.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    CMMotionManager
+
+</div>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    CMDeviceMotion
+
+</div>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">deviceYaw</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">deviceYaw</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>

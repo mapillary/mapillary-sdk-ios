@@ -22,8 +22,7 @@ custom_categories:
 
   - name: Authentication
     children:
-    - MAPLoginManager
-    - MAPApplicationDelegate
+    - MAPLoginManager    
     - MAPUser
     
   - name: Sequences
@@ -36,6 +35,8 @@ custom_categories:
   
   - name: Uploading  
     children:
+    - MAPApplicationDelegate
     - MAPUploadManager
     - MAPUploadManagerDelegate
     - MAPUploadManagerStatus
+    

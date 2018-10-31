@@ -44,9 +44,6 @@
                 <a href="../Classes/MAPLoginManager.html">MAPLoginManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/MAPUser.html">MAPUser</a>
               </li>
             </ul>
@@ -74,6 +71,9 @@
           <li class="nav-group-name">
             <a href="../Uploading.html">Uploading</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Classes/MAPUploadManager.html">MAPUploadManager</a>
               </li>
@@ -157,12 +157,12 @@ interpolated between two locations and also adds this value.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">directionOffset</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">directionOffset</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">directionOffset</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">directionOffset</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -185,11 +185,9 @@ interpolated between two locations and also adds this value.</p>
                       <div class="abstract">
                         <p>The time offset in milliseconds.</p>
 
-<p>Default is NSTimeIntervalSince1970. It means it is not set.
-+1 means the image date is increased by 1 ms when calculating the position of
-and image.
--1 means the image date is decreased by 1 ms when calculating the position of
-and image.</p>
+<p>Default is nil. It means it is not set. +1 means the image date is increased
+by 1 ms when calculating the position of and image. -1 means the image date
+is decreased by 1 ms when calculating the position of and image.</p>
 
                       </div>
                       <!--
@@ -197,12 +195,12 @@ and image.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">timeOffset</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">timeOffset</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">timeOffset</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">timeOffset</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -236,7 +234,7 @@ and image.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceDate</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceDate</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -270,7 +268,7 @@ and image.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -281,9 +279,9 @@ and image.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPSequence(py)project"></a>
-                    <a name="//apple_ref/objc/Property/project" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPSequence(py)project">project</a>
+                    <a name="/c:objc(cs)MAPSequence(py)gpxPath"></a>
+                    <a name="//apple_ref/objc/Property/gpxPath" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)gpxPath">gpxPath</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -291,7 +289,7 @@ and image.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The project this sequence belongs to.</p>
+                        <p>The path to the GPX file for this sequence. Can be nil.</p>
 
                       </div>
                       <!--
@@ -299,12 +297,81 @@ and image.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">project</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">gpxPath</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">project</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">gpxPath</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)organizationKey"></a>
+                    <a name="//apple_ref/objc/Property/organizationKey" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)organizationKey">organizationKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The organization this sequence belongs to. Default is nil.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">organizationKey</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">organizationKey</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)isPrivate"></a>
+                    <a name="//apple_ref/objc/Property/isPrivate" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)isPrivate">isPrivate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the sequence is private or public. Only used if organizationKey is set.
+Default is NO.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">isPrivate</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">isPrivate</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -325,7 +392,7 @@ and image.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The unique ID of this sequence.</p>
+                        <p>The unique key of this sequence.</p>
 
                       </div>
                       <!--
@@ -338,7 +405,7 @@ and image.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceKey</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sequenceKey</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -451,9 +518,9 @@ and image.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPSequence(py)imageOrientation"></a>
-                    <a name="//apple_ref/objc/Property/imageOrientation" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPSequence(py)imageOrientation">imageOrientation</a>
+                    <a name="/c:objc(cs)MAPSequence(py)rigSequenceUUID"></a>
+                    <a name="//apple_ref/objc/Property/rigSequenceUUID" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)rigSequenceUUID">rigSequenceUUID</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -461,7 +528,8 @@ and image.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The image orientation this sequence was captured in.</p>
+                        <p>The common identifier of this sequence for a rig. This is used to connect
+several separate sequences together.</p>
 
                       </div>
                       <!--
@@ -469,12 +537,46 @@ and image.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">imageOrientation</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">rigSequenceUUID</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">imageOrientation</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">rigSequenceUUID</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(py)rigUUID"></a>
+                    <a name="//apple_ref/objc/Property/rigUUID" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(py)rigUUID">rigUUID</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The unique identifier of the rig used to capture this sequence.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="o">*</span><span class="n">rigUUID</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">rigUUID</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -506,7 +608,7 @@ and image.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a new sequence for a specific device.</p>
+                        <p>Creates a new sequence for a specific device with the current date.</p>
 
                       </div>
                       <!--
@@ -549,9 +651,9 @@ and image.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPSequence(im)initWithDevice:andProject:"></a>
-                    <a name="//apple_ref/objc/Method/-initWithDevice:andProject:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPSequence(im)initWithDevice:andProject:">-initWithDevice:andProject:</a>
+                    <a name="/c:objc(cs)MAPSequence(im)initWithDevice:andDate:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithDevice:andDate:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)initWithDevice:andDate:">-initWithDevice:andDate:</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -559,7 +661,7 @@ and image.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a new sequence for a specific device and project.</p>
+                        <p>Creates a new sequence for a specific device with a specific date.</p>
 
                       </div>
                       <!--
@@ -567,12 +669,12 @@ and image.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithDevice</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPDevice.html">MAPDevice</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">device</span> <span class="nf">andProject</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">project</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithDevice</span><span class="p">:(</span><span class="n"><a href="../Classes/MAPDevice.html">MAPDevice</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">device</span> <span class="nf">andDate</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">date</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">device</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPDevice.html">MAPDevice</a></span><span class="o">!</span><span class="p">,</span> <span class="n">andProject</span> <span class="nv">project</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">device</span><span class="p">:</span> <span class="kt"><a href="../Classes/MAPDevice.html">MAPDevice</a></span><span class="o">!</span><span class="p">,</span> <span class="n">andDate</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -596,12 +698,12 @@ and image.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>project</em>
+                                <em>date</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>A project UUID.</p>
+                                  <p>The date of the sequence.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1031,7 +1133,7 @@ and image.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getImagesAsync</span><span class="p">(</span><span class="n">_</span> <span class="nv">images</span><span class="p">:</span> <span class="p">((</span><span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getImagesAsync</span><span class="p">(</span><span class="n">_</span> <span class="nv">images</span><span class="p">:</span> <span class="p">((</span><span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1234,7 +1336,7 @@ and image.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getLocationsAsync</span><span class="p">(</span><span class="n">_</span> <span class="nv">locations</span><span class="p">:</span> <span class="p">((</span><span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getLocationsAsync</span><span class="p">(</span><span class="n">_</span> <span class="nv">locations</span><span class="p">:</span> <span class="p">((</span><span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1500,6 +1602,40 @@ internal GPX file and thus is very slow.</p>
                           </tbody>
                         </table>
                       </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPSequence(im)hasGpxFile"></a>
+                    <a name="//apple_ref/objc/Method/-hasGpxFile" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPSequence(im)hasGpxFile">-hasGpxFile</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Checks if there is a GPX file generated or not.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">hasGpxFile</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">hasGpxFile</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
                     </section>
                   </div>
                 </li>

@@ -43,9 +43,6 @@
                 <a href="Classes/MAPLoginManager.html">MAPLoginManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Classes/MAPUser.html">MAPUser</a>
               </li>
             </ul>
@@ -73,6 +70,9 @@
           <li class="nav-group-name">
             <a href="Uploading.html">Uploading</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Classes/MAPUploadManager.html">MAPUploadManager</a>
               </li>
@@ -116,56 +116,79 @@ end
 <h2 id='configuration' class='heading'>Configuration</h2>
 <h3 id='register-your-app-with-mapillary' class='heading'>Register your app with Mapillary</h3>
 
-<p>To use the SDK, you need to obtain a Mapillary <code>client_id</code> first. </p>
+<p>To use the SDK, you need to register your application and obtain a Mapillary client id.</p>
 
 <ol>
 <li><a href="https://www.mapillary.com/signup">Create a Mapillary account</a> if you don&rsquo;t have one already.</li>
 <li>Create an app at <a href="https://www.mapillary.com/app/settings/developers">the Developer page</a>.</li>
 </ol>
-<h5 id='redirect-url' class='heading'>Redirect URL</h5>
+<h5 id='callback-url' class='heading'>Callback URL</h5>
 
-<p>When you fill in the form, make sure the redirect URL is similar to this:</p>
+<p>When you fill in the form, make sure the callback URL is similar to this:</p>
 
 <p><code>com.mycompany.myapp.mapillary</code></p>
+<h5 id='scope' class='heading'>Scope</h5>
+
+<p>Make sure to check the permissions your app needs access to. If unsure, check all of them. Make a note of this as you have to provide the same scope when authenticating later in the app.</p>
 <h5 id='client-id' class='heading'>Client id</h5>
 
-<p>Copy your client id, you need it to initialize the SDK later.</p>
+<p>After you have registered your application, copy your client id, you need it to initialize the SDK later.</p>
 <h3 id='edit-your-application-plist' class='heading'>Edit your application plist</h3>
 
-<p>Add <code>MapillaryClientId</code> and <code>MapillaryRedirectUrl</code> to your plist file. Below is an example of parts of a plist file.</p>
+<p>Add <code>MapillaryClientId</code> and <code>MapillaryCallbackUrl</code> to your plist file. Below is an example of parts of a plist file.</p>
 <pre class="highlight plaintext"><code>&lt;plist version="1.0"&gt;
 &lt;dict&gt;
     ...
     &lt;key&gt;MapillaryClientId&lt;/key&gt;
     &lt;string&gt;YOUR_CLIENT_ID&lt;/string&gt;
     ...
-    &lt;key&gt;MapillaryRedirectUrl&lt;/key&gt;
-    &lt;string&gt;YOUR_REDIRECT_URL&lt;/string&gt;
+    &lt;key&gt; MapillaryCallbackUrl&lt;/key&gt;
+    &lt;string&gt;YOUR_CALLBACK_URL&lt;/string&gt;
     ...
 &lt;/dict&gt;
 &lt;/plist&gt;
 </code></pre>
-<h3 id='app-delegate' class='heading'>App Delegate</h3>
+<h3 id='add-this-to-to-your-app-delegate' class='heading'>Add this to to your app delegate</h3>
 
-<p>Add this to your <code>AppDelegate.m</code> file. This is needed to handle background uploading properly.</p>
-<pre class="highlight plaintext"><code>#import &lt;MapillarySDK/MapillarySDK.h&gt;
+<p>In order for background uploads to work properly, you need to add this:</p>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -&gt; Void) {
 
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
-{    
-    [MAPApplicationDelegate interceptApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+    MAPApplicationDelegate.application(application, handleEventsForBackgroundURLSession: identifier, completionHandler: completionHandler)
 }
 </code></pre>
-<h2 id='documentation' class='heading'>Documentation</h2>
-
-<p>The latest generated documentation can found <a href="https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html">here</a>.</p>
-<h2 id='example-app' class='heading'>Example app</h2>
-
-<p>There is an example app called <a href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/MapillarySDKExample">MapillarySDKExample</a> that demonstrates how to use most of the features in the SDK.</p>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
+<pre class="highlight plaintext"><code>- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{    
+    [MAPApplicationDelegate application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+}
+</code></pre>
 <h2 id='usage' class='heading'>Usage</h2>
 
 <p>Below is a quick-start guide to get you started. Refer to the full <a href="https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html">docs</a> for details.</p>
 <h3 id='signing-in' class='heading'>Signing in</h3>
-<pre class="highlight plaintext"><code>[MAPLoginManager signInFromViewController:self result:^(BOOL success) {            
+
+<p>You need to specify the permissions (as a bit mask) that your app needs access to. Use the same as when you registered your app.</p>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>MAPLoginManager.signIn(from: self, scope: MAPScopeMask.all, result: { (success) in
+
+    if success
+    {
+        // Sign in was sucessful
+    }
+    else
+    {
+        // Sign in failed
+    }
+
+}) {
+
+    // The user cancelled the sign in process
+
+}
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
+<pre class="highlight plaintext"><code>[MAPLoginManager signInFromViewController:self scope:MAPScopeMaskAll result:^(BOOL success) {            
 
     if (success)
     {
@@ -183,26 +206,53 @@ end
 }];
 </code></pre>
 <h3 id='signing-out' class='heading'>Signing out</h3>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>MAPLoginManager.signOut()
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
 <pre class="highlight plaintext"><code>[MAPLoginManager signOut];
 </code></pre>
 <h3 id='creating-a-new-sequewnce' class='heading'>Creating a new sequewnce</h3>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>let device = MAPDevice.thisDevice() as! MAPDevice
+let sequence = MAPSequence.init(device: device)
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
 <pre class="highlight plaintext"><code>MAPDevice* device = [MAPDevice thisDevice];
 MAPSequence* sequence = [[MAPSequence alloc] initWithDevice:device];    
 </code></pre>
 <h3 id='adding-images-to-a-new-sequences' class='heading'>Adding images to a new sequences</h3>
 
 <p>To just add image data to a sequence, use this:</p>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>sequence.addImage(with: imageData, date: nil, location: nil)
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
 <pre class="highlight plaintext"><code>[sequence addImageWithData:imageData date:nil location:nil];
 </code></pre>
 <h3 id='adding-locations-to-a-new-sequences' class='heading'>Adding locations to a new sequences</h3>
 
 <p>To just add a location to a sequence, use this:</p>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>let location = MAPLocation.init()
+location.location = lastLocation // From CLLocationManager
+sequence.addLocation(location)
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
 <pre class="highlight plaintext"><code>MAPLocation* location = [[MAPLocation alloc] init];
-location.location = self.lastLocation; // From 
+location.location = lastLocation; // From CLLocationManager
 [sequence addLocation:location];
 </code></pre>
 <h3 id='listing-sequences' class='heading'>Listing sequences</h3>
-<pre class="highlight plaintext"><code>[MAPFileManager getSequencesAsync:^(NSArray *sequences) {
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>MAPFileManager.getSequencesAsync(true) { (sequences) in
+
+    // Do something
+
+}
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
+<pre class="highlight plaintext"><code>[MAPFileManager getSequencesAsync:true done:^(NSArray *sequences) {
 
     // Do something
 
@@ -215,6 +265,14 @@ location.location = self.lastLocation; // From
 <p>Image processing cannot be performed in the background. Once all images are processed you can put the app in the background and the upload will continue until all images are uploaded.</p>
 
 <p>For testing the upload, use the two properties <code>testUpload</code> and <code>deleteAfterUpload</code> (only used if <code>testUpload</code> is set to <code>YES</code>) to configure the uploader:</p>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>let uploadManager = MAPUploadManager.shared()
+uploadManager.delegate = self
+uploadManager.testUpload = true // Upload to our test server instead
+uploadManager.deleteAfterUpload = false // Keep the images after upload
+uploadManager.processAndUploadSequences(sequencesToUpload)
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
 <pre class="highlight plaintext"><code>MAPUploadManager* uploadManager = [MAPUploadManager sharedManager];
 uploadManager.delegate = self;
 uploadManager.testUpload = YES; // Upload to our test server instead
@@ -223,6 +281,12 @@ uploadManager.deleteAfterUpload = NO; // Keep the images after upload
 </code></pre>
 
 <p>When your app is ready for production, just omit those two lines:</p>
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>let uploadManager = MAPUploadManager.shared()
+uploadManager.delegate = self
+uploadManager.processAndUploadSequences(sequencesToUpload)
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
 <pre class="highlight plaintext"><code>MAPUploadManager* uploadManager = [MAPUploadManager sharedManager];
 uploadManager.delegate = self;
 [uploadManager processAndUploadSequences:sequencesToUpload];
@@ -230,36 +294,96 @@ uploadManager.delegate = self;
 <h3 id='tracking-images-processsing-and-upload-progress' class='heading'>Tracking images processsing and upload progress</h3>
 
 <p>To track the progress of the image processing and/or upload and to be able to update the UI, use <code><a href="Protocols/MAPUploadManagerDelegate.html">MAPUploadManagerDelegate</a></code>:</p>
-<pre class="highlight plaintext"><code>- (void)imageProcessed:(MAPUploadManager *)uploadManager image:(MAPImage *)image uploadStatus:(MAPUploadStatus*)uploadStatus
+<h5 id='swift' class='heading'>Swift</h5>
+<pre class="highlight plaintext"><code>
+func imageProcessed(_ uploadManager: MAPUploadManager!, image: MAPImage!, status: MAPUploadManagerStatus!)
 {
     // Image was processed
 }
 
-- (void)processingFinished:(MAPUploadManager *)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+func processingFinished(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!)
 {
-    // Image was processed
+    // Image processing finished
 }
 
-- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus
+func processingStopped(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!)
 {
-    // Image was uploaded sucessfully
+    // Image processing was stopped
 }
 
-- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image uploadStatus:(MAPUploadStatus*)uploadStatus error:(NSError*)error
+func imageUploaded(_ uploadManager: MAPUploadManager!, image: MAPImage!, status: MAPUploadManagerStatus!)
 {
-    // Image failed to uploaded
+   // Image was uploaded sucessfully
 }
 
-- (void)uploadFinished:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+func imageFailed(_ uploadManager: MAPUploadManager!, image: MAPImage!, status: MAPUploadManagerStatus!, error: Error!) 
+{
+    // Image failed to uploaded  
+}
+
+func uploadedData(_ uploadManager: MAPUploadManager!, bytesSent: Int64, status: MAPUploadManagerStatus!) 
+{
+    // Uploaded bytesSent bytes
+}
+
+func uploadFinished(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!)
 {
     // Upload finished
 }
 
-- (void)uploadStopped:(MAPUploadManager*)uploadManager uploadStatus:(MAPUploadStatus*)uploadStatus
+func uploadStopped(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!) 
+{
+    // Upload stopped    
+}
+
+</code></pre>
+<h5 id='objective-c' class='heading'>Objective-C</h5>
+<pre class="highlight plaintext"><code>- (void)imageProcessed:(MAPUploadManager*)uploadManager image:(MAPImage*)image status:(MAPUploadManagerStatus*)status
+{
+    // Image was processed
+}
+
+- (void)processingFinished:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
+{
+    // Image processing finished
+}
+
+- (void)processingStopped:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
+{
+    // Image processing was stopped
+}
+
+- (void)imageUploaded:(MAPUploadManager*)uploadManager image:(MAPImage*)image status:(MAPUploadManagerStatus*)status
+{
+    // Image was uploaded sucessfully
+}
+
+- (void)imageFailed:(MAPUploadManager*)uploadManager image:(MAPImage*)image status:(MAPUploadManagerStatus*)status error:(NSError*)error
+{
+    // Image failed to uploaded
+}
+
+- (void)uploadedData:(MAPUploadManager*)uploadManager bytesSent:(int64_t)bytesSent status:(MAPUploadManagerStatus*)status
+{
+    // Uploaded bytesSent bytes
+}
+
+- (void)uploadFinished:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
+{
+    // Upload finished
+}
+
+- (void)uploadStopped:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
 {
     // Upload stopped
 }
 </code></pre>
+<h2 id='documentation' class='heading'>Documentation</h2>
+
+<p>The latest generated documentation can found <a href="https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/getting-started.html">here</a>.</p>
+<h2 id='example-app' class='heading'>Example app</h2>
+
+<p>There is an example app called <a href="https://github.com/mapillary/mapillary-sdk-ios/blob/master/MapillarySDKExample">MapillarySDKExample</a> that demonstrates most of the features in the SDK.</p>
 <h2 id='maintainers' class='heading'>Maintainers</h2>
 
 <p>@millenbop, <a href="mailto:anders@mapillary.com">anders@mapillary.com</a></p>
