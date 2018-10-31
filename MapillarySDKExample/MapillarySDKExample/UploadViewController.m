@@ -23,7 +23,7 @@
     
     self.uploadManager = [MAPUploadManager sharedManager];
     self.uploadManager.delegate = self;
-    self.uploadManager.testUpload = NO; // This will upload to our test server instead
+    self.uploadManager.testUpload = YES; // This will upload to our test server instead
     
     self.imagesProcessedProgressView.progress = 0;
     self.imagesUploadedProgressView.progress = 0;
@@ -37,7 +37,7 @@
     
     [self.navigationController setNavigationBarHidden:NO];
     
-    [MAPFileManager getSequencesAsync:YES done:^(NSArray *sequences) {
+    [MAPFileManager getSequencesAsync:NO done:^(NSArray *sequences) {
         
         self.sequences = sequences;
         
