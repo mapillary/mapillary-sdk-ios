@@ -65,7 +65,7 @@
 - (void)testInit
 {
     MAPSequence* s1 = [[MAPSequence alloc] initWithDevice:self.device];
-    MAPSequence* s2 = [[MAPSequence alloc] initWithDevice:self.device andProject:@"test"];
+    MAPSequence* s2 = [[MAPSequence alloc] initWithDevice:self.device andDate:[NSDate date]];
     MAPSequence* s3 = [[MAPSequence alloc] initWithPath:s1.path parseGpx:NO];
     
     XCTAssertNotNil(s1);
