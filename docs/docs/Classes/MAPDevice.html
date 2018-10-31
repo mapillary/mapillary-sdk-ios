@@ -137,7 +137,7 @@ capture.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">make</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">make</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -171,7 +171,7 @@ capture.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">model</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">model</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -205,7 +205,43 @@ capture.</p>
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">uuid</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">uuid</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPDevice(py)isExternal"></a>
+                    <a name="//apple_ref/objc/Property/isExternal" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPDevice(py)isExternal">isExternal</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Defines if the device is an external or an internal device. If the device is
+internal, a GPX file will be created during capture. If external, no GPX file
+is created during capture, instead the coordinates are saved in a database.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">atomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">isExternal</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">isExternal</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -227,9 +263,9 @@ capture.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPDevice(im)initWithMake:andModel:"></a>
-                    <a name="//apple_ref/objc/Method/-initWithMake:andModel:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPDevice(im)initWithMake:andModel:">-initWithMake:andModel:</a>
+                    <a name="/c:objc(cs)MAPDevice(im)initWithMake:andModel:andUUID:isExternal:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithMake:andModel:andUUID:isExternal:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPDevice(im)initWithMake:andModel:andUUID:isExternal:">-initWithMake:andModel:andUUID:isExternal:</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -245,12 +281,15 @@ capture.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithMake</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">make</span> <span class="nf">andModel</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">model</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithMake</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">make</span>
+          <span class="nf">andModel</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">model</span>
+           <span class="nf">andUUID</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">uuid</span>
+        <span class="nf">isExternal</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">isExternal</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">make</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">andModel</span> <span class="nv">model</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">make</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">andModel</span> <span class="nv">model</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">andUUID</span> <span class="nv">uuid</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">isExternal</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -280,6 +319,30 @@ capture.</p>
                               <td>
                                 <div>
                                   <p>The model of the device.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uuid</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A unique identifier of the device.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isExternal</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Defines if the device is external or not.</p>
                                 </div>
                               </td>
                             </tr>
