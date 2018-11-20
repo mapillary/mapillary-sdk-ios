@@ -1,0 +1,891 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6CDC3BD4B978C0A068AA3413 /* Pods_MapillarySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D616FE5A05E8689665298669 /* Pods_MapillarySDK.framework */; };
+		957A69DD792B51DCC2E54620 /* Pods_MapillarySDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4A5130B71703379EB1B36C0 /* Pods_MapillarySDKTests.framework */; };
+		9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */; };
+		9A058026203437BE005A5C8A /* MAPExifToolsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A058025203437BE005A5C8A /* MAPExifToolsTests.m */; };
+		9A058028203476F8005A5C8A /* test-image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9A058027203476F7005A5C8A /* test-image.jpg */; };
+		9A1021441FE3FC7D003CF9CC /* MAPApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A1021431FE3FC7C003CF9CC /* MAPApplicationDelegate.m */; };
+		9A3347F02073C2330085600E /* MAPUploadManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A3347EE2073C2330085600E /* MAPUploadManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A420B6D2019E67D001BF118 /* MAPSequence+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B602019E67C001BF118 /* MAPSequence+Private.m */; };
+		9A420B6E2019E67D001BF118 /* MAPDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B612019E67C001BF118 /* MAPDefines.h */; };
+		9A420B6F2019E67D001BF118 /* MAPGpxParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B622019E67C001BF118 /* MAPGpxParser.h */; };
+		9A420B702019E67D001BF118 /* MAPImage+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B632019E67C001BF118 /* MAPImage+Private.h */; };
+		9A420B712019E67D001BF118 /* MAPInternalUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B642019E67C001BF118 /* MAPInternalUtils.h */; };
+		9A420B722019E67D001BF118 /* MAPApiManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B652019E67C001BF118 /* MAPApiManager.h */; };
+		9A420B732019E67D001BF118 /* MAPGpxLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B662019E67D001BF118 /* MAPGpxLogger.h */; };
+		9A420B742019E67D001BF118 /* MAPSequence+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B672019E67D001BF118 /* MAPSequence+Private.h */; };
+		9A420B752019E67D001BF118 /* MAPGpxLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B682019E67D001BF118 /* MAPGpxLogger.m */; };
+		9A420B762019E67D001BF118 /* MAPGpxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B692019E67D001BF118 /* MAPGpxParser.m */; };
+		9A420B772019E67D001BF118 /* MAPApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B6A2019E67D001BF118 /* MAPApiManager.m */; };
+		9A420B782019E67D001BF118 /* MAPImage+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B6B2019E67D001BF118 /* MAPImage+Private.m */; };
+		9A420B792019E67D001BF118 /* MAPInternalUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B6C2019E67D001BF118 /* MAPInternalUtils.m */; };
+		9A420B7E201B6485001BF118 /* MAPExifTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A420B7C201B6485001BF118 /* MAPExifTools.h */; };
+		9A420B7F201B6485001BF118 /* MAPExifTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7D201B6485001BF118 /* MAPExifTools.m */; };
+		9A58AD4F2142DA8900CE832D /* MAPCoordinate+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A58AD4B2142DA8800CE832D /* MAPCoordinate+CoreDataClass.m */; };
+		9A58AD502142DA8900CE832D /* MAPCoordinate+CoreDataProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A58AD4C2142DA8800CE832D /* MAPCoordinate+CoreDataProperties.h */; };
+		9A58AD512142DA8900CE832D /* MAPCoordinate+CoreDataClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A58AD4D2142DA8800CE832D /* MAPCoordinate+CoreDataClass.h */; };
+		9A58AD522142DA8900CE832D /* MAPCoordinate+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A58AD4E2142DA8900CE832D /* MAPCoordinate+CoreDataProperties.m */; };
+		9A6B0D731F628E2B009C2454 /* MAPApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6B0D711F628E2B009C2454 /* MAPApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A79772D1F55AA1500358A30 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 9A79772C1F55AA1500358A30 /* Podfile */; };
+		9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D551FE2D19400B6D126 /* MAPUserTests.m */; };
+		9A7CB8B3204E913C004C7BD1 /* MAPImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CB8B2204E913C004C7BD1 /* MAPImageTests.m */; };
+		9A7CB8B5204EA3A2004C7BD1 /* MAPLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CB8B4204EA3A2004C7BD1 /* MAPLocationTests.m */; };
+		9A7CB8B9204ECA7A004C7BD1 /* MAPFileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CB8B8204ECA7A004C7BD1 /* MAPFileManagerTests.m */; };
+		9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A88F9441F4D933F0076C311 /* MapillarySDK.framework */; };
+		9A88F9551F4D933F0076C311 /* MapillarySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A88F9471F4D933F0076C311 /* MapillarySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D091FE2CE2A00B6D126 /* MAPFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912CFD1FE2CE2900B6D126 /* MAPFileManager.m */; };
+		9A912D0C1FE2CE2A00B6D126 /* MAPFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D001FE2CE2A00B6D126 /* MAPFileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D0D1FE2CE2A00B6D126 /* MAPDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D011FE2CE2A00B6D126 /* MAPDevice.m */; };
+		9A912D0E1FE2CE2A00B6D126 /* MAPDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D021FE2CE2A00B6D126 /* MAPDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D251FE2CE3A00B6D126 /* MAPUploadManagerStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D131FE2CE3800B6D126 /* MAPUploadManagerStatus.m */; };
+		9A912D261FE2CE3A00B6D126 /* MAPUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D141FE2CE3800B6D126 /* MAPUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D271FE2CE3A00B6D126 /* MAPUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D151FE2CE3800B6D126 /* MAPUploadManager.m */; };
+		9A912D291FE2CE3A00B6D126 /* MAPLoginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D171FE2CE3800B6D126 /* MAPLoginManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D2A1FE2CE3A00B6D126 /* MAPUploadManagerStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D181FE2CE3800B6D126 /* MAPUploadManagerStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D2B1FE2CE3A00B6D126 /* MAPLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D191FE2CE3900B6D126 /* MAPLocation.m */; };
+		9A912D2C1FE2CE3A00B6D126 /* MAPSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D1A1FE2CE3900B6D126 /* MAPSequence.m */; };
+		9A912D2E1FE2CE3A00B6D126 /* MAPLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D1C1FE2CE3900B6D126 /* MAPLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D301FE2CE3A00B6D126 /* MAPImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D1E1FE2CE3900B6D126 /* MAPImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D311FE2CE3A00B6D126 /* MAPSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D1F1FE2CE3900B6D126 /* MAPSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D321FE2CE3A00B6D126 /* MAPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D201FE2CE3900B6D126 /* MAPUtils.m */; };
+		9A912D331FE2CE3A00B6D126 /* MAPImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D211FE2CE3A00B6D126 /* MAPImage.m */; };
+		9A912D351FE2CE3A00B6D126 /* MAPUploadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A912D231FE2CE3A00B6D126 /* MAPUploadManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A912D4B1FE2D11000B6D126 /* MAPUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D4A1FE2D11000B6D126 /* MAPUser.m */; };
+		9A912D571FE2D19400B6D126 /* MAPApplicationDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D501FE2D19400B6D126 /* MAPApplicationDelegateTests.m */; };
+		9A912D581FE2D19400B6D126 /* MAPGpxLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D511FE2D19400B6D126 /* MAPGpxLoggerTests.m */; };
+		9A912D591FE2D19400B6D126 /* MAPLoginManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D521FE2D19400B6D126 /* MAPLoginManagerTests.m */; };
+		9A912D5A1FE2D19400B6D126 /* MAPSequenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D531FE2D19400B6D126 /* MAPSequenceTests.m */; };
+		9A912D5B1FE2D19400B6D126 /* MAPUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D541FE2D19400B6D126 /* MAPUtilsTests.m */; };
+		9A912D5D1FE2D19400B6D126 /* MAPApiManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A912D561FE2D19400B6D126 /* MAPApiManagerTests.m */; };
+		9AB54E9F214130F200F84C0B /* MAPDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AB54E97214130F000F84C0B /* MAPDataManager.h */; };
+		9AB54EA1214130F200F84C0B /* MAPDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9AB54E99214130F100F84C0B /* MAPDataModel.xcdatamodeld */; };
+		9AB54EA3214130F200F84C0B /* MAPDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AB54E9C214130F100F84C0B /* MAPDataManager.m */; };
+		9AC871931F4DB37D0012721D /* MAPLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC871911F4DB37D0012721D /* MAPLoginManager.m */; };
+		9AC871961F4DB3F90012721D /* MAPUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AC871941F4DB3F90012721D /* MAPUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9AE3958B204958F1004FAA72 /* MAPLoginViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE39588204958F0004FAA72 /* MAPLoginViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9AE3958C204958F1004FAA72 /* MAPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39589204958F1004FAA72 /* MAPLoginViewController.m */; };
+		9AE395962049900C004FAA72 /* MAPLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AE395952049900B004FAA72 /* MAPLoginViewController.xib */; };
+		9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */; };
+		9AF041D0207543070000B704 /* MAPUploadManager+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF041CE207543070000B704 /* MAPUploadManager+Private.h */; };
+		9AF041D1207543070000B704 /* MAPUploadManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF041CF207543070000B704 /* MAPUploadManager+Private.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A88F94F1F4D933F0076C311 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A88F93B1F4D933F0076C311 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A88F9431F4D933F0076C311;
+			remoteInfo = MapillarySDK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.release.xcconfig"; sourceTree = "<group>"; };
+		9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPInternalUtilsTests.m; sourceTree = "<group>"; };
+		9A058025203437BE005A5C8A /* MAPExifToolsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPExifToolsTests.m; sourceTree = "<group>"; };
+		9A058027203476F7005A5C8A /* test-image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "test-image.jpg"; sourceTree = "<group>"; };
+		9A1021431FE3FC7C003CF9CC /* MAPApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPApplicationDelegate.m; sourceTree = "<group>"; };
+		9A3347EE2073C2330085600E /* MAPUploadManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPUploadManagerDelegate.h; sourceTree = "<group>"; };
+		9A420B602019E67C001BF118 /* MAPSequence+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MAPSequence+Private.m"; path = "internal/MAPSequence+Private.m"; sourceTree = "<group>"; };
+		9A420B612019E67C001BF118 /* MAPDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPDefines.h; path = internal/MAPDefines.h; sourceTree = "<group>"; };
+		9A420B622019E67C001BF118 /* MAPGpxParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPGpxParser.h; path = internal/MAPGpxParser.h; sourceTree = "<group>"; };
+		9A420B632019E67C001BF118 /* MAPImage+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MAPImage+Private.h"; path = "internal/MAPImage+Private.h"; sourceTree = "<group>"; };
+		9A420B642019E67C001BF118 /* MAPInternalUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPInternalUtils.h; path = internal/MAPInternalUtils.h; sourceTree = "<group>"; };
+		9A420B652019E67C001BF118 /* MAPApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPApiManager.h; path = internal/MAPApiManager.h; sourceTree = "<group>"; };
+		9A420B662019E67D001BF118 /* MAPGpxLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPGpxLogger.h; path = internal/MAPGpxLogger.h; sourceTree = "<group>"; };
+		9A420B672019E67D001BF118 /* MAPSequence+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MAPSequence+Private.h"; path = "internal/MAPSequence+Private.h"; sourceTree = "<group>"; };
+		9A420B682019E67D001BF118 /* MAPGpxLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAPGpxLogger.m; path = internal/MAPGpxLogger.m; sourceTree = "<group>"; };
+		9A420B692019E67D001BF118 /* MAPGpxParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAPGpxParser.m; path = internal/MAPGpxParser.m; sourceTree = "<group>"; };
+		9A420B6A2019E67D001BF118 /* MAPApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAPApiManager.m; path = internal/MAPApiManager.m; sourceTree = "<group>"; };
+		9A420B6B2019E67D001BF118 /* MAPImage+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MAPImage+Private.m"; path = "internal/MAPImage+Private.m"; sourceTree = "<group>"; };
+		9A420B6C2019E67D001BF118 /* MAPInternalUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAPInternalUtils.m; path = internal/MAPInternalUtils.m; sourceTree = "<group>"; };
+		9A420B7A201B3265001BF118 /* MAPUploadManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPUploadManagerTests.m; sourceTree = "<group>"; };
+		9A420B7C201B6485001BF118 /* MAPExifTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MAPExifTools.h; path = internal/MAPExifTools.h; sourceTree = "<group>"; };
+		9A420B7D201B6485001BF118 /* MAPExifTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MAPExifTools.m; path = internal/MAPExifTools.m; sourceTree = "<group>"; };
+		9A58AD4B2142DA8800CE832D /* MAPCoordinate+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MAPCoordinate+CoreDataClass.m"; path = "internal/MAPCoordinate+CoreDataClass.m"; sourceTree = "<group>"; };
+		9A58AD4C2142DA8800CE832D /* MAPCoordinate+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MAPCoordinate+CoreDataProperties.h"; path = "internal/MAPCoordinate+CoreDataProperties.h"; sourceTree = "<group>"; };
+		9A58AD4D2142DA8800CE832D /* MAPCoordinate+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MAPCoordinate+CoreDataClass.h"; path = "internal/MAPCoordinate+CoreDataClass.h"; sourceTree = "<group>"; };
+		9A58AD4E2142DA8900CE832D /* MAPCoordinate+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MAPCoordinate+CoreDataProperties.m"; path = "internal/MAPCoordinate+CoreDataProperties.m"; sourceTree = "<group>"; };
+		9A6B0D711F628E2B009C2454 /* MAPApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPApplicationDelegate.h; sourceTree = "<group>"; };
+		9A6B0D721F628E2B009C2454 /* MAPApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPApplicationDelegate.m; sourceTree = "<group>"; };
+		9A79772C1F55AA1500358A30 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9A7CB8B2204E913C004C7BD1 /* MAPImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPImageTests.m; sourceTree = "<group>"; };
+		9A7CB8B4204EA3A2004C7BD1 /* MAPLocationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPLocationTests.m; sourceTree = "<group>"; };
+		9A7CB8B8204ECA7A004C7BD1 /* MAPFileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPFileManagerTests.m; sourceTree = "<group>"; };
+		9A88F9441F4D933F0076C311 /* MapillarySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapillarySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A88F9471F4D933F0076C311 /* MapillarySDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapillarySDK.h; sourceTree = "<group>"; };
+		9A88F9481F4D933F0076C311 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A88F94D1F4D933F0076C311 /* MapillarySDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapillarySDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A88F9541F4D933F0076C311 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A912CFD1FE2CE2900B6D126 /* MAPFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPFileManager.m; sourceTree = "<group>"; };
+		9A912D001FE2CE2A00B6D126 /* MAPFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPFileManager.h; sourceTree = "<group>"; };
+		9A912D011FE2CE2A00B6D126 /* MAPDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPDevice.m; sourceTree = "<group>"; };
+		9A912D021FE2CE2A00B6D126 /* MAPDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPDevice.h; sourceTree = "<group>"; };
+		9A912D131FE2CE3800B6D126 /* MAPUploadManagerStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUploadManagerStatus.m; sourceTree = "<group>"; };
+		9A912D141FE2CE3800B6D126 /* MAPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUtils.h; sourceTree = "<group>"; };
+		9A912D151FE2CE3800B6D126 /* MAPUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUploadManager.m; sourceTree = "<group>"; };
+		9A912D171FE2CE3800B6D126 /* MAPLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPLoginManager.h; sourceTree = "<group>"; };
+		9A912D181FE2CE3800B6D126 /* MAPUploadManagerStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUploadManagerStatus.h; sourceTree = "<group>"; };
+		9A912D191FE2CE3900B6D126 /* MAPLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPLocation.m; sourceTree = "<group>"; };
+		9A912D1A1FE2CE3900B6D126 /* MAPSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPSequence.m; sourceTree = "<group>"; };
+		9A912D1C1FE2CE3900B6D126 /* MAPLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPLocation.h; sourceTree = "<group>"; };
+		9A912D1E1FE2CE3900B6D126 /* MAPImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPImage.h; sourceTree = "<group>"; };
+		9A912D1F1FE2CE3900B6D126 /* MAPSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPSequence.h; sourceTree = "<group>"; };
+		9A912D201FE2CE3900B6D126 /* MAPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUtils.m; sourceTree = "<group>"; };
+		9A912D211FE2CE3A00B6D126 /* MAPImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPImage.m; sourceTree = "<group>"; };
+		9A912D231FE2CE3A00B6D126 /* MAPUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUploadManager.h; sourceTree = "<group>"; };
+		9A912D3C1FE2CEBC00B6D126 /* MAPUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUserTests.m; sourceTree = "<group>"; };
+		9A912D4A1FE2D11000B6D126 /* MAPUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUser.m; sourceTree = "<group>"; };
+		9A912D501FE2D19400B6D126 /* MAPApplicationDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPApplicationDelegateTests.m; sourceTree = "<group>"; };
+		9A912D511FE2D19400B6D126 /* MAPGpxLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPGpxLoggerTests.m; sourceTree = "<group>"; };
+		9A912D521FE2D19400B6D126 /* MAPLoginManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPLoginManagerTests.m; sourceTree = "<group>"; };
+		9A912D531FE2D19400B6D126 /* MAPSequenceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPSequenceTests.m; sourceTree = "<group>"; };
+		9A912D541FE2D19400B6D126 /* MAPUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUtilsTests.m; sourceTree = "<group>"; };
+		9A912D551FE2D19400B6D126 /* MAPUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUserTests.m; sourceTree = "<group>"; };
+		9A912D561FE2D19400B6D126 /* MAPApiManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPApiManagerTests.m; sourceTree = "<group>"; };
+		9AB54E97214130F000F84C0B /* MAPDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPDataManager.h; path = internal/MAPDataManager.h; sourceTree = "<group>"; };
+		9AB54E9A214130F100F84C0B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		9AB54E9C214130F100F84C0B /* MAPDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAPDataManager.m; path = internal/MAPDataManager.m; sourceTree = "<group>"; };
+		9AC871911F4DB37D0012721D /* MAPLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPLoginManager.m; sourceTree = "<group>"; };
+		9AC871941F4DB3F90012721D /* MAPUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAPUser.h; sourceTree = "<group>"; };
+		9AC871951F4DB3F90012721D /* MAPUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAPUser.m; sourceTree = "<group>"; };
+		9AE39588204958F0004FAA72 /* MAPLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAPLoginViewController.h; path = internal/MAPLoginViewController.h; sourceTree = "<group>"; };
+		9AE39589204958F1004FAA72 /* MAPLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAPLoginViewController.m; path = internal/MAPLoginViewController.m; sourceTree = "<group>"; };
+		9AE395952049900B004FAA72 /* MAPLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MAPLoginViewController.xib; path = internal/MAPLoginViewController.xib; sourceTree = "<group>"; };
+		9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "mapbox-test.gpx"; sourceTree = "<group>"; };
+		9AE762361F94E47B003EC3E9 /* libOCMockito.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCMockito.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE762381F94E482003EC3E9 /* libOCHamcrest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCHamcrest.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCHamcrest.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE7623C1F94E4BC003EC3E9 /* libOCMockito.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCMockito.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AF041CE207543070000B704 /* MAPUploadManager+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MAPUploadManager+Private.h"; path = "internal/MAPUploadManager+Private.h"; sourceTree = "<group>"; };
+		9AF041CF207543070000B704 /* MAPUploadManager+Private.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MAPUploadManager+Private.m"; path = "internal/MAPUploadManager+Private.m"; sourceTree = "<group>"; };
+		AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.release.xcconfig"; sourceTree = "<group>"; };
+		B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.debug.xcconfig"; sourceTree = "<group>"; };
+		C4A5130B71703379EB1B36C0 /* Pods_MapillarySDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapillarySDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D616FE5A05E8689665298669 /* Pods_MapillarySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapillarySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9A88F9401F4D933F0076C311 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CDC3BD4B978C0A068AA3413 /* Pods_MapillarySDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A88F94A1F4D933F0076C311 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */,
+				957A69DD792B51DCC2E54620 /* Pods_MapillarySDKTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		15E690A7296FD5CBD0E66C92 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9AE7623C1F94E4BC003EC3E9 /* libOCMockito.a */,
+				9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */,
+				9AE762381F94E482003EC3E9 /* libOCHamcrest.a */,
+				9AE762361F94E47B003EC3E9 /* libOCMockito.a */,
+				D616FE5A05E8689665298669 /* Pods_MapillarySDK.framework */,
+				C4A5130B71703379EB1B36C0 /* Pods_MapillarySDKTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A88F93A1F4D933F0076C311 = {
+			isa = PBXGroup;
+			children = (
+				9A88F9461F4D933F0076C311 /* MapillarySDK */,
+				9A88F9511F4D933F0076C311 /* MapillarySDKTests */,
+				9A88F9451F4D933F0076C311 /* Products */,
+				C154E3531FA59E311CF0FE63 /* Pods */,
+				15E690A7296FD5CBD0E66C92 /* Frameworks */,
+				9A912D461FE2CF8100B6D126 /* Recovered References */,
+			);
+			sourceTree = "<group>";
+		};
+		9A88F9451F4D933F0076C311 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A88F9441F4D933F0076C311 /* MapillarySDK.framework */,
+				9A88F94D1F4D933F0076C311 /* MapillarySDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A88F9461F4D933F0076C311 /* MapillarySDK */ = {
+			isa = PBXGroup;
+			children = (
+				9A88F9481F4D933F0076C311 /* Info.plist */,
+				9A79772C1F55AA1500358A30 /* Podfile */,
+				9AC8718F1F4DB3300012721D /* internal */,
+				9A6B0D711F628E2B009C2454 /* MAPApplicationDelegate.h */,
+				9A1021431FE3FC7C003CF9CC /* MAPApplicationDelegate.m */,
+				9A912D021FE2CE2A00B6D126 /* MAPDevice.h */,
+				9A912D011FE2CE2A00B6D126 /* MAPDevice.m */,
+				9A912D001FE2CE2A00B6D126 /* MAPFileManager.h */,
+				9A912CFD1FE2CE2900B6D126 /* MAPFileManager.m */,
+				9A88F9471F4D933F0076C311 /* MapillarySDK.h */,
+				9A912D1E1FE2CE3900B6D126 /* MAPImage.h */,
+				9A912D211FE2CE3A00B6D126 /* MAPImage.m */,
+				9A912D1C1FE2CE3900B6D126 /* MAPLocation.h */,
+				9A912D191FE2CE3900B6D126 /* MAPLocation.m */,
+				9A912D171FE2CE3800B6D126 /* MAPLoginManager.h */,
+				9AC871911F4DB37D0012721D /* MAPLoginManager.m */,
+				9A912D1F1FE2CE3900B6D126 /* MAPSequence.h */,
+				9A912D1A1FE2CE3900B6D126 /* MAPSequence.m */,
+				9A912D231FE2CE3A00B6D126 /* MAPUploadManager.h */,
+				9A912D151FE2CE3800B6D126 /* MAPUploadManager.m */,
+				9A3347EE2073C2330085600E /* MAPUploadManagerDelegate.h */,
+				9A912D181FE2CE3800B6D126 /* MAPUploadManagerStatus.h */,
+				9A912D131FE2CE3800B6D126 /* MAPUploadManagerStatus.m */,
+				9AC871941F4DB3F90012721D /* MAPUser.h */,
+				9A912D4A1FE2D11000B6D126 /* MAPUser.m */,
+				9A912D141FE2CE3800B6D126 /* MAPUtils.h */,
+				9A912D201FE2CE3900B6D126 /* MAPUtils.m */,
+			);
+			path = MapillarySDK;
+			sourceTree = "<group>";
+		};
+		9A88F9511F4D933F0076C311 /* MapillarySDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A88F9541F4D933F0076C311 /* Info.plist */,
+				9A912D561FE2D19400B6D126 /* MAPApiManagerTests.m */,
+				9A912D501FE2D19400B6D126 /* MAPApplicationDelegateTests.m */,
+				9A058025203437BE005A5C8A /* MAPExifToolsTests.m */,
+				9A7CB8B8204ECA7A004C7BD1 /* MAPFileManagerTests.m */,
+				9A912D511FE2D19400B6D126 /* MAPGpxLoggerTests.m */,
+				9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */,
+				9A7CB8B2204E913C004C7BD1 /* MAPImageTests.m */,
+				9A7CB8B4204EA3A2004C7BD1 /* MAPLocationTests.m */,
+				9A912D521FE2D19400B6D126 /* MAPLoginManagerTests.m */,
+				9A912D531FE2D19400B6D126 /* MAPSequenceTests.m */,
+				9A912D551FE2D19400B6D126 /* MAPUserTests.m */,
+				9A912D541FE2D19400B6D126 /* MAPUtilsTests.m */,
+				9A420B7A201B3265001BF118 /* MAPUploadManagerTests.m */,
+				9AE3BB251FA20CC300174C47 /* test-files */,
+			);
+			path = MapillarySDKTests;
+			sourceTree = "<group>";
+		};
+		9A912D461FE2CF8100B6D126 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				9A6B0D721F628E2B009C2454 /* MAPApplicationDelegate.m */,
+				9AC871951F4DB3F90012721D /* MAPUser.m */,
+				9A912D3C1FE2CEBC00B6D126 /* MAPUserTests.m */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		9AC8718F1F4DB3300012721D /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				9AB54E97214130F000F84C0B /* MAPDataManager.h */,
+				9AB54E9C214130F100F84C0B /* MAPDataManager.m */,
+				9A58AD4D2142DA8800CE832D /* MAPCoordinate+CoreDataClass.h */,
+				9A58AD4B2142DA8800CE832D /* MAPCoordinate+CoreDataClass.m */,
+				9A58AD4C2142DA8800CE832D /* MAPCoordinate+CoreDataProperties.h */,
+				9A58AD4E2142DA8900CE832D /* MAPCoordinate+CoreDataProperties.m */,
+				9AB54E99214130F100F84C0B /* MAPDataModel.xcdatamodeld */,
+				9A420B652019E67C001BF118 /* MAPApiManager.h */,
+				9A420B6A2019E67D001BF118 /* MAPApiManager.m */,
+				9A420B612019E67C001BF118 /* MAPDefines.h */,
+				9A420B7C201B6485001BF118 /* MAPExifTools.h */,
+				9A420B7D201B6485001BF118 /* MAPExifTools.m */,
+				9A420B662019E67D001BF118 /* MAPGpxLogger.h */,
+				9A420B682019E67D001BF118 /* MAPGpxLogger.m */,
+				9A420B622019E67C001BF118 /* MAPGpxParser.h */,
+				9A420B692019E67D001BF118 /* MAPGpxParser.m */,
+				9A420B632019E67C001BF118 /* MAPImage+Private.h */,
+				9A420B6B2019E67D001BF118 /* MAPImage+Private.m */,
+				9A420B642019E67C001BF118 /* MAPInternalUtils.h */,
+				9A420B6C2019E67D001BF118 /* MAPInternalUtils.m */,
+				9AE39588204958F0004FAA72 /* MAPLoginViewController.h */,
+				9AE39589204958F1004FAA72 /* MAPLoginViewController.m */,
+				9AE395952049900B004FAA72 /* MAPLoginViewController.xib */,
+				9A420B672019E67D001BF118 /* MAPSequence+Private.h */,
+				9A420B602019E67C001BF118 /* MAPSequence+Private.m */,
+				9AF041CE207543070000B704 /* MAPUploadManager+Private.h */,
+				9AF041CF207543070000B704 /* MAPUploadManager+Private.m */,
+			);
+			name = internal;
+			sourceTree = "<group>";
+		};
+		9AE3BB251FA20CC300174C47 /* test-files */ = {
+			isa = PBXGroup;
+			children = (
+				9A058027203476F7005A5C8A /* test-image.jpg */,
+				9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */,
+			);
+			path = "test-files";
+			sourceTree = "<group>";
+		};
+		C154E3531FA59E311CF0FE63 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */,
+				9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */,
+				22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */,
+				AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		9A88F9411F4D933F0076C311 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AC871961F4DB3F90012721D /* MAPUser.h in Headers */,
+				9A420B712019E67D001BF118 /* MAPInternalUtils.h in Headers */,
+				9A912D0C1FE2CE2A00B6D126 /* MAPFileManager.h in Headers */,
+				9A420B7E201B6485001BF118 /* MAPExifTools.h in Headers */,
+				9A420B6E2019E67D001BF118 /* MAPDefines.h in Headers */,
+				9A912D311FE2CE3A00B6D126 /* MAPSequence.h in Headers */,
+				9A912D301FE2CE3A00B6D126 /* MAPImage.h in Headers */,
+				9A420B722019E67D001BF118 /* MAPApiManager.h in Headers */,
+				9A58AD502142DA8900CE832D /* MAPCoordinate+CoreDataProperties.h in Headers */,
+				9A912D261FE2CE3A00B6D126 /* MAPUtils.h in Headers */,
+				9A420B742019E67D001BF118 /* MAPSequence+Private.h in Headers */,
+				9A912D351FE2CE3A00B6D126 /* MAPUploadManager.h in Headers */,
+				9AE3958B204958F1004FAA72 /* MAPLoginViewController.h in Headers */,
+				9A58AD512142DA8900CE832D /* MAPCoordinate+CoreDataClass.h in Headers */,
+				9A420B6F2019E67D001BF118 /* MAPGpxParser.h in Headers */,
+				9A3347F02073C2330085600E /* MAPUploadManagerDelegate.h in Headers */,
+				9A912D2E1FE2CE3A00B6D126 /* MAPLocation.h in Headers */,
+				9AB54E9F214130F200F84C0B /* MAPDataManager.h in Headers */,
+				9A912D291FE2CE3A00B6D126 /* MAPLoginManager.h in Headers */,
+				9A420B732019E67D001BF118 /* MAPGpxLogger.h in Headers */,
+				9A912D2A1FE2CE3A00B6D126 /* MAPUploadManagerStatus.h in Headers */,
+				9A912D0E1FE2CE2A00B6D126 /* MAPDevice.h in Headers */,
+				9A6B0D731F628E2B009C2454 /* MAPApplicationDelegate.h in Headers */,
+				9A88F9551F4D933F0076C311 /* MapillarySDK.h in Headers */,
+				9AF041D0207543070000B704 /* MAPUploadManager+Private.h in Headers */,
+				9A420B702019E67D001BF118 /* MAPImage+Private.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		9A88F9431F4D933F0076C311 /* MapillarySDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A88F9581F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDK" */;
+			buildPhases = (
+				F92E7559CAE76386D150D3CE /* [CP] Check Pods Manifest.lock */,
+				9A88F93F1F4D933F0076C311 /* Sources */,
+				9A88F9401F4D933F0076C311 /* Frameworks */,
+				9A88F9411F4D933F0076C311 /* Headers */,
+				9A88F9421F4D933F0076C311 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MapillarySDK;
+			productName = MapillarySDK;
+			productReference = 9A88F9441F4D933F0076C311 /* MapillarySDK.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9A88F94C1F4D933F0076C311 /* MapillarySDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A88F95B1F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDKTests" */;
+			buildPhases = (
+				9A2E2D7F5BDC772E624E75FD /* [CP] Check Pods Manifest.lock */,
+				9A88F9491F4D933F0076C311 /* Sources */,
+				9A88F94A1F4D933F0076C311 /* Frameworks */,
+				9A88F94B1F4D933F0076C311 /* Resources */,
+				E3E70687E600D17D5BFF4278 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A88F9501F4D933F0076C311 /* PBXTargetDependency */,
+			);
+			name = MapillarySDKTests;
+			productName = MapillarySDKTests;
+			productReference = 9A88F94D1F4D933F0076C311 /* MapillarySDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9A88F93B1F4D933F0076C311 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = Mapillary;
+				TargetAttributes = {
+					9A88F9431F4D933F0076C311 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = K7QW859D7N;
+						ProvisioningStyle = Automatic;
+					};
+					9A88F94C1F4D933F0076C311 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = K7QW859D7N;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 9A88F93E1F4D933F0076C311 /* Build configuration list for PBXProject "MapillarySDK" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9A88F93A1F4D933F0076C311;
+			productRefGroup = 9A88F9451F4D933F0076C311 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9A88F9431F4D933F0076C311 /* MapillarySDK */,
+				9A88F94C1F4D933F0076C311 /* MapillarySDKTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9A88F9421F4D933F0076C311 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A79772D1F55AA1500358A30 /* Podfile in Resources */,
+				9AE395962049900C004FAA72 /* MAPLoginViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A88F94B1F4D933F0076C311 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */,
+				9A058028203476F8005A5C8A /* test-image.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9A2E2D7F5BDC772E624E75FD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MapillarySDKTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E3E70687E600D17D5BFF4278 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/OCHamcrest/OCHamcrest.framework",
+				"${BUILT_PRODUCTS_DIR}/OCMockito/OCMockito.framework",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSS3/AWSS3.framework",
+				"${BUILT_PRODUCTS_DIR}/BOSImageResizeOperation/BOSImageResizeOperation.framework",
+				"${BUILT_PRODUCTS_DIR}/NSHash/NSHash.framework",
+				"${BUILT_PRODUCTS_DIR}/PodAsset/PodAsset.framework",
+				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
+				"${BUILT_PRODUCTS_DIR}/SDVersion/SDVersion.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCHamcrest.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMockito.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSS3.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BOSImageResizeOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSHash.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PodAsset.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDVersion.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F92E7559CAE76386D150D3CE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MapillarySDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9A88F93F1F4D933F0076C311 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A420B7F201B6485001BF118 /* MAPExifTools.m in Sources */,
+				9AE3958C204958F1004FAA72 /* MAPLoginViewController.m in Sources */,
+				9AC871931F4DB37D0012721D /* MAPLoginManager.m in Sources */,
+				9A912D4B1FE2D11000B6D126 /* MAPUser.m in Sources */,
+				9A912D331FE2CE3A00B6D126 /* MAPImage.m in Sources */,
+				9A912D271FE2CE3A00B6D126 /* MAPUploadManager.m in Sources */,
+				9A420B782019E67D001BF118 /* MAPImage+Private.m in Sources */,
+				9A912D0D1FE2CE2A00B6D126 /* MAPDevice.m in Sources */,
+				9A420B6D2019E67D001BF118 /* MAPSequence+Private.m in Sources */,
+				9AF041D1207543070000B704 /* MAPUploadManager+Private.m in Sources */,
+				9A420B772019E67D001BF118 /* MAPApiManager.m in Sources */,
+				9A420B752019E67D001BF118 /* MAPGpxLogger.m in Sources */,
+				9A420B792019E67D001BF118 /* MAPInternalUtils.m in Sources */,
+				9AB54EA1214130F200F84C0B /* MAPDataModel.xcdatamodeld in Sources */,
+				9A58AD522142DA8900CE832D /* MAPCoordinate+CoreDataProperties.m in Sources */,
+				9A420B762019E67D001BF118 /* MAPGpxParser.m in Sources */,
+				9A912D091FE2CE2A00B6D126 /* MAPFileManager.m in Sources */,
+				9A912D251FE2CE3A00B6D126 /* MAPUploadManagerStatus.m in Sources */,
+				9A1021441FE3FC7D003CF9CC /* MAPApplicationDelegate.m in Sources */,
+				9A912D321FE2CE3A00B6D126 /* MAPUtils.m in Sources */,
+				9A912D2B1FE2CE3A00B6D126 /* MAPLocation.m in Sources */,
+				9AB54EA3214130F200F84C0B /* MAPDataManager.m in Sources */,
+				9A58AD4F2142DA8900CE832D /* MAPCoordinate+CoreDataClass.m in Sources */,
+				9A912D2C1FE2CE3A00B6D126 /* MAPSequence.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A88F9491F4D933F0076C311 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A912D571FE2D19400B6D126 /* MAPApplicationDelegateTests.m in Sources */,
+				9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */,
+				9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */,
+				9A912D591FE2D19400B6D126 /* MAPLoginManagerTests.m in Sources */,
+				9A912D5A1FE2D19400B6D126 /* MAPSequenceTests.m in Sources */,
+				9A058026203437BE005A5C8A /* MAPExifToolsTests.m in Sources */,
+				9A7CB8B3204E913C004C7BD1 /* MAPImageTests.m in Sources */,
+				9A912D5B1FE2D19400B6D126 /* MAPUtilsTests.m in Sources */,
+				9A7CB8B9204ECA7A004C7BD1 /* MAPFileManagerTests.m in Sources */,
+				9A912D5D1FE2D19400B6D126 /* MAPApiManagerTests.m in Sources */,
+				9A912D581FE2D19400B6D126 /* MAPGpxLoggerTests.m in Sources */,
+				9A7CB8B5204EA3A2004C7BD1 /* MAPLocationTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9A88F9501F4D933F0076C311 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A88F9431F4D933F0076C311 /* MapillarySDK */;
+			targetProxy = 9A88F94F1F4D933F0076C311 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		9A88F9561F4D933F0076C311 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		9A88F9571F4D933F0076C311 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		9A88F9591F4D933F0076C311 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = K7QW859D7N;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/AWSCore\"",
+					"\"${PODS_ROOT}/Headers/Public/AWSS3\"",
+					"\"${PODS_ROOT}/Headers/Public/BOSImageResizeOperation\"",
+					"\"${PODS_ROOT}/Headers/Public/OCHamcrest\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMockito\"",
+					"\"${PODS_ROOT}/Headers/Public/SDVersion\"",
+					"$(SRCROOT)",
+				);
+				INFOPLIST_FILE = MapillarySDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapillary.MapillarySDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.2;
+			};
+			name = Debug;
+		};
+		9A88F95A1F4D933F0076C311 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = K7QW859D7N;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/AWSCore\"",
+					"\"${PODS_ROOT}/Headers/Public/AWSS3\"",
+					"\"${PODS_ROOT}/Headers/Public/BOSImageResizeOperation\"",
+					"\"${PODS_ROOT}/Headers/Public/OCHamcrest\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMockito\"",
+					"\"${PODS_ROOT}/Headers/Public/SDVersion\"",
+					"$(SRCROOT)",
+				);
+				INFOPLIST_FILE = MapillarySDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapillary.MapillarySDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.2;
+			};
+			name = Release;
+		};
+		9A88F95C1F4D933F0076C311 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */;
+			buildSettings = {
+				DEVELOPMENT_TEAM = K7QW859D7N;
+				INFOPLIST_FILE = MapillarySDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapillary.MapillarySDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9A88F95D1F4D933F0076C311 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */;
+			buildSettings = {
+				DEVELOPMENT_TEAM = K7QW859D7N;
+				INFOPLIST_FILE = MapillarySDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapillary.MapillarySDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9A88F93E1F4D933F0076C311 /* Build configuration list for PBXProject "MapillarySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A88F9561F4D933F0076C311 /* Debug */,
+				9A88F9571F4D933F0076C311 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A88F9581F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A88F9591F4D933F0076C311 /* Debug */,
+				9A88F95A1F4D933F0076C311 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A88F95B1F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A88F95C1F4D933F0076C311 /* Debug */,
+				9A88F95D1F4D933F0076C311 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9AB54E99214130F100F84C0B /* MAPDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9AB54E9A214130F100F84C0B /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 9AB54E9A214130F100F84C0B /* DataModel.xcdatamodel */;
+			name = MAPDataModel.xcdatamodeld;
+			path = internal/MAPDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 9A88F93B1F4D933F0076C311 /* Project object */;
+}

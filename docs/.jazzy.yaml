@@ -1,0 +1,42 @@
+module: Mapillary
+author: Mapillary
+author_url: https://www.mapillary.com
+github_url: https://github.com/mapillary/mapillary-sdk-ios
+copyright: '© 2018 [Mapillary](https://www.mapillary.com). See [license](https://github.com/mapillary/mapillary-sdk-ios/blob/master/LICENSE) for more details.'
+
+head: |
+  <link rel='shortcut icon' href='https://www.mapillary.com/img/favicon.ico' type='image/x-icon' />
+objc: Yes
+skip_undocumented: Yes
+hide_documentation_coverage: Yes
+theme: themes/mapillary
+sdk: iphoneos
+umbrella_header: ../MapillarySDK/MapillarySDK/MapillarySDK.h
+framework_root: ../MapillarySDK
+documentation: guides/Getting started.md
+
+custom_categories:
+  - name: Guides
+    children:
+    - Getting started
+
+  - name: Authentication
+    children:
+    - MAPLoginManager    
+    - MAPUser
+    
+  - name: Sequences
+    children:
+    - MAPDevice
+    - MAPFileManager
+    - MAPImage
+    - MAPLocation
+    - MAPSequence    
+  
+  - name: Uploading  
+    children:
+    - MAPApplicationDelegate
+    - MAPUploadManager
+    - MAPUploadManagerDelegate
+    - MAPUploadManagerStatus
+    
