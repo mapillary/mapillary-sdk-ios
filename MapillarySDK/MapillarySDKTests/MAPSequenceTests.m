@@ -412,44 +412,155 @@
     XCTAssertEqual(images.count, 0);
 }
 
-- (void)testHeading
+- (void)testHeadingWithoutCompassValues
 {
     MAPLocation* a = [[MAPLocation alloc] init];
-    a.timestamp = [NSDate dateWithTimeIntervalSince1970:0];
+    a.timestamp = [NSDate dateWithTimeIntervalSince1970:250];
     a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
     [self.sequence addLocation:a];
     
     MAPLocation* b = [[MAPLocation alloc] init];
-    b.timestamp = [NSDate dateWithTimeIntervalSince1970:1000];
+    b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
     b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(55, 55) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
     [self.sequence addLocation:b];
     
-    NSData* imageData = [self createImageData];
-    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:0] location:nil];
-    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:500] location:nil];
-    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:1000] location:nil];
-    [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:1500] location:nil];
+    MAPLocation* location1 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:0]];
+    MAPLocation* location2 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:250]];
+    MAPLocation* location3 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:500]];
+    MAPLocation* location4 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:750]];
+    MAPLocation* location5 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:1000]];
     
-    NSArray* images = [self.sequence getImages];
-    MAPImage* image = nil;
+    NSNumber* correctHeading = @45;
+    MAPLocation* testLoction = nil;
     
-    double correctHeading = 119.36993408203125;
+    testLoction = location1;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
     
-    image = images[0];
-    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
-    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
+    testLoction = location2;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
     
-    image = images[1];
-    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
-    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
+    testLoction = location3;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
     
-    image = images[2];
-    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
-    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
+    testLoction = location4;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
     
-    image = images[3];
-    XCTAssert(image.location.magneticHeading.doubleValue == correctHeading);
-    XCTAssert(image.location.trueHeading.doubleValue == correctHeading);
+    testLoction = location5;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+}
+
+- (void)testHeadingWithCompassValues
+{
+    MAPLocation* a = [[MAPLocation alloc] init];
+    a.timestamp = [NSDate dateWithTimeIntervalSince1970:250];
+    a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+    a.magneticHeading = @0;
+    a.trueHeading = @0;
+    [self.sequence addLocation:a];
+    
+    MAPLocation* b = [[MAPLocation alloc] init];
+    b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(51, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    b.magneticHeading = @90;
+    b.trueHeading = @90;
+    [self.sequence addLocation:b];
+    
+    MAPLocation* location1 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:0]];
+    MAPLocation* location2 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:250]];
+    MAPLocation* location3 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:500]];
+    MAPLocation* location4 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:750]];
+    MAPLocation* location5 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:1000]];
+    
+    NSNumber* correctHeading = nil;
+    MAPLocation* testLoction = nil;
+    
+    testLoction = location1;
+    correctHeading = @0;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location2;
+    correctHeading = @0;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location3;
+    correctHeading = @45;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location4;
+    correctHeading = @90;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location5;
+    correctHeading = @90;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+}
+
+- (void)testHeadingWithCompassValues2
+{
+    MAPLocation* a = [[MAPLocation alloc] init];
+    a.timestamp = [NSDate dateWithTimeIntervalSince1970:250];
+    a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+    a.magneticHeading = @0;
+    a.trueHeading = @0;
+    [self.sequence addLocation:a];
+    
+    MAPLocation* b = [[MAPLocation alloc] init];
+    b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(51, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    b.magneticHeading = @90;
+    b.trueHeading = @90;
+    [self.sequence addLocation:b];
+    
+    MAPLocation* c = [[MAPLocation alloc] init];
+    c.timestamp = [NSDate dateWithTimeIntervalSince1970:1000];
+    c.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:c.timestamp];
+    c.magneticHeading = @270;
+    c.trueHeading = @270;
+    [self.sequence addLocation:c];
+    
+    MAPLocation* location1 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:0]];
+    MAPLocation* location2 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:250]];
+    MAPLocation* location3 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:500]];
+    MAPLocation* location4 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:750]];
+    MAPLocation* location5 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:1000]];
+    
+    NSNumber* correctHeading = nil;
+    MAPLocation* testLoction = nil;
+    
+    testLoction = location1;
+    correctHeading = @0;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location2;
+    correctHeading = @0;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location3;
+    correctHeading = @45;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location4;
+    correctHeading = @90;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    
+    testLoction = location5;
+    correctHeading = @270;
+    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
+    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
 }
 
 #pragma mark - Utils

@@ -430,12 +430,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 location = last;
             }
             
-            if (first.trueHeading && last.trueHeading && first.magneticHeading && last.magneticHeading)
-            {
-                location.magneticHeading = [NSNumber numberWithDouble:AVG(first.magneticHeading.doubleValue, last.magneticHeading.doubleValue)];
-                location.trueHeading = [NSNumber numberWithDouble:AVG(first.trueHeading.doubleValue, last.trueHeading.doubleValue)];
-            }
-            else
+            if (location.magneticHeading == nil || location.trueHeading == nil)
             {
                 location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
                 location.trueHeading = location.magneticHeading;
@@ -455,7 +450,19 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 
                 if ([currentLocation.timestamp compare:date] == NSOrderedSame)
                 {
+                    if (i > 0)
+                    {
+                        before = locations[i-1];
+                    }
+                    
                     equal = currentLocation;
+                    
+                    if (i+1 < locations.count)
+                    {
+                        after = locations[i+1];
+                    }
+                    
+                    break;
                 }
                 
                 else if ([currentLocation.timestamp compare:date] == NSOrderedDescending)
@@ -476,19 +483,21 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             {
                 location = equal;
                 
-                if (after)
-                {                    
-                    if (first.trueHeading && last.trueHeading && first.magneticHeading && last.magneticHeading)
+                if (location.magneticHeading == nil || location.trueHeading == nil)
+                {
+                    if (before)
                     {
-                        location.magneticHeading = [NSNumber numberWithDouble:AVG(first.magneticHeading.doubleValue, last.magneticHeading.doubleValue)];
-                        location.trueHeading = [NSNumber numberWithDouble:AVG(first.trueHeading.doubleValue, last.trueHeading.doubleValue)];
+                        location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:equal.location.coordinate];
+                        location.trueHeading = location.magneticHeading;
                     }
-                    else
+                    else if (after)
                     {
                         location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:equal.location.coordinate B:after.location.coordinate];
                         location.trueHeading = location.magneticHeading;
                     }
                 }
+                                
+                
             }
             
             // Need to interpolate between two positions
