@@ -10,11 +10,13 @@
 #import "MapillarySDK.h"
 #import "MAPInternalUtils.h"
 #import "MAPSequence+Private.h"
+#import "MAPDefines.h"
 
-@interface MAPSequenceTests : XCTestCase
+@interface MAPSequenceTests : XCTestCase <MAPUploadManagerDelegate>
 
 @property MAPDevice* device;
 @property MAPSequence* sequence;
+@property XCTestExpectation* expectationImagesProcessed;
 
 @end
 
@@ -563,12 +565,126 @@
     XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
 }
 
+- (void)testImageHeadingWithCompassValues
+{
+    MAPLocation* a = [[MAPLocation alloc] init];
+    a.timestamp = [NSDate dateWithTimeIntervalSince1970:250];
+    a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+    a.magneticHeading = @0;
+    a.trueHeading = @0;
+    [self.sequence addLocation:a];
+    
+    MAPLocation* b = [[MAPLocation alloc] init];
+    b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(51, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    b.magneticHeading = @90;
+    b.trueHeading = @90;
+    [self.sequence addLocation:b];
+    
+    MAPLocation* c = [[MAPLocation alloc] init];
+    c.timestamp = [NSDate dateWithTimeIntervalSince1970:1000];
+    c.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:c.timestamp];
+    c.magneticHeading = @270;
+    c.trueHeading = @270;
+    [self.sequence addLocation:c];
+    
+    [self.sequence addImageWithData:[self createImageData] date:[NSDate dateWithTimeIntervalSince1970:0] location:nil];
+    [self.sequence addImageWithData:[self createImageData] date:[NSDate dateWithTimeIntervalSince1970:250] location:nil];
+    [self.sequence addImageWithData:[self createImageData] date:[NSDate dateWithTimeIntervalSince1970:500] location:nil];
+    [self.sequence addImageWithData:[self createImageData] date:[NSDate dateWithTimeIntervalSince1970:750] location:nil];
+    [self.sequence addImageWithData:[self createImageData] date:[NSDate dateWithTimeIntervalSince1970:1000] location:nil];
+    
+    self.expectationImagesProcessed = [self expectationWithDescription:@"Processed images"];
+    
+    // Process images
+    
+    [MAPUploadManager sharedManager].delegate = self;
+    [[MAPUploadManager sharedManager] processSequences:@[self.sequence] forceReprocessing:YES];
+    
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+            [MAPUploadManager sharedManager].delegate = nil;
+        }
+    }];
+    
+    [MAPUploadManager sharedManager].delegate = nil;
+    
+    // Images are processed now
+    
+    NSArray* images = [self.sequence getImages];
+    
+    NSNumber* correctHeading = nil;
+    NSDictionary* heading = nil;
+    
+    correctHeading = @0;
+    heading = [self getCompassHeadingFromImage:images[0]];
+    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
+    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    
+    correctHeading = @0;
+    heading = [self getCompassHeadingFromImage:images[1]];
+    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
+    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    
+    correctHeading = @45;
+    heading = [self getCompassHeadingFromImage:images[2]];
+    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
+    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    
+    correctHeading = @90;
+    heading = [self getCompassHeadingFromImage:images[3]];
+    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
+    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    
+    correctHeading = @270;
+    heading = [self getCompassHeadingFromImage:images[4]];
+    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
+    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+}
+    
+- (void)processingFinished:(MAPUploadManager *)uploadManager status:(MAPUploadManagerStatus *)status
+{
+    [self.expectationImagesProcessed fulfill];
+}
+
 #pragma mark - Utils
 
 - (NSData*)createImageData
 {
     NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
     return [NSData dataWithContentsOfFile:path];
+}
+
+- (NSDictionary*)getCompassHeadingFromImage:(MAPImage*)image
+{
+    NSDictionary* compassHeading = nil;
+    
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
+    
+    if (imageSource)
+    {
+        CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+        NSDictionary* propertiesDictionary = (NSDictionary *)CFBridgingRelease(properties);
+        NSDictionary* TIFFDictionary = [propertiesDictionary objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+        
+        if (TIFFDictionary)
+        {
+            NSString* description = [TIFFDictionary objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
+            
+            if (description)
+            {
+                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[description dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+                compassHeading = json[kMAPCompassHeading];
+            }
+        }
+        
+        CFRelease(imageSource);
+    }
+    
+    return compassHeading;
 }
 
 @end

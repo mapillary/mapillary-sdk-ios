@@ -106,7 +106,7 @@
             NSNumber* tiffOrientation = TIFFDictionary[@"Orientation"];
             
             // Correct compass with orientation
-            if (tiffOrientation.intValue == 1)
+            /*if (tiffOrientation.intValue == 1)
             {
                 trueHeading -= 90;
                 magneticHeading -= 90;
@@ -120,7 +120,7 @@
             {
                 trueHeading += 180;
                 magneticHeading += 180;
-            }
+            }*/
             
             trueHeading = fmodf(trueHeading + 360.0f, 360.0f);
             magneticHeading = fmodf(magneticHeading + 360.0f, 360.0f);
