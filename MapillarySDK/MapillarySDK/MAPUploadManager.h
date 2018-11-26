@@ -48,7 +48,7 @@
 /**
  Set this flag to YES if you want to allow uploads via cellular network.
  
- Default is NO.
+ Default is YES.
  */
 @property (nonatomic) BOOL allowsCellularAccess;
 
