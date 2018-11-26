@@ -54,7 +54,7 @@
         self.status = [[MAPUploadManagerStatus alloc] init];
         self.dateLastUpdate = [NSDate date];
         self.bytesUploadedSinceLastUpdate = 0;
-        self.allowsCellularAccess = NO;
+        self.allowsCellularAccess = YES;
         self.testUpload = NO;
         self.deleteAfterUpload = YES;
         
