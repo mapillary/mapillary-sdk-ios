@@ -87,4 +87,5 @@
  @param status The current status of the upload manager.
  */
 - (void)uploadStopped:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status;
+
 @end

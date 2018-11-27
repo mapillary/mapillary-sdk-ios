@@ -305,7 +305,7 @@
     self.dateLastUpdate = [NSDate date];
     self.bytesUploadedSinceLastUpdate = 0;
     
-    self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(calculateSpeed) userInfo:nil repeats:YES];
+    self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(calculateSpeed) userInfo:nil repeats:YES];
     
     [self.sequencesToUpload removeAllObjects];
     [self.sequencesToUpload addObjectsFromArray:sequences];
@@ -479,7 +479,7 @@
     NSDate* now = [NSDate date];
     NSTimeInterval time = [now timeIntervalSinceDate:self.dateLastUpdate];
     
-    float factor = 0.5;
+    float factor = 0.9;
     float lastSpeed = self.status.uploadSpeedBytesPerSecond;
     float averageSpeed = self.bytesUploadedSinceLastUpdate/time;
     self.status.uploadSpeedBytesPerSecond = factor*lastSpeed + (1-factor)*averageSpeed;
