@@ -74,6 +74,7 @@
 		9AE3958C204958F1004FAA72 /* MAPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39589204958F1004FAA72 /* MAPLoginViewController.m */; };
 		9AE395962049900C004FAA72 /* MAPLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AE395952049900B004FAA72 /* MAPLoginViewController.xib */; };
 		9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */; };
+		9AED7A3921AEA9F200BDE544 /* daejeon.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AED7A3821AEA9F100BDE544 /* daejeon.gpx */; };
 		9AF041D0207543070000B704 /* MAPUploadManager+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF041CE207543070000B704 /* MAPUploadManager+Private.h */; };
 		9AF041D1207543070000B704 /* MAPUploadManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF041CF207543070000B704 /* MAPUploadManager+Private.m */; };
 /* End PBXBuildFile section */
@@ -167,6 +168,7 @@
 		9AE762381F94E482003EC3E9 /* libOCHamcrest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCHamcrest.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCHamcrest.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE7623C1F94E4BC003EC3E9 /* libOCMockito.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libOCMockito.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AED7A3821AEA9F100BDE544 /* daejeon.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = daejeon.gpx; sourceTree = "<group>"; };
 		9AF041CE207543070000B704 /* MAPUploadManager+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MAPUploadManager+Private.h"; path = "internal/MAPUploadManager+Private.h"; sourceTree = "<group>"; };
 		9AF041CF207543070000B704 /* MAPUploadManager+Private.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MAPUploadManager+Private.m"; path = "internal/MAPUploadManager+Private.m"; sourceTree = "<group>"; };
 		AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 		9AE3BB251FA20CC300174C47 /* test-files */ = {
 			isa = PBXGroup;
 			children = (
+				9AED7A3821AEA9F100BDE544 /* daejeon.gpx */,
 				9A058027203476F7005A5C8A /* test-image.jpg */,
 				9AE3BB261FA20CC300174C47 /* mapbox-test.gpx */,
 			);
@@ -483,6 +486,7 @@
 			files = (
 				9AE3BB271FA20CC300174C47 /* mapbox-test.gpx in Resources */,
 				9A058028203476F8005A5C8A /* test-image.jpg in Resources */,
+				9AED7A3921AEA9F200BDE544 /* daejeon.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

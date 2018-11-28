@@ -210,7 +210,10 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)addLocation:(MAPLocation*)location
 {
-    if (location)
+    if (location &&
+        CLLocationCoordinate2DIsValid(location.location.coordinate) &&
+        fabs(location.location.coordinate.latitude) > DBL_EPSILON &&
+        fabs(location.location.coordinate.longitude) > DBL_EPSILON)
     {
         if (self.device.isExternal)
         {

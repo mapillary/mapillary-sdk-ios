@@ -650,6 +650,78 @@
     [self.expectationImagesProcessed fulfill];
 }
 
+- (void)testNullIsland
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Testong for Null Island"];
+    
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"daejeon" ofType:@"gpx"];
+    
+    __weak MAPSequenceTests* weakSelf = self;
+    
+    [weakSelf.sequence addGpx:path done:^{
+        
+        MAPLocation* nullIsland = [[MAPLocation alloc] init];
+        nullIsland.location = [[CLLocation alloc] initWithLatitude:0 longitude:0];
+        [weakSelf.sequence addLocation:nullIsland]; // This should not be accepted
+        
+        [weakSelf.sequence getLocationsAsync:^(NSArray *array) {
+            
+            MAPLocation* first = array.firstObject;
+            MAPLocation* last = array.lastObject;
+            MAPLocation* errorLocation = nil;
+            
+            // Test track points
+            for (MAPLocation* location in array)
+            {
+                if (!CLLocationCoordinate2DIsValid(location.location.coordinate) ||
+                    fabs(location.location.coordinate.latitude) < DBL_EPSILON ||
+                    fabs(location.location.coordinate.longitude) < DBL_EPSILON)
+                {
+                    errorLocation = location;
+                    break;
+                }
+            }
+            
+            XCTAssertNil(errorLocation);
+            
+            // Test interpolation
+            
+            double samples = 9876;
+            NSTimeInterval interval = (last.timestamp.timeIntervalSince1970-first.timestamp.timeIntervalSince1970)/samples;
+            
+            for (int i = 0; i < samples; i++)
+            {
+                NSDate* sampleDate = [[NSDate alloc] initWithTimeInterval:i*interval sinceDate:first.timestamp];
+                
+                MAPLocation* location = [weakSelf.sequence locationForDate:sampleDate];
+                
+                if (!CLLocationCoordinate2DIsValid(location.location.coordinate) ||
+                    fabs(location.location.coordinate.latitude) < DBL_EPSILON ||
+                    fabs(location.location.coordinate.longitude) < DBL_EPSILON)
+                {
+                    errorLocation = location;
+                    break;
+                }
+            }
+            
+            XCTAssertNil(errorLocation);
+            
+            [expectation fulfill];
+            
+        }];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
 #pragma mark - Utils
 
 - (NSData*)createImageData
