@@ -28,8 +28,8 @@
 @property (weak) id<MAPUploadManagerDelegate> delegate;
 
 /**
- Set this flag to YES if you want to test your upload. It uploads to a test
- server instead of the production server. Images on this server is not
+ Set this property to YES if you want to test your upload. It uploads to a test
+ server instead of the production server. Images on this server are not
  accessible and will be deleted.
  
  Default is NO.
@@ -37,7 +37,7 @@
 @property (nonatomic) BOOL testUpload;
 
 /**
- Set this flag to NO if you want to keep your local images efter they have been
+ Set this property to NO if you want to keep your local images efter they have been
  uploaded. This flag is only used if `testUpload` is set to YES. When uploading
  to the production servers images are always deleted to avoid duplicates.
  
