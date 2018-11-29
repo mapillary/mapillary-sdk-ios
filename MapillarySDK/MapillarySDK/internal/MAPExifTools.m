@@ -67,6 +67,7 @@
     
     // Cleanup existing metadata
     [self cleanMetadata:metadata mutableMetadata:mutableMetadata];
+    CFRelease(metadata);
     
     
     // Update and add Mapillary tags to metadata
@@ -231,7 +232,6 @@
         CFRelease(value);
     }
     
-    CFRelease(metadata);
     CFRelease(tags);
 }
 

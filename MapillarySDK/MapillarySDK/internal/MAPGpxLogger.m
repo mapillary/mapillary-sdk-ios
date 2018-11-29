@@ -191,6 +191,8 @@ unsigned long long footerLength;
 - (void)dealloc
 {
     [self.operationQueue removeObserver:self forKeyPath:@"operations"];
+    self.operationQueue = nil;
+    self.dateFormatter = nil;
 }
 
 - (void)addLocation:(MAPLocation*)location
