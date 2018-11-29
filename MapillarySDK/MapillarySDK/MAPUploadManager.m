@@ -520,11 +520,16 @@
 {
     [self cleanUp];
     
-    if (self.backgroundUploadSessionCompletionHandler)
-    {
-        self.backgroundUploadSessionCompletionHandler();
-        self.backgroundUploadSessionCompletionHandler = nil;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (self.backgroundUploadSessionCompletionHandler)
+        {
+            
+            self.backgroundUploadSessionCompletionHandler();
+            self.backgroundUploadSessionCompletionHandler = nil;
+            
+        }
+    });
     
     if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
     {
