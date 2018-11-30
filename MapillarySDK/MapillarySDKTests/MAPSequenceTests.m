@@ -129,9 +129,11 @@
     XCTestExpectation* expectation = [self expectationWithDescription:@"Number of locations added should be the same as the number returned"];
     
     int nbrPositions = arc4random()%1000;
-    MAPLocation* location = [[MAPLocation alloc] init];
+    
     for (int i = 0; i < nbrPositions; i++)
     {
+        MAPLocation* location = [[MAPLocation alloc] init];
+        location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
         [self.sequence addLocation:location];
     }
     
@@ -164,7 +166,7 @@
     
     MAPLocation* b = [[MAPLocation alloc] init];
     b.timestamp = [NSDate dateWithTimeIntervalSince1970:1000];
-    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(100, 100) altitude:100 horizontalAccuracy:30 verticalAccuracy:30 timestamp:b.timestamp];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(60, 60) altitude:100 horizontalAccuracy:30 verticalAccuracy:30 timestamp:b.timestamp];
     [self.sequence addLocation:b];
     
     // Test with date inbetween A and B
