@@ -27,5 +27,11 @@
 - (void)getLocationsFrom:(NSDate*)from to:(NSDate*)to limitedToDevice:(MAPDevice*)inputDevice result:(void(^)(NSArray* locations, MAPDevice* device, NSString* organizationKey, bool isPrivate))result;
 - (void)deleteCoordinatesOlderThan:(NSDate*)date;
 
+#pragma mark - Images
+- (void)setImageAsProcessed:(MAPImage*)image;
+- (void)removeImageInformation:(MAPImage*)image;
+- (BOOL)isImageProcessed:(MAPImage*)image;
+- (NSDictionary*)getProcessedImages;
+- (void)deleteImagesOlderThan:(NSDate*)date;
 
 @end

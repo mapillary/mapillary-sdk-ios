@@ -246,9 +246,13 @@
  Adds Mapillary EXIF tags from the GPX file and also updates the GPS tags.
  
  @param image The image that should be processed.
+ @param forceReprocessing If set to YES, images that are already processed will
+ be processed again. This is needed if you change GPX data, like the offset etc.
+ If set to NO, images that already have been processed will not be processed
+ again.
  @see MAPImage
  */
-- (void)processImage:(MAPImage*)image;
+- (void)processImage:(MAPImage*)image forceReprocessing:(BOOL)forceReprocessing;
 
 ///-----------------------------------------------------------------------------
 /// @name Determining lock status

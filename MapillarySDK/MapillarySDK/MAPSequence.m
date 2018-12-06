@@ -261,9 +261,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     }];    
 }
 
-- (void)processImage:(MAPImage*)image
+- (void)processImage:(MAPImage*)image forceReprocessing:(BOOL)forceReprocessing
 {
-    [MAPExifTools addExifTagsToImage:image fromSequence:self];
+    if (forceReprocessing || ![[MAPDataManager sharedManager] isImageProcessed:image] || ![MAPExifTools imageHasMapillaryTags:image])
+    {
+        [MAPExifTools addExifTagsToImage:image fromSequence:self];
+        [[MAPDataManager sharedManager] setImageAsProcessed:image];
+    }
 }
 
 - (void)deleteImage:(MAPImage*)image

@@ -10,6 +10,7 @@
 #import "MAPLocation.h"
 #import "MAPSequence.h"
 #import <PodAsset/PodAsset.h>
+#import "MAPProcessedImage+CoreDataClass.h"
 
 @implementation MAPDataManager
 
@@ -187,6 +188,109 @@
     
     NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPCoordinate"];
     fetch.predicate =  [NSPredicate predicateWithFormat:@"timestamp <= %@", date];
+    
+    NSBatchDeleteRequest* delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetch];
+    
+    NSError* error = nil;
+    
+    [context executeRequest:delete error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR deleting coordinates");
+    }
+}
+
+#pragma mark - Images
+
+- (void)setImageAsProcessed:(MAPImage*)image
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    MAPProcessedImage* processed = (MAPProcessedImage*)[NSEntityDescription insertNewObjectForEntityForName:@"MAPProcessedImage" inManagedObjectContext:context];
+    
+    processed.date = [NSDate date];
+    processed.filename = image.imagePath.lastPathComponent;
+    
+    [[MAPDataManager sharedManager] saveChanges];
+}
+
+- (void)removeImageInformation:(MAPImage*)image
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPProcessedImage"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"filename == %@", image.imagePath.lastPathComponent];
+    
+    NSBatchDeleteRequest* delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetch];
+    
+    NSError* error = nil;
+    
+    [context executeRequest:delete error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR deleting coordinates");
+    }
+}
+
+- (BOOL)isImageProcessed:(MAPImage*)image
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPProcessedImage"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"filename == %@", image.imagePath.lastPathComponent];
+    
+    NSError* error = nil;
+    
+    NSUInteger count = [context countForFetchRequest:fetch error:&error];
+    if (error)
+    {
+        NSLog(@"ERROR getting processed image");
+    }
+    else
+    {
+        return count > 0;
+    }
+    
+    return NO;
+}
+
+- (NSDictionary*)getProcessedImages
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPProcessedImage"];
+    
+    NSError* error = nil;
+    
+    NSArray* fetchResult = [context executeFetchRequest:fetch error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR getting processed images");
+    }
+    else if (fetchResult.count > 0)
+    {
+        NSMutableArray* keys = [NSMutableArray array];
+        
+        for (MAPProcessedImage* p in fetchResult)
+        {
+            [keys addObject:p.filename];
+        }
+        
+        return [NSDictionary dictionaryWithObjects:fetchResult forKeys:keys];
+    }
+    
+    return [NSDictionary dictionary];
+}
+
+- (void)deleteImagesOlderThan:(NSDate*)date
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPProcessedImage"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"date <= %@", date];
     
     NSBatchDeleteRequest* delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetch];
     

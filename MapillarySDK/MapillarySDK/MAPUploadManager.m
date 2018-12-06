@@ -17,6 +17,7 @@
 #import "MAPImage+Private.h"
 #import <objc/runtime.h>
 #import "MAPUploadManager+Private.h"
+#import "MAPDataManager.h"
 
 @interface MAPUploadManager()
 
@@ -126,7 +127,17 @@
 
 - (void)stopUpload
 {
+    self.status.processing = NO;
     self.status.uploading = NO;
+    
+    [self.backgroundSession getAllTasksWithCompletionHandler:^(NSArray<__kindof NSURLSessionTask *> * _Nonnull tasks) {
+        
+        for (NSURLSessionTask* task in tasks)
+        {
+            [task cancel];
+        }
+        
+    }];
     
     [self.backgroundSession invalidateAndCancel];
     self.backgroundSession = nil;
@@ -230,6 +241,8 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
+        NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
+        
         for (MAPSequence* sequence in self.sequencesToUpload)
         {
             for (MAPImage* image in [sequence getImages])
@@ -239,7 +252,7 @@
                     return;
                 }
                 
-                [self createTask:image sequence:sequence forceProcessing:forceProcessing];
+                [self createTask:image sequence:sequence forceProcessing:forceProcessing processedImages:processedImages];
             }
         }
         
@@ -248,6 +261,8 @@
 
 - (void)startProcessing:(BOOL)forceReprocessing
 {
+    NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
+    
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
         for (MAPImage* image in [sequence getImages])
@@ -257,9 +272,10 @@
                 return;
             }
             
-            if (forceReprocessing || ![MAPExifTools imageHasMapillaryTags:image])
+            if (forceReprocessing || (processedImages[image.imagePath.lastPathComponent] == nil && ![MAPExifTools imageHasMapillaryTags:image]))
             {
                 [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
+                [[MAPDataManager sharedManager] setImageAsProcessed:image];
             }
             
             self.status.imagesProcessed++;
@@ -305,7 +321,7 @@
     self.dateLastUpdate = [NSDate date];
     self.bytesUploadedSinceLastUpdate = 0;
     
-    self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(calculateSpeed) userInfo:nil repeats:YES];
+    self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(calculateSpeed) userInfo:nil repeats:YES];
     
     [self.sequencesToUpload removeAllObjects];
     [self.sequencesToUpload addObjectsFromArray:sequences];
@@ -342,13 +358,13 @@
     self.backgroundSession = [NSURLSession sessionWithConfiguration:backgroundConfiguration delegate:self delegateQueue:nil];
 }
 
-- (void)createTask:(MAPImage*)image sequence:(MAPSequence*)sequence forceProcessing:(BOOL)forceProcessing
+- (void)createTask:(MAPImage*)image sequence:(MAPSequence*)sequence forceProcessing:(BOOL)forceProcessing processedImages:(NSDictionary*)processedImages
 {
     // Process image
-    
-    if (forceProcessing || ![MAPExifTools imageHasMapillaryTags:image])
+    if (forceProcessing || (processedImages[image.imagePath.lastPathComponent] == nil && ![MAPExifTools imageHasMapillaryTags:image]))
     {
         [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
+        [[MAPDataManager sharedManager] setImageAsProcessed:image];
     }
     
     self.status.imagesProcessed++;
@@ -441,10 +457,25 @@
     NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
     NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
     
-    [[NSFileManager defaultManager] removeItemAtPath:scheduled error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:processed error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:done error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:failed error:nil];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:scheduled])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:scheduled error:nil];
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:processed])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:processed error:nil];
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:done])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:done error:nil];
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:failed])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:failed error:nil];
+    }
 }
 
 - (void)setBookkeepingProcessedForImage:(MAPImage*)image
@@ -453,7 +484,11 @@
     
     NSString* scheduled = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".scheduled"];
     NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
-    [[NSFileManager defaultManager] moveItemAtPath:scheduled toPath:processed error:nil];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:scheduled])
+    {
+        [[NSFileManager defaultManager] moveItemAtPath:scheduled toPath:processed error:nil];
+    }
 }
 
 - (void)setBookkeepingDoneForImage:(MAPImage*)image
@@ -462,7 +497,11 @@
     
     NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
     NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
-    [[NSFileManager defaultManager] moveItemAtPath:processed toPath:done error:nil];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:processed])
+    {
+        [[NSFileManager defaultManager] moveItemAtPath:processed toPath:done error:nil];
+    }
 }
 
 - (void)setBookkeepingFailedForImage:(MAPImage*)image
@@ -471,7 +510,11 @@
     
     NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
     NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
-    [[NSFileManager defaultManager] moveItemAtPath:processed toPath:failed error:nil];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:processed])
+    {
+        [[NSFileManager defaultManager] moveItemAtPath:processed toPath:failed error:nil];
+    }
 }
 
 - (void)calculateSpeed
@@ -479,7 +522,7 @@
     NSDate* now = [NSDate date];
     NSTimeInterval time = [now timeIntervalSinceDate:self.dateLastUpdate];
     
-    float factor = 0.9;
+    float factor = 0.5;
     float lastSpeed = self.status.uploadSpeedBytesPerSecond;
     float averageSpeed = self.bytesUploadedSinceLastUpdate/time;
     self.status.uploadSpeedBytesPerSecond = factor*lastSpeed + (1-factor)*averageSpeed;
