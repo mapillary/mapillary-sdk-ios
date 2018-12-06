@@ -618,33 +618,45 @@
     
     NSArray* images = [self.sequence getImages];
     
-    NSNumber* correctHeading = nil;
+    int correctHeading = -1;
+    NSNumber* magneticHeading = nil;
+    NSNumber* trueHeading = nil;
     NSDictionary* heading = nil;
     
-    correctHeading = @0;
+    correctHeading = 0+90;
     heading = [self getCompassHeadingFromImage:images[0]];
-    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
-    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    magneticHeading = heading[kMAPMagneticHeading];
+    trueHeading = heading[kMAPTrueHeading];
+    XCTAssert(magneticHeading.intValue == correctHeading);
+    XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = @0;
+    correctHeading = 0+90;
     heading = [self getCompassHeadingFromImage:images[1]];
-    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
-    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    magneticHeading = heading[kMAPMagneticHeading];
+    trueHeading = heading[kMAPTrueHeading];
+    XCTAssert(magneticHeading.intValue == correctHeading);
+    XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = @45;
+    correctHeading = 45+90;
     heading = [self getCompassHeadingFromImage:images[2]];
-    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
-    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    magneticHeading = heading[kMAPMagneticHeading];
+    trueHeading = heading[kMAPTrueHeading];
+    XCTAssert(magneticHeading.intValue == correctHeading);
+    XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = @90;
+    correctHeading = 90+90;
     heading = [self getCompassHeadingFromImage:images[3]];
-    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
-    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    magneticHeading = heading[kMAPMagneticHeading];
+    trueHeading = heading[kMAPTrueHeading];
+    XCTAssert(magneticHeading.intValue == correctHeading);
+    XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = @270;
+    correctHeading = (270+90) % 360;
     heading = [self getCompassHeadingFromImage:images[4]];
-    XCTAssert([heading[kMAPMagneticHeading] isEqualToNumber:correctHeading]);
-    XCTAssert([heading[kMAPTrueHeading] isEqualToNumber:correctHeading]);
+    magneticHeading = heading[kMAPMagneticHeading];
+    trueHeading = heading[kMAPTrueHeading];
+    XCTAssert(magneticHeading.intValue == correctHeading);
+    XCTAssert(trueHeading.intValue == correctHeading);
 }
     
 - (void)processingFinished:(MAPUploadManager *)uploadManager status:(MAPUploadManagerStatus *)status
