@@ -27,9 +27,8 @@
 @property (nonatomic) NSURLSession* backgroundSession;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
 
-@property (nonatomic) NSTimer* speedTimer;
 @property (nonatomic) NSDate* dateLastUpdate;
-@property (nonatomic) int64_t bytesUploadedSinceLastUpdate;
+@property (nonatomic) NSMutableArray* speedArray;
 
 @end
 
@@ -54,7 +53,7 @@
         self.sequencesToUpload = [NSMutableArray array];
         self.status = [[MAPUploadManagerStatus alloc] init];
         self.dateLastUpdate = [NSDate date];
-        self.bytesUploadedSinceLastUpdate = 0;
+        self.speedArray = [NSMutableArray arrayWithCapacity:5];
         self.allowsCellularAccess = YES;
         self.testUpload = NO;
         self.deleteAfterUpload = YES;
@@ -89,7 +88,14 @@
         
         for (MAPSequence* sequence in self.sequencesToUpload)
         {
-            self.status.imageCount += sequence.imageCount;
+            NSArray* images = [sequence getImages];
+            self.status.imageCount += images.count;
+            
+            for (MAPImage* image in images)
+            {
+                [self createBookkeepingForImage:image];
+            }
+            
             [sequence lock];
         }
         
@@ -141,9 +147,6 @@
     
     [self.backgroundSession invalidateAndCancel];
     self.backgroundSession = nil;
-
-    [self.speedTimer invalidate];
-    self.speedTimer = nil;
     
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
@@ -172,9 +175,15 @@
 
 - (void)loadState
 {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
     [self.backgroundSession getTasksWithCompletionHandler:^(NSArray<NSURLSessionDataTask *> * _Nonnull dataTasks, NSArray<NSURLSessionUploadTask *> * _Nonnull uploadTasks, NSArray<NSURLSessionDownloadTask *> * _Nonnull downloadTasks) {
         
         self.status.uploading = NO;
+        self.status.imageCount = 0;
+        self.status.imagesProcessed = 0;
+        self.status.imagesUploaded = 0;
+        self.status.imagesFailed = 0;
         
         for (NSURLSessionTask* task in uploadTasks)
         {
@@ -185,48 +194,51 @@
             }
         }
         
-        [MAPFileManager getSequencesAsync:YES done:^(NSArray *sequences) {
-            
-            if (self.status.uploading)
+        NSArray* sequences = [MAPFileManager getSequences:YES];
+        
+        if (self.status.uploading)
+        {
+            for (MAPSequence* sequence in sequences)
             {
-                for (MAPSequence* sequence in sequences)
+                if ([sequence isLocked])
                 {
-                    if ([sequence isLocked])
+                    [self.sequencesToUpload addObject:sequence];
+                    
+                    NSArray* dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequence.path error:nil];
+                    
+                    NSArray* scheduled = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.scheduled'"]];
+                    NSArray* processed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.processed'"]];
+                    NSArray* done = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.done'"]];
+                    NSArray* failed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.failed'"]];
+                    
+                    self.status.uploading = YES;
+                    self.status.imageCount += scheduled.count;
+                    self.status.imagesProcessed += processed.count;
+                    self.status.imagesUploaded += done.count;
+                    self.status.imagesFailed += failed.count;
+                    self.dateLastUpdate = [NSDate date];
+                    
+                    for (NSURLSessionTask* task in uploadTasks)
                     {
-                        [self.sequencesToUpload addObject:sequence];
-                        
-                        NSArray* dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequence.path error:nil];
-                        
-                        NSArray* scheduled = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.scheduled'"]];
-                        NSArray* processed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.processed'"]];
-                        NSArray* done = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.done'"]];
-                        NSArray* failed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.failed'"]];
-                        
-                        self.status.uploading = YES;
-                        self.status.imageCount += scheduled.count + processed.count + done.count + failed.count;
-                        self.status.imagesProcessed += processed.count + done.count + failed.count;
-                        self.status.imagesUploaded += done.count;
-                        self.status.imagesFailed += failed.count;
-                        self.dateLastUpdate = [NSDate date];
-                        
-                        for (NSURLSessionTask* task in uploadTasks)
+                        if (task.state == NSURLSessionTaskStateSuspended)
                         {
-                            if (task.state == NSURLSessionTaskStateSuspended)
-                            {
-                                [task resume];
-                            }
+                            [task resume];
                         }
-                        
-                        self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(calculateSpeed) userInfo:nil repeats:YES];
                     }
                 }
             }
-            else
-            {
-                [self cleanUp];
-            }
-        }];
+        }
+        else
+        {
+            [self cleanUp];
+        }
+        
+        dispatch_semaphore_signal(semaphore);
+        
     }];
+    
+    // Wait here intil done
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (void)setupAws
@@ -279,6 +291,7 @@
             }
             
             self.status.imagesProcessed++;
+            [self setBookkeepingProcessedForImage:image];
             
             if (self.delegate && [self.delegate respondsToSelector:@selector(imageProcessed:image:status:)])
             {
@@ -319,9 +332,8 @@
     self.status.imagesProcessed = 0;
     self.status.uploadSpeedBytesPerSecond = 0;
     self.dateLastUpdate = [NSDate date];
-    self.bytesUploadedSinceLastUpdate = 0;
     
-    self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(calculateSpeed) userInfo:nil repeats:YES];
+    [self.speedArray removeAllObjects];
     
     [self.sequencesToUpload removeAllObjects];
     [self.sequencesToUpload addObjectsFromArray:sequences];
@@ -444,8 +456,8 @@
 {
     //NSLog(@"create: %@", image.imagePath.lastPathComponent);
     
-    NSString* upload = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".scheduled"];
-    [[NSFileManager defaultManager] createFileAtPath:upload contents:nil attributes:nil];
+    NSString* scheduled = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".scheduled"];
+    [[NSFileManager defaultManager] createFileAtPath:scheduled contents:nil attributes:nil];
 }
 
 - (void)deleteBookkeepingForImage:(MAPImage*)image
@@ -482,61 +494,28 @@
 {
     //NSLog(@"processed: %@", image.imagePath.lastPathComponent);
     
-    NSString* scheduled = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".scheduled"];
     NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:scheduled])
-    {
-        [[NSFileManager defaultManager] moveItemAtPath:scheduled toPath:processed error:nil];
-    }
+    [[NSFileManager defaultManager] createFileAtPath:processed contents:nil attributes:nil];
 }
 
 - (void)setBookkeepingDoneForImage:(MAPImage*)image
 {
     NSLog(@"done: %@", image.imagePath.lastPathComponent);
     
-    NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
     NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:processed])
-    {
-        [[NSFileManager defaultManager] moveItemAtPath:processed toPath:done error:nil];
-    }
+    [[NSFileManager defaultManager] createFileAtPath:done contents:nil attributes:nil];
 }
 
 - (void)setBookkeepingFailedForImage:(MAPImage*)image
 {
     NSLog(@"failed: %@", image.imagePath.lastPathComponent);
     
-    NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
     NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:processed])
-    {
-        [[NSFileManager defaultManager] moveItemAtPath:processed toPath:failed error:nil];
-    }
-}
-
-- (void)calculateSpeed
-{
-    NSDate* now = [NSDate date];
-    NSTimeInterval time = [now timeIntervalSinceDate:self.dateLastUpdate];
-    
-    float factor = 0.5;
-    float lastSpeed = self.status.uploadSpeedBytesPerSecond;
-    float averageSpeed = self.bytesUploadedSinceLastUpdate/time;
-    self.status.uploadSpeedBytesPerSecond = factor*lastSpeed + (1-factor)*averageSpeed;
-    
-    self.dateLastUpdate = now;
-    self.bytesUploadedSinceLastUpdate = 0;
+    [[NSFileManager defaultManager] createFileAtPath:failed contents:nil attributes:nil];
 }
 
 - (void)cleanUp
 {
-    // Stop timer
-    [self.speedTimer invalidate];
-    self.speedTimer = nil;
-    
     // Delete bookkeeping
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
@@ -563,16 +542,15 @@
 {
     [self cleanUp];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    /* TODO: Is this really needed?
+     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (self.backgroundUploadSessionCompletionHandler)
         {
-            
             self.backgroundUploadSessionCompletionHandler();
             self.backgroundUploadSessionCompletionHandler = nil;
-            
         }
-    });
+    });*/
     
     if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
     {
@@ -590,7 +568,28 @@
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 {
-    self.bytesUploadedSinceLastUpdate += bytesSent;
+    NSDate* now = [NSDate date];
+    NSTimeInterval time = [now timeIntervalSinceDate:self.dateLastUpdate];
+    
+    NSNumber* speedNow = [NSNumber numberWithDouble:bytesSent/time];
+    [self.speedArray addObject:speedNow];
+    
+    if (self.speedArray.count > 10)
+    {
+        [self.speedArray removeObjectAtIndex:0];
+        
+        double sum = 0;
+        
+        for (NSNumber* s in self.speedArray)
+        {
+            sum += s.doubleValue;
+        }
+        
+        self.status.uploadSpeedBytesPerSecond = (float)sum/(float)self.speedArray.count;
+        self.status.uploadSpeedBytesPerSecond /= 1024.0;
+    }
+    
+    self.dateLastUpdate = now;
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadedData:bytesSent:status:)])
     {
@@ -617,7 +616,7 @@
         
         [self setBookkeepingDoneForImage:image];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(imageUploaded:image:status:)])
+        if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(imageUploaded:image:status:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.delegate imageUploaded:self image:image status:self.status];
@@ -632,7 +631,7 @@
         
         [self setBookkeepingFailedForImage:image];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(imageFailed:image:status:error:)])
+        if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(imageFailed:image:status:error:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.delegate imageFailed:self image:image status:self.status error:error];
