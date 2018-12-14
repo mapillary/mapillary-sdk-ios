@@ -71,6 +71,7 @@
 {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     return [dateFormatter stringFromDate:self.timestamp];
 }
 
