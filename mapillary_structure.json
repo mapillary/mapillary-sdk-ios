@@ -1,7 +1,7 @@
 {
 	"description": "The Mapillary iOS SDK",
 	"frameworks": [],
-	"language": "Objective-C",
+	"language": "ObjectiveC",
 	"maintainers": [
 		"millenbop"
 	],
