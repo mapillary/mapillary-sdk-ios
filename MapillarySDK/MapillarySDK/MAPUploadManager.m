@@ -251,9 +251,9 @@
 
 - (void)startUpload:(BOOL)forceProcessing
 {
+    NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
         
         for (MAPSequence* sequence in self.sequencesToUpload)
         {
