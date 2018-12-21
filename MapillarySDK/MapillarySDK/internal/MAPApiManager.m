@@ -126,7 +126,7 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    NSURLSessionDataTask* task = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+   NSURLSessionDataTask* task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
         if (error)
         {
@@ -157,8 +157,8 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    NSURLSessionDataTask* task = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        
+    NSURLSessionDataTask* task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    
         if (error)
         {
             NSLog(@"Request failed: %@", error);
@@ -168,8 +168,8 @@
         {
             result(responseObject);
         }
-        
     }];
+    
     
     [task resume];
 }
