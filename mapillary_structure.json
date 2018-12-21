@@ -12,9 +12,6 @@
 			},
 			{
 				"name": "api_v3"
-			},
-			{
-				"name": "mapillary_upload_api"
 			}
 		],
 		"description": "Mapillary iOS SDK",
