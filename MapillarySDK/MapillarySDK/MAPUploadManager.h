@@ -87,11 +87,15 @@
 ///-----------------------------------------------------------------------------
 
 /**
- Starts to process and upload the sequences in the array. Even if the images
- has been processed before, it will be reprocessed before uploading. As soon as
+ Starts to process and upload the sequences in the array. As soon as
  one image has finished processing, it will be scheduled for uploading.
+ 
+ @param forceReprocessing If set to YES, images that are already processed will
+ be processed again. This is needed if you change GPX data, like the offset etc.
+ If set to NO, images that already have been processed will not be processed
+ again.
  */
-- (void)processAndUploadSequences:(NSArray*)sequences;
+- (void)processAndUploadSequences:(NSArray*)sequences forceReprocessing:(BOOL)forceReprocessing;
 
 /**
  Starts to upload the sequences in the array. If the images haven't been
