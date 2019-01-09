@@ -1,6 +1,8 @@
 #!/bin/bash
 export LANG=en_US.UTF-8
 
+pod update --project-directory=MapillarySDK/
+
 echo "Running tests..."
 set -o pipefail && xcodebuild test-without-building \
            -workspace MapillarySDK/MapillarySDK.xcworkspace \
