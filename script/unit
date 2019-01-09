@@ -5,11 +5,10 @@ pod update --project-directory=MapillarySDK/
 xcodebuild -workspace MapillarySDK/MapillarySDK.xcworkspace/ -scheme MapillarySDK
 
 echo "Running tests..."
-set -o pipefail && xcodebuild test-without-building \
+set -o pipefail && xcodebuild test \
            -workspace MapillarySDK/MapillarySDK.xcworkspace \
-           -scheme Test \
+           -scheme MapillarySDK \
            -configuration Debug \
-           -skip-testing:MAPGpxLoggerTests.testGpxLogger \
            -destination 'platform=iOS Simulator,OS=12.1,name=iPhone X' 2>&1 | /usr/local/bin/ocunit2junit 
 
 RC=$?
