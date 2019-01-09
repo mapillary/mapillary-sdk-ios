@@ -7,7 +7,7 @@ set -o pipefail && xcodebuild test-without-building \
            -scheme Test \
            -configuration Debug \
            -skip-testing:MAPGpxLoggerTests.testGpxLogger \
-           -destination 'platform=iOS Simulator,OS=11.4,name=iPhone 6' 2>&1 | /usr/local/bin/ocunit2junit 
+           -destination 'platform=iOS Simulator,OS=12.1,name=iPhone X' 2>&1 | /usr/local/bin/ocunit2junit 
 
 RC=$?
 
