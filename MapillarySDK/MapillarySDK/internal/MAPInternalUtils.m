@@ -151,19 +151,11 @@
 
 + (NSNumber*)calculateHeadingFromCoordA:(CLLocationCoordinate2D)A B:(CLLocationCoordinate2D)B
 {
-    double lat1 = A.latitude;
-    double lon1 = A.longitude;
-    double lat2 = B.latitude;
-    double lon2 = B.longitude;
+    double dy = A.latitude - B.latitude;
+    double dx = A.longitude - B.longitude;
     
-    // From http://www.movable-type.co.uk/scripts/latlong.html
-    double phi1 = lat1*M_PI/180.0;
-    double phi2 = lat2*M_PI/180.0;
-    double d1 = (lon2-lon1)*M_PI/180.0;
-    double y = sin(d1) * cos(phi2);
-    double x = cos(phi1) * sin(phi2) - sin(phi1) * cos(phi2) * cos(d1);
-    double heading = atan2(y, x)*180.0/M_PI;
-    
+    double heading = atan(dy/dx) * 180.0 / M_PI;
+        
     heading = (heading <   0) ? heading + 360 : heading; // 0 - 360
     heading = (heading > 360) ? heading - 360 : heading; // 0 - 360
     

@@ -70,7 +70,7 @@
                           "\t\t<mapillary:MAPDeviceModel>%@</mapillary:MAPDeviceModel>\n"
                           "\t\t<mapillary:MAPDeviceUUID>%@</mapillary:MAPDeviceUUID>\n"
                           "\t\t<mapillary:MAPDirectionOffset>0.000000</mapillary:MAPDirectionOffset>\n"
-                          "\t\t<mapillary:MAPLocalTimeZone>Europe/Stockholm (GMT+2) offset 7200 (Daylight)</mapillary:MAPLocalTimeZone>\n"
+                          "\t\t<mapillary:MAPLocalTimeZone>%@</mapillary:MAPLocalTimeZone>\n"
                           "\t\t<mapillary:MAPSettingsUserKey>(null)</mapillary:MAPSettingsUserKey>\n"
                           "\t\t<mapillary:MAPSequenceUUID>%@</mapillary:MAPSequenceUUID>\n"
                           "\t\t<mapillary:MAPTimeOffset>0.000000</mapillary:MAPTimeOffset>\n"
@@ -84,13 +84,11 @@
                           "\t\t\t\t<time>1970-01-01T00:00:00.000Z</time>\n"
                           "\t\t\t\t<extensions>\n"
                           "\t\t\t\t\t<mapillary:MAPGPSAccuracyMeters>0.000000</mapillary:MAPGPSAccuracyMeters>\n"
-                          "\t\t\t\t\t<mapillary:MAPAtanAngle>0.000000</mapillary:MAPAtanAngle>\n"
                           "\t\t\t\t\t<mapillary:MAPGPSSpeed>-1.000000</mapillary:MAPGPSSpeed>\n"
-                          "\t\t\t\t\t<mapillary:MAPOrientation>0</mapillary:MAPOrientation>\n"
                           "\t\t\t\t</extensions>\n"
                           "\t\t\t</trkpt>\n\t\t</trkseg>\n"
                           "\t</trk>\n</gpx>",
-                          [dateFormatter stringFromDate:self.sequence.sequenceDate], device.make, device.model, device.UUID, self.sequence.sequenceKey];
+                          [dateFormatter stringFromDate:self.sequence.sequenceDate], device.make, device.model, device.UUID, [[NSTimeZone systemTimeZone] description], self.sequence.sequenceKey];
     
     XCTAssertTrue([contents isEqualToString:expected]);
 }

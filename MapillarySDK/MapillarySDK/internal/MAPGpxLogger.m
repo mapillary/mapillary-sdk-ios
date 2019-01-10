@@ -56,7 +56,7 @@ unsigned long long footerLength;
         
         [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPGPSAccuracyMeters, self.location.location.horizontalAccuracy, kMAPGPSAccuracyMeters];        
         
-        if (self.location.trueHeading != nil)
+        if (self.location.trueHeading != nil && self.location.magneticHeading != nil)
         {
             [extensionsString appendFormat:@"\t\t\t\t\t<mapillary:%@>\n", kMAPCompassHeading];
             [extensionsString appendFormat:@"\t\t\t\t\t\t<mapillary:%@>%f</mapillary:%@>\n", kMAPTrueHeading, self.location.trueHeading.doubleValue, kMAPTrueHeading];
@@ -191,6 +191,8 @@ unsigned long long footerLength;
 - (void)dealloc
 {
     [self.operationQueue removeObserver:self forKeyPath:@"operations"];
+    self.operationQueue = nil;
+    self.dateFormatter = nil;
 }
 
 - (void)addLocation:(MAPLocation*)location

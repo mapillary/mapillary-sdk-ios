@@ -94,6 +94,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    self.dateFormatter = nil;
+}
+
 - (void)parse:(void(^)(NSDictionary* dict))done
 {
     self.doneCallback = done;

@@ -67,6 +67,7 @@
     
     // Cleanup existing metadata
     [self cleanMetadata:metadata mutableMetadata:mutableMetadata];
+    CFRelease(metadata);
     
     
     // Update and add Mapillary tags to metadata
@@ -108,13 +109,13 @@
             // Correct compass with orientation
             if (tiffOrientation.intValue == 1)
             {
-                trueHeading -= 90;
-                magneticHeading -= 90;
-            }
-            else if (tiffOrientation.intValue == 1)
-            {
                 trueHeading += 90;
                 magneticHeading += 90;
+            }
+            else if (tiffOrientation.intValue == 3)
+            {
+                trueHeading -= 90;
+                magneticHeading -= 90;
             }
             else if (tiffOrientation.intValue == 8)
             {
@@ -231,7 +232,6 @@
         CFRelease(value);
     }
     
-    CFRelease(metadata);
     CFRelease(tags);
 }
 

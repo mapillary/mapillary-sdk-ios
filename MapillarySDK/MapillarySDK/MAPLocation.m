@@ -18,8 +18,8 @@
     if (self)
     {
         self.location = nil;
-        self.trueHeading = 0;
-        self.magneticHeading = 0;
+        self.trueHeading = nil;
+        self.magneticHeading = nil;
         self.headingAccuracy = 0;
         self.timestamp = [NSDate date];
         self.deviceMotionX = 0;
@@ -71,6 +71,7 @@
 {
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     return [dateFormatter stringFromDate:self.timestamp];
 }
 

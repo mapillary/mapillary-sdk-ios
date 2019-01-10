@@ -28,8 +28,8 @@
 @property (weak) id<MAPUploadManagerDelegate> delegate;
 
 /**
- Set this flag to YES if you want to test your upload. It uploads to a test
- server instead of the production server. Images on this server is not
+ Set this property to YES if you want to test your upload. It uploads to a test
+ server instead of the production server. Images on this server are not
  accessible and will be deleted.
  
  Default is NO.
@@ -37,7 +37,7 @@
 @property (nonatomic) BOOL testUpload;
 
 /**
- Set this flag to NO if you want to keep your local images efter they have been
+ Set this property to NO if you want to keep your local images efter they have been
  uploaded. This flag is only used if `testUpload` is set to YES. When uploading
  to the production servers images are always deleted to avoid duplicates.
  
@@ -48,7 +48,7 @@
 /**
  Set this flag to YES if you want to allow uploads via cellular network.
  
- Default is NO.
+ Default is YES.
  */
 @property (nonatomic) BOOL allowsCellularAccess;
 
@@ -87,11 +87,15 @@
 ///-----------------------------------------------------------------------------
 
 /**
- Starts to process and upload the sequences in the array. Even if the images
- has been processed before, it will be reprocessed before uploading. As soon as
+ Starts to process and upload the sequences in the array. As soon as
  one image has finished processing, it will be scheduled for uploading.
+ 
+ @param forceReprocessing If set to YES, images that are already processed will
+ be processed again. This is needed if you change GPX data, like the offset etc.
+ If set to NO, images that already have been processed will not be processed
+ again.
  */
-- (void)processAndUploadSequences:(NSArray*)sequences;
+- (void)processAndUploadSequences:(NSArray*)sequences forceReprocessing:(BOOL)forceReprocessing;
 
 /**
  Starts to upload the sequences in the array. If the images haven't been
