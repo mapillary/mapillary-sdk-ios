@@ -315,6 +315,12 @@
         if (_persistentContainer == nil)
         {
             NSBundle* podBundle = [PodAsset bundleForPod:@"MapillarySDK"];
+            
+            if (podBundle == nil)
+            {
+                podBundle = [NSBundle bundleForClass:[self class]];
+            }
+            
             NSURL* url = [podBundle URLForResource:@"MAPDataModel" withExtension:@"momd"];
             NSManagedObjectModel* managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:url];
             
