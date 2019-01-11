@@ -578,9 +578,9 @@
     
     MAPLocation* b = [[MAPLocation alloc] init];
     b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
-    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(51, 50) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
-    b.magneticHeading = @90;
-    b.trueHeading = @90;
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 51) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    b.magneticHeading = @180;
+    b.trueHeading = @180;
     [self.sequence addLocation:b];
     
     MAPLocation* c = [[MAPLocation alloc] init];
@@ -623,28 +623,28 @@
     NSNumber* trueHeading = nil;
     NSDictionary* heading = nil;
     
-    correctHeading = 0+90;
+    correctHeading = 90;
     heading = [self getCompassHeadingFromImage:images[0]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 0+90;
+    correctHeading = 180;
     heading = [self getCompassHeadingFromImage:images[1]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 45+90;
+    correctHeading = 180;
     heading = [self getCompassHeadingFromImage:images[2]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 90+90;
+    correctHeading = 270;
     heading = [self getCompassHeadingFromImage:images[3]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
