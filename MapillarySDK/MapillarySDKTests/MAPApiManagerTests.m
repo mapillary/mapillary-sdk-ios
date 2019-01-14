@@ -35,12 +35,12 @@
     [MAPApiManager getCurrentUser:^(MAPUser *user) {
         
         XCTAssertNil(user);
-        [expectation fulfill];
+        [expectation fulfill];+
         
     }];
     
     // Wait for test to finish
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         if (error)
         {
