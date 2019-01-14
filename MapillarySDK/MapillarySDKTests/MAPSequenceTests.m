@@ -147,7 +147,7 @@
     }];
     
     // Wait for test to finish
-    [self waitForExpectationsWithTimeout:10 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         if (error)
         {
@@ -221,7 +221,7 @@
         }];
         
         // Wait for test to finish
-        [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
             
             if (error)
             {
@@ -243,7 +243,7 @@
     }];
     
     // Wait for test to finish
-    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         if (error)
         {
@@ -277,7 +277,7 @@
     }];
     
     // Wait for test to finish
-    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
         
@@ -308,7 +308,7 @@
     }];
     
     // Wait for test to finish
-    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
         

@@ -35,7 +35,7 @@
     [MAPApiManager getCurrentUser:^(MAPUser *user) {
         
         XCTAssertNil(user);
-        [expectation fulfill];+
+        [expectation fulfill];
         
     }];
     

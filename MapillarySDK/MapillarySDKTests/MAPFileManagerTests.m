@@ -73,7 +73,7 @@
     }];
     
     // Wait for test to finish
-    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
         
         if (error)
         {
