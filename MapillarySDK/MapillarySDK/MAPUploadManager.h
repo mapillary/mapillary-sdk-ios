@@ -52,6 +52,14 @@
  */
 @property (nonatomic) BOOL allowsCellularAccess;
 
+/**
+ Controls the number of files that are uploaded simultaneously. Set this before
+ starting an upload.
+ 
+ Default is 4.
+ */
+@property (nonatomic) int numberOfSimultaneousUploads;
+
 ///-----------------------------------------------------------------------------
 /// @name Creating an Upload Manager
 ///-----------------------------------------------------------------------------

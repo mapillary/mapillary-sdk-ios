@@ -66,6 +66,7 @@
         self.testUpload = NO;
         self.deleteAfterUpload = YES;
         self.bytesUploadedSinceLastUpdate = 0;
+        self.numberOfSimultaneousUploads = 4;
         
         [self setupAws];
         [self createSession];
@@ -311,7 +312,7 @@
                 // For foreground uploading, schedule only a few tasks now
                 else
                 {
-                    if (taskCount < self.uploadSession.configuration.HTTPMaximumConnectionsPerHost)
+                    if (taskCount < self.numberOfSimultaneousUploads)
                     {
                         [self createTask:image];
                         taskCount++;
@@ -374,7 +375,7 @@
         return;
     }
     
-    if (self.uploadSession == nil || self.uploadSession.configuration.allowsCellularAccess != self.allowsCellularAccess)
+    if (self.uploadSession == nil || self.uploadSession.configuration.allowsCellularAccess != self.allowsCellularAccess || self.uploadSession.configuration.HTTPMaximumConnectionsPerHost != self.numberOfSimultaneousUploads)
     {
         [self createSession];
     }
@@ -428,6 +429,8 @@
     {
         configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.mapillary.sdk.networking.upload"];
     }
+    
+    configuration.HTTPMaximumConnectionsPerHost = self.numberOfSimultaneousUploads;
     
     self.uploadSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 }
