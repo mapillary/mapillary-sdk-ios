@@ -32,10 +32,7 @@
 
     self.webView.delegate = self;
     self.webView.hidden = YES;
-    
-    //self.urlString = [self.urlString stringByAppendingString:@"&randomBits=123"];
-    
-    //NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.urlString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
+
     NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.urlString]];
     [self.webView loadRequest:request];
 }
@@ -82,10 +79,14 @@
     
     NSString* access_token = queryStringDictionary[@"access_token"];
     
-    if (access_token)
-    {                
+    NSString* callbackUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_CALLBACK_URL];
+    NSString* redirectUrl = [NSString stringWithFormat:@"/v2/oauth/%@", callbackUrl];
+    
+    // User clicked "Allow" or "Deny"
+    if ([url.path isEqualToString:redirectUrl])
+    {
         [self.webView stringByEvaluatingJavaScriptFromString:@"localStorage.clear()"];
-
+        
         [self dismissViewControllerAnimated:YES completion:^{
             
             if ([self.delegate respondsToSelector:@selector(didLogin:accessToken:)])
