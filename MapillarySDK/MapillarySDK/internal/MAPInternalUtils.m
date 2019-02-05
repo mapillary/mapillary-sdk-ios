@@ -113,34 +113,36 @@
 
 #pragma mark - Internal
 
-+ (float)calculateFactorFromDates:(NSDate*)date date1:(NSDate*)date1 date2:(NSDate*)date2
++ (double)calculateFactorFromDates:(NSDate*)date date1:(NSDate*)date1 date2:(NSDate*)date2
 {
     if (date1 == nil)
     {
-        return 1;
+        return 1.0;
     }
     
     if (date2 == nil)
     {
-        return 0;
+        return 0.0;
     }
     
     if ([date1 isEqualToDate:date2])
     {
-        return 0;
+        return 0.0;
     }
     
     return fabs([date1 timeIntervalSinceDate:date]/[date1 timeIntervalSinceDate:date2]);
 }
 
-+ (CLLocationCoordinate2D)interpolateCoords:(CLLocationCoordinate2D)location1 location2:(CLLocationCoordinate2D)location2 factor:(float)factor
++ (CLLocationCoordinate2D)interpolateCoords:(CLLocationCoordinate2D)location1 location2:(CLLocationCoordinate2D)location2 factor:(double)factor
 {
-    if (factor == 0)
+    // == 0
+    if (fabs(factor) < DBL_EPSILON)
     {
         return location1;
     }
     
-    if (factor == 1)
+    // == 1
+    if (fabs(factor-1) < DBL_EPSILON)
     {
         return location2;
     }
@@ -170,7 +172,7 @@
     }
     
     MAPLocation* result = [locationA copy];
-    float factor;
+    double factor;
     
     if (date == nil)
     {
