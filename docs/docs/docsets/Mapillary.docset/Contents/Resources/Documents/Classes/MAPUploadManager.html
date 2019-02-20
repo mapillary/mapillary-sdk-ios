@@ -72,9 +72,6 @@
             <a href="../Uploading.html">Uploading</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/MAPApplicationDelegate.html">MAPApplicationDelegate</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/MAPUploadManager.html">MAPUploadManager</a>
               </li>
               <li class="nav-group-task">
@@ -157,8 +154,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Set this flag to YES if you want to test your upload. It uploads to a test
-server instead of the production server. Images on this server is not
+                        <p>Set this property to YES if you want to test your upload. It uploads to a test
+server instead of the production server. Images on this server are not
 accessible and will be deleted.</p>
 
 <p>Default is NO.</p>
@@ -195,7 +192,7 @@ accessible and will be deleted.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Set this flag to NO if you want to keep your local images efter they have been
+                        <p>Set this property to NO if you want to keep your local images efter they have been
 uploaded. This flag is only used if <code><a href="../Classes/MAPUploadManager.html#/c:objc(cs)MAPUploadManager(py)testUpload">testUpload</a></code> is set to YES. When uploading
 to the production servers images are always deleted to avoid duplicates.</p>
 
@@ -235,7 +232,7 @@ to the production servers images are always deleted to avoid duplicates.</p>
                       <div class="abstract">
                         <p>Set this flag to YES if you want to allow uploads via cellular network.</p>
 
-<p>Default is NO.</p>
+<p>Default is YES.</p>
 
                       </div>
                       <!--
@@ -249,6 +246,43 @@ to the production servers images are always deleted to avoid duplicates.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="k">var</span> <span class="nv">allowsCellularAccess</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPUploadManager(py)numberOfSimultaneousUploads"></a>
+                    <a name="//apple_ref/objc/Property/numberOfSimultaneousUploads" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPUploadManager(py)numberOfSimultaneousUploads">numberOfSimultaneousUploads</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Controls the number of files that are uploaded simultaneously. Set this before
+starting an upload.</p>
+
+<p>Default is 4.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="kt">int</span> <span class="n">numberOfSimultaneousUploads</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">numberOfSimultaneousUploads</span><span class="p">:</span> <span class="kt">Int32</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -319,9 +353,9 @@ to the production servers images are always deleted to avoid duplicates.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPUploadManager(im)processSequences:"></a>
-                    <a name="//apple_ref/objc/Method/-processSequences:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPUploadManager(im)processSequences:">-processSequences:</a>
+                    <a name="/c:objc(cs)MAPUploadManager(im)processSequences:forceReprocessing:"></a>
+                    <a name="//apple_ref/objc/Method/-processSequences:forceReprocessing:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPUploadManager(im)processSequences:forceReprocessing:">-processSequences:forceReprocessing:</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -337,16 +371,38 @@ to the production servers images are always deleted to avoid duplicates.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processSequences</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">sequences</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processSequences</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">sequences</span> <span class="nf">forceReprocessing</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">forceReprocessing</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">processSequences</span><span class="p">(</span><span class="n">_</span> <span class="nv">sequences</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">processSequences</span><span class="p">(</span><span class="n">_</span> <span class="nv">sequences</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">forceReprocessing</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forceReprocessing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If set to YES, images that are already processed will
+be processed again. This is needed if you change GPX data, like the offset etc.
+If set to NO, images that already have been processed will not be processed
+again.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -398,9 +454,9 @@ to the production servers images are always deleted to avoid duplicates.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPUploadManager(im)processAndUploadSequences:"></a>
-                    <a name="//apple_ref/objc/Method/-processAndUploadSequences:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPUploadManager(im)processAndUploadSequences:">-processAndUploadSequences:</a>
+                    <a name="/c:objc(cs)MAPUploadManager(im)processAndUploadSequences:forceReprocessing:"></a>
+                    <a name="//apple_ref/objc/Method/-processAndUploadSequences:forceReprocessing:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPUploadManager(im)processAndUploadSequences:forceReprocessing:">-processAndUploadSequences:forceReprocessing:</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -408,7 +464,8 @@ to the production servers images are always deleted to avoid duplicates.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Starts to process and upload the sequences in the array.</p>
+                        <p>Starts to process and upload the sequences in the array. As soon as
+one image has finished processing, it will be scheduled for uploading.</p>
 
                       </div>
                       <!--
@@ -416,12 +473,70 @@ to the production servers images are always deleted to avoid duplicates.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processAndUploadSequences</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">sequences</span><span class="p">;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processAndUploadSequences</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">sequences</span>
+                <span class="nf">forceReprocessing</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">forceReprocessing</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">processAndUploadSequences</span><span class="p">(</span><span class="n">_</span> <span class="nv">sequences</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">processAndUploadSequences</span><span class="p">(</span><span class="n">_</span> <span class="nv">sequences</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">forceReprocessing</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      -->
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forceReprocessing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If set to YES, images that are already processed will
+be processed again. This is needed if you change GPX data, like the offset etc.
+If set to NO, images that already have been processed will not be processed
+again.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)MAPUploadManager(im)uploadSequences:"></a>
+                    <a name="//apple_ref/objc/Method/-uploadSequences:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPUploadManager(im)uploadSequences:">-uploadSequences:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Starts to upload the sequences in the array. If the images haven&rsquo;t been
+processed using <code>processSequences</code>, they will be processed before uploading.</p>
+
+                      </div>
+                      <!--
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">uploadSequences</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">sequences</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">uploadSequences</span><span class="p">(</span><span class="n">_</span> <span class="nv">sequences</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
