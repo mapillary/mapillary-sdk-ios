@@ -108,7 +108,7 @@
     
     if (!status.uploading)
     {
-        [self.uploadManager processAndUploadSequences:self.sequences];
+        [self.uploadManager processAndUploadSequences:self.sequences forceReprocessing:NO];
     }
     else
     {
