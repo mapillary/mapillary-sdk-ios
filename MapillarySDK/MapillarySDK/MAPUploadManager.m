@@ -164,18 +164,10 @@
     [self.uploadSession invalidateAndCancel];
     self.uploadSession = nil;
     
-    for (MAPImage* image in self.imagesToUpload)
-    {
-        [self deleteBookkeepingForImage:image];
-    }
-    
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
         [sequence unlock];
     }
-    
-    [self.imagesToUpload removeAllObjects];
-    [self.sequencesToUpload removeAllObjects];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:status:)])
     {
@@ -742,9 +734,13 @@
     else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            MAPImage* next = self.imagesToUpload.firstObject;
-            [self.imagesToUpload removeObjectAtIndex:0];
-            [self createTask:next];
+            
+            if (self.status.uploading)
+            {
+                MAPImage* next = self.imagesToUpload.firstObject;
+                [self.imagesToUpload removeObjectAtIndex:0];
+                [self createTask:next];
+            }
         });
     }
 }

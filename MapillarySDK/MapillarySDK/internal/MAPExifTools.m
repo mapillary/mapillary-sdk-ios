@@ -288,6 +288,7 @@
         
         dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"HH:mm:ss.SSSSSS";
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         
     });
     
@@ -303,6 +304,7 @@
         
         dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy:MM:dd";
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         
     });
         
@@ -318,21 +320,7 @@
         
         dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
-        
-    });
-    
-    return [dateFormatter stringFromDate:localDate];
-}
-
-+ (NSString*)getExifFormattedDateAndTime:(NSDate*)localDate
-{
-    static NSDateFormatter* dateFormatter = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"yyyy:MM:dd HH:mm:ss";
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         
     });
     

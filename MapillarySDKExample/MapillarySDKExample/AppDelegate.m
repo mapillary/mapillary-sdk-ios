@@ -7,17 +7,11 @@
 //
 
 #import "AppDelegate.h"
-#import <MapillarySDK/MapillarySDK.h>
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
-{    
-    [MAPApplicationDelegate application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
-}
 
 @end
