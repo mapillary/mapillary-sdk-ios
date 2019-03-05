@@ -19,7 +19,7 @@ PODS:
     - AWSCore (= 2.9.1)
   - BOSImageResizeOperation (0.1.0)
   - MapillarySDK (0.8):
-    - AFNetworking (~> 3.1)
+    - AFNetworking (~> 3.0)
     - AWSCore (~> 2.6)
     - AWSS3 (~> 2.6)
     - BOSImageResizeOperation (~> 0.1)
@@ -55,7 +55,7 @@ SPEC CHECKSUMS:
   AWSCore: de39c337b7cb32c7a2c6402f45ecf4e50498000e
   AWSS3: 1feca899851eb4d45ca16860e441da658e1b852d
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
-  MapillarySDK: d8ec14c446483f6718d0e42cd292263b1393498d
+  MapillarySDK: 1e7a6bd5d78d9fdebe646526aa2f27ccb9078d0a
   NSHash: 036c03781d372c288d332b512b203e7bb832e46e
   PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c

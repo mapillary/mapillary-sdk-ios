@@ -12,7 +12,6 @@
 #define AWS_COGNITO_IDENTITY_POOL_ID        @"eu-west-1:57d09467-4c2f-470d-9577-90d3f89f76a1"
 
 #define MAPILLARY_CLIENT_ID                 @"MapillaryClientId"
-#define MAPILLARY_CLIENT_CALLBACK_URL       @"MapillaryCallbackUrl"
 
 #define MAPILLARY_KEYCHAIN_SERVICE          @"MapillaryKeychainService"
 #define MAPILLARY_KEYCHAIN_ACCOUNT          @"MapillaryKeychainAccount"

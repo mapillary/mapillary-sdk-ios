@@ -52,7 +52,7 @@ After you have registered your application, copy your client id, you need it to 
 ### Edit your application plist
 
 
-Add `MapillaryClientId` and `MapillaryCallbackUrl` to your plist file. Below is an example of parts of a plist file.
+Add `MapillaryClientId` to your plist file. Below is an example of parts of a plist file.
 
 ```
 <plist version="1.0">
@@ -60,9 +60,6 @@ Add `MapillaryClientId` and `MapillaryCallbackUrl` to your plist file. Below is 
 	...
 	<key>MapillaryClientId</key>
 	<string>YOUR_CLIENT_ID</string>
-	...
-	<key> MapillaryCallbackUrl</key>
-	<string>YOUR_CALLBACK_URL</string>
 	...
 </dict>
 </plist>
@@ -95,8 +92,6 @@ Below is a quick-start guide to get you started. Refer to the full [docs](https:
 
 
 ### Signing in
-
-You need to specify the permissions (as a bit mask) that your app needs access to. Use the same as when you registered your app.
 
 ##### Swift
 

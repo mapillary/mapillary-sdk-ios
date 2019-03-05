@@ -79,11 +79,7 @@
     
     NSString* access_token = queryStringDictionary[@"access_token"];
     
-    NSString* callbackUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_CALLBACK_URL];
-    NSString* redirectUrl = [NSString stringWithFormat:@"/v2/oauth/%@", callbackUrl];
-    
-    // User clicked "Allow" or "Deny"
-    if ([url.path isEqualToString:redirectUrl])
+    if (access_token != nil && access_token.length > 0)
     {
         [self.webView stringByEvaluatingJavaScriptFromString:@"localStorage.clear()"];
         

@@ -40,56 +40,12 @@ static MAPLoginManager* singleInstance;
     return singleInstance;
 }
 
-+ (void)signInFromViewController:(UIViewController*)viewController scope:(MAPScopeMask)scope result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled
++ (void)signInFromViewController:(UIViewController*)viewController result:(void (^) (BOOL success))result cancelled:(void (^) (void))cancelled
 {
-    NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
-    NSString* redirectUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_CALLBACK_URL];
-    
-    // Check that clientId and redirectUrl are set
+    NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];    
     NSAssert(clientId != nil, @"MapillaryClientId is not specified in application plist file");
-    NSAssert(redirectUrl != nil, @"MapillaryCallbackUrl is not specified in application plist file");
-     
-    NSMutableString* scopeString = [NSMutableString string];
-    
-    if (scope & MAPScopeMaskUserEmail)
-    {
-        [scopeString appendString:@"user:email%20"];
-    }
-    if (scope & MAPScopeMaskUserRead)
-    {
-        [scopeString appendString:@"user:read%20"];
-    }
-    if (scope & MAPScopeMaskUserWrite)
-    {
-        [scopeString appendString:@"user:write%20"];
-    }
-    if (scope & MAPScopeMaskPublicWrite)
-    {
-        [scopeString appendString:@"public:write%20"];
-    }
-    if (scope & MAPScopeMaskPublicUpload)
-    {
-        [scopeString appendString:@"public:upload%20"];
-    }
-    if (scope & MAPScopeMaskPrivateRead)
-    {
-        [scopeString appendString:@"private:read%20"];
-    }
-    if (scope & MAPScopeMaskPrivateWrite)
-    {
-        [scopeString appendString:@"private:write%20"];
-    }
-    if (scope & MAPScopeMaskPrivateUpload)
-    {
-        [scopeString appendString:@"private:upload%20"];
-    }
-    
-    if (scopeString.length > 0 && [[scopeString substringFromIndex:scopeString.length-3] isEqualToString:@"%20"])
-    {
-        scopeString = [NSMutableString stringWithString:[scopeString substringToIndex:scopeString.length-3]];
-    }
-    
-    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?scope=%@&state=return&redirect_uri=%@&response_type=token&client_id=%@&simple=true", scopeString, redirectUrl, clientId];
+
+    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?client_id=%@&simple=true", clientId];
     
     [MAPLoginManager getInstance].loginCompletionHandler = result;
     [MAPLoginManager getInstance].loginCancelledHandler = cancelled;

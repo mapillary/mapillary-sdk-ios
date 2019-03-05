@@ -35,7 +35,7 @@
     {
         self.button.enabled = NO;
         
-        [MAPLoginManager signInFromViewController:self scope:MAPScopeMaskAll result:^(BOOL success) {
+        [MAPLoginManager signInFromViewController:self result:^(BOOL success) {
             
             if (success)
             {
