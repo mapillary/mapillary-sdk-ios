@@ -132,12 +132,15 @@ end
 <p>After you have registered your application, copy your client id, you need it to initialize the SDK later.</p>
 <h3 id='edit-your-application-plist' class='heading'>Edit your application plist</h3>
 
-<p>Add <code>MapillaryClientId</code> to your plist file. Below is an example of parts of a plist file.</p>
+<p>Add <code>MapillaryClientId</code> and <code>MapillaryCallbackUrl</code> to your plist file. Below is an example of parts of a plist file.</p>
 <pre class="highlight plaintext"><code>&lt;plist version="1.0"&gt;
 &lt;dict&gt;
     ...
     &lt;key&gt;MapillaryClientId&lt;/key&gt;
-    &lt;string&gt;YOUR_CLIENT_ID&lt;/string&gt; 
+    &lt;string&gt;YOUR_CLIENT_ID&lt;/string&gt;
+    ...
+    &lt;key&gt; MapillaryCallbackUrl&lt;/key&gt;
+    &lt;string&gt;YOUR_CALLBACK_URL&lt;/string&gt;
     ...
 &lt;/dict&gt;
 &lt;/plist&gt;
@@ -161,8 +164,10 @@ end
 
 <p>Below is a quick-start guide to get you started. Refer to the full <a href="https://htmlpreview.github.io/?https://github.com/mapillary/mapillary-sdk-ios/blob/master/docs/docs/index.html">docs</a> for details.</p>
 <h3 id='signing-in' class='heading'>Signing in</h3>
+
+<p>You need to specify the permissions (as a bit mask) that your app needs access to. Use the same as when you registered your app.</p>
 <h5 id='swift' class='heading'>Swift</h5>
-<pre class="highlight plaintext"><code>MAPLoginManager.signIn(from: self, result: { (success) in
+<pre class="highlight plaintext"><code>MAPLoginManager.signIn(from: self, scope: MAPScopeMask.all, result: { (success) in
 
     if success
     {
@@ -180,7 +185,7 @@ end
 }
 </code></pre>
 <h5 id='objective-c' class='heading'>Objective-C</h5>
-<pre class="highlight plaintext"><code>[MAPLoginManager signInFromViewController:self result:^(BOOL success) {            
+<pre class="highlight plaintext"><code>[MAPLoginManager signInFromViewController:self scope:MAPScopeMaskAll result:^(BOOL success) {            
 
     if (success)
     {
