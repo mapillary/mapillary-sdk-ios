@@ -45,7 +45,13 @@ static MAPLoginManager* singleInstance;
     NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];    
     NSAssert(clientId != nil, @"MapillaryClientId is not specified in application plist file");
 
-    NSString* urlString = [NSString stringWithFormat:@"https://www.mapillary.com/connect?client_id=%@&simple=true", clientId];
+    NSString* urlString = [NSString stringWithFormat:@"%@/connect?client_id=%@&simple=true", kMAPAuthEndpoint, clientId];
+    
+    NSString* staging = NSBundle.mainBundle.infoDictionary[@"STAGING"];
+    if (staging && staging.intValue == 1)
+    {
+        urlString = [NSString stringWithFormat:@"%@/connect?client_id=%@&simple=true", kMAPAuthEndpointStaging, clientId];
+    }
     
     [MAPLoginManager getInstance].loginCompletionHandler = result;
     [MAPLoginManager getInstance].loginCancelledHandler = cancelled;

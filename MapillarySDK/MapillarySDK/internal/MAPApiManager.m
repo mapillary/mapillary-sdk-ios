@@ -50,7 +50,14 @@
 + (NSString*)fullUrlForUrlString:(NSString*)url
 {
     NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
-    NSString* baseUrl = @"https://a.mapillary.com";
+    NSString* baseUrl = kMAPAPIEndpoint;
+    
+    NSString* staging = NSBundle.mainBundle.infoDictionary[@"STAGING"];    
+    if (staging && staging.intValue == 1)
+    {
+        baseUrl = kMAPAPIEndpointStaging;
+    }
+    
     NSMutableString* fullPath = [NSMutableString stringWithFormat:@"%@/%@", baseUrl, url];
     
     if ([fullPath containsString:@"?"])

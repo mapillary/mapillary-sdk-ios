@@ -58,4 +58,10 @@
 // Used?
 #define kMAPSettingsTokenValid              @"MAPSettingsTokenValid"
 
+// API
+#define kMAPAPIEndpoint                     @"https://a.mapillary.com"
+#define kMAPAPIEndpointStaging              @"http://staging.mapillary.io:8080"
+#define kMAPAuthEndpoint                    @"https://www.mapillary.com"
+#define kMAPAuthEndpointStaging             @"http://staging.mapillary.io:3002"
+
 #endif /* MAPDefines_h */
