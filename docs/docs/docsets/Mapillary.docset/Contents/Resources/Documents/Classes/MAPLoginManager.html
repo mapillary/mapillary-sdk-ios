@@ -95,14 +95,17 @@
                 </div>
               </div>
             <p>The <code>MAPLoginManager</code> class manages the authentication of Mapillary. The
-signIn method starts the authentication loop. It requires one value to be
+signIn method starts the authentication loop. It requires two values to be
 defined in your application <code>.plist</code> file:</p>
 
 <ul>
 <li>MapillaryClientId</li>
+<li>MapillaryCallbackUrl</li>
 </ul>
 
-<p>You need to register your app at mapillary.com to obtain a client ID.</p>
+<p>You need to register your app at mapillary.com to enter the redirect URL and
+also to obtain a client ID. Your app must also support the custom URL scheme
+defined in <code>MapillaryCallbackUrl</code>.</p>
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     <code>MAPApplicationDelegate</code>
@@ -123,9 +126,9 @@ defined in your application <code>.plist</code> file:</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)MAPLoginManager(cm)signInFromViewController:result:cancelled:"></a>
-                    <a name="//apple_ref/objc/Method/+signInFromViewController:result:cancelled:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)MAPLoginManager(cm)signInFromViewController:result:cancelled:">+signInFromViewController:result:cancelled:</a>
+                    <a name="/c:objc(cs)MAPLoginManager(cm)signInFromViewController:scope:result:cancelled:"></a>
+                    <a name="//apple_ref/objc/Method/+signInFromViewController:scope:result:cancelled:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)MAPLoginManager(cm)signInFromViewController:scope:result:cancelled:">+signInFromViewController:scope:result:cancelled:</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -137,6 +140,9 @@ defined in your application <code>.plist</code> file:</p>
 After the user has entered the credentials and is authenticated, focus is
 returned to the app.</p>
 
+<p>@oaram scope A bit mask for the scope of permissions to request. Must match
+what you configured when created the app on mapillary.com.</p>
+
                       </div>
                       <!--
                       <div class="declaration">
@@ -144,13 +150,14 @@ returned to the app.</p>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
                           <pre class="highlight"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">signInFromViewController</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">viewController</span>
+                           <span class="nf">scope</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">scope</span>
                           <span class="nf">result</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">int</span><span class="p">))</span><span class="nv">result</span>
                        <span class="nf">cancelled</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span><span class="nv">cancelled</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">signIn</span><span class="p">(</span><span class="n">fromViewController</span> <span class="nv">viewController</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">result</span><span class="p">:</span> <span class="p">((</span><span class="kt">Int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">,</span> <span class="nv">cancelled</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">signIn</span><span class="p">(</span><span class="n">fromViewController</span> <span class="nv">viewController</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">result</span><span class="p">:</span> <span class="p">((</span><span class="kt">Int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">,</span> <span class="nv">cancelled</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>

@@ -106,14 +106,17 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The <code>MAPLoginManager</code> class manages the authentication of Mapillary. The
-signIn method starts the authentication loop. It requires one value to be
+signIn method starts the authentication loop. It requires two values to be
 defined in your application <code>.plist</code> file:</p>
 
 <ul>
 <li>MapillaryClientId</li>
+<li>MapillaryCallbackUrl</li>
 </ul>
 
-<p>You need to register your app at mapillary.com to obtain a client ID.</p>
+<p>You need to register your app at mapillary.com to enter the redirect URL and
+also to obtain a client ID. Your app must also support the custom URL scheme
+defined in <code>MapillaryCallbackUrl</code>.</p>
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     <code>MAPApplicationDelegate</code>
