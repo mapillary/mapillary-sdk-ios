@@ -1,6 +1,34 @@
 {
   "warnings": [
     {
+      "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/MAPLoginManager.h",
+      "line": 13,
+      "symbol": "NS_ENUM",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.function",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/MAPLoginManager.h",
+      "line": 23,
+      "symbol": "",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.unexposed",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/MAPLoginManager.h",
+      "line": 25,
+      "symbol": "NS_OPTIONS",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.function",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/MAPLoginManager.h",
+      "line": 35,
+      "symbol": "",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.unexposed",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/MAPUtils.h",
       "line": 12,
       "symbol": "MAPUtils",
