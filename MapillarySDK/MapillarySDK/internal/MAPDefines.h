@@ -59,4 +59,13 @@
 // Used?
 #define kMAPSettingsTokenValid              @"MAPSettingsTokenValid"
 
+// API
+#define kMAPSettingStaging                  @"MAPSettingStaging"
+#define kMAPAPIEndpoint                     @"https://a.mapillary.com"
+#define kMAPAPIEndpointStaging              @"http://staging.mapillary.io:8080"
+#define kMAPAuthEndpoint                    @"https://www.mapillary.com"
+#define kMAPAuthEndpointStaging             @"http://staging.mapillary.io:3002"
+#define kMAPRedirectURLStaging              @"http://staging.mapillary.io:3000"
+#define kMAPClientIdStaging                 @"YWFhYWFhYWFhYWFhYWFhYWFhYWFhYTphcHBfYQ=="
+
 #endif /* MAPDefines_h */

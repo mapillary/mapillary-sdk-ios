@@ -10,12 +10,13 @@
 #import "MAPDefines.h"
 #import "AFNetworking.h"
 #import <SAMKeychain/SAMKeychain.h>
+#import "MAPInternalUtils.h"
 
 @implementation MAPApiManager
 
 + (void)getCurrentUser:(void(^)(MAPUser* user))done
 {
-    NSString* url = @"/v3/me";
+    NSString* url = @"v3/me";
     
     [self simpleGET:url responseObject:^(id responseObject) {
         
@@ -42,15 +43,19 @@
 
 #pragma mark - Util
 
-/*+ (NSString *)encodeString:(NSString *)unencodedString
-{
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)unencodedString, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8 ));
-}*/
-
 + (NSString*)fullUrlForUrlString:(NSString*)url
 {
     NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
-    NSString* baseUrl = @"https://a.mapillary.com";
+    NSString* baseUrl = kMAPAPIEndpoint;
+    
+    if ([MAPInternalUtils usingStaging])
+    {
+        baseUrl = kMAPAPIEndpointStaging;
+        clientId = kMAPClientIdStaging;
+    }
+    
+    clientId = [clientId stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.alphanumericCharacterSet];
+    
     NSMutableString* fullPath = [NSMutableString stringWithFormat:@"%@/%@", baseUrl, url];
     
     if ([fullPath containsString:@"?"])

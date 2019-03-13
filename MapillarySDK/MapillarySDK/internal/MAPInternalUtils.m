@@ -10,6 +10,7 @@
 #include <sys/xattr.h>
 #import "BOSImageResizeOperation.h"
 #import <NSHash/NSString+NSHash.h>
+#import "MAPDefines.h"
 
 @implementation MAPInternalUtils
 
@@ -110,6 +111,16 @@
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 }
 
++ (BOOL)usingStaging
+{
+    NSString* staging = NSBundle.mainBundle.infoDictionary[@"STAGING"];
+    if ((staging && staging.intValue == 1) || [NSUserDefaults.standardUserDefaults integerForKey:kMAPSettingStaging] == 1)
+    {
+        return YES;
+    }
+    
+    return NO;
+}
 
 #pragma mark - Internal
 

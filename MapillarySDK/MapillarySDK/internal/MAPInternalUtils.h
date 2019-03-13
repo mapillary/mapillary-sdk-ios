@@ -38,4 +38,6 @@
 
 + (NSString*)getSHA256HashFromString:(NSString*)string;
 
++ (BOOL)usingStaging;
+
 @end
