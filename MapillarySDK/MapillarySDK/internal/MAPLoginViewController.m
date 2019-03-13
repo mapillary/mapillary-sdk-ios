@@ -9,6 +9,7 @@
 #import "MAPLoginViewController.h"
 #import "MAPApiManager.h"
 #import "MAPDefines.h"
+#import "MAPInternalUtils.h"
 
 @interface MAPLoginViewController ()
 
@@ -30,7 +31,7 @@
         [cookieStorage deleteCookie:each];
     }
 
-    self.webView.delegate = self;
+    self.webView.navigationDelegate = self;
     self.webView.hidden = YES;
 
     NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.urlString]];
@@ -41,7 +42,7 @@
 
 - (IBAction)cancelAction:(id)sender
 {
-    [self.webView stringByEvaluatingJavaScriptFromString:@"localStorage.clear()"];
+    [self.webView evaluateJavaScript:@"localStorage.clear()" completionHandler:nil];
     
     [self dismissViewControllerAnimated:YES completion:^{
         
@@ -53,17 +54,17 @@
     }];
 }
 
-#pragma mark - UIWebViewDelegate
+#pragma mark - WKNavigationDelegate
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [self.spinner stopAnimating];
     self.webView.hidden = NO;
 }
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-    NSURL* url = request.URL;
+    NSURL* url = navigationAction.request.URL;
     
     NSMutableDictionary* queryStringDictionary = [[NSMutableDictionary alloc] init];
     NSArray* urlComponents = [url.absoluteString componentsSeparatedByString:@"&"];
@@ -79,13 +80,30 @@
     
     NSString* access_token = queryStringDictionary[@"access_token"];
     
-    NSString* callbackUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_CALLBACK_URL];
-    NSString* redirectUrl = [NSString stringWithFormat:@"/v2/oauth/%@", callbackUrl];
+    BOOL exit = NO;
+    
+    if ([MAPInternalUtils usingStaging])
+    {
+        NSURL* redirectUrl = [NSURL URLWithString:kMAPRedirectURLStaging];
+        if ([url.host isEqualToString:redirectUrl.host] && url.port == redirectUrl.port)
+        {
+            exit = YES;
+        }
+    }
+    else
+    {
+        NSString* callbackUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_CALLBACK_URL];
+        NSString* redirectUrl = [NSString stringWithFormat:@"/v2/oauth/%@", callbackUrl];
+        if ([url.path isEqualToString:redirectUrl])
+        {
+            exit = YES;
+        }
+    }
     
     // User clicked "Allow" or "Deny"
-    if ([url.path isEqualToString:redirectUrl])
+    if (exit)
     {
-        [self.webView stringByEvaluatingJavaScriptFromString:@"localStorage.clear()"];
+        [self.webView evaluateJavaScript:@"localStorage.clear()" completionHandler:nil];
         
         [self dismissViewControllerAnimated:YES completion:^{
             
@@ -97,7 +115,7 @@
         }];
     }
     
-    return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 @end
