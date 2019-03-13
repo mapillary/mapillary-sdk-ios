@@ -13,6 +13,7 @@
 #import <PodAsset/PodAsset.h>
 #import <SAMKeychain/SAMKeychain.h>
 #import "MAPLoginViewController.h"
+#import "MAPInternalUtils.h"
 
 static MAPLoginManager* singleInstance;
 
@@ -89,14 +90,22 @@ static MAPLoginManager* singleInstance;
         scopeString = [NSMutableString stringWithString:[scopeString substringToIndex:scopeString.length-3]];
     }
     
-    NSString* urlString = [NSString stringWithFormat:@%@/connect?scope=%@&state=return&redirect_uri=%@&response_type=token&client_id=%@&simple=true", kMAPAuthEndpoint, scopeString, redirectUrl, clientId];
-
-
-    NSString* staging = NSBundle.mainBundle.infoDictionary[@"STAGING"];
-    if (staging && staging.intValue == 1)
+    NSString* endPoint = kMAPAuthEndpoint;
+    NSString* paramRedirectUrl = redirectUrl;
+    NSString* paramClientId = clientId;
+    
+    if ([MAPInternalUtils usingStaging])
     {
-        [NSString stringWithFormat:@%@/connect?scope=%@&state=return&redirect_uri=%@&response_type=token&client_id=%@&simple=true", kMAPAuthEndpointStaging, scopeString, redirectUrl, clientId];
+        endPoint = kMAPAuthEndpointStaging;
+        paramRedirectUrl = kMAPRedirectURLStaging;
+        paramClientId = kMAPClientIdStaging;
     }
+    
+    NSString* urlString = [NSString stringWithFormat:@"%@/connect?scope=%@&state=return&redirect_uri=%@&response_type=token&client_id=%@&simple=true",
+                           endPoint,
+                           scopeString,
+                           [paramRedirectUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.alphanumericCharacterSet],
+                           [paramClientId stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.alphanumericCharacterSet]];
     
     [MAPLoginManager getInstance].loginCompletionHandler = result;
     [MAPLoginManager getInstance].loginCancelledHandler = cancelled;

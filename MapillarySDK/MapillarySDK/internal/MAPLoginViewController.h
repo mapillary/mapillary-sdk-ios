@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 @class MAPLoginViewController;
 
@@ -15,9 +16,9 @@
 - (void)didCancel:(MAPLoginViewController*)loginViewController;
 @end
 
-@interface MAPLoginViewController : UIViewController  <UIWebViewDelegate>
+@interface MAPLoginViewController : UIViewController  <WKNavigationDelegate>
 
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet WKWebView *webView;
 @property (nonatomic, weak) id<MAPLoginViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (nonatomic) NSString* urlString;
