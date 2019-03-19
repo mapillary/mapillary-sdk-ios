@@ -1,5 +1,4 @@
 platform :ios, '11.0'
-use_frameworks!
 
 target 'MapillarySDK' do
 
@@ -11,12 +10,5 @@ target 'MapillarySDK' do
     pod 'PodAsset', '~> 0.22'
     pod 'SAMKeychain', '~> 1.5'
     pod 'NSHash', '~> 1.2'
-
-    target 'MapillarySDKTests' do
-        
-        inherit! :search_paths
-        pod 'OCMockito', '~> 5.0'
-        
-    end
 
 end
