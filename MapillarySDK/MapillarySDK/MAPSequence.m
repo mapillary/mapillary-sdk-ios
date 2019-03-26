@@ -365,7 +365,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     {
         if (self.cachedLocations)
         {
-            done(self.cachedLocations);
+            done([[NSArray alloc] initWithArray:self.cachedLocations copyItems:YES]);
             return;
         }
         
@@ -393,7 +393,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 
                 self.cachedLocations = [[NSMutableArray alloc] initWithArray:sorted];
                 
-                done(sorted);
+                done([[NSArray alloc] initWithArray:self.cachedLocations copyItems:YES]);
                 
             }];
             
@@ -503,8 +503,6 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                         location.trueHeading = location.magneticHeading;
                     }
                 }
-                                
-                
             }
             
             // Need to interpolate between two positions
@@ -529,7 +527,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         double trueHeading = location.trueHeading.doubleValue;
         double magneticHeading = location.magneticHeading.doubleValue;
         
-        if (self.directionOffset != nil)
+        if (self.directionOffset != nil && fabs(self.directionOffset.doubleValue) > 0.0)
         {
             trueHeading += self.directionOffset.doubleValue;
             magneticHeading += self.directionOffset.doubleValue;
