@@ -1093,7 +1093,38 @@
     
     XCTAssertEqual(location5.trueHeading.floatValue, 190.0f);
     XCTAssertEqual(location5.magneticHeading.floatValue, 195.0f);
+}
+
+- (void)testSavePropertyChanges
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Changed properties should be saved"];
     
+    self.sequence.directionOffset = @45;
+    self.sequence.sequenceDate = [NSDate dateWithTimeIntervalSince1970:1000];
+    
+    [self.sequence savePropertyChanges:^{
+        
+        NSString* path = self.sequence.path;
+        
+        MAPSequence* sequence2 = [[MAPSequence alloc] initWithPath:path parseGpx:YES];
+        
+        XCTAssertEqual(sequence2.directionOffset.intValue, 45);
+        XCTAssertEqual(sequence2.sequenceDate.timeIntervalSince1970, 1000);
+        
+        [MAPFileManager deleteSequence:sequence2];
+        
+        [expectation fulfill];
+    
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
 }
 
 #pragma mark - Utils

@@ -581,15 +581,26 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     }
     else
     {
+        __block NSArray* existingLocations = nil;
+        
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
         [self getLocationsAsync:^(NSArray *locations) {
             
-            [self createGpx:locations];
+            existingLocations = locations;
             
-            if (done)
-            {
-                done();
-            }
+            dispatch_semaphore_signal(semaphore);
+            
         }];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        [self createGpx:existingLocations];
+        
+        if (done)
+        {
+            done();
+        }
     }
 }
 
