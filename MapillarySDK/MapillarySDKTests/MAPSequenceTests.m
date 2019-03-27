@@ -738,7 +738,7 @@
 {
     XCTestExpectation* expectation = [self expectationWithDescription:@"Testing for Null Island"];
     
-    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"daejeon" ofType:@"gpx"];
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mapbox-test" ofType:@"gpx"];
     
     __weak MAPSequenceTests* weakSelf = self;
     
@@ -770,7 +770,7 @@
             
             // Test interpolation
             
-            double samples = 9876;
+            double samples = arc4random()%1000;
             NSTimeInterval interval = (last.timestamp.timeIntervalSince1970-first.timestamp.timeIntervalSince1970)/samples;
             
             for (int i = 0; i < samples; i++)
