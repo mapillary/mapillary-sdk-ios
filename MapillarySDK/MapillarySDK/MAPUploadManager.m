@@ -334,8 +334,11 @@
             
             if (forceReprocessing || (processedImages[image.imagePath.lastPathComponent] == nil && ![MAPExifTools imageHasMapillaryTags:image]))
             {
-                [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
-                [[MAPDataManager sharedManager] setImageAsProcessed:image];
+                BOOL success = [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
+                if (success)
+                {
+                    [[MAPDataManager sharedManager] setImageAsProcessed:image];
+                }
             }
             
             self.status.imagesProcessed++;
@@ -431,8 +434,11 @@
 {
     if (forceProcessing || (processedImages[image.imagePath.lastPathComponent] == nil && ![MAPExifTools imageHasMapillaryTags:image]))
     {
-        [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
-        [[MAPDataManager sharedManager] setImageAsProcessed:image];
+        BOOL success = [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
+        if (success)
+        {
+            [[MAPDataManager sharedManager] setImageAsProcessed:image];
+        }
     }
     
     self.status.imagesProcessed++;
