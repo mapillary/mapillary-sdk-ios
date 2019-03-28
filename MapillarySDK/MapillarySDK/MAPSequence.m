@@ -180,14 +180,28 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
     [imageData writeToFile:fullPath atomically:YES];
     
-    NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
-    UIImage* srcImage = [UIImage imageWithData:imageData];
-    
-    float screenWidth = [[UIScreen mainScreen] bounds].size.width;
-    float screenHeight = [[UIScreen mainScreen] bounds].size.width;
-    CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
-    
-    [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
+    if (location)
+    {
+        NSLog(@"Adding EXIF to image");
+        MAPImage* image = [[MAPImage alloc] initWithPath:fullPath];
+        image.location = location;
+        BOOL sucess = [MAPExifTools addExifTagsToImage:image fromSequence:self];
+        if (sucess)
+        {
+            [[MAPDataManager sharedManager] setImageAsProcessed:image];
+        }
+    }
+    else
+    {
+        NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
+        UIImage* srcImage = [UIImage imageWithData:imageData];
+        
+        float screenWidth = [[UIScreen mainScreen] bounds].size.width;
+        float screenHeight = [[UIScreen mainScreen] bounds].size.width;
+        CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
+        
+        [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
+    }
     
     [self addLocation:location];
     
@@ -265,8 +279,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     if (forceReprocessing || ![[MAPDataManager sharedManager] isImageProcessed:image] || ![MAPExifTools imageHasMapillaryTags:image])
     {
-        [MAPExifTools addExifTagsToImage:image fromSequence:self];
-        [[MAPDataManager sharedManager] setImageAsProcessed:image];
+        BOOL success = [MAPExifTools addExifTagsToImage:image fromSequence:self];
+        if (success)
+        {
+            [[MAPDataManager sharedManager] setImageAsProcessed:image];
+        }        
     }
 }
 

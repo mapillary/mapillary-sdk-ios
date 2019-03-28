@@ -814,7 +814,8 @@
     MAPLocation* location = [[MAPLocation alloc] init];
     location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
 
-    [self.sequence addImageWithData:imageData date:nil location:location];
+    [self.sequence addImageWithData:imageData date:nil location:nil];
+    [self.sequence addLocation:location];
     
     MAPImage* image = [[self.sequence getImages] firstObject];
     
@@ -822,6 +823,33 @@
     
     [self.sequence processImage:image forceReprocessing:YES];
 
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+}
+
+- (void)testImageProcessingRealtime
+{
+    // Same as testImageProcessing but without the separate processing step
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:MAPILLARY_CURRENT_USER_KEY];
+    
+    NSData* imageData = [self createImageData];
+    MAPLocation* location = [[MAPLocation alloc] init];
+    location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+    
+    [self.sequence addImageWithData:imageData date:nil location:nil];
+    MAPImage* image = [[self.sequence getImages] firstObject];
+    XCTAssertFalse([MAPExifTools imageHasMapillaryTags:image]);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    XCTAssertFalse([MAPExifTools imageHasMapillaryTags:image]);
+    
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    image = [[self.sequence getImages] lastObject];
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
     XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
