@@ -98,11 +98,17 @@
 locations. Internally, all data is stored in a compliant GPX file which works
 in other programs as well if you decide to export it.</p>
 
-<p>The location of an image is calculated using the date and time the image was
-captured and is interpolated between GPS points in the GPX file.
-processImage
-If you want to export the image and get all the EXIF data added, you need to
-process the image first using <code>-[MAPSequence processImage:]</code>.</p>
+<p>If you provide a location when adding an image, it will be processed directly
+and will have all the necessary EXIF information.</p>
+
+<p>If you don&rsquo;t add a location when adding the image. the location of the image is
+calculated using the date and time the image was captured and is interpolated
+between GPS points in the GPX file.</p>
+
+<p>If you want to export the image and get all the EXIF data added, you need to
+process the image first using <code>-[MAPSequence processImage:]</code>. The location of
+an image is calculated using the date and time the image was captured and is
+interpolated between GPS points in the GPX file.</p>
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     <a href="http://www.topografix.com/gpx.asp">http://www.topografix.com/gpx.asp</a>
@@ -858,7 +864,10 @@ several separate sequences together.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The location the image was captured. Can be nil.</p>
+                                  <p>The location the image was captured. If not nil, the image will
+            be processed here. If nil, the image needs to be processed
+            later using <code>-[MAPSequence processImage:]</code> or
+            <code><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></code>.</p>
                                 </div>
                               </td>
                             </tr>
@@ -937,7 +946,10 @@ several separate sequences together.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The location the image was captured. Can be nil.</p>
+                                  <p>The location the image was captured. If not nil, the image will
+            be processed here. If nil, the image needs to be processed
+            later using <code>-[MAPSequence processImage:]</code> or
+            <code><a href="../Classes/MAPUploadManager.html">MAPUploadManager</a></code>.</p>
                                 </div>
                               </td>
                             </tr>

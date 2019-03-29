@@ -37,14 +37,14 @@
     },
     {
       "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/internal/MAPLoginViewController.h",
-      "line": 13,
+      "line": 14,
       "symbol": "MAPLoginViewControllerDelegate",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/anders/Dropbox/Mapillary/src/sdk/MapillarySDK/MapillarySDK/internal/MAPLoginViewController.h",
-      "line": 18,
+      "line": 19,
       "symbol": "MAPLoginViewController",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.class",
       "warning": "undocumented"

@@ -16,11 +16,17 @@
  locations. Internally, all data is stored in a compliant GPX file which works
  in other programs as well if you decide to export it.
  
- The location of an image is calculated using the date and time the image was
- captured and is interpolated between GPS points in the GPX file.
- processImage
+ If you provide a location when adding an image, it will be processed directly
+ and will have all the necessary EXIF information.
+ 
+ If you don't add a location when adding the image. the location of the image is
+ calculated using the date and time the image was captured and is interpolated
+ between GPS points in the GPX file.
+ 
  If you want to export the image and get all the EXIF data added, you need to
- process the image first using `-[MAPSequence processImage:]`.
+ process the image first using `-[MAPSequence processImage:]`. The location of
+ an image is calculated using the date and time the image was captured and is
+ interpolated between GPS points in the GPX file.
  
  @see http://www.topografix.com/gpx.asp
  @see http://www.topografix.com/gpx/1/1/
@@ -149,7 +155,10 @@
  
  @param imageData The image data of an image.
  @param date The date the image was captured. If `nil` the current date is used.
- @param location The location the image was captured. Can be nil.
+ @param location The location the image was captured. If not nil, the image will
+                 be processed here. If nil, the image needs to be processed
+                 later using `-[MAPSequence processImage:]` or
+                 `MAPUploadManager`.
  */
 - (void)addImageWithData:(NSData*)imageData date:(NSDate*)date location:(MAPLocation*)location;
 
@@ -158,7 +167,10 @@
  
  @param imagePath The file path to the image on disk.
  @param date The date the image was captured. If `nil` the current date is used.
- @param location The location the image was captured. Can be nil.
+ @param location The location the image was captured. If not nil, the image will
+                 be processed here. If nil, the image needs to be processed
+                 later using `-[MAPSequence processImage:]` or
+                 `MAPUploadManager`.
  */
 - (void)addImageWithPath:(NSString*)imagePath date:(NSDate*)date location:(MAPLocation*)location;
 
