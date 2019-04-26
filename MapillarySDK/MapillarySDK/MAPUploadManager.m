@@ -159,22 +159,22 @@
             [task cancel];
         }
         
-    }];
-    
-    [self.uploadSession invalidateAndCancel];
-    self.uploadSession = nil;
-    
-    for (MAPSequence* sequence in self.sequencesToUpload)
-    {
-        [sequence unlock];
-    }
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:status:)])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate uploadStopped:self status:self.status];
-        });
-    }
+        [self.uploadSession invalidateAndCancel];
+        self.uploadSession = nil;
+        
+        for (MAPSequence* sequence in self.sequencesToUpload)
+        {
+            [sequence unlock];
+        }
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:status:)])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate uploadStopped:self status:self.status];
+            });
+        }
+        
+    }];        
 }
 
 - (MAPUploadManagerStatus*)getStatus
