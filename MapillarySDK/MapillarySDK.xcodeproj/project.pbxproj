@@ -80,6 +80,7 @@
 		9AED7A3921AEA9F200BDE544 /* daejeon.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AED7A3821AEA9F100BDE544 /* daejeon.gpx */; };
 		9AF041D0207543070000B704 /* MAPUploadManager+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF041CE207543070000B704 /* MAPUploadManager+Private.h */; };
 		9AF041D1207543070000B704 /* MAPUploadManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF041CF207543070000B704 /* MAPUploadManager+Private.m */; };
+		9F25C3A622A9A03A0048DFD8 /* MAPUploadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7A201B3265001BF118 /* MAPUploadManagerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -221,7 +222,6 @@
 				A717DD7C2CC9B420EE9A965F /* Pods-MapillarySDK.debug.xcconfig */,
 				DB1F322FE8F1EC1E9255D281 /* Pods-MapillarySDK.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -465,6 +465,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 9A88F93A1F4D933F0076C311;
@@ -589,6 +590,7 @@
 				9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */,
 				9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */,
 				9A912D591FE2D19400B6D126 /* MAPLoginManagerTests.m in Sources */,
+				9F25C3A622A9A03A0048DFD8 /* MAPUploadManagerTests.m in Sources */,
 				9A912D5A1FE2D19400B6D126 /* MAPSequenceTests.m in Sources */,
 				9A058026203437BE005A5C8A /* MAPExifToolsTests.m in Sources */,
 				9A7CB8B3204E913C004C7BD1 /* MAPImageTests.m in Sources */,
