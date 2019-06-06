@@ -182,6 +182,11 @@
     return self.status;
 }
 
+- (NSURLSession*)getSession
+{
+    return self.uploadSession;
+}
+
 #pragma mark - internal
 
 - (void)loadState
