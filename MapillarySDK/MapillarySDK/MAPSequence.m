@@ -437,7 +437,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 location = last;
             }
             
-            if (location.magneticHeading == nil || location.trueHeading == nil)
+            if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
             {
                 location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
                 location.trueHeading = location.magneticHeading;
@@ -490,7 +490,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             {
                 location = equal;
                 
-                if (location.magneticHeading == nil || location.trueHeading == nil)
+                if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
                 {
                     if (before)
                     {
@@ -509,6 +509,12 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             else if (before && after)
             {
                 location = [MAPInternalUtils locationBetweenLocationA:before andLocationB:after forDate:date];
+                
+                if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
+                {
+                    location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:after.location.coordinate];
+                    location.trueHeading = location.magneticHeading;
+                }
             }
             
             // Only found one, not possible to interpolate, use the one position we found
