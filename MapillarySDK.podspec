@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name             = 'MapillarySDK'
-  s.version          = '0.8'
+  s.version          = '0.9'
   s.platform         = :ios, '11.0'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.summary          = 'Mapillary is a platform for creating street-level imagery and extract data using computer vision'
