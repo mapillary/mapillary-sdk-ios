@@ -95,41 +95,6 @@
     
     if (image.location.trueHeading != nil && image.location.magneticHeading != nil && image.location.headingAccuracy != nil)
     {
-        CLLocationDirection trueHeading = image.location.trueHeading.doubleValue;
-        CLLocationDirection magneticHeading = image.location.magneticHeading.doubleValue;
-        
-        CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
-        NSDictionary* propertiesDictionary = (NSDictionary *)CFBridgingRelease(properties);
-        NSDictionary* TIFFDictionary = [propertiesDictionary objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
-        
-        if (TIFFDictionary)
-        {
-            NSNumber* tiffOrientation = TIFFDictionary[@"Orientation"];
-            
-            // Correct compass with orientation
-            if (tiffOrientation.intValue == 1)
-            {
-                trueHeading += 90;
-                magneticHeading += 90;
-            }
-            else if (tiffOrientation.intValue == 3)
-            {
-                trueHeading -= 90;
-                magneticHeading -= 90;
-            }
-            else if (tiffOrientation.intValue == 8)
-            {
-                trueHeading += 180;
-                magneticHeading += 180;
-            }
-            
-            trueHeading = fmodf(trueHeading + 360.0f, 360.0f);
-            magneticHeading = fmodf(magneticHeading + 360.0f, 360.0f);
-            
-            image.location.trueHeading = [NSNumber numberWithDouble:trueHeading];
-            image.location.magneticHeading = [NSNumber numberWithDouble:magneticHeading];
-        }
-        
         description[kMAPCompassHeading] = @{kMAPTrueHeading:image.location.trueHeading, kMAPMagneticHeading:image.location.magneticHeading, kMAPAccuracyDegrees:image.location.headingAccuracy};
     }
     
