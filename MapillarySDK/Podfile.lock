@@ -19,6 +19,7 @@ PODS:
     - AWSCore (= 2.9.3)
   - BOSImageResizeOperation (0.1.0)
   - NSHash (1.2.0)
+  - OCMock (3.2.2)
   - PodAsset (0.22.0)
   - SAMKeychain (1.5.3)
   - SDVersion (4.3.2)
@@ -29,6 +30,7 @@ DEPENDENCIES:
   - AWSS3 (~> 2.6)
   - BOSImageResizeOperation (~> 0.1)
   - NSHash (~> 1.2)
+  - OCMock (~> 3.2.2)
   - PodAsset (~> 0.22)
   - SAMKeychain (~> 1.5)
   - SDVersion (~> 4.0)
@@ -40,6 +42,7 @@ SPEC REPOS:
     - AWSS3
     - BOSImageResizeOperation
     - NSHash
+    - OCMock
     - PodAsset
     - SAMKeychain
     - SDVersion
@@ -50,10 +53,11 @@ SPEC CHECKSUMS:
   AWSS3: f016dddb6de858f0cc328d4e10a551299a66a3bb
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   NSHash: 036c03781d372c288d332b512b203e7bb832e46e
+  OCMock: 18c9b7e67d4c2770e95bb77a9cc1ae0c91fe3835
   PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SDVersion: 18f32c835c1543611fcfae3c6accd9a04b90597e
 
-PODFILE CHECKSUM: 6733edee1fe510306011b62afa83b96864ffd4f0
+PODFILE CHECKSUM: 13574a85373385c0f5838b810577a3fdc1f6e62c
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.3

@@ -493,7 +493,7 @@
     
     MAPLocation* b = [[MAPLocation alloc] init];
     b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
-    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(55, 55) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50.1, 50.1) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
     [self.sequence addLocation:b];
     
     MAPLocation* location1 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:0]];
@@ -506,24 +506,24 @@
     MAPLocation* testLoction = nil;
     
     testLoction = location1;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location2;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location3;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location4;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location5;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
 }
 
 - (void)testHeadingWithCompassValues
@@ -966,7 +966,7 @@
     
     {
         MAPLocation* location = [[MAPLocation alloc] init];
-        location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+        location.location = [[CLLocation alloc] initWithLatitude:50.01 longitude:50.01];
         location.trueHeading = [NSNumber numberWithDouble:10.0];
         location.magneticHeading = [NSNumber numberWithDouble:15.0];
         location.timestamp = date4;
@@ -1006,20 +1006,20 @@
     location4 = [self.sequence locationForDate:date4];
     location5 = [self.sequence locationForDate:date5];
     
-    XCTAssertEqual(location1.trueHeading.floatValue, 0.0f);
-    XCTAssertEqual(location1.magneticHeading.floatValue, 0.0f);
+    XCTAssert(location1.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location1.magneticHeading.floatValue-44.091251 < 0.01);
     
-    XCTAssertEqual(location2.trueHeading.floatValue, 0.0f);
-    XCTAssertEqual(location2.magneticHeading.floatValue, 0.0f);
+    XCTAssert(location2.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location2.magneticHeading.floatValue-44.091251 < 0.01);
     
-    XCTAssertEqual(location3.trueHeading.floatValue, 5.0f);
-    XCTAssertEqual(location3.magneticHeading.floatValue, 7.5f);
+    XCTAssert(location3.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location3.magneticHeading.floatValue-44.091251 < 0.01);
     
-    XCTAssertEqual(location4.trueHeading.floatValue, 10.0f);
-    XCTAssertEqual(location4.magneticHeading.floatValue, 15.0f);
+    XCTAssert(location4.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location4.magneticHeading.floatValue-44.091251 < 0.01);
     
-    XCTAssertEqual(location5.trueHeading.floatValue, 10.0f);
-    XCTAssertEqual(location5.magneticHeading.floatValue, 15.0f);
+    XCTAssert(location5.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location5.magneticHeading.floatValue-44.091251 < 0.01);
     
     // Test with positive offset
     self.sequence.directionOffset = @10;

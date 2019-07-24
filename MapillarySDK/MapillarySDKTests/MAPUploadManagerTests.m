@@ -5,6 +5,7 @@
 //  Created by Anders Mårtensson on 2018-01-26.
 //  Copyright © 2018 Mapillary. All rights reserved.
 //
+
 #import <OCMock/OCMock.h>
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"

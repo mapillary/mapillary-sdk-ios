@@ -81,6 +81,7 @@
 		9AF041D0207543070000B704 /* MAPUploadManager+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF041CE207543070000B704 /* MAPUploadManager+Private.h */; };
 		9AF041D1207543070000B704 /* MAPUploadManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF041CF207543070000B704 /* MAPUploadManager+Private.m */; };
 		9F25C3A622A9A03A0048DFD8 /* MAPUploadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7A201B3265001BF118 /* MAPUploadManagerTests.m */; };
+		D73C12D3C3B0B75D0360E8D6 /* libPods-MapillarySDKTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F31F2FF7A2A7B889AD950C /* libPods-MapillarySDKTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		80FE2A968D027A8DD10AE018 /* Pods-MapillarySDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.debug.xcconfig"; path = "Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPInternalUtilsTests.m; sourceTree = "<group>"; };
 		9A058025203437BE005A5C8A /* MAPExifToolsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPExifToolsTests.m; sourceTree = "<group>"; };
 		9A058027203476F7005A5C8A /* test-image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "test-image.jpg"; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		9AF041CF207543070000B704 /* MAPUploadManager+Private.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MAPUploadManager+Private.m"; path = "internal/MAPUploadManager+Private.m"; sourceTree = "<group>"; };
 		9ED23475D98C5FB775B0E021 /* libPods-MapillarySDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapillarySDK.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A717DD7C2CC9B420EE9A965F /* Pods-MapillarySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.debug.xcconfig"; path = "Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.debug.xcconfig"; sourceTree = "<group>"; };
+		B37988D1B2C5ADE0CB73ECB9 /* Pods-MapillarySDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.release.xcconfig"; path = "Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		C1F31F2FF7A2A7B889AD950C /* libPods-MapillarySDKTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapillarySDKTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB1F322FE8F1EC1E9255D281 /* Pods-MapillarySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.release.xcconfig"; path = "Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */,
+				D73C12D3C3B0B75D0360E8D6 /* libPods-MapillarySDKTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +225,8 @@
 			children = (
 				A717DD7C2CC9B420EE9A965F /* Pods-MapillarySDK.debug.xcconfig */,
 				DB1F322FE8F1EC1E9255D281 /* Pods-MapillarySDK.release.xcconfig */,
+				80FE2A968D027A8DD10AE018 /* Pods-MapillarySDKTests.debug.xcconfig */,
+				B37988D1B2C5ADE0CB73ECB9 /* Pods-MapillarySDKTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -425,9 +431,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A88F95B1F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDKTests" */;
 			buildPhases = (
+				9C7F11D29FBE8C330BEC4008 /* [CP] Check Pods Manifest.lock */,
 				9A88F9491F4D933F0076C311 /* Sources */,
 				9A88F94A1F4D933F0076C311 /* Frameworks */,
 				9A88F94B1F4D933F0076C311 /* Resources */,
+				EAAAC938FEC3E21B8C03704A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -524,7 +532,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B06A7C24CAFAB16812B2CAB3 /* [CP] Copy Pods Resources */ = {
+		9C7F11D29FBE8C330BEC4008 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -532,18 +540,54 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MapillarySDKTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B06A7C24CAFAB16812B2CAB3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK-resources.sh",
 				"${PODS_ROOT}/SAMKeychain/Support/SAMKeychain.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SAMKeychain.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EAAAC938FEC3E21B8C03704A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-resources.sh",
+				"${PODS_ROOT}/SAMKeychain/Support/SAMKeychain.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SAMKeychain.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -819,6 +863,7 @@
 		};
 		9A88F95C1F4D933F0076C311 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 80FE2A968D027A8DD10AE018 /* Pods-MapillarySDKTests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = K7QW859D7N;
 				INFOPLIST_FILE = MapillarySDKTests/Info.plist;
@@ -830,6 +875,7 @@
 		};
 		9A88F95D1F4D933F0076C311 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B37988D1B2C5ADE0CB73ECB9 /* Pods-MapillarySDKTests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = K7QW859D7N;
 				INFOPLIST_FILE = MapillarySDKTests/Info.plist;
