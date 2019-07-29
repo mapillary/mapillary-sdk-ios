@@ -642,8 +642,6 @@
 
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    [self cleanUp];
-    
     /* TODO: Is this really needed?
      dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -661,7 +659,9 @@
         });
     }
     
-     self.status.uploading = NO;
+    self.status.uploading = NO;
+    
+    [self cleanUp];
     
     NSLog(@"All tasks are finished");
 }
@@ -722,8 +722,6 @@
     
     if (self.status.imagesUploaded+self.status.imagesFailed == self.status.imageCount)
     {
-        [self cleanUp];
-        
         if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -735,6 +733,8 @@
         self.speedTimer = nil;
         
         self.status.uploading = NO;
+        
+        [self cleanUp];
     }
     else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)
     {
