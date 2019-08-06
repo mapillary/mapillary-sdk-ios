@@ -691,37 +691,35 @@
     NSNumber* trueHeading = nil;
     NSDictionary* heading = nil;
     
-    // +90 here because the photo is in lanscape
-    
-    correctHeading = 0+90;
+    correctHeading = 0;
     heading = [self getCompassHeadingFromImage:images[0]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 0+90;
+    correctHeading = 0;
     heading = [self getCompassHeadingFromImage:images[1]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 90+90;
+    correctHeading = 90;
     heading = [self getCompassHeadingFromImage:images[2]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 180+90;
+    correctHeading = 180;
     heading = [self getCompassHeadingFromImage:images[3]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 0; // 270+90 = 360 = 0
+    correctHeading = 270; // 270+90 = 360 = 0
     heading = [self getCompassHeadingFromImage:images[4]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];

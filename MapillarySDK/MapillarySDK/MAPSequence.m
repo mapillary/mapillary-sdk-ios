@@ -441,6 +441,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             {
                 location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
                 location.trueHeading = location.magneticHeading;
+                location.headingAccuracy = @0;
             }
         }
         
@@ -492,15 +493,17 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 
                 if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
                 {
-                    if (before)
-                    {
-                        location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:equal.location.coordinate];
-                        location.trueHeading = location.magneticHeading;
-                    }
-                    else if (after)
+                    if (after)
                     {
                         location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:equal.location.coordinate B:after.location.coordinate];
                         location.trueHeading = location.magneticHeading;
+                        location.headingAccuracy = @0;
+                    }                    
+                    else if (before)
+                    {
+                        location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:equal.location.coordinate];
+                        location.trueHeading = location.magneticHeading;
+                        location.headingAccuracy = @0;
                     }
                 }
             }
@@ -514,6 +517,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 {
                     location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:after.location.coordinate];
                     location.trueHeading = location.magneticHeading;
+                    location.headingAccuracy = @0;
                 }
             }
             

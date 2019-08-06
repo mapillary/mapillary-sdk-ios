@@ -227,6 +227,7 @@
     {
         result.magneticHeading = [self calculateHeadingFromCoordA:locationA.location.coordinate B:locationB.location.coordinate];
         result.trueHeading = result.magneticHeading;
+        result.headingAccuracy = @0;
     }
     
     return result;
