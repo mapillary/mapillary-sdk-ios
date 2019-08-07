@@ -174,7 +174,7 @@
     for (int i = 0; i < nbrPositions; i++)
     {
         MAPLocation* location = [[MAPLocation alloc] init];
-        location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+        location.location = [[CLLocation alloc] initWithLatitude:50+i*0.001 longitude:50+i*0.001];
         [self.sequence addLocation:location];
     }
     
@@ -341,7 +341,7 @@
         
         [weakSelf.sequence getLocationsAsync:^(NSArray *array) {
             
-            XCTAssert(array.count == 206);
+            XCTAssert(array.count == 205);
             [expectation fulfill];
             
         }];
@@ -1113,6 +1113,96 @@
         
         [expectation fulfill];
     
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddDuplicatesSameCoordinate
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Sequence should not contain duplicates"];
+    
+    MAPLocation* l1 = [[MAPLocation alloc] init];
+    MAPLocation* l2 = [[MAPLocation alloc] init];
+    l1.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    l2.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    
+    [self.sequence addLocation:l1];
+    [self.sequence addLocation:l2];
+    
+    [self.sequence getLocationsAsync:^(NSArray *locations) {
+        
+        XCTAssertEqual(locations.count, 1);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddDuplicatesAlmostSameCoordinate
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Sequence should not contain duplicates"];
+    
+    MAPLocation* l1 = [[MAPLocation alloc] init];
+    MAPLocation* l2 = [[MAPLocation alloc] init];
+    l1.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    l2.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50.000001, 50.000001) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]]; // < 10 cm
+    
+    [self.sequence addLocation:l1];
+    [self.sequence addLocation:l2];
+    
+    [self.sequence getLocationsAsync:^(NSArray *locations) {
+        
+        XCTAssertEqual(locations.count, 1);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddDuplicatesSameCourse
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Sequence should not contain duplicates"];
+    
+    MAPLocation* l1 = [[MAPLocation alloc] init];
+    MAPLocation* l2 = [[MAPLocation alloc] init];
+    l1.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    l2.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:30 course:0 speed:10 timestamp:[NSDate date]];
+    
+    [self.sequence addLocation:l1];
+    [self.sequence addLocation:l2];
+    
+    [self.sequence getLocationsAsync:^(NSArray *locations) {
+        
+        XCTAssertEqual(locations.count, 1);
+        
+        [expectation fulfill];
+        
     }];
     
     // Wait for test to finish

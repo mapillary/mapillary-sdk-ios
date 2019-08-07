@@ -210,11 +210,22 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)addLocation:(MAPLocation*)location
 {
+    // Sanity check that coordinate is valid
     if (location &&
         CLLocationCoordinate2DIsValid(location.location.coordinate) &&
         fabs(location.location.coordinate.latitude) > DBL_EPSILON &&
         fabs(location.location.coordinate.longitude) > DBL_EPSILON)
     {
+        
+        // Skip duplicates. It would be too slow to check all coordinates so here we just compare to the previous coordinate
+        if (self.currentLocation &&
+            fabs(self.currentLocation.location.coordinate.latitude-location.location.coordinate.latitude) < 0.000001 && // > 10 cm
+            fabs(self.currentLocation.location.coordinate.longitude-location.location.coordinate.longitude) < 0.000001 && // > 10 cm
+            fabs(self.currentLocation.location.course-location.location.course) < 1) // 1 deg
+        {
+            return;
+        }
+        
         if (self.device.isExternal)
         {
             [[MAPDataManager sharedManager] addLocation:location sequence:self];
