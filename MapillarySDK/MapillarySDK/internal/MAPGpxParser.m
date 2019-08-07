@@ -80,7 +80,7 @@
             self.private = @NO;
             self.sequenceUUID = [[NSUUID UUID] UUIDString];
             self.timeOffset = nil;
-            self.directionOffset = @-1;
+            self.directionOffset = nil;
             self.sequenceDate = [NSDate date];
             self.rigUUID = [[NSUUID UUID] UUIDString];
             self.rigSequenceUUID = [[NSUUID UUID] UUIDString];

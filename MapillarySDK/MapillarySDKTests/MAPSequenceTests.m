@@ -11,6 +11,7 @@
 #import "MAPInternalUtils.h"
 #import "MAPSequence+Private.h"
 #import "MAPDefines.h"
+#import "MAPExifTools.h"
 
 @interface MAPSequenceTests : XCTestCase <MAPUploadManagerDelegate>
 
@@ -102,6 +103,26 @@
     // There should now be nbrImages images
     images = [self.sequence getImages];
     XCTAssert(images.count == nbrImages);
+    
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Number of images should be the same as number of images added"];
+    
+    [self.sequence getImagesAsync:^(NSArray *images) {
+        
+        XCTAssertEqual(images.count, nbrImages);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+        
+    }];
 }
 
 - (void)testAddImagesFromFile
@@ -120,6 +141,26 @@
     // There should now be nbrImages images
     XCTAssert([self.sequence getImages].count == nbrImages);
     
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Number of images should be the same as number of images added"];        
+    
+    [self.sequence getImagesAsync:^(NSArray *images) {
+        
+        XCTAssertEqual(images.count, nbrImages);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+        
+    }];
+    
     // Cleanup
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
@@ -133,7 +174,7 @@
     for (int i = 0; i < nbrPositions; i++)
     {
         MAPLocation* location = [[MAPLocation alloc] init];
-        location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+        location.location = [[CLLocation alloc] initWithLatitude:50+i*0.001 longitude:50+i*0.001];
         [self.sequence addLocation:location];
     }
     
@@ -300,7 +341,7 @@
         
         [weakSelf.sequence getLocationsAsync:^(NSArray *array) {
             
-            XCTAssert(array.count == 206);
+            XCTAssert(array.count == 205);
             [expectation fulfill];
             
         }];
@@ -416,6 +457,33 @@
     XCTAssertEqual(images.count, 0);
 }
 
+- (void)testDeleteAllImages
+{
+    // There should be no images
+    NSArray* images = [self.sequence getImages];
+    XCTAssertNotNil(images);
+    XCTAssert(images.count == 0);
+    
+    // Add test data
+    NSData* imageData = [self createImageData];
+    int nbrImages = arc4random()%100;
+    for (int i = 0; i < nbrImages; i++)
+    {
+        [self.sequence addImageWithData:imageData date:nil location:nil];
+    }
+    
+    // There should now be nbrImages images
+    images = [self.sequence getImages];
+    XCTAssert(images.count == nbrImages);
+    
+    // Delete all images
+    [self.sequence deleteAllImages];
+    
+    // There should be no images
+    images = [self.sequence getImages];
+    XCTAssert(images.count == 0);
+}
+
 - (void)testHeadingWithoutCompassValues
 {
     MAPLocation* a = [[MAPLocation alloc] init];
@@ -425,7 +493,7 @@
     
     MAPLocation* b = [[MAPLocation alloc] init];
     b.timestamp = [NSDate dateWithTimeIntervalSince1970:750];
-    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(55, 55) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
+    b.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50.1, 50.1) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:b.timestamp];
     [self.sequence addLocation:b];
     
     MAPLocation* location1 = [self.sequence locationForDate:[NSDate dateWithTimeIntervalSince1970:0]];
@@ -438,24 +506,24 @@
     MAPLocation* testLoction = nil;
     
     testLoction = location1;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location2;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location3;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location4;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
     
     testLoction = location5;
-    XCTAssert([testLoction.magneticHeading isEqualToNumber:correctHeading]);
-    XCTAssert([testLoction.trueHeading isEqualToNumber:correctHeading]);
+    XCTAssert(testLoction.magneticHeading.doubleValue-correctHeading.doubleValue < 0.01);
+    XCTAssert(testLoction.trueHeading.doubleValue-correctHeading.doubleValue < 0.01);
 }
 
 - (void)testHeadingWithCompassValues
@@ -623,35 +691,35 @@
     NSNumber* trueHeading = nil;
     NSDictionary* heading = nil;
     
-    correctHeading = 90;
+    correctHeading = 0;
     heading = [self getCompassHeadingFromImage:images[0]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 180;
+    correctHeading = 0;
     heading = [self getCompassHeadingFromImage:images[1]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 180;
+    correctHeading = 90;
     heading = [self getCompassHeadingFromImage:images[2]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = 270;
+    correctHeading = 180;
     heading = [self getCompassHeadingFromImage:images[3]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
     XCTAssert(magneticHeading.intValue == correctHeading);
     XCTAssert(trueHeading.intValue == correctHeading);
     
-    correctHeading = (270+90) % 360;
+    correctHeading = 270; // 270+90 = 360 = 0
     heading = [self getCompassHeadingFromImage:images[4]];
     magneticHeading = heading[kMAPMagneticHeading];
     trueHeading = heading[kMAPTrueHeading];
@@ -666,9 +734,9 @@
 
 - (void)testNullIsland
 {
-    XCTestExpectation* expectation = [self expectationWithDescription:@"Testong for Null Island"];
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Testing for Null Island"];
     
-    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"daejeon" ofType:@"gpx"];
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mapbox-test" ofType:@"gpx"];
     
     __weak MAPSequenceTests* weakSelf = self;
     
@@ -700,7 +768,7 @@
             
             // Test interpolation
             
-            double samples = 9876;
+            double samples = arc4random()%1000;
             NSTimeInterval interval = (last.timestamp.timeIntervalSince1970-first.timestamp.timeIntervalSince1970)/samples;
             
             for (int i = 0; i < samples; i++)
@@ -723,6 +791,417 @@
             [expectation fulfill];
             
         }];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testImageProcessing
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:MAPILLARY_CURRENT_USER_KEY];
+    
+    NSData* imageData = [self createImageData];
+    MAPLocation* location = [[MAPLocation alloc] init];
+    location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    
+    MAPImage* image = [[self.sequence getImages] firstObject];
+    
+    XCTAssertFalse([MAPExifTools imageHasMapillaryTags:image]);
+    
+    [self.sequence processImage:image forceReprocessing:YES];
+
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+}
+
+- (void)testTimeOffset
+{
+    NSDate* date1 = [NSDate dateWithTimeIntervalSince1970:0];
+    NSDate* date2 = [NSDate dateWithTimeIntervalSince1970:250];
+    NSDate* date3 = [NSDate dateWithTimeIntervalSince1970:500];
+    NSDate* date4 = [NSDate dateWithTimeIntervalSince1970:750];
+    NSDate* date5 = [NSDate dateWithTimeIntervalSince1970:1000];
+    
+    {
+        MAPLocation* location = [[MAPLocation alloc] init];
+        location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+        location.timestamp = date2;
+        [self.sequence addLocation:location];
+    }
+    
+    {
+        MAPLocation* location = [[MAPLocation alloc] init];
+        location.location = [[CLLocation alloc] initWithLatitude:55 longitude:55];
+        location.timestamp = date4;
+        [self.sequence addLocation:location];
+    }
+    
+    // Test with no offset
+    self.sequence.timeOffset = nil;
+    
+    MAPLocation* location1 = [self.sequence locationForDate:date1];
+    MAPLocation* location2 = [self.sequence locationForDate:date2];
+    MAPLocation* location3 = [self.sequence locationForDate:date3];
+    MAPLocation* location4 = [self.sequence locationForDate:date4];
+    MAPLocation* location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.location.coordinate.latitude, 50);
+    XCTAssertEqual(location1.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location2.location.coordinate.latitude, 50);
+    XCTAssertEqual(location2.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location3.location.coordinate.latitude, 52.5);
+    XCTAssertEqual(location3.location.coordinate.longitude, 52.5);
+    
+    XCTAssertEqual(location4.location.coordinate.latitude, 55);
+    XCTAssertEqual(location4.location.coordinate.longitude, 55);
+    
+    XCTAssertEqual(location5.location.coordinate.latitude, 55);
+    XCTAssertEqual(location5.location.coordinate.longitude, 55);
+    
+    // Test with 0 offset
+    self.sequence.timeOffset = @0;
+        
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.location.coordinate.latitude, 50);
+    XCTAssertEqual(location1.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location2.location.coordinate.latitude, 50);
+    XCTAssertEqual(location2.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location3.location.coordinate.latitude, 52.5);
+    XCTAssertEqual(location3.location.coordinate.longitude, 52.5);
+    
+    XCTAssertEqual(location4.location.coordinate.latitude, 55);
+    XCTAssertEqual(location4.location.coordinate.longitude, 55);
+    
+    XCTAssertEqual(location5.location.coordinate.latitude, 55);
+    XCTAssertEqual(location5.location.coordinate.longitude, 55);
+        
+    // Test with positive offset
+    self.sequence.timeOffset = @250;
+    
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.location.coordinate.latitude, 50);
+    XCTAssertEqual(location1.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location2.location.coordinate.latitude, 52.5);
+    XCTAssertEqual(location2.location.coordinate.longitude, 52.5);
+    
+    XCTAssertEqual(location3.location.coordinate.latitude, 55);
+    XCTAssertEqual(location3.location.coordinate.longitude, 55);
+    
+    XCTAssertEqual(location4.location.coordinate.latitude, 55);
+    XCTAssertEqual(location4.location.coordinate.longitude, 55);
+    
+    XCTAssertEqual(location5.location.coordinate.latitude, 55);
+    XCTAssertEqual(location5.location.coordinate.longitude, 55);
+    
+    
+    // Test with negative offset
+    self.sequence.timeOffset = [NSNumber numberWithInt:-250];
+    
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.location.coordinate.latitude, 50);
+    XCTAssertEqual(location1.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location2.location.coordinate.latitude, 50);
+    XCTAssertEqual(location2.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location3.location.coordinate.latitude, 50);
+    XCTAssertEqual(location3.location.coordinate.longitude, 50);
+    
+    XCTAssertEqual(location4.location.coordinate.latitude, 52.5);
+    XCTAssertEqual(location4.location.coordinate.longitude, 52.5);
+    
+    XCTAssertEqual(location5.location.coordinate.latitude, 55);
+    XCTAssertEqual(location5.location.coordinate.longitude, 55);
+}
+
+- (void)testDirectionOffset
+{
+    NSDate* date1 = [NSDate dateWithTimeIntervalSince1970:0];
+    NSDate* date2 = [NSDate dateWithTimeIntervalSince1970:250];
+    NSDate* date3 = [NSDate dateWithTimeIntervalSince1970:500];
+    NSDate* date4 = [NSDate dateWithTimeIntervalSince1970:750];
+    NSDate* date5 = [NSDate dateWithTimeIntervalSince1970:1000];
+    
+    {
+        MAPLocation* location = [[MAPLocation alloc] init];
+        location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+        location.trueHeading = [NSNumber numberWithDouble:0.0];
+        location.magneticHeading = [NSNumber numberWithDouble:0.0];
+        location.timestamp = date2;
+        [self.sequence addLocation:location];
+    }
+    
+    {
+        MAPLocation* location = [[MAPLocation alloc] init];
+        location.location = [[CLLocation alloc] initWithLatitude:50.01 longitude:50.01];
+        location.trueHeading = [NSNumber numberWithDouble:10.0];
+        location.magneticHeading = [NSNumber numberWithDouble:15.0];
+        location.timestamp = date4;
+        [self.sequence addLocation:location];
+    }
+    
+    // Test with no offset
+    self.sequence.directionOffset = nil;
+    
+    MAPLocation* location1 = [self.sequence locationForDate:date1];
+    MAPLocation* location2 = [self.sequence locationForDate:date2];
+    MAPLocation* location3 = [self.sequence locationForDate:date3];
+    MAPLocation* location4 = [self.sequence locationForDate:date4];
+    MAPLocation* location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.trueHeading.floatValue, 0.0f);
+    XCTAssertEqual(location1.magneticHeading.floatValue, 0.0f);
+    
+    XCTAssertEqual(location2.trueHeading.floatValue, 0.0f);
+    XCTAssertEqual(location2.magneticHeading.floatValue, 0.0f);
+    
+    XCTAssertEqual(location3.trueHeading.floatValue, 5.0f);
+    XCTAssertEqual(location3.magneticHeading.floatValue, 7.5f);
+    
+    XCTAssertEqual(location4.trueHeading.intValue, 10.0f);
+    XCTAssertEqual(location4.magneticHeading.intValue, 15.0f);
+    
+    XCTAssertEqual(location5.trueHeading.floatValue, 10.0f);
+    XCTAssertEqual(location5.magneticHeading.floatValue, 15.0f);
+    
+    // Test with 0 offset
+    self.sequence.directionOffset = @0;
+    
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssert(location1.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location1.magneticHeading.floatValue-44.091251 < 0.01);
+    
+    XCTAssert(location2.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location2.magneticHeading.floatValue-44.091251 < 0.01);
+    
+    XCTAssert(location3.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location3.magneticHeading.floatValue-44.091251 < 0.01);
+    
+    XCTAssert(location4.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location4.magneticHeading.floatValue-44.091251 < 0.01);
+    
+    XCTAssert(location5.trueHeading.floatValue-44.091251 < 0.01);
+    XCTAssert(location5.magneticHeading.floatValue-44.091251 < 0.01);
+    
+    // Test with positive offset
+    self.sequence.directionOffset = @10;
+    
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.trueHeading.floatValue, 10.0f);
+    XCTAssertEqual(location1.magneticHeading.floatValue, 10.0f);
+    
+    XCTAssertEqual(location2.trueHeading.floatValue, 10.0f);
+    XCTAssertEqual(location2.magneticHeading.floatValue, 10.0f);
+    
+    XCTAssertEqual(location3.trueHeading.floatValue, 15.0f);
+    XCTAssertEqual(location3.magneticHeading.floatValue, 17.5f);
+    
+    XCTAssertEqual(location4.trueHeading.floatValue, 20.0f);
+    XCTAssertEqual(location4.magneticHeading.floatValue, 25.0f);
+    
+    XCTAssertEqual(location5.trueHeading.floatValue, 20.0f);
+    XCTAssertEqual(location5.magneticHeading.floatValue, 25.0f);
+    
+    
+    // Test with negative offset
+    self.sequence.directionOffset = @-10;
+    
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.trueHeading.floatValue, 350.0f);
+    XCTAssertEqual(location1.magneticHeading.floatValue, 350.0f);
+    
+    XCTAssertEqual(location2.trueHeading.floatValue, 350.0f);
+    XCTAssertEqual(location2.magneticHeading.floatValue, 350.0f);
+    
+    XCTAssertEqual(location3.trueHeading.floatValue, 355.0f);
+    XCTAssertEqual(location3.magneticHeading.floatValue, 357.5f);
+    
+    XCTAssertEqual(location4.trueHeading.floatValue, 0.0f);
+    XCTAssertEqual(location4.magneticHeading.floatValue, 5.0f);
+    
+    XCTAssertEqual(location5.trueHeading.floatValue, 0.0f);
+    XCTAssertEqual(location5.magneticHeading.floatValue, 5.0f);
+    
+    // Test with big direction offset
+    self.sequence.directionOffset = @540; // 360+180
+    
+    location1 = [self.sequence locationForDate:date1];
+    location2 = [self.sequence locationForDate:date2];
+    location3 = [self.sequence locationForDate:date3];
+    location4 = [self.sequence locationForDate:date4];
+    location5 = [self.sequence locationForDate:date5];
+    
+    XCTAssertEqual(location1.trueHeading.floatValue, 180.0f);
+    XCTAssertEqual(location1.magneticHeading.floatValue, 180.0f);
+    
+    XCTAssertEqual(location2.trueHeading.floatValue, 180.0f);
+    XCTAssertEqual(location2.magneticHeading.floatValue, 180.0f);
+    
+    XCTAssertEqual(location3.trueHeading.floatValue, 185.0f);
+    XCTAssertEqual(location3.magneticHeading.floatValue, 187.5f);
+    
+    XCTAssertEqual(location4.trueHeading.floatValue, 190.0f);
+    XCTAssertEqual(location4.magneticHeading.floatValue, 195.0f);
+    
+    XCTAssertEqual(location5.trueHeading.floatValue, 190.0f);
+    XCTAssertEqual(location5.magneticHeading.floatValue, 195.0f);
+}
+
+- (void)testSavePropertyChanges
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Changed properties should be saved"];
+    
+    self.sequence.directionOffset = @45;
+    self.sequence.sequenceDate = [NSDate dateWithTimeIntervalSince1970:1000];
+    
+    [self.sequence savePropertyChanges:^{
+        
+        NSString* path = self.sequence.path;
+        
+        MAPSequence* sequence2 = [[MAPSequence alloc] initWithPath:path parseGpx:YES];
+        
+        XCTAssertEqual(sequence2.directionOffset.intValue, 45);
+        XCTAssertEqual(sequence2.sequenceDate.timeIntervalSince1970, 1000);
+        
+        [MAPFileManager deleteSequence:sequence2];
+        
+        [expectation fulfill];
+    
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddDuplicatesSameCoordinate
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Sequence should not contain duplicates"];
+    
+    MAPLocation* l1 = [[MAPLocation alloc] init];
+    MAPLocation* l2 = [[MAPLocation alloc] init];
+    l1.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    l2.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    
+    [self.sequence addLocation:l1];
+    [self.sequence addLocation:l2];
+    
+    [self.sequence getLocationsAsync:^(NSArray *locations) {
+        
+        XCTAssertEqual(locations.count, 1);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddDuplicatesAlmostSameCoordinate
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Sequence should not contain duplicates"];
+    
+    MAPLocation* l1 = [[MAPLocation alloc] init];
+    MAPLocation* l2 = [[MAPLocation alloc] init];
+    l1.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    l2.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50.000001, 50.000001) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]]; // < 10 cm
+    
+    [self.sequence addLocation:l1];
+    [self.sequence addLocation:l2];
+    
+    [self.sequence getLocationsAsync:^(NSArray *locations) {
+        
+        XCTAssertEqual(locations.count, 1);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    // Wait for test to finish
+    [self waitForExpectationsWithTimeout:120 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+        }
+    }];
+}
+
+- (void)testAddDuplicatesSameCourse
+{
+    XCTestExpectation* expectation = [self expectationWithDescription:@"Sequence should not contain duplicates"];
+    
+    MAPLocation* l1 = [[MAPLocation alloc] init];
+    MAPLocation* l2 = [[MAPLocation alloc] init];
+    l1.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:10 timestamp:[NSDate date]];
+    l2.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50, 50) altitude:50 horizontalAccuracy:0 verticalAccuracy:30 course:0 speed:10 timestamp:[NSDate date]];
+    
+    [self.sequence addLocation:l1];
+    [self.sequence addLocation:l2];
+    
+    [self.sequence getLocationsAsync:^(NSArray *locations) {
+        
+        XCTAssertEqual(locations.count, 1);
+        
+        [expectation fulfill];
         
     }];
     

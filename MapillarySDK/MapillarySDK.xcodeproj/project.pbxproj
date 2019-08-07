@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6CDC3BD4B978C0A068AA3413 /* Pods_MapillarySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D616FE5A05E8689665298669 /* Pods_MapillarySDK.framework */; };
-		957A69DD792B51DCC2E54620 /* Pods_MapillarySDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4A5130B71703379EB1B36C0 /* Pods_MapillarySDKTests.framework */; };
+		44D9509C7AF97B6428856197 /* libPods-MapillarySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED23475D98C5FB775B0E021 /* libPods-MapillarySDK.a */; };
 		9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */; };
 		9A058026203437BE005A5C8A /* MAPExifToolsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A058025203437BE005A5C8A /* MAPExifToolsTests.m */; };
 		9A058028203476F8005A5C8A /* test-image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9A058027203476F7005A5C8A /* test-image.jpg */; };
@@ -81,6 +80,8 @@
 		9AED7A3921AEA9F200BDE544 /* daejeon.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 9AED7A3821AEA9F100BDE544 /* daejeon.gpx */; };
 		9AF041D0207543070000B704 /* MAPUploadManager+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF041CE207543070000B704 /* MAPUploadManager+Private.h */; };
 		9AF041D1207543070000B704 /* MAPUploadManager+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF041CF207543070000B704 /* MAPUploadManager+Private.m */; };
+		9F25C3A622A9A03A0048DFD8 /* MAPUploadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A420B7A201B3265001BF118 /* MAPUploadManagerTests.m */; };
+		D73C12D3C3B0B75D0360E8D6 /* libPods-MapillarySDKTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F31F2FF7A2A7B889AD950C /* libPods-MapillarySDKTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,8 +95,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.debug.xcconfig"; sourceTree = "<group>"; };
-		9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.release.xcconfig"; sourceTree = "<group>"; };
+		80FE2A968D027A8DD10AE018 /* Pods-MapillarySDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.debug.xcconfig"; path = "Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9A0580232034375F005A5C8A /* MAPInternalUtilsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPInternalUtilsTests.m; sourceTree = "<group>"; };
 		9A058025203437BE005A5C8A /* MAPExifToolsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPExifToolsTests.m; sourceTree = "<group>"; };
 		9A058027203476F7005A5C8A /* test-image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "test-image.jpg"; sourceTree = "<group>"; };
@@ -179,10 +179,11 @@
 		9AED7A3821AEA9F100BDE544 /* daejeon.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = daejeon.gpx; sourceTree = "<group>"; };
 		9AF041CE207543070000B704 /* MAPUploadManager+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MAPUploadManager+Private.h"; path = "internal/MAPUploadManager+Private.h"; sourceTree = "<group>"; };
 		9AF041CF207543070000B704 /* MAPUploadManager+Private.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MAPUploadManager+Private.m"; path = "internal/MAPUploadManager+Private.m"; sourceTree = "<group>"; };
-		AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.release.xcconfig"; sourceTree = "<group>"; };
-		B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.debug.xcconfig"; sourceTree = "<group>"; };
-		C4A5130B71703379EB1B36C0 /* Pods_MapillarySDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapillarySDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D616FE5A05E8689665298669 /* Pods_MapillarySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapillarySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ED23475D98C5FB775B0E021 /* libPods-MapillarySDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapillarySDK.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A717DD7C2CC9B420EE9A965F /* Pods-MapillarySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.debug.xcconfig"; path = "Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.debug.xcconfig"; sourceTree = "<group>"; };
+		B37988D1B2C5ADE0CB73ECB9 /* Pods-MapillarySDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDKTests.release.xcconfig"; path = "Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests.release.xcconfig"; sourceTree = "<group>"; };
+		C1F31F2FF7A2A7B889AD950C /* libPods-MapillarySDKTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapillarySDKTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1F322FE8F1EC1E9255D281 /* Pods-MapillarySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapillarySDK.release.xcconfig"; path = "Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,7 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CDC3BD4B978C0A068AA3413 /* Pods_MapillarySDK.framework in Frameworks */,
+				44D9509C7AF97B6428856197 /* libPods-MapillarySDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A88F94E1F4D933F0076C311 /* MapillarySDK.framework in Frameworks */,
-				957A69DD792B51DCC2E54620 /* Pods_MapillarySDKTests.framework in Frameworks */,
+				D73C12D3C3B0B75D0360E8D6 /* libPods-MapillarySDKTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,10 +214,21 @@
 				9AE7623A1F94E4B7003EC3E9 /* libOCHamcrest.a */,
 				9AE762381F94E482003EC3E9 /* libOCHamcrest.a */,
 				9AE762361F94E47B003EC3E9 /* libOCMockito.a */,
-				D616FE5A05E8689665298669 /* Pods_MapillarySDK.framework */,
-				C4A5130B71703379EB1B36C0 /* Pods_MapillarySDKTests.framework */,
+				9ED23475D98C5FB775B0E021 /* libPods-MapillarySDK.a */,
+				C1F31F2FF7A2A7B889AD950C /* libPods-MapillarySDKTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3EE07DC4D93D27C7DECD1D00 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A717DD7C2CC9B420EE9A965F /* Pods-MapillarySDK.debug.xcconfig */,
+				DB1F322FE8F1EC1E9255D281 /* Pods-MapillarySDK.release.xcconfig */,
+				80FE2A968D027A8DD10AE018 /* Pods-MapillarySDKTests.debug.xcconfig */,
+				B37988D1B2C5ADE0CB73ECB9 /* Pods-MapillarySDKTests.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		9A88F93A1F4D933F0076C311 = {
@@ -225,9 +237,9 @@
 				9A88F9461F4D933F0076C311 /* MapillarySDK */,
 				9A88F9511F4D933F0076C311 /* MapillarySDKTests */,
 				9A88F9451F4D933F0076C311 /* Products */,
-				C154E3531FA59E311CF0FE63 /* Pods */,
 				15E690A7296FD5CBD0E66C92 /* Frameworks */,
 				9A912D461FE2CF8100B6D126 /* Recovered References */,
+				3EE07DC4D93D27C7DECD1D00 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -354,17 +366,6 @@
 			path = "test-files";
 			sourceTree = "<group>";
 		};
-		C154E3531FA59E311CF0FE63 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */,
-				9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */,
-				22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */,
-				AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -410,11 +411,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A88F9581F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDK" */;
 			buildPhases = (
-				F92E7559CAE76386D150D3CE /* [CP] Check Pods Manifest.lock */,
+				2E418043C1BC9826387100B8 /* [CP] Check Pods Manifest.lock */,
 				9A88F93F1F4D933F0076C311 /* Sources */,
 				9A88F9401F4D933F0076C311 /* Frameworks */,
 				9A88F9411F4D933F0076C311 /* Headers */,
 				9A88F9421F4D933F0076C311 /* Resources */,
+				B06A7C24CAFAB16812B2CAB3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -429,11 +431,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A88F95B1F4D933F0076C311 /* Build configuration list for PBXNativeTarget "MapillarySDKTests" */;
 			buildPhases = (
-				9A2E2D7F5BDC772E624E75FD /* [CP] Check Pods Manifest.lock */,
+				9C7F11D29FBE8C330BEC4008 /* [CP] Check Pods Manifest.lock */,
 				9A88F9491F4D933F0076C311 /* Sources */,
 				9A88F94A1F4D933F0076C311 /* Frameworks */,
 				9A88F94B1F4D933F0076C311 /* Resources */,
-				E3E70687E600D17D5BFF4278 /* [CP] Embed Pods Frameworks */,
+				EAAAC938FEC3E21B8C03704A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -471,6 +473,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 9A88F93A1F4D933F0076C311;
@@ -507,16 +510,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9A2E2D7F5BDC772E624E75FD /* [CP] Check Pods Manifest.lock */ = {
+		2E418043C1BC9826387100B8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MapillarySDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C7F11D29FBE8C330BEC4008 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-MapillarySDKTests-checkManifestLockResult.txt",
 			);
@@ -525,58 +554,40 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E3E70687E600D17D5BFF4278 /* [CP] Embed Pods Frameworks */ = {
+		B06A7C24CAFAB16812B2CAB3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/OCHamcrest/OCHamcrest.framework",
-				"${BUILT_PRODUCTS_DIR}/OCMockito/OCMockito.framework",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
-				"${BUILT_PRODUCTS_DIR}/AWSS3/AWSS3.framework",
-				"${BUILT_PRODUCTS_DIR}/BOSImageResizeOperation/BOSImageResizeOperation.framework",
-				"${BUILT_PRODUCTS_DIR}/NSHash/NSHash.framework",
-				"${BUILT_PRODUCTS_DIR}/PodAsset/PodAsset.framework",
-				"${BUILT_PRODUCTS_DIR}/SAMKeychain/SAMKeychain.framework",
-				"${BUILT_PRODUCTS_DIR}/SDVersion/SDVersion.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK-resources.sh",
+				"${PODS_ROOT}/SAMKeychain/Support/SAMKeychain.bundle",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCHamcrest.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMockito.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSS3.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BOSImageResizeOperation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSHash.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PodAsset.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SAMKeychain.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDVersion.framework",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SAMKeychain.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MapillarySDK/Pods-MapillarySDK-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F92E7559CAE76386D150D3CE /* [CP] Check Pods Manifest.lock */ = {
+		EAAAC938FEC3E21B8C03704A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"${PODS_ROOT}/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-resources.sh",
+				"${PODS_ROOT}/SAMKeychain/Support/SAMKeychain.bundle",
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MapillarySDK-checkManifestLockResult.txt",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SAMKeychain.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MapillarySDKTests/Pods-MapillarySDKTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -623,6 +634,7 @@
 				9A7CB8B1204E8F11004C7BD1 /* MAPUserTests.m in Sources */,
 				9A0580242034375F005A5C8A /* MAPInternalUtilsTests.m in Sources */,
 				9A912D591FE2D19400B6D126 /* MAPLoginManagerTests.m in Sources */,
+				9F25C3A622A9A03A0048DFD8 /* MAPUploadManagerTests.m in Sources */,
 				9A912D5A1FE2D19400B6D126 /* MAPSequenceTests.m in Sources */,
 				9A058026203437BE005A5C8A /* MAPExifToolsTests.m in Sources */,
 				9A7CB8B3204E913C004C7BD1 /* MAPImageTests.m in Sources */,
@@ -765,7 +777,7 @@
 		};
 		9A88F9591F4D933F0076C311 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B28D729845064077865D7260 /* Pods-MapillarySDK.debug.xcconfig */;
+			baseConfigurationReference = A717DD7C2CC9B420EE9A965F /* Pods-MapillarySDK.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
@@ -808,7 +820,7 @@
 		};
 		9A88F95A1F4D933F0076C311 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9118836B0FBEFF1B1CFFD71D /* Pods-MapillarySDK.release.xcconfig */;
+			baseConfigurationReference = DB1F322FE8F1EC1E9255D281 /* Pods-MapillarySDK.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
@@ -851,7 +863,7 @@
 		};
 		9A88F95C1F4D933F0076C311 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22FFA07D5FDB91E34206156C /* Pods-MapillarySDKTests.debug.xcconfig */;
+			baseConfigurationReference = 80FE2A968D027A8DD10AE018 /* Pods-MapillarySDKTests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = K7QW859D7N;
 				INFOPLIST_FILE = MapillarySDKTests/Info.plist;
@@ -863,7 +875,7 @@
 		};
 		9A88F95D1F4D933F0076C311 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF85996D43C4CB7735B1F0BB /* Pods-MapillarySDKTests.release.xcconfig */;
+			baseConfigurationReference = B37988D1B2C5ADE0CB73ECB9 /* Pods-MapillarySDKTests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = K7QW859D7N;
 				INFOPLIST_FILE = MapillarySDKTests/Info.plist;

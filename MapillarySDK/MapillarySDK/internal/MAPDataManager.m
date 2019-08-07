@@ -355,15 +355,20 @@
 - (void)saveContext
 {
     NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
-    NSError *error = nil;
-
-    if ([context hasChanges] && ![context save:&error])
-    {
-        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+    
+    [context performBlockAndWait:^{
         
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        abort();
-    }
+        NSError *error = nil;
+        
+        if ([context hasChanges] && ![context save:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+            
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            abort();
+        }
+        
+    }];        
 }
 
 

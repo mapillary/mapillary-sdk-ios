@@ -159,27 +159,32 @@
             [task cancel];
         }
         
-    }];
-    
-    [self.uploadSession invalidateAndCancel];
-    self.uploadSession = nil;
-    
-    for (MAPSequence* sequence in self.sequencesToUpload)
-    {
-        [sequence unlock];
-    }
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:status:)])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate uploadStopped:self status:self.status];
-        });
-    }
+        [self.uploadSession invalidateAndCancel];
+        self.uploadSession = nil;
+        
+        for (MAPSequence* sequence in self.sequencesToUpload)
+        {
+            [sequence unlock];
+        }
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(uploadStopped:status:)])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate uploadStopped:self status:self.status];
+            });
+        }
+        
+    }];        
 }
 
 - (MAPUploadManagerStatus*)getStatus
 {
     return self.status;
+}
+
+- (NSURLSession*)getSession
+{
+    return self.uploadSession;
 }
 
 #pragma mark - internal
@@ -637,8 +642,6 @@
 
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    [self cleanUp];
-    
     /* TODO: Is this really needed?
      dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -656,7 +659,9 @@
         });
     }
     
-     self.status.uploading = NO;
+    self.status.uploading = NO;
+    
+    [self cleanUp];
     
     NSLog(@"All tasks are finished");
 }
@@ -717,8 +722,6 @@
     
     if (self.status.imagesUploaded+self.status.imagesFailed == self.status.imageCount)
     {
-        [self cleanUp];
-        
         if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -730,6 +733,8 @@
         self.speedTimer = nil;
         
         self.status.uploading = NO;
+        
+        [self cleanUp];
     }
     else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)
     {

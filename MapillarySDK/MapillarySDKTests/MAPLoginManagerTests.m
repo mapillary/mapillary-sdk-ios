@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import "MapillarySDK.h"
-#import <OCMockito/OCMockito.h>
 
 @interface MAPLoginManagerTests : XCTestCase
 

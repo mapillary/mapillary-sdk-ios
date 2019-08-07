@@ -86,6 +86,11 @@
 - (void)processSequences:(NSArray*)sequences forceReprocessing:(BOOL)forceReprocessing;
 
 /**
+ Process the image received as parameter
+ */
+- (void)processImage:(MAPImage*)image sequence:(MAPSequence*)sequence processedImages:(NSDictionary*)processedImages forceProcessing:(BOOL)forceProcessing;
+
+/**
  Stops the image processing.
  */
 - (void)stopProcessing;
@@ -115,6 +120,37 @@
  Stops the image processing and upload.
  */
 - (void)stopUpload;
+
+/**
+ Starts the image processing.
+ */
+- (void)startProcessing:(BOOL)forceReprocessing;
+
+/**
+ Starts the image upload.
+ */
+- (void)startUpload:(BOOL)forceProcessing;
+
+/**
+ Creates book keeping for an image
+ */
+- (void)createBookkeepingForImage:(MAPImage*)image;
+
+/**
+ Creates an upload sesion
+ */
+- (void)createSession;
+
+/**
+ Gets the upload session
+ */
+- (NSURLSession*)getSession;
+
+/**
+ Calculates the upload speed
+ */
+- (void)calculateUploadSpeed;
+
 
 ///-----------------------------------------------------------------------------
 /// @name Getting the current status of the Upload Manager

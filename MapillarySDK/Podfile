@@ -1,9 +1,8 @@
 platform :ios, '11.0'
-use_frameworks!
 
 target 'MapillarySDK' do
 
-    pod 'AFNetworking', '~> 3.1'
+    pod 'AFNetworking', '~> 3.0'
     pod 'BOSImageResizeOperation', '~> 0.1'
     pod 'SDVersion', '~> 4.0'
     pod 'AWSCore', '~> 2.6'
@@ -12,11 +11,10 @@ target 'MapillarySDK' do
     pod 'SAMKeychain', '~> 1.5'
     pod 'NSHash', '~> 1.2'
 
-    target 'MapillarySDKTests' do
-        
-        inherit! :search_paths
-        pod 'OCMockito', '~> 5.0'
-        
-    end
+end
+
+target 'MapillarySDKTests' do
+
+   pod 'OCMock', '~> 3.2.2'
 
 end

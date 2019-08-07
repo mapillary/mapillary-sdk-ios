@@ -36,6 +36,10 @@
     XCTAssertTrue([location1 isEqual:location2]);
     XCTAssertTrue([location2 isEqual:location1]);
     XCTAssertTrue([location1 isEqual:location1]);
+    
+    XCTAssertTrue([location1 isEqualToLocation:location2]);
+    XCTAssertTrue([location2 isEqualToLocation:location1]);
+    XCTAssertTrue([location1 isEqualToLocation:location1]);
 }
 
 - (void)testNotEqual
@@ -48,6 +52,12 @@
     
     XCTAssertFalse([location1 isEqual:location2]);
     XCTAssertFalse([location2 isEqual:location1]);
+    XCTAssertFalse([location1 isEqual:nil]);
+    XCTAssertFalse([location1 isEqual:[NSString string]]);
+    
+    XCTAssertFalse([location1 isEqualToLocation:location2]);
+    XCTAssertFalse([location2 isEqualToLocation:location1]);
+    XCTAssertFalse([location1 isEqualToLocation:nil]);
 }
 
 - (void)testDescription
