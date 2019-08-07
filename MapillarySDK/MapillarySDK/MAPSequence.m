@@ -224,11 +224,22 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)addLocation:(MAPLocation*)location
 {
+    // Sanity check that coordinate is valid
     if (location &&
         CLLocationCoordinate2DIsValid(location.location.coordinate) &&
         fabs(location.location.coordinate.latitude) > DBL_EPSILON &&
         fabs(location.location.coordinate.longitude) > DBL_EPSILON)
     {
+        
+        // Skip duplicates. It would be too slow to check all coordinates so here we just compare to the previous coordinate
+        if (self.currentLocation &&
+            fabs(self.currentLocation.location.coordinate.latitude-location.location.coordinate.latitude) < 0.000001 && // > 10 cm
+            fabs(self.currentLocation.location.coordinate.longitude-location.location.coordinate.longitude) < 0.000001 && // > 10 cm
+            fabs(self.currentLocation.location.course-location.location.course) < 1) // 1 deg
+        {
+            return;
+        }
+        
         if (self.device.isExternal)
         {
             [[MAPDataManager sharedManager] addLocation:location sequence:self];
@@ -454,10 +465,11 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
                 location = last;
             }
             
-            if (location.magneticHeading == nil || location.trueHeading == nil)
+            if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
             {
                 location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
                 location.trueHeading = location.magneticHeading;
+                location.headingAccuracy = @0;
             }
         }
         
@@ -507,17 +519,19 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             {
                 location = equal;
                 
-                if (location.magneticHeading == nil || location.trueHeading == nil)
+                if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
                 {
-                    if (before)
-                    {
-                        location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:equal.location.coordinate];
-                        location.trueHeading = location.magneticHeading;
-                    }
-                    else if (after)
+                    if (after)
                     {
                         location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:equal.location.coordinate B:after.location.coordinate];
                         location.trueHeading = location.magneticHeading;
+                        location.headingAccuracy = @0;
+                    }                    
+                    else if (before)
+                    {
+                        location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:equal.location.coordinate];
+                        location.trueHeading = location.magneticHeading;
+                        location.headingAccuracy = @0;
                     }
                 }
             }
@@ -526,6 +540,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             else if (before && after)
             {
                 location = [MAPInternalUtils locationBetweenLocationA:before andLocationB:after forDate:date];
+                
+                if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
+                {
+                    location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:before.location.coordinate B:after.location.coordinate];
+                    location.trueHeading = location.magneticHeading;
+                    location.headingAccuracy = @0;
+                }
             }
             
             // Only found one, not possible to interpolate, use the one position we found

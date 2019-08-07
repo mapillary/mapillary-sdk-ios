@@ -9,7 +9,7 @@ set -o pipefail && xcodebuild test \
            -workspace MapillarySDK/MapillarySDK.xcworkspace \
            -scheme MapillarySDK \
            -configuration Debug \
-           -destination 'platform=iOS Simulator,OS=12.1,name=iPhone X' 2>&1 | /usr/local/bin/ocunit2junit 
+           -destination 'platform=iOS Simulator,OS=12.2,name=iPhone X' 2>&1 | /usr/local/bin/ocunit2junit 
 
 RC=$?
 

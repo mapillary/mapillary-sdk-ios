@@ -164,10 +164,21 @@
 
 + (NSNumber*)calculateHeadingFromCoordA:(CLLocationCoordinate2D)A B:(CLLocationCoordinate2D)B
 {
-    double dy = A.latitude - B.latitude;
-    double dx = A.longitude - B.longitude;
+    double lat1 = A.latitude;
+    double lat2 = B.latitude;
     
-    double heading = atan(dy/dx) * 180.0 / M_PI;
+    double lon1 = A.longitude;
+    double lon2 = B.longitude;
+    
+    double dx = cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon2-lon1);
+    double dy = sin(lon2-lon1)*cos(lat2);
+    
+    double heading = atan2(dy, dx)* 180.0 / M_PI;
+    
+    if (isnan(heading))
+    {
+        heading = 0;
+    }
         
     heading = (heading <   0) ? heading + 360 : heading; // 0 - 360
     heading = (heading > 360) ? heading - 360 : heading; // 0 - 360
@@ -216,6 +227,7 @@
     {
         result.magneticHeading = [self calculateHeadingFromCoordA:locationA.location.coordinate B:locationB.location.coordinate];
         result.trueHeading = result.magneticHeading;
+        result.headingAccuracy = @0;
     }
     
     return result;

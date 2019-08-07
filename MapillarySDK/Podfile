@@ -12,3 +12,9 @@ target 'MapillarySDK' do
     pod 'NSHash', '~> 1.2'
 
 end
+
+target 'MapillarySDKTests' do
+
+   pod 'OCMock', '~> 3.2.2'
+
+end
