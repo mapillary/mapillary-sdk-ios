@@ -367,9 +367,22 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 {
     if (self.device.isExternal || ![self hasGpxFile] || self.device == nil)
     {
+        // Try to get locations limited to the external device first
         [[MAPDataManager sharedManager] getAllLocationsLimitedToDevice:self.device result:^(NSArray *locations, MAPDevice *device, NSString *organizationKey, bool isPrivate) {
-
-            done(locations);
+            
+            // If we get 0 locations, it could be due to the camera ID has changed, so get all loctions as a fallback
+            if (locations.count == 0)
+            {
+                [[MAPDataManager sharedManager] getAllLocationsLimitedToDevice:nil result:^(NSArray *locations, MAPDevice *device, NSString *organizationKey, bool isPrivate) {
+                    
+                    done(locations);
+                    
+                }];
+            }
+            else
+            {
+                done(locations);
+            }
         }];
     }
     else
