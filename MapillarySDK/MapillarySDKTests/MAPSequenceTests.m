@@ -781,24 +781,31 @@
     }
 }
 
-- (void)testImageHeadingWithCompassValuesForward
+- (void)testImageHeadingWithCompassValuesCircle
 {
-    for (int i = 0; i < arc4random()%100; i++)
+    int divider = 36;
+    
+    for (int i = 0; i <= 360/divider; i++)
     {
+        float x = 50+10*cosf(i*M_PI/180.0);
+        float y = 50+10*sinf(i*M_PI/180.0);
+        
         MAPLocation* a = [[MAPLocation alloc] init];
-        a.timestamp = [NSDate dateWithTimeIntervalSince1970:arc4random()%1111*i];
-        a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(50+i*0.1, 50+i*0.1) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
-        a.magneticHeading = [NSNumber numberWithFloat:arc4random()%360];
-        a.trueHeading = [NSNumber numberWithFloat:arc4random()%360];
+        a.timestamp = [NSDate dateWithTimeIntervalSince1970:100*i];
+        a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(x, y) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+        a.magneticHeading = [NSNumber numberWithFloat:i*360/divider];
+        a.trueHeading = [NSNumber numberWithFloat:i*360/divider];
         [self.sequence addLocation:a];
+        
+        NSLog(@"%f", a.magneticHeading.floatValue);
     }
     
     NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
     NSData* imageData = [NSData dataWithContentsOfFile:path];
     
-    for (int i = 0; i < arc4random()%25; i++)
+    for (int i = 0; i <= 360/divider; i++)
     {
-        [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:arc4random()%10*i] location:nil];
+        [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:100*i] location:nil];
     }
     
     self.expectationImagesProcessed = [self expectationWithDescription:@"Processed images"];
@@ -823,8 +830,7 @@
     
     NSArray* images = [self.sequence getImages];
     
-    NSNumber* prevMagneticHeading = nil;
-    NSNumber* prevTrueHeading = nil;
+    int correct = 0;
     
     for (MAPImage* image in images)
     {
@@ -832,9 +838,79 @@
         NSNumber* magneticHeading = heading[kMAPMagneticHeading];
         NSNumber* trueHeading = heading[kMAPTrueHeading];
         
+        XCTAssert(magneticHeading.intValue == correct);
+        XCTAssert(trueHeading.intValue == correct);
         
-        XCTAssert(magneticHeading.intValue == prevMagneticHeading.intValue);
-        XCTAssert(trueHeading.intValue == prevTrueHeading.intValue);
+        NSLog(@"%f", magneticHeading.floatValue);
+        
+        correct += 360/divider;
+        if (correct > 360) correct -= 360;
+    }
+}
+
+- (void)testImageHeadingWithForwardValuesCircle
+{
+    int divider = 36;
+    
+    for (int i = 0; i <= 360/divider; i++)
+    {
+        float x = 50+10*cosf(i*M_PI/180.0);
+        float y = 50+10*sinf(i*M_PI/180.0);
+        
+        MAPLocation* a = [[MAPLocation alloc] init];
+        a.timestamp = [NSDate dateWithTimeIntervalSince1970:100*i];
+        a.location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(x, y) altitude:0 horizontalAccuracy:10 verticalAccuracy:10 timestamp:a.timestamp];
+        a.magneticHeading = [NSNumber numberWithFloat:i*360/divider];
+        a.trueHeading = [NSNumber numberWithFloat:i*360/divider];
+        [self.sequence addLocation:a];
+        
+        NSLog(@"%f", a.magneticHeading.floatValue);
+    }
+    
+    NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"test-image" ofType:@"jpg"];
+    NSData* imageData = [NSData dataWithContentsOfFile:path];
+    
+    for (int i = 0; i <= 360/divider; i++)
+    {
+        [self.sequence addImageWithData:imageData date:[NSDate dateWithTimeIntervalSince1970:100*i] location:nil];
+    }
+    
+    self.expectationImagesProcessed = [self expectationWithDescription:@"Processed images"];
+    
+    // Process images
+    
+    [MAPUploadManager sharedManager].delegate = self;
+    [[MAPUploadManager sharedManager] processSequences:@[self.sequence] forceReprocessing:YES];
+    
+    [self waitForExpectationsWithTimeout:60 handler:^(NSError *error) {
+        
+        if (error)
+        {
+            XCTFail(@"Expectation failed with error: %@", error);
+            [MAPUploadManager sharedManager].delegate = nil;
+        }
+    }];
+    
+    [MAPUploadManager sharedManager].delegate = nil;
+    
+    // Images are processed now
+    
+    NSArray* images = [self.sequence getImages];
+    
+    int correct = 0;
+    
+    for (MAPImage* image in images)
+    {
+        NSDictionary* heading = [self getCompassHeadingFromImage:image];
+        NSNumber* magneticHeading = heading[kMAPMagneticHeading];
+        NSNumber* trueHeading = heading[kMAPTrueHeading];
+        
+        XCTAssert(magneticHeading.intValue == correct);
+        XCTAssert(trueHeading.intValue == correct);
+        
+        
+        correct += 360/divider;
+        if (correct > 360) correct -= 360;
     }
 }
     
