@@ -130,9 +130,10 @@
     
     
     // Cleanup
+    CFRelease(options);
+    CFRelease(mutableMetadata);
     CFRelease(destination);
     CFRelease(imageSource);
-    CFRelease(mutableMetadata);
     
     return success;
 }
@@ -185,16 +186,16 @@
             CFStringCompare(nameSpace, kCGImageMetadataNamespaceIPTCCore, 0) == kCFCompareEqualTo)
             //CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPBasic, 0) == kCFCompareEqualTo) // This causes the metadata to no be able to be written to the destination
         {
-            NSString* tagPath = [NSString stringWithFormat:@"%@:%@", prefix, name];
+            CFStringRef tagPath = (__bridge CFStringRef) [NSString stringWithFormat:@"%@:%@", prefix, name];
             CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(nameSpace, prefix, name, type, value);
-            CGImageMetadataSetTagWithPath(mutableMetadata, NULL, (__bridge CFStringRef)tagPath, tagValue);
+            CGImageMetadataSetTagWithPath(mutableMetadata, NULL, tagPath, tagValue);
             CFRelease(tagValue);
         }
-        
-        CFRelease(nameSpace);
-        CFRelease(prefix);
-        CFRelease(name);
+                
         CFRelease(value);
+        CFRelease(name);
+        CFRelease(prefix);
+        CFRelease(nameSpace);
     }
     
     CFRelease(tags);
