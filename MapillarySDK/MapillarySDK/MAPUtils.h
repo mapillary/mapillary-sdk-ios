@@ -11,4 +11,6 @@
 
 @interface MAPUtils : NSObject
 
++ (NSString*)deviceName;
+
 @end
