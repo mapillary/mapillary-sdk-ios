@@ -166,39 +166,48 @@
 
 + (void)cleanMetadata:(CGImageMetadataRef)metadata mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
 {
+    if (metadata == nil)
+    {
+        return;
+    }
+    
     // Copy all the valid tags and ignore the ones that we shouldn't have
     
     CFArrayRef tags = CGImageMetadataCopyTags(metadata);
-    for(int i = 0; i < CFArrayGetCount(tags); i++)
-    {
-        CGImageMetadataTagRef tag = (CGImageMetadataTagRef)CFArrayGetValueAtIndex(tags, i);
-        CFStringRef nameSpace = CGImageMetadataTagCopyNamespace(tag);
-        CFStringRef prefix = CGImageMetadataTagCopyPrefix(tag);
-        CFStringRef name = CGImageMetadataTagCopyName(tag);
-        CGImageMetadataType type = CGImageMetadataTagGetType(tag);
-        CFTypeRef value = CGImageMetadataTagCopyValue(tag);
-        
-        if (CFStringCompare(nameSpace, kCGImageMetadataNamespaceExif, 0) == kCFCompareEqualTo ||
-            CFStringCompare(nameSpace, kCGImageMetadataNamespaceExifEX, 0) == kCFCompareEqualTo ||
-            CFStringCompare(nameSpace, kCGImageMetadataNamespaceExifAux, 0) == kCFCompareEqualTo ||
-            CFStringCompare(nameSpace, kCGImageMetadataNamespaceTIFF, 0) == kCFCompareEqualTo ||
-            CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPRights, 0) == kCFCompareEqualTo ||
-            CFStringCompare(nameSpace, kCGImageMetadataNamespaceIPTCCore, 0) == kCFCompareEqualTo)
-            //CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPBasic, 0) == kCFCompareEqualTo) // This causes the metadata to no be able to be written to the destination
-        {
-            CFStringRef tagPath = (__bridge CFStringRef) [NSString stringWithFormat:@"%@:%@", prefix, name];
-            CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(nameSpace, prefix, name, type, value);
-            CGImageMetadataSetTagWithPath(mutableMetadata, NULL, tagPath, tagValue);
-            CFRelease(tagValue);
-        }
-                
-        CFRelease(value);
-        CFRelease(name);
-        CFRelease(prefix);
-        CFRelease(nameSpace);
-    }
     
-    CFRelease(tags);
+    if (tags)
+    {
+        for(int i = 0; i < CFArrayGetCount(tags); i++)
+        {
+            CGImageMetadataTagRef tag = (CGImageMetadataTagRef)CFArrayGetValueAtIndex(tags, i);
+            CFStringRef nameSpace = CGImageMetadataTagCopyNamespace(tag);
+            CFStringRef prefix = CGImageMetadataTagCopyPrefix(tag);
+            CFStringRef name = CGImageMetadataTagCopyName(tag);
+            CGImageMetadataType type = CGImageMetadataTagGetType(tag);
+            CFTypeRef value = CGImageMetadataTagCopyValue(tag);
+            
+            if (CFStringCompare(nameSpace, kCGImageMetadataNamespaceExif, 0) == kCFCompareEqualTo ||
+                CFStringCompare(nameSpace, kCGImageMetadataNamespaceExifEX, 0) == kCFCompareEqualTo ||
+                CFStringCompare(nameSpace, kCGImageMetadataNamespaceExifAux, 0) == kCFCompareEqualTo ||
+                CFStringCompare(nameSpace, kCGImageMetadataNamespaceTIFF, 0) == kCFCompareEqualTo ||
+                CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPRights, 0) == kCFCompareEqualTo ||
+                CFStringCompare(nameSpace, kCGImageMetadataNamespaceIPTCCore, 0) == kCFCompareEqualTo)
+                //CFStringCompare(nameSpace, kCGImageMetadataNamespaceXMPBasic, 0) == kCFCompareEqualTo) // This causes the metadata to no be able to be written to the destination
+            {
+                CFStringRef tagPath = (__bridge CFStringRef) [NSString stringWithFormat:@"%@:%@", prefix, name];
+                CGImageMetadataTagRef tagValue = CGImageMetadataTagCreate(nameSpace, prefix, name, type, value);
+                CGImageMetadataSetTagWithPath(mutableMetadata, NULL, tagPath, tagValue);
+                CFRelease(tagValue);
+            }
+            
+            CFRelease(value);
+            CFRelease(name);
+            CFRelease(prefix);
+            CFRelease(nameSpace);
+        }
+        
+        CFRelease(tags);
+    }
 }
 
 + (void)addGps:(MAPLocation*)location mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
