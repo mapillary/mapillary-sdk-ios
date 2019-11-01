@@ -198,6 +198,15 @@
  */
 - (void)getImagesAsync:(void(^)(NSArray* images))images;
 
+/**
+ Gets the paths for all images in this sequence as an array of `NSString`
+ objects.
+ 
+ @return The image paths in this sequence.
+ @see MAPImage
+ */
+- (NSArray*)getImagePaths;
+
 ///-----------------------------------------------------------------------------
 /// @name Adding locations
 ///-----------------------------------------------------------------------------
