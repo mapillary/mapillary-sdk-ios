@@ -7,8 +7,8 @@
 //
 
 #import "MAPDevice.h"
-#import <SDVersion/SDVersion.h>
 #import <UIKit/UIKit.h>
+#import "MAPInternalUtils.h"
 
 @implementation MAPDevice
 
@@ -27,8 +27,7 @@
 
 + (id)thisDevice
 {
-    MAPDevice* current = [[MAPDevice alloc] initWithMake:@"Apple" andModel:[SDVersion deviceNameString] andUUID:[[[UIDevice currentDevice] identifierForVendor] UUIDString] isExternal:NO];
-    
+    MAPDevice* current = [[MAPDevice alloc] initWithMake:@"Apple" andModel:[MAPInternalUtils deviceName] andUUID:[[[UIDevice currentDevice] identifierForVendor] UUIDString] isExternal:NO];
     return current;
 }
 

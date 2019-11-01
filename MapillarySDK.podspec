@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.requires_arc     = true
   s.dependency 'AFNetworking', '~> 3.0'
   s.dependency 'BOSImageResizeOperation', '~> 0.1'
-  s.dependency 'SDVersion', '~> 4.0'
+  s.dependency 'SDVersion'
   s.dependency 'AWSCore', '~> 2.6'
   s.dependency 'AWSS3', '~> 2.6'
   s.dependency 'PodAsset', '~> 0.22'

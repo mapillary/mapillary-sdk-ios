@@ -7,7 +7,6 @@
 //
 
 #import "MAPUtils.h"
-#import "MAPFileManager.h"
 
 @implementation MAPUtils
 

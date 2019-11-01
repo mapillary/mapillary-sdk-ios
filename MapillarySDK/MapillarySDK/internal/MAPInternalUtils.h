@@ -25,6 +25,7 @@
 + (NSDate*)dateFromFilePath:(NSString*)filePath;
 
 + (NSString*)appVersion;
++ (NSString*)deviceName;
 
 + (double)calculateFactorFromDates:(NSDate*)date date1:(NSDate*)date1 date2:(NSDate*)date2;
 + (CLLocationCoordinate2D)interpolateCoords:(CLLocationCoordinate2D)location1 location2:(CLLocationCoordinate2D)location2 factor:(double)factor;

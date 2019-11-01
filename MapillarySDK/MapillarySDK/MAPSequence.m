@@ -341,18 +341,13 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     MAPUser* author = [MAPLoginManager currentUser];
     
     NSMutableArray* images = [[NSMutableArray alloc] init];
-    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
-    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
-    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
-    NSArray* sortedFiles = [files sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
-        return [obj1 compare:obj2];
-    }];
+    NSArray* imagePaths = [self getImagePaths];
     
-    for (NSString* path in sortedFiles)
+    for (NSString* path in imagePaths)
     {
         MAPImage* image = [[MAPImage alloc] init];
-        image.imagePath = [self.path stringByAppendingPathComponent:path];
-        image.captureDate = [MAPInternalUtils dateFromFilePath:path];
+        image.imagePath = path;
+        image.captureDate = [MAPInternalUtils dateFromFilePath:path.lastPathComponent];
         image.author = author;
         image.location = [self locationForDate:image.captureDate];
         
@@ -380,13 +375,47 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
     }
 }
 
+- (NSArray*)getImagePaths
+{
+    
+    NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
+    NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
+    NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
+    NSArray* sortedFiles = [files sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    NSMutableArray* fullPathsArray = [NSMutableArray arrayWithCapacity:sortedFiles.count];
+    
+    for (NSString* path in sortedFiles)
+    {
+        NSString* fullPath = [self.path stringByAppendingPathComponent:path];
+        [fullPathsArray addObject:fullPath];
+    }
+    
+    return fullPathsArray;
+}
+
 - (void)getLocationsAsync:(void(^)(NSArray* locations))done
 {
     if (self.device.isExternal || ![self hasGpxFile] || self.device == nil)
     {
+        // Try to get locations limited to the external device first
         [[MAPDataManager sharedManager] getAllLocationsLimitedToDevice:self.device result:^(NSArray *locations, MAPDevice *device, NSString *organizationKey, bool isPrivate) {
-
-            done(locations);
+            
+            // If we get 0 locations, it could be due to the camera ID has changed, so get all loctions as a fallback
+            if (locations.count == 0)
+            {
+                [[MAPDataManager sharedManager] getAllLocationsLimitedToDevice:nil result:^(NSArray *locations, MAPDevice *device, NSString *organizationKey, bool isPrivate) {
+                    
+                    done(locations);
+                    
+                }];
+            }
+            else
+            {
+                done(locations);
+            }
         }];
     }
     else

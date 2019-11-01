@@ -68,4 +68,36 @@
     XCTAssertTrue([resultAB isEqualToLocation:resultABNil]);
 }
 
+- (void)testCalculateHeadingFromCoords
+{
+    // Verified using http://instantglobe.com/CRANES/GeoCoordTool.html
+    
+    CLLocationCoordinate2D A = CLLocationCoordinate2DMake(39.099912, -94.581213);
+    CLLocationCoordinate2D B = CLLocationCoordinate2DMake(38.627089, -90.200203);
+    
+    NSNumber* result = [MAPInternalUtils calculateHeadingFromCoordA:A B:B];
+    
+    XCTAssertEqual(result.intValue, 96); // 96.51262423499946
+}
+
+- (void)testCalculateHeadingFromCoords2
+{
+    CLLocationCoordinate2D A = CLLocationCoordinate2DMake(55.596, 13.023); // Malmö
+    CLLocationCoordinate2D B = CLLocationCoordinate2DMake(59.334415, 18.110103); // Stockholm
+    
+    NSNumber* result = [MAPInternalUtils calculateHeadingFromCoordA:A B:B];
+    
+    XCTAssertEqual(result.intValue, 34); // 34.07484069345571
+}
+
+- (void)testCalculateHeadingFromCoordsReverse
+{
+    CLLocationCoordinate2D A = CLLocationCoordinate2DMake(39.099912, -94.581213);
+    CLLocationCoordinate2D B = CLLocationCoordinate2DMake(38.627089, -90.200203);
+    
+    NSNumber* result = [MAPInternalUtils calculateHeadingFromCoordA:B B:A];
+    
+    XCTAssertEqual(result.intValue, 279); // 279.26239975009179
+}
+
 @end
