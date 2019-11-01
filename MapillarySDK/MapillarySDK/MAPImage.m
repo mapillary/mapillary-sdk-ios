@@ -28,6 +28,7 @@
 {
     self = [self init];
     self.imagePath = path;
+    self.captureDate = [MAPInternalUtils dateFromFilePath:path];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self thumbPath]])
     {
