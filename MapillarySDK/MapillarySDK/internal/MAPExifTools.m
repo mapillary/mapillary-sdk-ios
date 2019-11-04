@@ -103,7 +103,12 @@
     [self addXmpMetadata:mutableMetadata tag:@"description" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)descriptionString];
     
     
-    // Add to default EXIF and TIFF
+    // Add GPS to default EXIF and TIFF
+    if (image.location == nil)
+    {
+        image.location = [sequence locationForDate:image.captureDate];
+    }
+    
     [self addGps:image.location mutableMetadata:mutableMetadata];
     
     
@@ -248,7 +253,7 @@
         [self addExifMetadata:mutableMetadata tag:@"GPSTimeStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedTime:location.location.timestamp]];
         [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
         [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
-        [self addExifMetadata:mutableMetadata tag:@"GPSDOP"   type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSDOP"                 type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
         [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)location.trueHeading];
         [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
     }
