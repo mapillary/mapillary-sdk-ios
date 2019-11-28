@@ -468,18 +468,33 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             NSTimeInterval diff1 = [date timeIntervalSinceDate:first.timestamp];
             NSTimeInterval diff2 = [date timeIntervalSinceDate:last.timestamp];
             
+            MAPLocation* A = nil;
+            MAPLocation* B = nil;
+            
             if (fabs(diff1) < fabs(diff2))
             {
+                A = first;
                 location = first;
+                
+                if (locations.count > 1)
+                {
+                    B = locations[1];
+                }
             }
             else
             {
+                B = last;
                 location = last;
+                
+                if (locations.count > 1)
+                {
+                    A = locations[locations.count-2];
+                }
             }
             
             if (location.magneticHeading == nil || location.trueHeading == nil || (self.directionOffset != nil && self.directionOffset.intValue == 0))
             {
-                location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:first.location.coordinate B:last.location.coordinate];
+                location.magneticHeading = [MAPInternalUtils calculateHeadingFromCoordA:A.location.coordinate B:B.location.coordinate];
                 location.trueHeading = location.magneticHeading;
                 location.headingAccuracy = @0;
             }
