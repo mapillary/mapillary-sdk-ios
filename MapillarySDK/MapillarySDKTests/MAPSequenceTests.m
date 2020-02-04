@@ -1047,16 +1047,17 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
 }
 
-- (void)testImageProcessingRealtime
+- (void)testImageProcessingRealtimeWithoutLocation
 {
     // Same as testImageProcessing but without the separate processing step
     
     [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:MAPILLARY_CURRENT_USER_KEY];
-    
+        
     NSData* imageData = [self createImageData];
     MAPLocation* location = [[MAPLocation alloc] init];
     location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
     
+    // Image 1, no location, should not have tags after it's added
     [self.sequence addImageWithData:imageData date:nil location:nil];
     MAPImage* image = [[self.sequence getImages] firstObject];
     XCTAssertFalse([MAPExifTools imageHasMapillaryTags:image]);
@@ -1064,12 +1065,160 @@
     image = [[MAPImage alloc] initWithPath:image.imagePath];
     XCTAssertFalse([MAPExifTools imageHasMapillaryTags:image]);
     
+    // Image 2, with location, should have tags after it's added
+    imageData = [self createImageData];
     [self.sequence addImageWithData:imageData date:nil location:location];
     image = [[self.sequence getImages] lastObject];
     XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
     
     image = [[MAPImage alloc] initWithPath:image.imagePath];
     XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+}
+
+- (void)testImageProcessingRealtimeWithLocation
+{
+    // Same as testImageProcessing but without the separate processing step
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:MAPILLARY_CURRENT_USER_KEY];
+        
+    NSData* imageData = [self createImageData];
+    MAPLocation* location = [[MAPLocation alloc] init];
+    location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+    
+    // Image 1, with location, should have tags after it's added
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    MAPImage* image = [[self.sequence getImages] firstObject];
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    // Image 2, with location, should have tags after it's added
+    imageData = [self createImageData];
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    image = [[self.sequence getImages] lastObject];
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    XCTAssertTrue([MAPExifTools imageHasMapillaryTags:image]);
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+}
+
+- (void)testImageProcessingRealtimeWithLocationAndHeading
+{
+    // Same as testImageProcessing but without the separate processing step
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:MAPILLARY_CURRENT_USER_KEY];
+        
+    NSData* imageData = [self createImageData];
+    MAPLocation* location = [[MAPLocation alloc] init];
+    location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+    
+    // Image 1
+    location.magneticHeading = @10;
+    location.trueHeading = @20;
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    MAPImage* image = [[self.sequence getImages] firstObject];
+    NSDictionary* hedingDict = [self getCompassHeadingFromImage:image];
+    NSNumber* magneticHeading = hedingDict[kMAPMagneticHeading];
+    NSNumber* trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(location.magneticHeading.intValue, magneticHeading.intValue);
+    XCTAssertEqual(location.trueHeading.intValue, trueHeading.intValue);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    magneticHeading = hedingDict[kMAPMagneticHeading];
+    trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(location.magneticHeading.intValue, magneticHeading.intValue);
+    XCTAssertEqual(location.trueHeading.intValue, trueHeading.intValue);
+    
+    // Image 2
+    imageData = [self createImageData];
+    location.magneticHeading = @20;
+    location.trueHeading = @30;
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    image = [[self.sequence getImages] lastObject];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    magneticHeading = hedingDict[kMAPMagneticHeading];
+    trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(location.magneticHeading.intValue, magneticHeading.intValue);
+    XCTAssertEqual(location.trueHeading.intValue, trueHeading.intValue);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    magneticHeading = hedingDict[kMAPMagneticHeading];
+    trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(location.magneticHeading.intValue, magneticHeading.intValue);
+    XCTAssertEqual(location.trueHeading.intValue, trueHeading.intValue);
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+}
+
+- (void)testImageProcessingRealtimeWithLocationAndHeadingWithDirectionSetForward
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:MAPILLARY_CURRENT_USER_KEY];
+    
+    self.sequence.directionOffset = @0;
+        
+    NSData* imageData = [self createImageData];
+    MAPLocation* location = [[MAPLocation alloc] init];
+    
+    
+    // Image 1, since we are "looking at next", not possible to add compass angle at this point
+    location.magneticHeading = @10;
+    location.trueHeading = @20;
+    location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    MAPImage* image = [[self.sequence getImages] firstObject];
+    NSDictionary* hedingDict = [self getCompassHeadingFromImage:image];
+    XCTAssertNil(hedingDict);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    XCTAssertNil(hedingDict);
+    
+    // Image 2
+    imageData = [self createImageData];
+    location.magneticHeading = @20;
+    location.trueHeading = @30;
+    location.location = [[CLLocation alloc] initWithLatitude:51 longitude:51];
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    image = [[self.sequence getImages] lastObject];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    NSNumber* magneticHeading = hedingDict[kMAPMagneticHeading];
+    NSNumber* trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(magneticHeading.intValue, 32);
+    XCTAssertEqual(trueHeading.intValue, 32);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    magneticHeading = hedingDict[kMAPMagneticHeading];
+    trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(magneticHeading.intValue, 32);
+    XCTAssertEqual(trueHeading.intValue, 32);
+    
+    // Image 3
+    imageData = [self createImageData];
+    location.magneticHeading = @15;
+    location.trueHeading = @45;
+    location.location = [[CLLocation alloc] initWithLatitude:50 longitude:50];
+    [self.sequence addImageWithData:imageData date:nil location:location];
+    image = [[self.sequence getImages] lastObject];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    magneticHeading = hedingDict[kMAPMagneticHeading];
+    trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(magneticHeading.intValue, 212);
+    XCTAssertEqual(trueHeading.intValue, 212);
+    
+    image = [[MAPImage alloc] initWithPath:image.imagePath];
+    hedingDict = [self getCompassHeadingFromImage:image];
+    magneticHeading = hedingDict[kMAPMagneticHeading];
+    trueHeading = hedingDict[kMAPTrueHeading];
+    XCTAssertEqual(magneticHeading.intValue, 212);
+    XCTAssertEqual(trueHeading.intValue, 212);
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
 }

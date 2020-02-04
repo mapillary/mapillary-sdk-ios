@@ -70,8 +70,8 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         self.directionOffset = nil;
         self.timeOffset = nil;
         self.sequenceKey = [[NSUUID UUID] UUIDString];
-        self.currentLocation = [[MAPLocation alloc] init];
-        self.device = device;// ? device : [MAPDevice thisDevice];
+        self.currentLocation = nil;
+        self.device = device;
         self.organizationKey = nil;
         self.isPrivate = NO;
         self.cachedLocations = nil;
@@ -176,35 +176,56 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
         location.timestamp = date;
     }
     
+    // Save image
     NSString* fileName = [MAPInternalUtils getTimeString:date];
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@.jpg", self.path, fileName];
     [imageData writeToFile:fullPath atomically:YES];
     
-    if (location)
+    // If location is provided, add EXIF here
+    if (location && (self.directionOffset == nil || (self.directionOffset != nil && self.currentLocation)))
     {
         NSLog(@"Adding EXIF to image");
+        
         MAPImage* image = [[MAPImage alloc] initWithPath:fullPath];
         image.location = location;
+        
+        // If we are not using the compass for the heading (directionOffset == nil), we need to calcuate the heading from the previous image
+        if (self.directionOffset != nil)
+        {
+            double calculatedHeading = [MAPInternalUtils calculateHeadingFromCoordA:self.currentLocation.location.coordinate B:location.location.coordinate].doubleValue;
+            
+            if (fabs(self.directionOffset.doubleValue) > 0.0)
+            {
+                calculatedHeading += self.directionOffset.doubleValue;
+                calculatedHeading = fmodf(calculatedHeading + 360.0f, 360.0f);
+            }
+            
+            image.location.trueHeading = [NSNumber numberWithDouble:calculatedHeading];
+            image.location.magneticHeading = [NSNumber numberWithDouble:calculatedHeading];
+            image.location.headingAccuracy = @0;
+        }
+        
         BOOL sucess = [MAPExifTools addExifTagsToImage:image fromSequence:self];
         if (sucess)
         {
             [[MAPDataManager sharedManager] setImageAsProcessed:image];
         }
     }
-    else
-    {
-        NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
-        UIImage* srcImage = [UIImage imageWithData:imageData];
-        
-        float screenWidth = [[UIScreen mainScreen] bounds].size.width;
-        float screenHeight = [[UIScreen mainScreen] bounds].size.width;
-        CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
-        
-        [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
-    }
     
+    // Create thumbnail
+    NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
+    UIImage* srcImage = [UIImage imageWithData:imageData];
+    
+    float screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    float screenHeight = [[UIScreen mainScreen] bounds].size.width;
+    CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
+    
+    [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
+    
+    // Add location to GPX
     [self addLocation:location];
     
+    // Update stats
     self.imageCount++;
     self.sequenceSize += imageData.length;
 }
@@ -254,7 +275,7 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             [self.gpxLogger addLocation:location];
         }
         
-        self.currentLocation = location;
+        self.currentLocation = [location copy];
     }
 }
 

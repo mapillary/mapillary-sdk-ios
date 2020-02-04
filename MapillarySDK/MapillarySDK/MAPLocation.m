@@ -20,14 +20,14 @@
         self.location = nil;
         self.trueHeading = nil;
         self.magneticHeading = nil;
-        self.headingAccuracy = 0;
+        self.headingAccuracy = @0;
         self.timestamp = [NSDate date];
-        self.deviceMotionX = 0;
-        self.deviceMotionY = 0;
-        self.deviceMotionZ = 0;
-        self.devicePitch = 0;
-        self.deviceRoll = 0;
-        self.deviceYaw = 0;
+        self.deviceMotionX = nil;
+        self.deviceMotionY = nil;
+        self.deviceMotionZ = nil;
+        self.devicePitch = nil;
+        self.deviceRoll = nil;
+        self.deviceYaw = nil;
     }
     return self;
 }

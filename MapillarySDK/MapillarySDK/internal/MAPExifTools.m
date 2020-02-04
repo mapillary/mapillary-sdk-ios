@@ -109,6 +109,11 @@
         image.location = [sequence locationForDate:image.captureDate];
     }
     
+    if (image.location.trueHeading == nil)
+    {
+        image.location.trueHeading = @0;
+    }
+    
     [self addGps:image.location mutableMetadata:mutableMetadata];
     
     
@@ -254,8 +259,8 @@
         [self addExifMetadata:mutableMetadata tag:@"GPSDateStamp"           type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getUTCFormattedDate:location.location.timestamp]];
         [self addExifMetadata:mutableMetadata tag:@"GPSAltitude"            type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.altitude]];
         [self addExifMetadata:mutableMetadata tag:@"GPSDOP"                 type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.horizontalAccuracy]];
-        [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)location.trueHeading];
         [self addExifMetadata:mutableMetadata tag:@"GPSSpeed"               type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)[NSNumber numberWithDouble:location.location.speed]];
+        [self addExifMetadata:mutableMetadata tag:@"GPSImgDirection"        type:kCGImageMetadataTypeString value:(__bridge CFNumberRef)location.trueHeading];
     }
 }
 
