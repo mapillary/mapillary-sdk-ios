@@ -211,17 +211,19 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
             [[MAPDataManager sharedManager] setImageAsProcessed:image];
         }
     }
-    
-    // Create thumbnail
-    NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
-    UIImage* srcImage = [UIImage imageWithData:imageData];
-    
-    float screenWidth = [[UIScreen mainScreen] bounds].size.width;
-    float screenHeight = [[UIScreen mainScreen] bounds].size.width;
-    CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
-    
-    [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
-    
+    else
+    {
+        // Create thumbnail
+        NSString* thumbPath = [NSString stringWithFormat:@"%@/%@-thumb.jpg", self.path, fileName];
+        UIImage* srcImage = [UIImage imageWithData:imageData];
+        
+        float screenWidth = [[UIScreen mainScreen] bounds].size.width;
+        float screenHeight = [[UIScreen mainScreen] bounds].size.width;
+        CGSize thumbSize = CGSizeMake(screenWidth/3-1, screenHeight/3-1);
+        
+        [MAPInternalUtils createThumbnailForImage:srcImage atPath:thumbPath withSize:thumbSize];
+    }
+
     // Add location to GPX
     [self addLocation:location];
     
