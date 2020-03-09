@@ -18,6 +18,8 @@
  */
 @interface MAPUploadManager : NSObject <NSURLSessionDelegate, NSURLSessionTaskDelegate, CLLocationManagerDelegate>
 
+@property (nonatomic, copy) void (^backgroundUploadSessionCompletionHandler)(void);
+
 ///-----------------------------------------------------------------------------
 /// @name Properties
 ///-----------------------------------------------------------------------------
@@ -88,7 +90,7 @@
 /**
  Process the image received as parameter
  */
-- (void)processImage:(MAPImage*)image sequence:(MAPSequence*)sequence processedImages:(NSDictionary*)processedImages forceProcessing:(BOOL)forceProcessing;
+- (void)processImage:(MAPImage*)image sequence:(MAPSequence*)sequence forceProcessing:(BOOL)forceProcessing;
 
 /**
  Stops the image processing.

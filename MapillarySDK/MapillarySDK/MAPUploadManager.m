@@ -18,15 +18,18 @@
 #import <objc/runtime.h>
 #import "MAPUploadManager+Private.h"
 #import "MAPDataManager.h"
+#import "MAPInternalUtils.h"
+
+#import <UserNotifications/UserNotifications.h>
 
 #define FOREGROUND 1
 #define BACKGROUND 2
-#define UPLOAD_MODE FOREGROUND
+#define UPLOAD_MODE BACKGROUND
+#define NBR_SCHEDULED_TASKS 4
 
 @interface MAPUploadManager()
 
 @property (nonatomic) NSMutableArray* sequencesToUpload;
-@property (nonatomic) NSMutableArray* imagesToUpload;
 @property (nonatomic) MAPUploadManagerStatus* status;
 
 @property (nonatomic) NSURLSession* uploadSession;
@@ -37,9 +40,13 @@
 @property (nonatomic) NSTimer* speedTimer;
 @property (nonatomic) int64_t bytesUploadedSinceLastUpdate;
 
+@property (nonatomic) NSMutableDictionary* uploadStatus;
+
 @end
 
 @implementation MAPUploadManager
+
+//@dynamic backgroundUploadSessionCompletionHandler;
 
 + (instancetype)sharedManager
 {
@@ -58,7 +65,6 @@
     if (self)
     {
         self.sequencesToUpload = [NSMutableArray array];
-        self.imagesToUpload = [NSMutableArray array];
         self.status = [[MAPUploadManagerStatus alloc] init];
         self.dateLastUpdate = [NSDate date];
         self.speedArray = [NSMutableArray arrayWithCapacity:5];
@@ -67,6 +73,12 @@
         self.deleteAfterUpload = YES;
         self.bytesUploadedSinceLastUpdate = 0;
         self.numberOfSimultaneousUploads = 4;
+        self.uploadStatus = [NSMutableDictionary dictionary];
+        
+        self.uploadStatus[@"scheduled"] = [NSMutableArray array];
+        self.uploadStatus[@"started"] = [NSMutableArray array];
+        self.uploadStatus[@"uploaded"] = [NSMutableArray array];
+        self.uploadStatus[@"failed"] = [NSMutableArray array];
         
         [self setupAws];
         [self createSession];
@@ -90,9 +102,9 @@
     self.status.imagesFailed = 0;
     self.status.imagesProcessed = 0;
     self.status.uploadSpeedBytesPerSecond = 0;
-    
-    [self.imagesToUpload removeAllObjects];
+        
     [self.sequencesToUpload removeAllObjects];
+    [self.uploadStatus removeAllObjects];
     
     [self.sequencesToUpload addObjectsFromArray:sequences];
     
@@ -156,6 +168,7 @@
         
         for (NSURLSessionTask* task in tasks)
         {
+            [task suspend];
             [task cancel];
         }
         
@@ -201,70 +214,42 @@
     }
     else
     {
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        self.status.uploading = NO;
+        self.status.imageCount = 0;
+        self.status.imagesProcessed = 0;
+        self.status.imagesUploaded = 0;
+        self.status.imagesFailed = 0;
         
-        [self.uploadSession getTasksWithCompletionHandler:^(NSArray<NSURLSessionDataTask *> * _Nonnull dataTasks, NSArray<NSURLSessionUploadTask *> * _Nonnull uploadTasks, NSArray<NSURLSessionDownloadTask *> * _Nonnull downloadTasks) {
+        NSString* uploadStatusPath = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], @"uploadStatus.json"];
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:uploadStatusPath])
+        {
+            NSData* data = [NSData dataWithContentsOfFile:uploadStatusPath];
             
-            self.status.uploading = NO;
-            self.status.imageCount = 0;
-            self.status.imagesProcessed = 0;
-            self.status.imagesUploaded = 0;
-            self.status.imagesFailed = 0;
-            
-            for (NSURLSessionTask* task in uploadTasks)
+            if (data)
             {
-                if (task.state == NSURLSessionTaskStateRunning)
-                {
-                    self.status.uploading = YES;
-                    [task suspend];
-                }
+                self.status.uploading = YES;
+                
+                NSError* error = nil;
+                self.uploadStatus = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+                
+                NSArray* scheduled = self.uploadStatus[@"scheduled"];
+                //NSArray* processed = self.uploadStatus[@"processed"];
+                NSArray* uploaded = self.uploadStatus[@"uploaded"];
+                NSArray* failed = self.uploadStatus[@"failed"];
+                
+                self.status.imageCount += scheduled.count;
+                //self.status.imagesProcessed += processed.count;
+                self.status.imagesUploaded += uploaded.count;
+                self.status.imagesFailed += failed.count;
             }
             
-            NSArray* sequences = [MAPFileManager getSequences:YES];
-            
-            if (self.status.uploading)
-            {
-                for (MAPSequence* sequence in sequences)
-                {
-                    if ([sequence isLocked])
-                    {
-                        [self.sequencesToUpload addObject:sequence];
-                        
-                        NSArray* dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequence.path error:nil];
-                        
-                        NSArray* scheduled = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.scheduled'"]];
-                        NSArray* processed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.processed'"]];
-                        NSArray* done = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.done'"]];
-                        NSArray* failed = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.failed'"]];
-                        
-                        self.status.uploading = YES;
-                        self.status.imageCount += scheduled.count;
-                        self.status.imagesProcessed += processed.count;
-                        self.status.imagesUploaded += done.count;
-                        self.status.imagesFailed += failed.count;
-                        self.dateLastUpdate = [NSDate date];
-                        
-                        for (NSURLSessionTask* task in uploadTasks)
-                        {
-                            if (task.state == NSURLSessionTaskStateSuspended)
-                            {
-                                [task resume];
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                [self cleanUp];
-            }
-            
-            dispatch_semaphore_signal(semaphore);
-            
-        }];
-        
-        // Wait here intil done
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            self.dateLastUpdate = [NSDate date];
+        }
+        else
+        {
+            [self cleanUp];
+        }
     }
 }
 
@@ -278,8 +263,6 @@
 
 - (void)startUpload:(BOOL)forceProcessing
 {
-    NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
-    
     self.speedTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
         
         [self calculateUploadSpeed];
@@ -299,25 +282,12 @@
                     return;
                 }
                 
-                [self processImage:image sequence:sequence processedImages:processedImages forceProcessing:forceProcessing];
-                
-                // For background uploading, schedule all tasks
-                if (UPLOAD_MODE == BACKGROUND)
+                //if (taskCount < self.numberOfSimultaneousUploads)
+                if (taskCount < NBR_SCHEDULED_TASKS)
                 {
-                    [self createTask:image];
-                }
-                // For foreground uploading, schedule only a few tasks now
-                else
-                {
-                    if (taskCount < self.numberOfSimultaneousUploads)
-                    {
-                        [self createTask:image];
-                        taskCount++;
-                    }
-                    else
-                    {
-                        [self.imagesToUpload addObject:image];
-                    }
+                    [self processImage:image sequence:sequence forceProcessing:forceProcessing];
+                    [self createTask:image startUpload:YES];
+                    taskCount++;
                 }
             }
         }
@@ -326,8 +296,6 @@
 
 - (void)startProcessing:(BOOL)forceReprocessing
 {
-    NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
-    
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
         for (MAPImage* image in [sequence getImages])
@@ -337,7 +305,7 @@
                 return;
             }
             
-            if (forceReprocessing || (processedImages[image.imagePath.lastPathComponent] == nil && ![MAPExifTools imageHasMapillaryTags:image]))
+            if (forceReprocessing || ![MAPExifTools imageHasMapillaryTags:image])
             {
                 BOOL success = [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
                 if (success)
@@ -395,6 +363,12 @@
     [self.sequencesToUpload removeAllObjects];
     [self.sequencesToUpload addObjectsFromArray:sequences];
     
+    [self.uploadStatus removeAllObjects];
+    self.uploadStatus[@"scheduled"] = [NSMutableArray array];
+    self.uploadStatus[@"started"] = [NSMutableArray array];
+    self.uploadStatus[@"uploaded"] = [NSMutableArray array];
+    self.uploadStatus[@"failed"] = [NSMutableArray array];
+    
     for (MAPSequence* sequence in self.sequencesToUpload)
     {
         NSArray* images = [sequence getImages];
@@ -402,11 +376,16 @@
         
         for (MAPImage* image in images)
         {
-            [self createBookkeepingForImage:image];
+            @autoreleasepool
+            {
+                [self createBookkeepingForImage:image];
+            }
         }
         
         [sequence lock];
     }
+    
+    [self saveBookKeeping];
     
     [self startUpload:forceProcessing];
 }
@@ -424,25 +403,24 @@
     if (UPLOAD_MODE == FOREGROUND)
     {
         configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        configuration.HTTPMaximumConnectionsPerHost = self.numberOfSimultaneousUploads;
     }
     else
     {
         configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.mapillary.sdk.networking.upload"];
     }
     
-    configuration.HTTPMaximumConnectionsPerHost = self.numberOfSimultaneousUploads;
-    
     self.uploadSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 }
 
-- (void)processImage:(MAPImage*)image sequence:(MAPSequence*)sequence processedImages:(NSDictionary*)processedImages forceProcessing:(BOOL)forceProcessing
+- (void)processImage:(MAPImage*)image sequence:(MAPSequence*)sequence forceProcessing:(BOOL)forceProcessing
 {
-    if (forceProcessing || (processedImages[image.imagePath.lastPathComponent] == nil && ![MAPExifTools imageHasMapillaryTags:image]))
+    if (forceProcessing || ![MAPExifTools imageHasMapillaryTags:image])
     {
         BOOL success = [MAPExifTools addExifTagsToImage:image fromSequence:sequence];
         if (success)
         {
-            [[MAPDataManager sharedManager] setImageAsProcessed:image];
+            
         }
     }
     
@@ -464,7 +442,7 @@
     }
 }
 
-- (NSURLSessionUploadTask*)createTask:(MAPImage*)image
+- (NSURLSessionUploadTask*)createTask:(MAPImage*)image startUpload:(BOOL)startUpload
 {
     // Create task and schedule for upload
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
@@ -476,7 +454,12 @@
         uploadTask = [self.uploadSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath]];
         
         [uploadTask setTaskDescription:image.imagePath];
-        [uploadTask resume];
+        
+        if (startUpload)
+        {
+            [uploadTask resume];
+            [self setBookkeepingStartedForImage:image];
+        }
         
         dispatch_semaphore_signal(semaphore);
 
@@ -530,8 +513,17 @@
 {
     //NSLog(@"create: %@", image.imagePath.lastPathComponent);
     
-    NSString* scheduled = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".scheduled"];
-    [[NSFileManager defaultManager] createFileAtPath:scheduled contents:nil attributes:nil];
+    NSMutableArray* scheduled = self.uploadStatus[@"scheduled"];
+    
+    if (scheduled == nil)
+    {
+        scheduled = [NSMutableArray array];
+    }
+    
+    [scheduled addObject:image.imagePath];
+    self.uploadStatus[@"scheduled"] = scheduled;
+    
+    //[self saveBookKeeping];
 }
 
 - (void)deleteBookkeepingForImage:(MAPImage*)image
@@ -568,24 +560,142 @@
 {
     //NSLog(@"processed: %@", image.imagePath.lastPathComponent);
     
-    NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
-    [[NSFileManager defaultManager] createFileAtPath:processed contents:nil attributes:nil];
+    /*NSMutableArray* scheduled = self.uploadStatus[@"scheduled"];
+    NSMutableArray* processed = self.uploadStatus[@"processed"];
+    
+    if (processed == nil)
+    {
+        processed = [NSMutableArray array];
+    }
+    
+    [scheduled removeObject:image.imagePath];
+    [processed addObject:image.imagePath];
+    
+    self.uploadStatus[@"scheduled"] = scheduled;
+    self.uploadStatus[@"processed"] = processed;
+    
+    [self saveBookKeeping];*/
+}
+
+- (void)setBookkeepingStartedForImage:(MAPImage*)image
+{
+    //NSLog(@"processed: %@", image.imagePath.lastPathComponent);
+    
+    NSMutableArray* scheduled = self.uploadStatus[@"scheduled"];
+    NSMutableArray* started = self.uploadStatus[@"started"];
+    
+    if (scheduled == nil)
+    {
+        scheduled = [NSMutableArray array];
+    }
+    
+    if (started == nil)
+    {
+        started = [NSMutableArray array];
+    }
+    
+    [scheduled removeObject:image.imagePath];
+    [started addObject:image.imagePath];
+    
+    self.uploadStatus[@"scheduled"] = scheduled;
+    self.uploadStatus[@"started"] = started;
+    
+    [self saveBookKeeping];
 }
 
 - (void)setBookkeepingDoneForImage:(MAPImage*)image
 {
-    NSLog(@"done: %@", image.imagePath.lastPathComponent);
+    //NSLog(@"done: %@", image.imagePath.lastPathComponent);
     
-    NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
-    [[NSFileManager defaultManager] createFileAtPath:done contents:nil attributes:nil];
+    NSMutableArray* started = self.uploadStatus[@"started"];
+    NSMutableArray* uploaded = self.uploadStatus[@"uploaded"];
+    
+    if (started == nil)
+    {
+        started = [NSMutableArray array];
+    }
+    
+    if (uploaded == nil)
+    {
+        uploaded = [NSMutableArray array];
+    }
+    
+    [started removeObject:image.imagePath];
+    [uploaded addObject:image.imagePath];
+    
+    self.uploadStatus[@"started"] = started;
+    self.uploadStatus[@"uploaded"] = uploaded;
+    
+    [self saveBookKeeping];
 }
 
 - (void)setBookkeepingFailedForImage:(MAPImage*)image
 {
     NSLog(@"failed: %@", image.imagePath.lastPathComponent);
     
-    NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
-    [[NSFileManager defaultManager] createFileAtPath:failed contents:nil attributes:nil];
+    NSMutableArray* started = self.uploadStatus[@"started"];
+    NSMutableArray* failed = self.uploadStatus[@"failed"];
+    
+    if (started == nil)
+    {
+        started = [NSMutableArray array];
+    }
+    
+    if (failed == nil)
+    {
+        failed = [NSMutableArray array];
+    }
+    
+    [started removeObject:image.imagePath];
+    [failed addObject:image.imagePath];
+    
+    self.uploadStatus[@"started"] = started;
+    self.uploadStatus[@"failed"] = failed;
+    
+    [self saveBookKeeping];
+}
+
+- (MAPImage*)nextImageToUpload
+{
+    NSMutableArray* scheduled = self.uploadStatus[@"scheduled"];
+    MAPImage* nextImage = nil;
+    
+    if (scheduled.count > 0)
+    {
+        NSString* nextPath = scheduled.firstObject;
+        nextImage = [[MAPImage alloc] initWithPath:nextPath];
+
+        MAPSequence* sequence = [[MAPSequence alloc] initWithPath:nextPath.stringByDeletingLastPathComponent parseGpx:NO];
+        [self processImage:nextImage sequence:sequence forceProcessing:NO];
+    }
+    
+    return nextImage;
+}
+
+- (NSUInteger)numberOfImagesToUpload
+{
+    NSMutableArray* scheduled = self.uploadStatus[@"scheduled"];
+    NSMutableArray* processed = self.uploadStatus[@"processed"];
+    return scheduled.count + processed.count;
+}
+
+- (BOOL)hasImagesToUpload
+{
+    return [self numberOfImagesToUpload] > 0;
+}
+
+- (void)saveBookKeeping
+{
+    NSString* uploadStatusPath = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], @"uploadStatus.json"];
+    NSData* data = [NSJSONSerialization dataWithJSONObject:self.uploadStatus options:NSJSONWritingPrettyPrinted error:nil];
+    [data writeToFile:uploadStatusPath atomically:YES];
+    
+    NSArray* scheduled = self.uploadStatus[@"scheduled"];
+    NSArray* started = self.uploadStatus[@"started"];
+    NSArray* uploaded = self.uploadStatus[@"uploaded"];
+    NSArray* failed = self.uploadStatus[@"failed"];
+    
+    NSLog(@"scheduled %lu\tstarted %lu\tuploaded %lu\tfailed %lu", (unsigned long)scheduled.count, started.count, uploaded.count, failed.count);
 }
 
 - (void)cleanUp
@@ -602,6 +712,12 @@
             
             [sequence unlock];
         }
+    }
+    
+    NSString* uploadStatusPath = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], @"uploadStatus.json"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:uploadStatusPath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:uploadStatusPath error:nil];
     }
 }
 
@@ -648,28 +764,90 @@
 
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    /* TODO: Is this really needed?
-     dispatch_async(dispatch_get_main_queue(), ^{
+    NSString* uploadStatusPath = [NSString stringWithFormat:@"%@/%@", [MAPInternalUtils sequenceDirectory], @"uploadStatus.json"];
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:uploadStatusPath])
+    {
+        NSData* data = [NSData dataWithContentsOfFile:uploadStatusPath];
         
-        if (self.backgroundUploadSessionCompletionHandler)
+        if (data)
+        {
+            self.status.uploading = YES;
+            
+            NSError* error = nil;
+            self.uploadStatus = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        }
+    }
+    
+    if (self.status.uploading && [self hasImagesToUpload])
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            for (int i = 0; i < NBR_SCHEDULED_TASKS; i++)
+            {
+                MAPImage* next = [self nextImageToUpload];
+                if (next)
+                {
+                    [self createTask:next startUpload:YES];
+                }
+                else
+                {
+                    break;
+                } 
+            }
+
+            NSArray* scheduled = self.uploadStatus[@"scheduled"];
+            NSArray* started = self.uploadStatus[@"started"];
+            NSArray* uploaded = self.uploadStatus[@"uploaded"];
+            NSArray* failed = self.uploadStatus[@"failed"];
+
+            UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+            content.title = @"Scheduling";
+            content.body = [NSString stringWithFormat:@"scheduled %lu--started %lu--uploaded %lu—-failed %lu", (unsigned long)scheduled.count, started.count, uploaded.count, failed.count];
+            content.sound = UNNotificationSound.defaultSound;
+            
+            UNNotificationRequest* notification = [UNNotificationRequest requestWithIdentifier:@"batch_done" content:content trigger:nil];
+            
+            [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:notification withCompletionHandler:^(NSError * _Nullable error) {
+                
+            }];
+            
+        });
+    }
+    else
+    {
+        if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate uploadFinished:self status:self.status];
+            });
+        }
+        
+        self.status.uploading = NO;
+        
+        [self cleanUp];
+        
+        NSLog(@"All tasks are finished");
+        
+        UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+        content.title = @"Upload done";
+        content.sound = UNNotificationSound.defaultSound;
+        
+        UNNotificationRequest* notification = [UNNotificationRequest requestWithIdentifier:@"upload_done" content:content trigger:nil];
+        
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:notification withCompletionHandler:^(NSError * _Nullable error) {
+            
+        }];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (self.backgroundUploadSessionCompletionHandler != nil)
         {
             self.backgroundUploadSessionCompletionHandler();
             self.backgroundUploadSessionCompletionHandler = nil;
         }
-    });*/
-    
-    if (self.status.uploading && self.delegate && [self.delegate respondsToSelector:@selector(uploadFinished:status:)])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate uploadFinished:self status:self.status];
-        });
-    }
-    
-    self.status.uploading = NO;
-    
-    [self cleanUp];
-    
-    NSLog(@"All tasks are finished");
+    });
 }
 
 #pragma mark - NSURLSessionTaskDelegate
@@ -742,17 +920,17 @@
         
         [self cleanUp];
     }
-    else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)
+    else if (self.status.uploading && [self hasImagesToUpload])
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            if (self.status.uploading)
+            MAPImage* next = [self nextImageToUpload];
+            
+            if (next)
             {
-                MAPImage* next = self.imagesToUpload.firstObject;
-                [self.imagesToUpload removeObjectAtIndex:0];
-                [self createTask:next];
+                [self createTask:next startUpload:YES];
             }
-        });
+        //});
     }
 }
 

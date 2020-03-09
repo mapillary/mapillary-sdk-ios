@@ -11,6 +11,4 @@
 
 @interface MAPUploadManager(Private)
 
-@property (nonatomic, copy) void (^backgroundUploadSessionCompletionHandler)(void);
-
 @end
