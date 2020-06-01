@@ -41,12 +41,59 @@
     }];
 }
 
++ (void)startUploadSession:(void(^)(NSURL* url, NSDictionary* fields, NSString* sessionKey, NSString* keyPrefix))done
+{
+    NSString* url = @"v3/me/uploads/";
+    NSDictionary* json = @{@"type" : @"images/sequence"};
+    
+    [self simplePOST:url json:json responseObject:^(id responseObject) {
+        
+        NSURL* url = nil;
+        NSDictionary* fields = nil;
+        NSString* sessionKey = nil;
+        NSString* keyPrefix = nil;
+        
+        if (responseObject)
+        {
+            NSDictionary* dict = (NSDictionary*)responseObject;
+            NSString* urlPath = dict[@"url"];
+            NSString* status = dict[@"status"];
+            
+            // urlPath = @"http://b2f6c0708c31.ngrok.io";
+            // urlPath = @"https://postman-echo.com/post";
+            
+            if (urlPath && [status isEqualToString:@"open"])
+            {
+                url = [NSURL URLWithString:urlPath];
+                fields = dict[@"fields"];
+                sessionKey = dict[@"key"];
+                keyPrefix = dict[@"key_prefix"];
+            }
+        }
+        
+        if (done)
+        {
+            done(url, fields, sessionKey, keyPrefix);
+        }
+        
+    }];
+}
+
++ (void)endUploadSession:(NSString*)sessionKey
+{
+    NSString* url = [NSString stringWithFormat:@"v3/me/uploads%@/closed", sessionKey];
+    
+    [self simplePUT:url responseObject:^(id responseObject) {
+        
+    }];
+}
+
 #pragma mark - Util
 
 + (NSString*)fullUrlForUrlString:(NSString*)url
 {
     NSString* clientId = [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID];
-    NSString* baseUrl = kMAPAPIEndpoint;
+    NSString* baseUrl = kMAPAPIEndpoint; // @" https://28ca7d4c.ngrok.io";
     
     if ([MAPInternalUtils usingStaging])
     {
@@ -155,12 +202,16 @@
     AFHTTPSessionManager* manager = [self httpSessionManager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSMutableURLRequest* request = [manager.requestSerializer requestWithMethod:@"POST" URLString:path parameters:nil error:nil];
     
-    NSMutableURLRequest* request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:path parameters:nil error:nil];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
+    if (json)
+    {
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
+        NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
+    }
     
     NSURLSessionDataTask* task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
     

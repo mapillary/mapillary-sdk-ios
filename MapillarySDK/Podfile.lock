@@ -14,9 +14,6 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - AWSCore (2.12.1)
-  - AWSS3 (2.12.1):
-    - AWSCore (= 2.12.1)
   - BOSImageResizeOperation (0.1.0)
   - NSHash (1.2.0)
   - OCMock (3.2.2)
@@ -25,8 +22,6 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
-  - AWSCore (~> 2.6)
-  - AWSS3 (~> 2.6)
   - BOSImageResizeOperation (~> 0.1)
   - NSHash (~> 1.2)
   - OCMock (~> 3.2.2)
@@ -36,8 +31,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
-    - AWSCore
-    - AWSS3
     - BOSImageResizeOperation
     - NSHash
     - OCMock
@@ -46,14 +39,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  AWSCore: 0a4431f74d9dbf084d420b887a6a21042b423c5c
-  AWSS3: 640fad8279e2c5b02d803a82ff5dd6ee75d65c39
   BOSImageResizeOperation: 457aafe464729572cac69cc89dce0e2e1450edaa
   NSHash: 036c03781d372c288d332b512b203e7bb832e46e
   OCMock: 18c9b7e67d4c2770e95bb77a9cc1ae0c91fe3835
   PodAsset: d9d35b6a86ceaeaead63692a1bce27b4aea243b3
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
 
-PODFILE CHECKSUM: 726a5d45925a641b2c62431968de4301e7df2193
+PODFILE CHECKSUM: ca3a4a314fa096111e0a36a8956c1b505ed2e84b
 
 COCOAPODS: 1.8.4

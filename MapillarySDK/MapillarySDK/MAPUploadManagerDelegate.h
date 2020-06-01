@@ -88,4 +88,12 @@
  */
 - (void)uploadStopped:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status;
 
+/**
+ Delegate method for when the upload service is not reachable.
+ 
+ @param uploadManager The upload manager object that is uploading the images.
+ @param status The current status of the upload manager.
+ */
+- (void)uploadServiceNotReachable:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status;
+
 @end

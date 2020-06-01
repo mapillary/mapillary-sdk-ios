@@ -7,7 +7,6 @@
 //
 
 #import "MAPUploadManager.h"
-#import <AWSS3/AWSS3.h>
 #import "MAPSequence.h"
 #import "MAPSequence+Private.h"
 #import "MAPImage+Private.h"
@@ -18,12 +17,19 @@
 #import <objc/runtime.h>
 #import "MAPUploadManager+Private.h"
 #import "MAPDataManager.h"
+#import "MAPApiManager.h"
+#import <SAMKeychain/SAMKeychain.h>
 
 #define FOREGROUND 1
 #define BACKGROUND 2
 #define UPLOAD_MODE FOREGROUND
 
 @interface MAPUploadManager()
+
+@property (nonatomic) NSURL* uploadUrl;
+@property (nonatomic) NSMutableDictionary* uploadFields;
+@property (nonatomic) NSString* uploadSessionKey;
+@property (nonatomic) NSString* uploadKeyPrefix;
 
 @property (nonatomic) NSMutableArray* sequencesToUpload;
 @property (nonatomic) NSMutableArray* imagesToUpload;
@@ -57,6 +63,7 @@
     
     if (self)
     {
+        self.uploadUrl = nil;
         self.sequencesToUpload = [NSMutableArray array];
         self.imagesToUpload = [NSMutableArray array];
         self.status = [[MAPUploadManagerStatus alloc] init];
@@ -68,7 +75,6 @@
         self.bytesUploadedSinceLastUpdate = 0;
         self.numberOfSimultaneousUploads = 4;
         
-        [self setupAws];
         [self createSession];
         [self loadState];
     }
@@ -268,14 +274,6 @@
     }
 }
 
-- (void)setupAws
-{
-    AWSRegionType region = AWSRegionEUWest1;
-    AWSCognitoCredentialsProvider* credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:region identityPoolId:AWS_COGNITO_IDENTITY_POOL_ID];
-    AWSServiceConfiguration* configuration = [[AWSServiceConfiguration alloc] initWithRegion:region credentialsProvider:credentialsProvider];
-    AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
-}
-
 - (void)startUpload:(BOOL)forceProcessing
 {
     NSDictionary* processedImages = [[MAPDataManager sharedManager] getProcessedImages];
@@ -464,7 +462,7 @@
     }
 }
 
-- (NSURLSessionUploadTask*)createTask:(MAPImage*)image
+- (void)createTask:(MAPImage*)image
 {
     // Create task and schedule for upload
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
@@ -473,57 +471,149 @@
     
     [self createRequestForImage:image request:^(NSURLRequest *request) {
         
-        uploadTask = [self.uploadSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath]];
-        
-        [uploadTask setTaskDescription:image.imagePath];
-        [uploadTask resume];
-        
+        if (request != nil)
+        {
+            //uploadTask = [self.uploadSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath]];
+            
+            /*NSURLSession *session = [NSURLSession sharedSession];
+            uploadTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                
+                if (error)
+                {
+                    NSLog(@"%@", error);
+                }
+                else
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    NSError *parseError = nil;
+                    NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
+                    NSLog(@"%@",responseDictionary);
+                }
+                
+            }];*/
+            
+            NSURLSession *session = [NSURLSession sharedSession];
+            uploadTask = [session uploadTaskWithRequest:request fromData:[@"hello world" dataUsingEncoding:NSUTF8StringEncoding] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                
+                if (error)
+                {
+                    NSLog(@"%@", error);
+                }
+                else
+                {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    NSError *parseError = nil;
+                    NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
+                    NSLog(@"%@",responseDictionary);
+                }
+                
+            }];
+            
+            [uploadTask setTaskDescription:image.imagePath];
+            [uploadTask resume];
+        }
+
         dispatch_semaphore_signal(semaphore);
 
     }];
     
     // Wait here intil done
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    
-    return uploadTask;
 }
 
 - (void)createRequestForImage:(MAPImage*)image request:(void (^) (NSURLRequest* request))result
 {
-    NSString* bucket = nil;
-    
-    if (self.testUpload)
+    if (self.uploadUrl == nil)
     {
-        bucket = @"test.balda.public.bucket";
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        [MAPApiManager startUploadSession:^(NSURL *url, NSDictionary* fields, NSString* sessionKey, NSString* keyPrefix) {
+            
+            self.uploadUrl = url;
+            self.uploadFields = [NSMutableDictionary dictionaryWithDictionary:fields];
+            self.uploadSessionKey = sessionKey;
+            self.uploadKeyPrefix = keyPrefix;
+            
+            NSLog(@"SESSION KEY %@", sessionKey);
+            
+            dispatch_semaphore_signal(semaphore);
+            
+        }];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    }
+        
+    if (self.uploadUrl != nil)
+    {
+        NSString* accessToken = [SAMKeychain passwordForService:MAPILLARY_KEYCHAIN_SERVICE account:MAPILLARY_KEYCHAIN_ACCOUNT];
+        NSString* boundary = [[NSUUID UUID] UUIDString];
+        
+        
+        NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.uploadUrl];
+        request.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+        [request setHTTPMethod:@"POST"];
+        //[request setValue:@"image/jpeg" forHTTPHeaderField:@"Content-Type"];
+        //[request setValue:[NSString stringWithFormat:@"Bearer %@", accessToken] forHTTPHeaderField:@"Authorization"];
+        request.HTTPShouldHandleCookies = NO;
+        
+        [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
+        
+        // Form data
+                
+        self.uploadFields[@"X-Amz-Meta-Latitude"] = @"0.0";
+        self.uploadFields[@"X-Amz-Meta-Longitude"] = @"0.0";
+        self.uploadFields[@"X-Amz-Meta-Compass-Angle"] = @"0.0";
+        self.uploadFields[@"X-Amz-Meta-Captured-At"] = @"0";
+        //self.uploadFields[@"key"] = [self.uploadKeyPrefix stringByAppendingPathComponent:@"filename.jpg"];
+                
+        NSMutableString* body = [NSMutableString string];
+                
+        NSString* key = @"key";
+        NSString* value = [self.uploadKeyPrefix stringByAppendingPathComponent:@"test.txt"];
+            
+        [body appendFormat:@"--%@\r\n", boundary];
+        [body appendFormat:@"Content-Disposition:form-data; name=\"%@\"\r\n\r\n", key];
+        [body appendFormat:@"%@\r\n", value];
+        
+        for (NSString* key in self.uploadFields.allKeys)
+        {
+            NSString* value = [self.uploadFields valueForKey:key];
+            
+            [body appendFormat:@"--%@\r\n", boundary];
+            [body appendFormat:@"Content-Disposition:form-data; name=\"%@\"\r\n\r\n", key];
+            [body appendFormat:@"%@\r\n", value];
+        }
+        
+        /*[body appendFormat:@"--%@\r\n", boundary];
+        [body appendFormat:@"Content-Disposition:form-data; name=\"file\"; filename=\"test.txt\"\r\n"];
+        [body appendFormat:@"Content-Type: application/octet-stream\r\n\r\n"];
+        [body appendFormat:@"%@\r\n", @"hello kamil"];*/
+
+        [body appendFormat:@"\r\n--%@--\r\n", boundary];
+        
+        NSData* postData = [body dataUsingEncoding:NSUTF8StringEncoding];
+        [request setHTTPBody:postData];
+        
+        [request setValue:[NSString stringWithFormat:@"%lu", postData.length] forHTTPHeaderField:@"Content-Length"];
+        
+        result(request);
     }
     else
     {
-        bucket = @"mapillary.uploads.images";
+        // This means the upload service is down
+        // Stop upload and report error
+        
+        [self stopUpload];
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(uploadServiceNotReachable:status:)])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate uploadServiceNotReachable:self status:self.status];
+            });
+        }
+        
+        result(nil);
     }
-    
-    AWSS3GetPreSignedURLRequest* getPreSignedURLRequest = [AWSS3GetPreSignedURLRequest new];
-    getPreSignedURLRequest.bucket = bucket;
-    getPreSignedURLRequest.key = image.imagePath.lastPathComponent;
-    getPreSignedURLRequest.HTTPMethod = AWSHTTPMethodPUT;
-    getPreSignedURLRequest.expires = [NSDate dateWithTimeIntervalSinceNow:60*60*24];
-    getPreSignedURLRequest.contentType = @"image/jpeg";
-    
-    AWSTask* awsTask = [[AWSS3PreSignedURLBuilder defaultS3PreSignedURLBuilder] getPreSignedURL:getPreSignedURLRequest];
-    
-    [awsTask continueWithBlock:^id _Nullable(AWSTask * _Nonnull task) {
-        
-        NSURL* presignedURL = awsTask.result;
-        
-        NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:presignedURL];
-        request.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-        [request setHTTPMethod:@"PUT"];
-        [request setValue:@"image/jpeg" forHTTPHeaderField:@"Content-Type"];
-        
-        result(request);
-        
-        return nil;
-        
-    }];
 }
 
 - (void)createBookkeepingForImage:(MAPImage*)image
@@ -688,8 +778,9 @@
 {
     NSString* filePath = task.taskDescription;
     MAPImage* image = [[MAPImage alloc] initWithPath:filePath];
+    NSHTTPURLResponse* response = (NSHTTPURLResponse*) task.response;
     
-    if (error == nil && task.state == NSURLSessionTaskStateCompleted)
+    if (error == nil && task.state == NSURLSessionTaskStateCompleted && response.statusCode >= 200 && response.statusCode < 300)
     {
         if (self.deleteAfterUpload || (!self.testUpload && !self.deleteAfterUpload))
         {
@@ -741,6 +832,8 @@
         self.status.uploading = NO;
         
         [self cleanUp];
+        
+        [MAPApiManager endUploadSession:self.uploadSessionKey];
     }
     else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)
     {
