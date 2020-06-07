@@ -13,6 +13,7 @@
 @interface MAPExifTools : NSObject
 
 + (BOOL)imageHasMapillaryTags:(MAPImage*)image;
++ (NSDictionary*)getExifTagsFromImage:(MAPImage*)image;
 + (BOOL)addExifTagsToImage:(MAPImage*)image fromSequence:(MAPSequence*)sequence;
 
 @end

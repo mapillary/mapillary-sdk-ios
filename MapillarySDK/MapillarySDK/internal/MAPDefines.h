@@ -60,10 +60,10 @@
 // API
 #define kMAPSettingStaging                  @"MAPSettingStaging"
 #define kMAPAPIEndpoint                     @"https://a.mapillary.com"
-#define kMAPAPIEndpointStaging              @"http://staging.mapillary.io:8080"
+#define kMAPAPIEndpointStaging              @"https://sandbox-a-api.mapillary.com"
 #define kMAPAuthEndpoint                    @"https://www.mapillary.com"
-#define kMAPAuthEndpointStaging             @"http://staging.mapillary.io:3002"
-#define kMAPRedirectURLStaging              @"http://staging.mapillary.io:3000"
+#define kMAPAuthEndpointStaging             @"https://sandbox-a-api.mapillary.com:3002"
+#define kMAPRedirectURLStaging              @"https://sandbox-a-api.mapillary.com:3000"
 #define kMAPClientIdStaging                 @"YWFhYWFhYWFhYWFhYWFhYWFhYWFhYTphcHBfYQ=="
 
 #endif /* MAPDefines_h */

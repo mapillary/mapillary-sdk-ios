@@ -12,6 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "MAPLocation.h"
 #import "MAPSequence.h"
+#import "MAPUploadSession+CoreDataClass.h"
 
 @interface MAPDataManager : NSObject
 
@@ -33,5 +34,12 @@
 - (BOOL)isImageProcessed:(MAPImage*)image;
 - (NSDictionary*)getProcessedImages;
 - (void)deleteImagesOlderThan:(NSDate*)date;
+
+#pragma mark - Upload sessions
+- (void)addUploadSessionKey:(NSString*)uploadSessionKey uploadFields:(NSDictionary*)uploadFields uploadKeyPrefix:(NSString*)uploadKeyPrefix uploadUrl:(NSURL*)uploadUrl forSequence:(NSString*)sequenceKey;
+- (void)removeUploadSession:(NSString*)uploadSessionKey;
+- (void)removeUploadSessionForSequenceKey:(NSString*)sequenceKey;
+- (NSArray*)getUploadSessions;
+- (MAPUploadSession*)getUploadSessionForSequenceKey:(NSString*)sequenceKey;
 
 @end

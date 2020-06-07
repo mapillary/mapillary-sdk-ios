@@ -14,6 +14,7 @@
 + (void)getCurrentUser:(void(^)(MAPUser* user))done;
 
 + (void)startUploadSession:(void(^)(NSURL* url, NSDictionary* fields, NSString* sessionKey, NSString* keyPrefix))done;
-+ (void)endUploadSession:(NSString*)sessionKey;
++ (void)endUploadSession:(NSString*)sessionKey done:(void(^)(BOOL success))done;
++ (void)getUploadSessions:(void(^)(NSArray* uploadSessionKeys))done;
 
 @end

@@ -304,6 +304,108 @@
     }
 }
 
+#pragma mark - Upload sessions
+
+- (void)addUploadSessionKey:(NSString*)uploadSessionKey uploadFields:(NSDictionary*)uploadFields uploadKeyPrefix:(NSString*)uploadKeyPrefix uploadUrl:(NSURL*)uploadUrl forSequence:(NSString*)sequenceKey
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    MAPUploadSession* uploadSession = (MAPUploadSession*)[NSEntityDescription insertNewObjectForEntityForName:@"MAPUploadSession" inManagedObjectContext:context];
+    
+    uploadSession.date = [NSDate date];
+    uploadSession.sequenceKey = sequenceKey;
+    uploadSession.uploadFields = [NSJSONSerialization dataWithJSONObject:uploadFields options:0 error:nil];
+    uploadSession.uploadKeyPrefix = uploadKeyPrefix;
+    uploadSession.uploadSessionKey = uploadSessionKey;
+    uploadSession.uploadUrl = uploadUrl.absoluteString;
+    
+    [[MAPDataManager sharedManager] saveChanges];
+}
+
+- (void)removeUploadSession:(NSString*)uploadSessionKey
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPUploadSession"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"uploadSessionKey == %@", uploadSessionKey];
+    
+    NSBatchDeleteRequest* delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetch];
+    
+    NSError* error = nil;
+    
+    [context executeRequest:delete error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR deleting upload session");
+    }
+}
+
+- (void)removeUploadSessionForSequenceKey:(NSString*)sequenceKey
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPUploadSession"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"sequenceKey == %@", sequenceKey];
+    
+    NSBatchDeleteRequest* delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetch];
+    
+    NSError* error = nil;
+    
+    [context executeRequest:delete error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR deleting upload session");
+    }
+}
+
+- (NSArray*)getUploadSessions
+{
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPUploadSession"];
+    
+    NSError* error = nil;
+    
+    NSArray* fetchResult = [context executeFetchRequest:fetch error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR getting upload sessions");
+    }
+    else if (fetchResult.count > 0)
+    {
+        return fetchResult;
+    }
+    
+    return [NSArray array];
+}
+
+- (MAPUploadSession*)getUploadSessionForSequenceKey:(NSString*)sequenceKey
+{
+    MAPUploadSession* uploadSession = nil;
+    
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPUploadSession"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"sequenceKey == %@", sequenceKey];
+    
+    NSError* error = nil;
+    
+    NSArray* fetchResult = [context executeFetchRequest:fetch error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR getting upload session");
+    }
+    else if (fetchResult.count > 0)
+    {
+        uploadSession = fetchResult[0];
+    }
+    
+    return uploadSession;
+}
+
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;

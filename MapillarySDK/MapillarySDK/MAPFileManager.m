@@ -8,6 +8,8 @@
 
 #import "MAPFileManager.h"
 #import "MAPInternalUtils.h"
+#import "MAPDataManager.h"
+#import "MAPApiManager.h"
 
 @implementation MAPFileManager
 
@@ -62,9 +64,22 @@
 
 + (void)deleteSequence:(MAPSequence*)sequence
 {
-    NSFileManager* fm = [NSFileManager defaultManager];
-
+    // Delete upload session
+    MAPUploadSession* uploadSession = [[MAPDataManager sharedManager] getUploadSessionForSequenceKey:sequence.sequenceKey];
+    
+    if (uploadSession != nil)
+    {
+        NSLog(@"CLOSING SESSION");
+        [MAPApiManager endUploadSession:uploadSession.uploadSessionKey done:^(BOOL success) {
+            if (success)
+            {
+                [[MAPDataManager sharedManager] removeUploadSession:uploadSession.uploadSessionKey];
+            }
+        }];
+    }
+    
     // Delete folder
+    NSFileManager* fm = [NSFileManager defaultManager];
     [fm removeItemAtPath:sequence.path error:nil];
 }
 

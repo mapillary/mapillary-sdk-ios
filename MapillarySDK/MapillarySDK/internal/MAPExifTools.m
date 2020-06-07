@@ -49,6 +49,34 @@
     return ok;
 }
 
++ (NSDictionary*)getExifTagsFromImage:(MAPImage*)image
+{
+    NSDictionary* dict = nil;
+    
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:image.imagePath], NULL);
+    
+    if (imageSource)
+    {
+        CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+        NSDictionary* propertiesDictionary = (NSDictionary *)CFBridgingRelease(properties);
+        NSDictionary* TIFFDictionary = [propertiesDictionary objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+        
+        if (TIFFDictionary)
+        {
+            NSString* description = [TIFFDictionary objectForKey:(NSString *)kCGImagePropertyTIFFImageDescription];
+            
+            if (description)
+            {
+                dict = [NSJSONSerialization JSONObjectWithData:[description dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            }
+        }
+        
+        CFRelease(imageSource);
+    }
+    
+    return dict;
+}
+
 + (BOOL)addExifTagsToImage:(MAPImage*)image fromSequence:(MAPSequence*)sequence
 {
     BOOL success = YES;

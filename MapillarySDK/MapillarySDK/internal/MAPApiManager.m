@@ -59,9 +59,6 @@
             NSString* urlPath = dict[@"url"];
             NSString* status = dict[@"status"];
             
-            // urlPath = @"http://b2f6c0708c31.ngrok.io";
-            // urlPath = @"https://postman-echo.com/post";
-            
             if (urlPath && [status isEqualToString:@"open"])
             {
                 url = [NSURL URLWithString:urlPath];
@@ -79,11 +76,47 @@
     }];
 }
 
-+ (void)endUploadSession:(NSString*)sessionKey
++ (void)endUploadSession:(NSString*)sessionKey done:(void(^)(BOOL success))done
 {
-    NSString* url = [NSString stringWithFormat:@"v3/me/uploads%@/closed", sessionKey];
+    NSString* url = [NSString stringWithFormat:@"v3/me/uploads/%@/closed", sessionKey];
     
     [self simplePUT:url responseObject:^(id responseObject) {
+        
+        if (responseObject)
+        {
+            
+        }
+        
+        if (done)
+        {
+            done(YES);
+        }
+        
+    }];
+}
+
++ (void)getUploadSessions:(void(^)(NSArray* uploadSessionKeys))done
+{
+    NSString* url = @"v3/me/uploads/";
+    NSMutableArray* uploadSessionKeys = [NSMutableArray array];
+    
+    [self simpleGET:url responseObject:^(id responseObject) {
+        
+        if (responseObject)
+        {
+            NSArray* sessions = (NSArray*)responseObject;
+            
+            for (NSDictionary* dict in sessions)
+            {
+                NSString* key = dict[@"key"];
+                [uploadSessionKeys addObject:key];
+            }
+        }
+        
+        if (done)
+        {
+            done(uploadSessionKeys);
+        }
         
     }];
 }

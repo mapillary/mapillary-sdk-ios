@@ -17,6 +17,7 @@
 #import "MAPImage+Private.h"
 #import "MAPExifTools.h"
 #import "MAPDataManager.h"
+#import "MAPApiManager.h"
 
 static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
@@ -338,15 +339,26 @@ static NSString* kGpxLoggerBusy = @"kGpxLoggerBusy";
 
 - (void)deleteAllImages
 {
+    // Delete upload session
+    MAPUploadSession* uploadSession = [[MAPDataManager sharedManager] getUploadSessionForSequenceKey:self.sequenceKey];
+    
+    if (uploadSession != nil)
+    {
+        NSLog(@"CLOSING SESSION");
+        [MAPApiManager endUploadSession:uploadSession.uploadSessionKey done:^(BOOL success) {
+            if (success)
+            {
+                [[MAPDataManager sharedManager] removeUploadSession:uploadSession.uploadSessionKey];
+            }
+        }];
+    }
+    
     NSMutableArray* images = [[NSMutableArray alloc] init];
     NSArray* contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:nil];
     NSArray* extensions = [NSArray arrayWithObjects:@"jpg", @"png", nil];
     NSArray* files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@) AND NOT (self CONTAINS 'thumb')", extensions]];
-    NSArray* sortedFiles = [files sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
-        return [obj1 compare:obj2];
-    }];
     
-    for (NSString* path in sortedFiles)
+    for (NSString* path in files)
     {
         MAPImage* image = [[MAPImage alloc] init];
         image.imagePath = [self.path stringByAppendingPathComponent:path];
