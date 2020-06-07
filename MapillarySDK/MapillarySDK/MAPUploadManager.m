@@ -482,38 +482,7 @@
         
         if (request != nil)
         {
-            //uploadTask = [self.uploadSession uploadTaskWithRequest:request fromFile:[NSURL fileURLWithPath:image.imagePath]];
-            
             uploadTask = [self.uploadSession uploadTaskWithStreamedRequest:request];
-            
-            /*NSURLSession *session = [NSURLSession sharedSession];
-            uploadTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                
-                if (error)
-                {
-                    NSLog(@"%@", error);
-                }
-                else
-                {
-                    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                }
-                
-            }];*/
-            
-            /*NSURLSession *session = [NSURLSession sharedSession];
-            uploadTask = [session uploadTaskWithRequest:request fromData:[@"hello world" dataUsingEncoding:NSUTF8StringEncoding] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                
-                if (error)
-                {
-                    NSLog(@"%@", error);
-                }
-                else
-                {
-                    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                }
-                
-            }];*/
-            
             [uploadTask setTaskDescription:image.imagePath];
             [uploadTask resume];
         }
