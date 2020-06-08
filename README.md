@@ -270,7 +270,7 @@ To track the progress of the image processing and/or upload and to be able to up
 
 func imageProcessed(_ uploadManager: MAPUploadManager!, image: MAPImage!, status: MAPUploadManagerStatus!)
 {
-	// Image was processed
+    // Image was processed
 }
     
 func processingFinished(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!)
@@ -290,22 +290,22 @@ func imageUploaded(_ uploadManager: MAPUploadManager!, image: MAPImage!, status:
 
 func imageFailed(_ uploadManager: MAPUploadManager!, image: MAPImage!, status: MAPUploadManagerStatus!, error: Error!) 
 {
-	// Image failed to uploaded  
+    // Image failed to uploaded  
 }
     
 func uploadedData(_ uploadManager: MAPUploadManager!, bytesSent: Int64, status: MAPUploadManagerStatus!) 
 {
-	// Uploaded bytesSent bytes
+    // Uploaded bytesSent bytes
 }
 
 func uploadFinished(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!)
 {
-	// Upload finished
+    // Upload finished
 }
 
 func uploadStopped(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerStatus!) 
 {
-	// Upload stopped    
+    // Upload stopped    
 }
 
 ```
@@ -339,7 +339,7 @@ func uploadStopped(_ uploadManager: MAPUploadManager!, status: MAPUploadManagerS
 
 - (void)uploadedData:(MAPUploadManager*)uploadManager bytesSent:(int64_t)bytesSent status:(MAPUploadManagerStatus*)status
 {
-	// Uploaded bytesSent bytes
+    // Uploaded bytesSent bytes
 }
 
 - (void)uploadFinished:(MAPUploadManager*)uploadManager status:(MAPUploadManagerStatus*)status
@@ -371,4 +371,4 @@ Give feedback and report bugs on the SDK [here](https://github.com/mapillary/map
 
 ## License
 
-Copyright (C) Mapillary 2018
+Copyright (C) Mapillary 2020

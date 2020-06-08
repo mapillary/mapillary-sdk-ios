@@ -1,0 +1,49 @@
+---
+- - :approve
+  - AFNetworking/NSURLSession
+  - :who: 
+    :why: needed for AFNetworking
+    :versions: []
+    :when: 2020-03-09 15:30:50.097439000 Z
+- - :approve
+  - AFNetworking/Reachability
+  - :who: 
+    :why: needed for AFNetworking
+    :versions: []
+    :when: 2020-03-09 15:30:57.674622000 Z
+- - :approve
+  - AFNetworking/Security
+  - :who: 
+    :why: needed for AFNetworking
+    :versions: []
+    :when: 2020-03-09 15:31:06.194174000 Z
+- - :approve
+  - AFNetworking/Serialization
+  - :who: 
+    :why: needed for AFNetworking
+    :versions: []
+    :when: 2020-03-09 15:31:15.367376000 Z
+- - :approve
+  - AFNetworking/UIKit
+  - :who: 
+    :why: needed for AFNetworking
+    :versions: []
+    :when: 2020-03-09 15:31:26.869148000 Z
+- - :approve
+  - AWSCore
+  - :who: 
+    :why: needed for AWS
+    :versions: []
+    :when: 2020-03-09 15:31:42.232961000 Z
+- - :approve
+  - AWSS3
+  - :who: 
+    :why: needed for AWS
+    :versions: []
+    :when: 2020-03-09 15:31:49.994295000 Z
+- - :approve
+  - OCMock
+  - :who: 
+    :why: needed for mocking in tests
+    :versions: []
+    :when: 2020-03-09 15:31:57.510514000 Z
