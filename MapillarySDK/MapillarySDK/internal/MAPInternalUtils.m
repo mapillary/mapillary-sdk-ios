@@ -258,7 +258,7 @@
         return YES;
     }
     
-    return NO;
+    return YES;
 }
 
 #pragma mark - Internal
