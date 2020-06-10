@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<MAPUploadSession *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSDate *date;
+@property (nonatomic) BOOL done;
 @property (nullable, nonatomic, copy) NSString *sequenceKey;
 @property (nullable, nonatomic, copy) NSData *uploadFields;
 @property (nullable, nonatomic, copy) NSString *uploadKeyPrefix;

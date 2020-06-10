@@ -415,6 +415,7 @@
         [sequence lock];
     }
     
+    [self closeDoneUploadSessions];
     [self startUpload:forceProcessing];
 }
 
@@ -509,10 +510,7 @@
         {
             NSLog(@"CLOSING SESSION");
             [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
-                if (success)
-                {
-                    [[MAPDataManager sharedManager] removeUploadSession:self.uploadSessionKey];
-                }
+                
             }];
         }
         
@@ -714,7 +712,6 @@
     self.bytesUploadedSinceLastUpdate = 0;
 }
 
-// Not used
 - (void)getAndCloseAllUploadSessions
 {
     [MAPApiManager getUploadSessions:^(NSArray *uploadSessionKeys) {
@@ -722,14 +719,24 @@
         for (NSString* key in uploadSessionKeys)
         {
             [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
-                if (success)
-                {
-                    [[MAPDataManager sharedManager] removeUploadSession:key];
-                }
+                
             }];
         }
         
     }];
+}
+
+- (void)closeDoneUploadSessions
+{
+    for (MAPUploadSession* uploadSession in [[MAPDataManager sharedManager] getUploadSessions])
+    {
+        if (uploadSession.done)
+        {
+            [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
+                
+            }];
+        }
+    }
 }
 
 #pragma mark - NSURLSessionDelegate
@@ -838,10 +845,7 @@
         
         NSLog(@"UPLOAD DONE, CLOSING SESSION");
         [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
-            if (success)
-            {
-                [[MAPDataManager sharedManager] removeUploadSession:self.uploadSessionKey];
-            }
+            
         }];
     }
     else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)

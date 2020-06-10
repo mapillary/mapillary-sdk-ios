@@ -41,5 +41,6 @@
 - (void)removeUploadSessionForSequenceKey:(NSString*)sequenceKey;
 - (NSArray*)getUploadSessions;
 - (MAPUploadSession*)getUploadSessionForSequenceKey:(NSString*)sequenceKey;
+- (MAPUploadSession*)getUploadSessionForSessionKey:(NSString*)uploadSessionKey;
 
 @end

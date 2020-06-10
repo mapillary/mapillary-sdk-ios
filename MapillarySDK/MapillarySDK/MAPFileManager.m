@@ -71,10 +71,7 @@
     {
         NSLog(@"CLOSING SESSION");
         [MAPApiManager endUploadSession:uploadSession.uploadSessionKey done:^(BOOL success) {
-            if (success)
-            {
-                [[MAPDataManager sharedManager] removeUploadSession:uploadSession.uploadSessionKey];
-            }
+            
         }];
     }
     

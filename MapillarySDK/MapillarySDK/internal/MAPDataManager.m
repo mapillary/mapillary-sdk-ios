@@ -406,6 +406,30 @@
     return uploadSession;
 }
 
+- (MAPUploadSession*)getUploadSessionForSessionKey:(NSString*)uploadSessionKey
+{
+    MAPUploadSession* uploadSession = nil;
+    
+    NSManagedObjectContext* context = [MAPDataManager sharedManager].persistentContainer.viewContext;
+    NSFetchRequest* fetch = [[NSFetchRequest alloc] initWithEntityName:@"MAPUploadSession"];
+    fetch.predicate =  [NSPredicate predicateWithFormat:@"uploadSessionKey == %@", uploadSessionKey];
+    
+    NSError* error = nil;
+    
+    NSArray* fetchResult = [context executeFetchRequest:fetch error:&error];
+    
+    if (error)
+    {
+        NSLog(@"ERROR getting upload session");
+    }
+    else if (fetchResult.count > 0)
+    {
+        uploadSession = fetchResult[0];
+    }
+    
+    return uploadSession;
+}
+
 #pragma mark - Core Data stack
 
 @synthesize persistentContainer = _persistentContainer;

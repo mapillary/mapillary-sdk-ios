@@ -15,6 +15,7 @@
 }
 
 @dynamic date;
+@dynamic done;
 @dynamic sequenceKey;
 @dynamic uploadFields;
 @dynamic uploadKeyPrefix;

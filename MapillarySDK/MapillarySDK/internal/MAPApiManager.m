@@ -11,6 +11,7 @@
 #import "AFNetworking.h"
 #import <SAMKeychain/SAMKeychain.h>
 #import "MAPInternalUtils.h"
+#import "MAPDataManager.h"
 
 @implementation MAPApiManager
 
@@ -18,7 +19,7 @@
 {
     NSString* url = @"v3/me";
     
-    [self simpleGET:url responseObject:^(id responseObject) {
+    [self simpleGET:url responseObject:^(id responseObject, NSError* error) {
         
         MAPUser* user = nil;
         
@@ -46,7 +47,7 @@
     NSString* url = @"v3/me/uploads/";
     NSDictionary* json = @{@"type" : @"images/sequence"};
     
-    [self simplePOST:url json:json responseObject:^(id responseObject) {
+    [self simplePOST:url json:json responseObject:^(id responseObject, NSError* error) {
         
         NSURL* url = nil;
         NSDictionary* fields = nil;
@@ -80,16 +81,20 @@
 {
     NSString* url = [NSString stringWithFormat:@"v3/me/uploads/%@/closed", sessionKey];
     
-    [self simplePUT:url responseObject:^(id responseObject) {
+    [self simplePUT:url responseObject:^(id responseObject, NSError* error) {
         
-        if (responseObject)
+        MAPUploadSession* uploadSession = [[MAPDataManager sharedManager] getUploadSessionForSessionKey:sessionKey];
+        uploadSession.done = YES;
+        [[MAPDataManager sharedManager] saveChanges];
+        
+        if (error == nil)
         {
-            
+            [[MAPDataManager sharedManager] removeUploadSession:uploadSession.uploadSessionKey];
         }
         
         if (done)
         {
-            done(YES);
+            done(error == nil);
         }
         
     }];
@@ -100,7 +105,7 @@
     NSString* url = @"v3/me/uploads/";
     NSMutableArray* uploadSessionKeys = [NSMutableArray array];
     
-    [self simpleGET:url responseObject:^(id responseObject) {
+    [self simpleGET:url responseObject:^(id responseObject, NSError* error) {
         
         if (responseObject)
         {
@@ -164,7 +169,7 @@
     return manager;
 }
 
-+ (void)simpleGET:(NSString*)url responseObject:(void (^) (id responseObject))result
++ (void)simpleGET:(NSString*)url responseObject:(void (^) (id responseObject, NSError* error))result
 {
     NSString* path = [self fullUrlForUrlString:url];
     
@@ -182,7 +187,7 @@
         
         if (result)
         {
-            result(responseObject);
+            result(responseObject, nil);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -191,13 +196,13 @@
         
         if (result)
         {
-            result(nil);
+            result(nil, error);
         }
         
     }];
 }
 
-+ (void)simplePATCH:(NSString*)url json:(NSDictionary*)json responseObject:(void (^) (id responseObject))result
++ (void)simplePATCH:(NSString*)url json:(NSDictionary*)json responseObject:(void (^) (id responseObject, NSError* error))result
 {
     NSString* path = [self fullUrlForUrlString:url];
     
@@ -220,7 +225,7 @@
         
         if (result)
         {
-            result(responseObject);
+            result(responseObject, error);
         }
         
     }];
@@ -228,7 +233,7 @@
     [task resume];
 }
 
-+ (void)simplePOST:(NSString*)url json:(NSDictionary*)json responseObject:(void (^) (id responseObject))result
++ (void)simplePOST:(NSString*)url json:(NSDictionary*)json responseObject:(void (^) (id responseObject, NSError* error))result
 {
     NSString* path = [self fullUrlForUrlString:url];
     
@@ -255,7 +260,7 @@
         
         if (result)
         {
-            result(responseObject);
+            result(responseObject, error);
         }
     }];
     
@@ -263,7 +268,7 @@
     [task resume];
 }
 
-+ (void)simplePUT:(NSString*)url responseObject:(void (^) (id responseObject))result
++ (void)simplePUT:(NSString*)url responseObject:(void (^) (id responseObject, NSError* error))result
 {
     NSString* path = [self fullUrlForUrlString:url];
     
@@ -281,7 +286,7 @@
         
         if (result)
         {
-            result(responseObject);
+            result(responseObject, nil);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -290,7 +295,7 @@
         
         if (result)
         {
-            result(nil);
+            result(nil, error);
         }
         
     }];
