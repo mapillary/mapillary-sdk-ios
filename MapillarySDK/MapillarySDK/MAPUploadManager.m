@@ -506,7 +506,7 @@
     {
         NSLog(@"NEW SEQUENCE DETECTED");
         
-        if (self.currentSequenceUUID != nil && uploadSession == nil)
+        if (self.currentSequenceUUID != nil && uploadSession == nil && self.status.imagesFailed == 0)
         {
             NSLog(@"CLOSING SESSION");
             [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
@@ -843,10 +843,13 @@
         
         [self cleanUp];
         
-        NSLog(@"UPLOAD DONE, CLOSING SESSION");
-        [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
-            
-        }];
+        if (self.status.imagesFailed == 0)
+        {
+            NSLog(@"UPLOAD DONE, CLOSING SESSION");
+            [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
+                
+            }];
+        }
     }
     else if (UPLOAD_MODE == FOREGROUND && self.imagesToUpload.count > 0 && self.status.uploading)
     {

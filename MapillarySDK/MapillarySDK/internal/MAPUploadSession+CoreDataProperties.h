@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<MAPUploadSession *> *)fetchRequest;
 
+@property (nonatomic) BOOL closing;
 @property (nullable, nonatomic, copy) NSDate *date;
 @property (nonatomic) BOOL done;
 @property (nullable, nonatomic, copy) NSString *sequenceKey;

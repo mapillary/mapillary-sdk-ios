@@ -79,17 +79,36 @@
 
 + (void)endUploadSession:(NSString*)sessionKey done:(void(^)(BOOL success))done
 {
+    MAPUploadSession* uploadSession = [[MAPDataManager sharedManager] getUploadSessionForSessionKey:sessionKey];
+    
+    if (uploadSession.closing)
+    {
+        if (done)
+        {
+            done(NO);
+            return;
+        }
+    }
+    
+    uploadSession.closing = YES;
+    [[MAPDataManager sharedManager] saveChanges];    
+    
     NSString* url = [NSString stringWithFormat:@"v3/me/uploads/%@/closed", sessionKey];
     
     [self simplePUT:url responseObject:^(id responseObject, NSError* error) {
-        
-        MAPUploadSession* uploadSession = [[MAPDataManager sharedManager] getUploadSessionForSessionKey:sessionKey];
+                
         uploadSession.done = YES;
         [[MAPDataManager sharedManager] saveChanges];
         
         if (error == nil)
         {
             [[MAPDataManager sharedManager] removeUploadSession:uploadSession.uploadSessionKey];
+            
+            NSLog(@"CLOSED SESSION %@", sessionKey);
+        }
+        else
+        {
+            NSLog(@"FAILED TO CLOSE SESSION %@", sessionKey);
         }
         
         if (done)

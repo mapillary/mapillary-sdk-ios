@@ -14,6 +14,7 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"MAPUploadSession"];
 }
 
+@dynamic closing;
 @dynamic date;
 @dynamic done;
 @dynamic sequenceKey;

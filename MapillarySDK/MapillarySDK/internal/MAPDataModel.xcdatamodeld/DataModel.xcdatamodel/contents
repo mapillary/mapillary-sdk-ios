@@ -26,6 +26,7 @@
         <attribute name="filename" optional="YES" attributeType="String"/>
     </entity>
     <entity name="MAPUploadSession" representedClassName="MAPUploadSession" syncable="YES" codeGenerationType="class">
+        <attribute name="closing" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="done" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="sequenceKey" optional="YES" attributeType="String"/>
@@ -37,6 +38,6 @@
     <elements>
         <element name="MAPCoordinate" positionX="-45" positionY="0" width="128" height="330"/>
         <element name="MAPProcessedImage" positionX="-45" positionY="144" width="128" height="75"/>
-        <element name="MAPUploadSession" positionX="-45" positionY="144" width="128" height="148"/>
+        <element name="MAPUploadSession" positionX="-45" positionY="144" width="128" height="163"/>
     </elements>
 </model>
