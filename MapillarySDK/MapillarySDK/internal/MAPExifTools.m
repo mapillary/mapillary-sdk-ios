@@ -123,6 +123,26 @@
     
     if (image.location.trueHeading != nil && image.location.magneticHeading != nil && image.location.headingAccuracy != nil)
     {
+        // Correct compass with orientation
+        if (sequence.directionOffset == nil)
+        {
+            CFDictionaryRef properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+            NSDictionary* propertiesDictionary = (NSDictionary *)CFBridgingRelease(properties);
+            NSDictionary* TIFFDictionary = [propertiesDictionary objectForKey:(NSString *)kCGImagePropertyTIFFDictionary];
+            int orientationValue = (int)[[TIFFDictionary objectForKey:@"Orientation"] integerValue];
+            
+            if (orientationValue == 1)
+            {
+                image.location.trueHeading = [NSNumber numberWithDouble:image.location.trueHeading.doubleValue + 90];
+                image.location.magneticHeading = [NSNumber numberWithDouble:image.location.magneticHeading.doubleValue + 90];
+            }
+            else if (orientationValue == 3)
+            {
+                image.location.trueHeading = [NSNumber numberWithDouble:image.location.trueHeading.doubleValue - 90];
+                image.location.magneticHeading = [NSNumber numberWithDouble:image.location.magneticHeading.doubleValue - 90];
+            }
+        }
+        
         description[kMAPCompassHeading] = @{kMAPTrueHeading:image.location.trueHeading, kMAPMagneticHeading:image.location.magneticHeading, kMAPAccuracyDegrees:image.location.headingAccuracy};
     }
     
