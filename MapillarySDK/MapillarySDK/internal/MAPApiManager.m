@@ -12,6 +12,7 @@
 #import <SAMKeychain/SAMKeychain.h>
 #import "MAPInternalUtils.h"
 #import "MAPDataManager.h"
+#import "MAPUploadManager.h"
 
 @implementation MAPApiManager
 
@@ -94,6 +95,11 @@
     [[MAPDataManager sharedManager] saveChanges];    
     
     NSString* url = [NSString stringWithFormat:@"v3/me/uploads/%@/closed", sessionKey];
+    
+    if ([MAPUploadManager sharedManager].testUpload)
+    {
+        url = [NSString stringWithFormat:@"v3/me/uploads/%@/closed?_dry_run", sessionKey];
+    }
     
     [self simplePUT:url responseObject:^(id responseObject, NSError* error) {
                 
