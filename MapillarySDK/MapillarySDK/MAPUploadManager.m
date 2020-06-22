@@ -439,6 +439,7 @@
     }
     
     configuration.HTTPMaximumConnectionsPerHost = self.numberOfSimultaneousUploads;
+    configuration.timeoutIntervalForRequest = 300;
     
     self.uploadSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 }
@@ -578,6 +579,8 @@
             
             
         } error:nil];
+        
+        request.timeoutInterval = 300;
         
         result(request);
     }
