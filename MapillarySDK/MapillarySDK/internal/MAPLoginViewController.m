@@ -21,21 +21,33 @@
 {
     [super viewDidLoad];
     
+    [self cleanUp];
+
+    self.webView.navigationDelegate = self;
+    self.webView.hidden = YES;
+    
+    NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:60];
+    [self.webView loadRequest:request];
+}
+
+- (void)cleanUp
+{
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     [[NSURLCache sharedURLCache] setDiskCapacity:0];
     [[NSURLCache sharedURLCache] setMemoryCapacity:0];
     
-    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    for (NSHTTPCookie *each in cookieStorage.cookies)
+    NSHTTPCookieStorage* cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (NSHTTPCookie* each in cookieStorage.cookies)
     {
         [cookieStorage deleteCookie:each];
     }
-
-    self.webView.navigationDelegate = self;
-    self.webView.hidden = YES;
-
-    NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.urlString]];
-    [self.webView loadRequest:request];
+    
+    if (self.webView)
+    {
+        [self.webView evaluateJavaScript:@"localStorage.clear()" completionHandler:nil];
+    }
+    
+    [MAPInternalUtils deleteNetworkCache];
 }
 
 #pragma mark - Button actions
@@ -103,7 +115,7 @@
     // User clicked "Allow" or "Deny"
     if (exit)
     {
-        [self.webView evaluateJavaScript:@"localStorage.clear()" completionHandler:nil];
+        [self cleanUp];
         
         [self dismissViewControllerAnimated:YES completion:^{
             

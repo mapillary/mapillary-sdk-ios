@@ -41,4 +41,6 @@
 
 + (BOOL)usingStaging;
 
++ (void)deleteNetworkCache;
+
 @end

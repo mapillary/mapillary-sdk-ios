@@ -261,6 +261,14 @@
     return NO;
 }
 
++ (void)deleteNetworkCache
+{
+    NSString* caches = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, TRUE) objectAtIndex:0];
+    NSString* appID = [[NSBundle mainBundle] infoDictionary][@"CFBundleIdentifier"];
+    NSString* path = [NSString stringWithFormat:@"%@/%@/Cache.db-wal", caches, appID];
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+}
+
 #pragma mark - Internal
 
 + (double)calculateFactorFromDates:(NSDate*)date date1:(NSDate*)date1 date2:(NSDate*)date2

@@ -129,6 +129,8 @@ static MAPLoginManager* singleInstance;
         [SAMKeychain deletePasswordForService:MAPILLARY_KEYCHAIN_SERVICE account:account];
     }
     
+    [MAPInternalUtils deleteNetworkCache];
+    
     [self getInstance].user = nil;
 }
 
