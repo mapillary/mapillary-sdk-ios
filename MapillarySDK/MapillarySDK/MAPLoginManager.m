@@ -119,6 +119,8 @@ static MAPLoginManager* singleInstance;
 
 + (void)signOut
 {
+    [MAPApiManager logoutCurrentUser];
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_NAME];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_EMAIL];

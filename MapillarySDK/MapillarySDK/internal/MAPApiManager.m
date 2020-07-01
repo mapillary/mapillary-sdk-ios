@@ -13,6 +13,7 @@
 #import "MAPInternalUtils.h"
 #import "MAPDataManager.h"
 #import "MAPUploadManager.h"
+#import "MAPLoginManager.h"
 
 @implementation MAPApiManager
 
@@ -40,6 +41,21 @@
         {
             done(user);
         }
+    }];
+}
+
++ (void)logoutCurrentUser
+{
+    NSString* url = @"/v3/me/logout";
+    NSDictionary* json = @{@"client_id" : [[NSBundle mainBundle] objectForInfoDictionaryKey:MAPILLARY_CLIENT_ID]};
+    
+    [self simplePOST:url json:json responseObject:^(id responseObject, NSError* error) {
+        
+        if (responseObject)
+        {
+            
+        }
+                
     }];
 }
 
@@ -204,6 +220,11 @@
     [manager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSHTTPURLResponse* response = (NSHTTPURLResponse*)task.response;
+              
+        if (response && response.statusCode == 401)
+        {
+            [self handle401];
+        }
         
         if (response.statusCode != 200)
         {
@@ -242,6 +263,13 @@
     [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
     
    NSURLSessionDataTask* task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+       
+       NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+       
+       if (httpResponse && httpResponse.statusCode == 401)
+       {
+           [self handle401];
+       }
         
         if (error)
         {
@@ -277,6 +305,13 @@
     }
     
     NSURLSessionDataTask* task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+              
+        if (httpResponse && httpResponse.statusCode == 401)
+        {
+            [self handle401];
+        }
     
         if (error)
         {
@@ -304,6 +339,11 @@
         
         NSHTTPURLResponse* response = (NSHTTPURLResponse*)task.response;
         
+        if (response.statusCode == 401)
+        {
+            [self handle401];
+        }
+        
         if (response.statusCode != 200)
         {
             NSLog(@"Request failed: %ld", (long)response.statusCode);
@@ -324,6 +364,11 @@
         }
         
     }];
+}
+
++ (void)handle401
+{
+    [MAPLoginManager signOut];
 }
 
 @end
