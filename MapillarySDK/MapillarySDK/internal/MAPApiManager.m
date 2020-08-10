@@ -223,7 +223,7 @@
               
         if (response && response.statusCode == 401)
         {
-            [self handle401];
+            [self handle401:path];
         }
         
         if (response.statusCode != 200)
@@ -268,18 +268,23 @@
        
        if (httpResponse && httpResponse.statusCode == 401)
        {
-           [self handle401];
+           [self handle401:path];
        }
-        
-        if (error)
-        {
-            NSLog(@"Request failed: %@", error);
-        }
-        
-        if (result)
-        {
-            result(responseObject, error);
-        }
+       
+       if (httpResponse.statusCode != 200)
+       {
+           NSLog(@"Request failed: %ld", (long)httpResponse.statusCode);
+       }
+       
+       if (error)
+       {
+           NSLog(@"Request failed: %@", error);
+       }
+       
+       if (result)
+       {
+           result(responseObject, error);
+       }
         
     }];
     
@@ -310,7 +315,12 @@
               
         if (httpResponse && httpResponse.statusCode == 401)
         {
-            [self handle401];
+            [self handle401:path];
+        }
+        
+        if (httpResponse.statusCode != 200)
+        {
+            NSLog(@"Request failed: %ld", (long)httpResponse.statusCode);
         }
     
         if (error)
@@ -341,7 +351,7 @@
         
         if (response.statusCode == 401)
         {
-            [self handle401];
+            [self handle401:path];
         }
         
         if (response.statusCode != 200)
@@ -366,9 +376,9 @@
     }];
 }
 
-+ (void)handle401
++ (void)handle401:(NSString*)reason
 {
-    [MAPLoginManager signOut];
+    [MAPLoginManager signOut:reason];
 }
 
 @end

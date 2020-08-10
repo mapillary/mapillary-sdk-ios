@@ -28,7 +28,7 @@ static MAPLoginManager* singleInstance;
 
 @implementation MAPLoginManager
 
-+ (MAPLoginManager*)getInstance
++ (instancetype)sharedManager
 {
     static dispatch_once_t dispatchOnceToken;
     
@@ -107,33 +107,48 @@ static MAPLoginManager* singleInstance;
                            [paramRedirectUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.alphanumericCharacterSet],
                            [paramClientId stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.alphanumericCharacterSet]];
     
-    [MAPLoginManager getInstance].loginCompletionHandler = result;
-    [MAPLoginManager getInstance].loginCancelledHandler = cancelled;
+    [MAPLoginManager sharedManager].loginCompletionHandler = result;
+    [MAPLoginManager sharedManager].loginCancelledHandler = cancelled;
     
     MAPLoginViewController* loginViewController = [[MAPLoginViewController alloc] initWithNibName:@"MAPLoginViewController" bundle:[PodAsset bundleForPod:@"MapillarySDK"]];
     loginViewController.urlString = urlString;
-    loginViewController.delegate = (id<MAPLoginViewControllerDelegate>)[MAPLoginManager getInstance];
+    loginViewController.delegate = (id<MAPLoginViewControllerDelegate>)[MAPLoginManager sharedManager];
     
     [viewController presentViewController:loginViewController animated:YES completion:nil];
 }
 
 + (void)signOut
 {
-    [MAPApiManager logoutCurrentUser];
-    
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_NAME];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_EMAIL];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    for (NSString* account in [SAMKeychain accountsForService:MAPILLARY_KEYCHAIN_SERVICE])
+    [self signOut:nil];
+}
+
++ (void)signOut:(NSString*)reason
+{
+    if ([self isSignedIn])
     {
-        [SAMKeychain deletePasswordForService:MAPILLARY_KEYCHAIN_SERVICE account:account];
+        [MAPApiManager logoutCurrentUser];
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_NAME];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_KEY];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MAPILLARY_CURRENT_USER_EMAIL];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        for (NSString* account in [SAMKeychain accountsForService:MAPILLARY_KEYCHAIN_SERVICE])
+        {
+            [SAMKeychain deletePasswordForService:MAPILLARY_KEYCHAIN_SERVICE account:account];
+        }
+        
+        [MAPInternalUtils deleteNetworkCache];
+        
+        if ([MAPLoginManager sharedManager].delegate && [[MAPLoginManager sharedManager].delegate respondsToSelector:@selector(userWasSignedOut:user:reason:)])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[MAPLoginManager sharedManager].delegate userWasSignedOut:[MAPLoginManager sharedManager] user:[MAPLoginManager sharedManager].user reason:reason];
+            });
+        }
+        
+        [MAPLoginManager sharedManager].user = nil;
     }
-    
-    [MAPInternalUtils deleteNetworkCache];
-    
-    [self getInstance].user = nil;
 }
 
 + (BOOL)isSignedIn
@@ -143,7 +158,7 @@ static MAPLoginManager* singleInstance;
 
 + (MAPUser*)currentUser
 {
-    if ([self getInstance].user == nil)
+    if ([MAPLoginManager sharedManager].user == nil)
     {
         NSString* userName = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_NAME];
         NSString* userKey = [[NSUserDefaults standardUserDefaults] stringForKey:MAPILLARY_CURRENT_USER_KEY];
@@ -152,15 +167,15 @@ static MAPLoginManager* singleInstance;
         
         if (userName && userKey && userAccessToken)
         {
-            [self getInstance].user = [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andUserEmail:userEmail andAccessToken:userAccessToken];
+            [MAPLoginManager sharedManager].user = [[MAPUser alloc] initWithUserName:userName andUserKey:userKey andUserEmail:userEmail andAccessToken:userAccessToken];
         }
         else
         {
-            [self getInstance].user = nil;
+            [MAPLoginManager sharedManager].user = nil;
         }
     }
     
-    return [self getInstance].user;
+    return [MAPLoginManager sharedManager].user;
 }
 
 #pragma mark - Internal
@@ -183,40 +198,40 @@ static MAPLoginManager* singleInstance;
                 
                 if (self.loginCompletionHandler)
                 {
-                    [MAPLoginManager getInstance].loginCompletionHandler(YES);
-                    [MAPLoginManager getInstance].loginCompletionHandler = nil;
-                    [MAPLoginManager getInstance].loginCancelledHandler = nil;
+                    [MAPLoginManager sharedManager].loginCompletionHandler(YES);
+                    [MAPLoginManager sharedManager].loginCompletionHandler = nil;
+                    [MAPLoginManager sharedManager].loginCancelledHandler = nil;
                 }
             }
             else
             {
-                if ([MAPLoginManager getInstance].loginCompletionHandler)
+                if ([MAPLoginManager sharedManager].loginCompletionHandler)
                 {
-                    [MAPLoginManager getInstance].loginCompletionHandler(NO);
-                    [MAPLoginManager getInstance].loginCompletionHandler = nil;
-                    [MAPLoginManager getInstance].loginCancelledHandler = nil;
+                    [MAPLoginManager sharedManager].loginCompletionHandler(NO);
+                    [MAPLoginManager sharedManager].loginCompletionHandler = nil;
+                    [MAPLoginManager sharedManager].loginCancelledHandler = nil;
                 }
             }
         }];
     }
     else
     {
-        if ([MAPLoginManager getInstance].loginCompletionHandler)
+        if ([MAPLoginManager sharedManager].loginCompletionHandler)
         {
-            [MAPLoginManager getInstance].loginCompletionHandler(NO);
-            [MAPLoginManager getInstance].loginCompletionHandler = nil;
-            [MAPLoginManager getInstance].loginCancelledHandler = nil;
+            [MAPLoginManager sharedManager].loginCompletionHandler(NO);
+            [MAPLoginManager sharedManager].loginCompletionHandler = nil;
+            [MAPLoginManager sharedManager].loginCancelledHandler = nil;
         }
     }
 }
 
 - (void)didCancel:(MAPLoginViewController*)loginViewController
 {
-    if ([MAPLoginManager getInstance].loginCancelledHandler)
+    if ([MAPLoginManager sharedManager].loginCancelledHandler)
     {
-        [MAPLoginManager getInstance].loginCancelledHandler();
-        [MAPLoginManager getInstance].loginCompletionHandler = nil;
-        [MAPLoginManager getInstance].loginCancelledHandler = nil;
+        [MAPLoginManager sharedManager].loginCancelledHandler();
+        [MAPLoginManager sharedManager].loginCompletionHandler = nil;
+        [MAPLoginManager sharedManager].loginCancelledHandler = nil;
     }
 }
 

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MAPUser.h"
 #import "MAPLoginViewController.h"
+#import "MAPLoginManagerDelegate.h"
 
 typedef NS_ENUM(NSInteger, MAPScope) {
     MAPScopeUserEmail,
@@ -51,6 +52,26 @@ typedef NS_OPTIONS(NSUInteger, MAPScopeMask) {
 @interface MAPLoginManager : NSObject <MAPLoginViewControllerDelegate>
 
 ///-----------------------------------------------------------------------------
+/// @name Properties
+///-----------------------------------------------------------------------------
+
+/**
+ The delegate of the login manager object.
+ */
+@property (weak) id<MAPLoginManagerDelegate> delegate;
+
+///-----------------------------------------------------------------------------
+/// @name Creating a Login Manager
+///-----------------------------------------------------------------------------
+
+/**
+ Returns the shared login manager object.
+ 
+ @return The shared upload manager.
+ */
++ (instancetype)sharedManager;
+
+///-----------------------------------------------------------------------------
 /// @name Authentication
 ///-----------------------------------------------------------------------------
 
@@ -71,6 +92,14 @@ typedef NS_OPTIONS(NSUInteger, MAPScopeMask) {
  Signs out the current signed in user and removes all related user data.
  */
 + (void)signOut;
+
+/**
+Signs out the current signed in user and removes all related user data. If the user is
+  automatically signed out, you should specify the reason.
+ 
+ @param reason A string that is used to explain why the user was signed out.
+*/
++ (void)signOut:(NSString*)reason;
 
 ///-----------------------------------------------------------------------------
 /// @name Current user
