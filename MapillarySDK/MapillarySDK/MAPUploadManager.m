@@ -610,33 +610,18 @@
     [[NSFileManager defaultManager] createFileAtPath:scheduled contents:nil attributes:nil];
 }
 
-- (void)deleteBookkeepingForImage:(MAPImage*)image
+- (void)deleteBookkeepingForSequence:(MAPSequence*)sequence
 {
     //NSLog(@"delete: %@", image.imagePath.lastPathComponent);
-    
-    NSString* scheduled = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".scheduled"];
-    NSString* processed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".processed"];
-    NSString* done = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".done"];
-    NSString* failed = [image.imagePath stringByReplacingOccurrencesOfString:@".jpg" withString:@".failed"];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:scheduled])
+      
+    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sequence.path error:nil];
+    NSArray *extensions = [NSArray arrayWithObjects:@"scheduled", @"processed", @"done", @"failed", nil];
+    NSArray *files = [contents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(pathExtension IN %@)", extensions]];
+  
+    for (NSString* file in files)
     {
-        [[NSFileManager defaultManager] removeItemAtPath:scheduled error:nil];
-    }
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:processed])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:processed error:nil];
-    }
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:done])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:done error:nil];
-    }
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:failed])
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:failed error:nil];
+      NSString* filePath = [sequence.path stringByAppendingFormat:@"/%@", file];
+      [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
 }
 
@@ -671,11 +656,7 @@
     {
         if ([[NSFileManager defaultManager] fileExistsAtPath:sequence.path])
         {
-            for (MAPImage* image in [sequence getImages])
-            {
-                [self deleteBookkeepingForImage:image];
-            }
-            
+            [self deleteBookkeepingForSequence:sequence];
             [sequence unlock];
         }
     }
