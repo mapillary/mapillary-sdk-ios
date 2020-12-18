@@ -163,6 +163,10 @@
     }
     
     [self addGps:image.location mutableMetadata:mutableMetadata];
+  
+    
+    // Add extra tags
+    [self addExtraTags:image mutableMetadata:mutableMetadata];
     
     
     // Write new metadata to image
@@ -268,6 +272,12 @@
     }
 }
 
++ (void)addExtraTags:(MAPImage*)image mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
+{
+  [self addExifMetadata:mutableMetadata tag:@"DateTimeOriginal" type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getEXIFFormattedDateAndTime:image.captureDate]];
+  [self addTiffMetadata:mutableMetadata tag:@"DateTime"         type:kCGImageMetadataTypeString value:(__bridge CFStringRef)[self getEXIFFormattedDateAndTime:image.captureDate]];
+}
+
 + (void)addGps:(MAPLocation*)location mutableMetadata:(CGMutableImageMetadataRef)mutableMetadata
 {
     if (location.location)
@@ -353,6 +363,22 @@
         
         dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy_MM_dd_HH_mm_ss_SSS";
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        
+    });
+    
+    return [dateFormatter stringFromDate:localDate];
+}
+
++ (NSString*)getEXIFFormattedDateAndTime:(NSDate*)localDate
+{
+    static NSDateFormatter* dateFormatter = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy:MM:dd HH:mm:ss";
         dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         
     });
