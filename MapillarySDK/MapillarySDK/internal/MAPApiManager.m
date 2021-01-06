@@ -221,10 +221,10 @@
         
         NSHTTPURLResponse* response = (NSHTTPURLResponse*)task.response;
               
-        if (response && response.statusCode == 401)
+        /*if (response && response.statusCode == 401)
         {
             [self handle401:path];
-        }
+        }*/
         
         if (response.statusCode != 200)
         {
@@ -266,10 +266,10 @@
        
        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
        
-       if (httpResponse && httpResponse.statusCode == 401)
+       /*if (httpResponse && httpResponse.statusCode == 401)
        {
            [self handle401:path];
-       }
+       }*/
        
        if (httpResponse.statusCode != 200)
        {
@@ -313,10 +313,10 @@
         
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
               
-        if (httpResponse && httpResponse.statusCode == 401)
+        /*if (httpResponse && httpResponse.statusCode == 401)
         {
             [self handle401:path];
-        }
+        }*/
         
         if (httpResponse.statusCode != 200)
         {
@@ -349,10 +349,10 @@
         
         NSHTTPURLResponse* response = (NSHTTPURLResponse*)task.response;
         
-        if (response.statusCode == 401)
+        /*if (response.statusCode == 401)
         {
             [self handle401:path];
-        }
+        }*/
         
         if (response.statusCode != 200)
         {
