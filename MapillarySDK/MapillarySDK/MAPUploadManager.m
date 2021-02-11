@@ -702,7 +702,7 @@
         
         for (NSString* key in uploadSessionKeys)
         {
-            [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
+            [MAPApiManager endUploadSession:key done:^(BOOL success) {
                 
             }];
         }
@@ -716,7 +716,7 @@
     {
         if (uploadSession.done)
         {
-            [MAPApiManager endUploadSession:self.uploadSessionKey done:^(BOOL success) {
+            [MAPApiManager endUploadSession:uploadSession.uploadSessionKey done:^(BOOL success) {
                 
             }];
         }
